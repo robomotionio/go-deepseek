@@ -1,0 +1,24 @@
+go-deepseek
+Copyright (c) 2026 Robomotion
+Licensed under the MIT License (see LICENSE).
+
+This product includes software developed by third parties:
+
+--------------------------------------------------------------------------------
+web-streams-polyfill v3.3.3
+  nodecompat/js/vendor/web-streams-polyfill.js
+  Copyright 2024 Mattias Buelens, Diwank Singh Tomer and other contributors.
+  Licensed under the MIT License (see nodecompat/js/vendor/web-streams-polyfill.LICENSE).
+
+  Vendored rather than fetched: the runtime this package builds needs
+  ReadableStream, WritableStream and TransformStream before any application code
+  runs, and a robot has no package manager at that moment.
+--------------------------------------------------------------------------------
+DeepSeek Harness (dsh)
+  bundle/ (generated artifact, when built)
+  Copyright (c) DeepSeek.
+  Licensed under the MIT License.
+
+  The bundle is generated from a pinned deepseek-harness checkout by
+  `make bundle`; see bundle/README.md for the commit it was built from.
+--------------------------------------------------------------------------------
