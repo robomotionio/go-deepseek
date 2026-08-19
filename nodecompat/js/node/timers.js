@@ -8,4 +8,12 @@ export const setImmediate = globalThis.setImmediate;
 export const clearImmediate = globalThis.clearImmediate;
 
 export const promises = await import('node:timers/promises');
-export default { setTimeout, clearTimeout, setInterval, clearInterval, setImmediate, clearImmediate, promises };
+const __ns = { setTimeout, clearTimeout, setInterval, clearInterval, setImmediate, clearImmediate, promises };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['timers'] = __ns;

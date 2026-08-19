@@ -29,8 +29,16 @@ export const networkInterfaces = () => ({});
 export const loadavg = () => [0, 0, 0];
 export const availableParallelism = () => host.os.cpus();
 
-export default {
+const __ns = {
   EOL, platform, arch, homedir, tmpdir, hostname, type, release,
   totalmem, freemem, uptime, userInfo, endianness, cpus, networkInterfaces,
   loadavg, availableParallelism, devNull,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['os'] = __ns;

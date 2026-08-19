@@ -14,7 +14,15 @@ export const resolve = (from, to) => new URL(to, from).href;
 export const domainToASCII = (domain) => String(domain).toLowerCase();
 export const domainToUnicode = (domain) => String(domain);
 
-export default {
+const __ns = {
   URL, URLSearchParams, fileURLToPath, pathToFileURL, format, parse, resolve,
   domainToASCII, domainToUnicode,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['url'] = __ns;

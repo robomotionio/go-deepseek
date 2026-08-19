@@ -81,7 +81,7 @@ export const createInflate = noStreams('createInflate');
 export const createZstdCompress = noStreams('createZstdCompress');
 export const createZstdDecompress = noStreams('createZstdDecompress');
 
-export default {
+const __ns = {
   constants,
   zstdCompress, zstdCompressSync, zstdDecompress, zstdDecompressSync,
   gzip, gzipSync, gunzip, gunzipSync, deflate, deflateSync, inflate, inflateSync,
@@ -89,3 +89,11 @@ export default {
   createGzip, createGunzip, createDeflate, createInflate,
   createZstdCompress, createZstdDecompress,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['zlib'] = __ns;

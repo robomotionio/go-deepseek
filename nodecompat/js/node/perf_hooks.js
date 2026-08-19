@@ -10,4 +10,12 @@ export class PerformanceObserver {
   disconnect() {}
 }
 export const constants = {};
-export default { performance, PerformanceObserver, monitorEventLoopDelay, constants };
+const __ns = { performance, PerformanceObserver, monitorEventLoopDelay, constants };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['perf_hooks'] = __ns;

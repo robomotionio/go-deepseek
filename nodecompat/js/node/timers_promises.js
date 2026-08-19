@@ -34,4 +34,12 @@ export const scheduler = {
   yield: () => setTimeout(0),
 };
 
-export default { setTimeout, setImmediate, setInterval, scheduler };
+const __ns = { setTimeout, setImmediate, setInterval, scheduler };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['timers/promises'] = __ns;

@@ -150,8 +150,16 @@ export const stripVTControlCharacters = (s) => String(s).replace(/\x1b\[[0-9;]*[
 
 export const parseArgs = () => { throw new Error('util.parseArgs is not implemented'); };
 
-export default {
+const __ns = {
   types, inspect, format, formatWithOptions, promisify, callbackify, inherits,
   deprecate, isDeepStrictEqual, TextEncoder, TextDecoder, debuglog, debug,
   stripVTControlCharacters, parseArgs,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['util'] = __ns;

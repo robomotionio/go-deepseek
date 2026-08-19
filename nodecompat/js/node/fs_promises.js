@@ -35,8 +35,8 @@ export const readFile = settle((path, options) => {
 });
 export const writeFile = settle((path, data, options) => host.fs.writeFile(pathOf(path), encodeData(data, options), modeOf(options)));
 export const appendFile = settle((path, data, options) => host.fs.appendFile(pathOf(path), encodeData(data, options), modeOf(options)));
-export const stat = settle((path) => makeStats(host.fs.stat(pathOf(path), true)));
-export const lstat = settle((path) => makeStats(host.fs.stat(pathOf(path), false)));
+export const stat = settle((path, options) => makeStats(host.fs.stat(pathOf(path), true), options));
+export const lstat = settle((path, options) => makeStats(host.fs.stat(pathOf(path), false), options));
 export const mkdir = settle((path, options = {}) => host.fs.mkdir(pathOf(path), Boolean(options.recursive), modeOf(options)));
 export const rm = settle((path, options = {}) => host.fs.rm(pathOf(path), Boolean(options.recursive), Boolean(options.force)));
 export const rmdir = settle((path, options = {}) => host.fs.rm(pathOf(path), Boolean(options.recursive), false));
@@ -87,11 +87,24 @@ class FileHandle {
   }
   async readFile(options) { return decode(readAllFrom(this.#fd), options); }
   async writeFile(data, options) { host.fs.write(this.#fd, encodeData(data, options), -1); }
-  async stat() { return makeStats(host.fs.fstat(this.#fd)); }
-  async truncate(len = 0) { host.fs.write(this.#fd, new Uint8Array(0), len); }
+  async appendFile(data, options) { host.fs.write(this.#fd, encodeData(data, options), -1); }
+  async stat(options) { return makeStats(host.fs.fstat(this.#fd), options); }
+  async truncate(len = 0) { host.fs.ftruncate(this.#fd, len); }
+  // chmod through the handle rather than the path is what an atomic write does:
+  // the staging file is given its mode while it is still open and still
+  // unpublished, so nothing ever observes it at the wrong permissions.
+  async chmod(mode) { host.fs.fchmod(this.#fd, Number(mode)); }
+  async chown() { /* ownership is not something this runtime changes */ }
+  async utimes() { /* the handle's times are not settable here */ }
   async sync() { host.fs.fsync(this.#fd); }
   async datasync() { host.fs.fsync(this.#fd); }
   async close() { host.fs.close(this.#fd); }
+  createReadStream() {
+    throw Object.assign(new Error('FileHandle.createReadStream is not supported'), { code: 'ERR_NOT_IMPLEMENTED' });
+  }
+  createWriteStream() {
+    throw Object.assign(new Error('FileHandle.createWriteStream is not supported'), { code: 'ERR_NOT_IMPLEMENTED' });
+  }
   // A FileHandle is disposable, so `await using handle = await open(...)` closes
   // it on the way out of the block even if the block throws.
   async [Symbol.asyncDispose]() { await this.close(); }
@@ -110,12 +123,39 @@ function readAllFrom(fd) {
 export const open = settle((path, flags = 'r', mode = 0) =>
   new FileHandle(host.fs.open(pathOf(path), String(flags), Number(mode))));
 
+// A directory handle, for the callers that iterate rather than list. It is
+// backed by one readdir: the incremental syscall version buys nothing here,
+// where the read is a Go function call away rather than a syscall away.
+class Dir {
+  constructor(path, entries) { this.path = path; this._entries = entries; this._at = 0; }
+  async read() { return this._at < this._entries.length ? this._entries[this._at++] : null; }
+  async close() {}
+  async *[Symbol.asyncIterator]() { for (const entry of this._entries) yield entry; }
+}
+
+export const opendir = settle((path, options = {}) =>
+  new Dir(pathOf(path), host.fs.readdir(pathOf(path), true).map((e) => new Dirent(e, pathOf(path)))));
+
+export const lutimes = utimes;
+export const lchmod = chmod;
+export const statfs = settle(() => ({ type: 0, bsize: 4096, blocks: 0, bfree: 0, bavail: 0, files: 0, ffree: 0 }));
+export const glob = () => { throw Object.assign(new Error('fs.glob is not supported'), { code: 'ERR_NOT_IMPLEMENTED' }); };
+
 export function watch() {
   throw Object.assign(new Error('fs.watch is not supported in this runtime'), { code: 'ERR_NOT_IMPLEMENTED' });
 }
 
-export default {
+const __ns = {
   constants, readFile, writeFile, appendFile, stat, lstat, mkdir, rm, rmdir,
   unlink, rename, copyFile, cp, realpath, readlink, symlink, link, chmod,
   utimes, access, truncate, mkdtemp, readdir, open, watch,
+  opendir, lutimes, lchmod, statfs, glob,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['fs/promises'] = __ns;

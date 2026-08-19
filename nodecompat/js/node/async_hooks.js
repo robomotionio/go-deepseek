@@ -66,4 +66,12 @@ export const executionAsyncId = () => 0;
 export const triggerAsyncId = () => 0;
 export const createHook = () => ({ enable() { return this; }, disable() { return this; } });
 
-export default { AsyncLocalStorage, AsyncResource, executionAsyncId, triggerAsyncId, createHook };
+const __ns = { AsyncLocalStorage, AsyncResource, executionAsyncId, triggerAsyncId, createHook };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['async_hooks'] = __ns;

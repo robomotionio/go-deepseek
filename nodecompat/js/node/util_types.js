@@ -26,9 +26,17 @@ export const isProxy = () => false;   // a Proxy is not distinguishable from her
 export const isNativeError = (v) => v instanceof Error;
 export const isBoxedPrimitive = (v) => v instanceof Number || v instanceof String || v instanceof Boolean || v instanceof Symbol;
 
-export default {
+const __ns = {
   isDate, isRegExp, isMap, isSet, isPromise, isTypedArray, isUint8Array,
   isArrayBuffer, isSharedArrayBuffer, isDataView, isAnyArrayBuffer,
   isArrayBufferView, isAsyncFunction, isGeneratorFunction, isGeneratorObject,
   isProxy, isNativeError, isBoxedPrimitive,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['util/types'] = __ns;

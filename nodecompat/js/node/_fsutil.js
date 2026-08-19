@@ -42,9 +42,39 @@ export function guard(fn) {
 // makeStats builds the Stats shape by hand rather than from a class: the raw
 // object carries isFile as a boolean and the API exposes it as a method, so the
 // two cannot share a name on one object.
-export function makeStats(raw) {
+//
+// bigint is not a detail. `stat(path, { bigint: true })` promises BigInt fields,
+// and code that asks for it then does BigInt arithmetic on them — so returning
+// Numbers does not merely lose precision, it makes the next expression throw
+// "Cannot mix BigInt and other types". The harness's own filesystem provider
+// asks for it on every stat.
+export function makeStats(raw, options) {
+  const asBigInt = Boolean(options && options.bigint);
+  const n = (value) => (asBigInt ? BigInt(Math.trunc(Number(value) || 0)) : value);
   return {
     ...raw,
+    dev: n(raw.dev),
+    ino: n(raw.ino),
+    mode: n(raw.mode),
+    nlink: n(raw.nlink),
+    uid: n(raw.uid),
+    gid: n(raw.gid),
+    rdev: n(0),
+    size: n(raw.size),
+    blksize: n(4096),
+    blocks: n(Math.ceil((Number(raw.size) || 0) / 512)),
+    atimeMs: n(raw.atimeMs),
+    mtimeMs: n(raw.mtimeMs),
+    ctimeMs: n(raw.ctimeMs),
+    birthtimeMs: n(raw.birthtimeMs),
+    // The nanosecond fields exist only in the bigint form, where they are the
+    // reason to ask for it.
+    ...(asBigInt ? {
+      atimeNs: BigInt(Math.trunc(raw.atimeMs)) * 1000000n,
+      mtimeNs: BigInt(Math.trunc(raw.mtimeMs)) * 1000000n,
+      ctimeNs: BigInt(Math.trunc(raw.ctimeMs)) * 1000000n,
+      birthtimeNs: BigInt(Math.trunc(raw.birthtimeMs)) * 1000000n,
+    } : {}),
     isFile: () => raw.isFile,
     isDirectory: () => raw.isDirectory,
     isSymbolicLink: () => raw.isSymlink,

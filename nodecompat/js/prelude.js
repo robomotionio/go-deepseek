@@ -705,13 +705,22 @@
     versions: { node: '22.0.0', v8: 'goant' },
     env: processEnv,
     argv: host.process.argv(),
+    argv0: 'node',
     execPath: host.process.argv()[0] || 'node',
+    // Empty rather than absent. Library code reads it without checking —
+    // `process.execArgv.includes('--expose-internals')` is in the harness's own
+    // loader — and an undefined here fails as "cannot read properties of
+    // undefined", a long way from the missing field.
+    execArgv: [],
+    title: 'dsh',
+    release: { name: 'node' },
+    config: { variables: {} },
+    exitCode: undefined,
     pid: host.process.pid(),
     ppid: 0,
     cwd: () => host.process.cwd(),
     chdir() { throw new Error('process.chdir is not supported: the working directory belongs to the host'); },
     exit: (code = 0) => host.process.exit(code),
-    exitCode: undefined,
     uptime: () => host.os.uptime(),
     hrtime: Object.assign(
       (previous) => {
@@ -763,6 +772,37 @@
   g.process = process;
   g.global = g;
 
+  // --- CommonJS interop ------------------------------------------------------
+  //
+  // A bundled CommonJS package may `require` a Node builtin at run time: the
+  // bundler leaves those as dynamic requires when the builtin is external, and
+  // the shim it emits looks for a global `require` before giving up with
+  // "Dynamic require of \"process\" is not supported".
+  //
+  // require is synchronous and a module is not, so this cannot import anything.
+  // It serves what has already been evaluated instead: each node: shim publishes
+  // itself into __nodeRegistry as it loads, and the two below exist from here.
+  const registry = (g.__nodeRegistry ??= {});
+  registry.process = process;
+  registry.buffer = { Buffer, Blob, atob: (x) => Buffer.from(x, 'base64').toString('latin1'), btoa: (x) => Buffer.from(x, 'latin1').toString('base64') };
+
+  if (typeof g.require !== 'function') {
+    g.require = (name) => {
+      const key = String(name).replace(/^node:/, '');
+      const found = registry[key];
+      if (found !== undefined) return found;
+      throw Object.assign(
+        new Error(
+          `require('${name}') is not available: this runtime resolves modules through its host. `
+          + (key.includes('/') || /^[a-z_]+$/.test(key)
+            ? `If '${key}' is a Node builtin, it has to be imported somewhere before a synchronous require can see it.`
+            : 'Only Node builtins are requireable.'),
+        ),
+        { code: 'ERR_MODULE_NOT_FOUND' },
+      );
+    };
+  }
+
   // --- performance ----------------------------------------------------------
 
   if (!g.performance) {
@@ -803,21 +843,45 @@
   const rawClearTimeout = g.clearTimeout;
   const rawClearInterval = g.clearInterval;
 
+  const tracing = Boolean(host.timers.tracing);
+
   function timerHandle(id, clear) {
+    let refed = true;
     return {
       id,
-      unref() { return this; },
-      ref() { return this; },
-      hasRef() { return true; },
+      // Node's unref, and it has to be real. Library code arms a watchdog
+      // alongside some work and unrefs it, meaning "fire if we are still here,
+      // but do not be the reason we are". A no-op version held the loop open
+      // for the whole of a five-minute stream timeout after the stream had
+      // finished — which looked exactly like a hang.
+      unref() { refed = false; host.timers.unref(id); if (tracing) host.timers.trace('unref', 0, id, ''); return this; },
+      ref() { refed = true; host.timers.ref(id); if (tracing) host.timers.trace('ref', 0, id, ''); return this; },
+      hasRef() { return refed; },
       close() { clear(id); },
       [Symbol.toPrimitive]() { return id; },
     };
   }
 
-  g.setTimeout = (fn, delay, ...args) => timerHandle(rawSetTimeout(fn, delay, ...args), rawClearTimeout);
-  g.setInterval = (fn, delay, ...args) => timerHandle(rawSetInterval(fn, delay, ...args), rawClearInterval);
-  g.clearTimeout = (handle) => rawClearTimeout(handle && typeof handle === 'object' ? handle.id : handle);
-  g.clearInterval = (handle) => rawClearInterval(handle && typeof handle === 'object' ? handle.id : handle);
+  g.setTimeout = (fn, delay, ...args) => {
+    const id = rawSetTimeout(fn, delay, ...args);
+    if (tracing) host.timers.trace('timeout', Number(delay) || 0, id, Number(delay) >= 1000 ? String(new Error('armed').stack) : '');
+    return timerHandle(id, rawClearTimeout);
+  };
+  g.setInterval = (fn, delay, ...args) => {
+    const id = rawSetInterval(fn, delay, ...args);
+    if (tracing) host.timers.trace('interval', Number(delay) || 0, id, Number(delay) >= 1000 ? String(new Error('armed').stack) : '');
+    return timerHandle(id, rawClearInterval);
+  };
+  g.clearTimeout = (handle) => {
+    const id = handle && typeof handle === 'object' ? handle.id : handle;
+    if (tracing) host.timers.trace('clear', 0, Number(id) || 0, '');
+    return rawClearTimeout(id);
+  };
+  g.clearInterval = (handle) => {
+    const id = handle && typeof handle === 'object' ? handle.id : handle;
+    if (tracing) host.timers.trace('clear', 0, Number(id) || 0, '');
+    return rawClearInterval(id);
+  };
   g.setImmediate = (fn, ...args) => g.setTimeout(fn, 0, ...args);
   g.clearImmediate = g.clearTimeout;
 })(globalThis);

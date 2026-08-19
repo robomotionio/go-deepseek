@@ -93,9 +93,17 @@ export const privateDecrypt = unsupported('privateDecrypt');
 export const scryptSync = unsupported('scryptSync');
 export const pbkdf2Sync = unsupported('pbkdf2Sync');
 
-export default {
+const __ns = {
   createHash, createHmac, randomBytes, randomUUID, randomInt, getRandomValues,
   timingSafeEqual, webcrypto, getHashes, constants,
   createCipheriv, createDecipheriv, createSign, createVerify,
   generateKeyPairSync, publicEncrypt, privateDecrypt, scryptSync, pbkdf2Sync,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['crypto'] = __ns;

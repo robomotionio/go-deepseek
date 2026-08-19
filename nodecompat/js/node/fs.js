@@ -35,7 +35,7 @@ export const mkdtempSync = guard((prefix) => host.fs.mkdtemp(pathOf(prefix)));
 export const openSync = guard((path, flags = 'r', mode = 0) => host.fs.open(pathOf(path), String(flags), Number(mode)));
 export const closeSync = guard((fd) => host.fs.close(fdOf(fd)));
 export const fsyncSync = guard((fd) => host.fs.fsync(fdOf(fd)));
-export const fstatSync = guard((fd) => makeStats(host.fs.fstat(fdOf(fd))));
+export const fstatSync = guard((fd, options) => makeStats(host.fs.fstat(fdOf(fd)), options));
 
 export const readdirSync = guard((path, options = {}) => {
   const withTypes = Boolean(options && options.withFileTypes);
@@ -64,7 +64,7 @@ export const writeSync = guard((fd, buffer, offset = 0, length, position = -1) =
 
 function statOrUndefined(path, follow, options) {
   try {
-    return makeStats(host.fs.stat(path, follow));
+    return makeStats(host.fs.stat(path, follow), options);
   } catch (err) {
     // throwIfNoEntry:false is how callers ask "tell me about this if it is
     // there", and it is the difference between a branch and a try/catch.
@@ -178,6 +178,45 @@ export function createWriteStream(path, options = {}) {
   });
 }
 
+// The classes callers import by name. They are constructors so that
+// `instanceof` and `import { Stats } from 'node:fs'` both work; the instances
+// this module returns are built by makeStats, which is a plain object with the
+// same shape (see _fsutil.js for why the two cannot be one thing).
+export class Stats {
+  isFile() { return Boolean(this._isFile); }
+  isDirectory() { return Boolean(this._isDirectory); }
+  isSymbolicLink() { return Boolean(this._isSymlink); }
+  isBlockDevice() { return false; }
+  isCharacterDevice() { return false; }
+  isFIFO() { return false; }
+  isSocket() { return false; }
+}
+
+export class Dir {
+  constructor(path, entries) { this.path = path; this._entries = entries; this._at = 0; }
+  async read() { return this._at < this._entries.length ? this._entries[this._at++] : null; }
+  readSync() { return this._at < this._entries.length ? this._entries[this._at++] : null; }
+  async close() {}
+  closeSync() {}
+  async *[Symbol.asyncIterator]() { for (const entry of this._entries) yield entry; }
+}
+
+export const opendirSync = (path, options) => new Dir(pathOf(path), readdirSync(path, { ...options, withFileTypes: true }));
+export const opendir = callbackify(opendirSync, 2);
+
+export class ReadStream {}
+export class WriteStream {}
+export const FileReadStream = ReadStream;
+export const FileWriteStream = WriteStream;
+
+export const lutimesSync = utimesSync;
+export const lutimes = utimes;
+export const lchmodSync = chmodSync;
+export const lchmod = chmod;
+export const fchmodSync = (fd, mode) => { throw Object.assign(new Error('fs.fchmodSync is not supported'), { code: 'ERR_NOT_IMPLEMENTED' }); };
+export const statfsSync = () => ({ type: 0, bsize: 4096, blocks: 0, bfree: 0, bavail: 0, files: 0, ffree: 0 });
+export const globSync = () => { throw Object.assign(new Error('fs.globSync is not supported'), { code: 'ERR_NOT_IMPLEMENTED' }); };
+
 export function watch() {
   // Deliberate. A watcher is a long-lived host resource with no owner in this
   // design, and everything here that watches files does so to notice edits a
@@ -189,8 +228,10 @@ export const unwatchFile = () => {};
 
 export const promises = promisesAPI;
 
-export default {
-  constants, Dirent, promises,
+const __ns = {
+  constants, Dirent, promises, Stats, Dir, ReadStream, WriteStream,
+  opendir, opendirSync, lutimes, lutimesSync, lchmod, lchmodSync,
+  statfsSync, globSync,
   readFileSync, writeFileSync, appendFileSync, existsSync, statSync, lstatSync,
   mkdirSync, rmSync, rmdirSync, unlinkSync, renameSync, copyFileSync, cpSync,
   realpathSync, readlinkSync, symlinkSync, linkSync, chmodSync, utimesSync,
@@ -201,3 +242,11 @@ export default {
   access, truncate, mkdtemp, open, close,
   createReadStream, createWriteStream, watch, watchFile, unwatchFile,
 };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['fs'] = __ns;

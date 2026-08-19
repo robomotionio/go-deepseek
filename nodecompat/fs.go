@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -55,10 +56,15 @@ func (c *Compat) fsBindings() map[string]any {
 		"write":      c.fsWriteFD,
 		"fsync":      c.fsSync,
 		"fstat":      c.fsFstat,
+		"fchmod":     c.fsFchmod,
+		"ftruncate":  c.fsFtruncate,
 	}
 }
 
 func (c *Compat) fsReadFile(path string) ([]byte, error) {
+	if content, ok := c.virtual(path); ok {
+		return []byte(content), nil
+	}
 	p, err := c.resolvePath(path)
 	if err != nil {
 		return nil, err
@@ -151,12 +157,51 @@ func (c *Compat) fsStat(path string, follow bool) (map[string]any, error) {
 // fsExists answers without throwing, because existsSync's whole contract is
 // that it does not.
 func (c *Compat) fsExists(path string) bool {
+	if _, ok := c.virtual(path); ok {
+		return true
+	}
 	p, err := c.resolvePath(path)
 	if err != nil {
 		return false
 	}
 	_, err = os.Stat(p)
 	return err == nil
+}
+
+// virtual looks a path up in the host-supplied overlay, after normalising the
+// `..` segments a caller may have built it from.
+func (c *Compat) virtual(path string) (string, bool) {
+	if len(c.opts.Virtual) == 0 {
+		return "", false
+	}
+	if content, ok := c.opts.Virtual[path]; ok {
+		return content, true
+	}
+	content, ok := c.opts.Virtual[normaliseVirtual(path)]
+	return content, ok
+}
+
+// normaliseVirtual resolves `.` and `..` without touching the filesystem, so
+// that "dsh:/modules/../package.json" and "dsh:/package.json" are one key. The
+// path package would mangle the scheme, which is why this is by hand.
+func normaliseVirtual(p string) string {
+	scheme := ""
+	if i := strings.Index(p, ":/"); i > 1 {
+		scheme, p = p[:i+2], p[i+2:]
+	}
+	var out []string
+	for _, part := range strings.Split(p, "/") {
+		switch part {
+		case "", ".":
+		case "..":
+			if len(out) > 0 {
+				out = out[:len(out)-1]
+			}
+		default:
+			out = append(out, part)
+		}
+	}
+	return scheme + strings.Join(out, "/")
 }
 
 // statObject is the shape the shim turns into a Stats instance. Times are
@@ -571,6 +616,27 @@ func (c *Compat) fsSync(id int64) error {
 		return err
 	}
 	return f.Sync()
+}
+
+// fchmod and ftruncate operate on a descriptor the script already holds. They
+// exist because the atomic-write dance does: write to a staging file, set its
+// mode through the OPEN handle, sync, then link it into place. Without them the
+// handle's chmod is undefined, and every write fails with "undefined is not a
+// function" — which is exactly what the agent reported.
+func (c *Compat) fsFchmod(id int64, mode int) error {
+	f, err := c.file(id)
+	if err != nil {
+		return err
+	}
+	return f.Chmod(os.FileMode(mode))
+}
+
+func (c *Compat) fsFtruncate(id int64, size int64) error {
+	f, err := c.file(id)
+	if err != nil {
+		return err
+	}
+	return f.Truncate(size)
 }
 
 func (c *Compat) fsFstat(id int64) (map[string]any, error) {

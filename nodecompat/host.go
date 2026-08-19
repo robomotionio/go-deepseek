@@ -69,6 +69,23 @@ type Options struct {
 	// Stdout and Stderr receive process.stdout.write / console output. Nil sends
 	// them to the process's own.
 	Stdout, Stderr func(p []byte)
+
+	// TraceTimers, when set, is called for every timer a script arms. It exists
+	// for one question that is otherwise very hard to answer — "what is keeping
+	// the event loop alive?" — and costs nothing when nil.
+	TraceTimers func(kind string, delayMs float64, id float64, stack string)
+
+	// TraceHTTP, when set, reports each step of a request: the fetch, every body
+	// chunk, the end of the body, a cancellation. Off by default; it exists
+	// because a stalled stream is otherwise invisible from either side.
+	TraceHTTP func(step string, id int64, detail string)
+
+	// Virtual serves files that are not on disk, keyed by exact path. It exists
+	// for one real case: a bundled module reading its own package.json to learn
+	// its version. That module has no directory, so there is nothing for the
+	// read to find and nowhere sensible to put one — and the alternative,
+	// letting it fail, breaks every package that does it, which is all of them.
+	Virtual map[string]string
 }
 
 // Compat is an installed compatibility layer. It owns the host resources the

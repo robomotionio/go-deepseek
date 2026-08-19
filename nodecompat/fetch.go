@@ -64,6 +64,7 @@ func (c *Compat) httpFetch(req map[string]any) goant.Value {
 	requestID := int64(toFloat(req["requestId"]))
 	redirect, _ := req["redirect"].(string)
 
+	c.traceHTTP("fetch", requestID, method+" "+rawURL)
 	p, resolve, reject := c.rt.NewPromise()
 	go func() {
 		res, err := c.doFetch(method, rawURL, headers, body, requestID, redirect)
@@ -149,6 +150,7 @@ func (c *Compat) doFetch(method, rawURL string, headers []string, body []byte, r
 	c.bodies[bodyID] = br
 	c.mu.Unlock()
 
+	c.traceHTTP("response", bodyID, fmt.Sprintf("%d %s", resp.StatusCode, resp.Header.Get("content-type")))
 	out := map[string]any{
 		"status":     resp.StatusCode,
 		"statusText": statusText(resp),
@@ -169,6 +171,10 @@ func (c *Compat) forget(requestID int64) {
 	c.mu.Unlock()
 }
 
+// read is asked for by the shim once per pull. A trace of these against the
+// chunks below is what tells a stalled stream (no read outstanding, no EOF seen)
+// from a slow one.
+//
 // httpRead returns the next chunk, or null at the end of the body. Chunks are
 // whatever the transport hands over rather than a fixed size: an SSE stream
 // arrives event by event, and re-chunking it would only add latency.
@@ -183,16 +189,28 @@ func (c *Compat) httpRead(bodyID int64) goant.Value {
 		if br.buf == nil {
 			br.buf = make([]byte, 32*1024)
 		}
-		n, err := br.resp.Body.Read(br.buf)
+		// Read until there are bytes or an error. A Reader may return (0, nil) —
+		// io.Reader says so explicitly, and an HTTP body being read as it arrives
+		// does — and treating that as the end truncated the stream: the SSE
+		// parser downstream then waited forever for the rest of an event that had
+		// already been cut off. The whole turn hung on it.
+		var n int
+		var err error
+		for n == 0 && err == nil {
+			n, err = br.resp.Body.Read(br.buf)
+		}
 		if n > 0 {
 			chunk := make([]byte, n)
 			copy(chunk, br.buf[:n])
+			c.traceHTTP("chunk", bodyID, fmt.Sprintf("%d bytes", n))
 			return chunk, nil
 		}
-		if err == io.EOF || err == nil {
+		if err == io.EOF {
+			c.traceHTTP("eof", bodyID, "")
 			c.dropBody(bodyID)
 			return nil, nil
 		}
+		c.traceHTTP("error", bodyID, err.Error())
 		c.dropBody(bodyID)
 		if strings.Contains(err.Error(), "context canceled") {
 			return nil, fmt.Errorf("AbortError: the operation was aborted")
@@ -202,7 +220,14 @@ func (c *Compat) httpRead(bodyID int64) goant.Value {
 }
 
 func (c *Compat) httpCancel(bodyID int64) {
+	c.traceHTTP("cancel", bodyID, "")
 	c.dropBody(bodyID)
+}
+
+func (c *Compat) traceHTTP(step string, id int64, detail string) {
+	if c.opts.TraceHTTP != nil {
+		c.opts.TraceHTTP(step, id, detail)
+	}
 }
 
 func (c *Compat) dropBody(bodyID int64) {

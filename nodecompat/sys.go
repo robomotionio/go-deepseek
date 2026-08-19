@@ -318,6 +318,23 @@ func parseQuery(query string) []string {
 	return out
 }
 
+// --- timers ------------------------------------------------------------------
+
+// timerBindings exposes ref/unref, which the engine owns because only the loop
+// knows what is keeping it alive.
+func (c *Compat) timerBindings() map[string]any {
+	return map[string]any{
+		"unref": func(id float64) { c.rt.UnrefTimer(id) },
+		"ref":   func(id float64) { c.rt.RefTimer(id) },
+		"trace": func(kind string, delay, id float64, stack string) {
+			if c.opts.TraceTimers != nil {
+				c.opts.TraceTimers(kind, delay, id, stack)
+			}
+		},
+		"tracing": c.opts.TraceTimers != nil,
+	}
+}
+
 // --- text --------------------------------------------------------------------
 
 func (c *Compat) textBindings() map[string]any {
@@ -347,6 +364,7 @@ func (c *Compat) hostObject() map[string]any {
 		"url":     c.urlBindings(),
 		"text":    c.textBindings(),
 		"crypto":  c.cryptoBindings(),
+		"timers":  c.timerBindings(),
 		"zlib":    c.compressBindings(),
 		"http":    c.httpBindings(),
 		"sortStrings": func(in []string) []string {

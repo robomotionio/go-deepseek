@@ -19,7 +19,7 @@ export function createRequire(from) {
       );
     }
     const dir = base.slice(0, base.lastIndexOf('/') + 1);
-    const path = specifier.startsWith('/') ? specifier : dir + specifier;
+    const path = normalise(specifier.startsWith('/') ? specifier : dir + specifier);
     if (path.endsWith('.json')) {
       return JSON.parse(new TextDecoder().decode(host.fs.readFile(path)));
     }
@@ -31,6 +31,23 @@ export function createRequire(from) {
   require.resolve = (specifier) => specifier;
   require.cache = {};
   return require;
+}
+
+// normalise resolves `.` and `..` textually. The path is not necessarily a file
+// path — a module compiled into the binary is reached by a URL-shaped key — so
+// node:path's algebra is the wrong tool and its separator handling would mangle
+// the scheme.
+function normalise(p) {
+  const [scheme, rest] = /^[a-z][a-z0-9+.-]*:\//i.test(p)
+    ? [p.slice(0, p.indexOf(':/') + 2), p.slice(p.indexOf(':/') + 2)]
+    : ['', p];
+  const out = [];
+  for (const part of rest.split('/')) {
+    if (part === '' || part === '.') continue;
+    if (part === '..') { out.pop(); continue; }
+    out.push(part);
+  }
+  return scheme + (scheme ? '' : p.startsWith('/') ? '/' : '') + out.join('/');
 }
 
 export const builtinModules = [
@@ -51,3 +68,10 @@ export class Module {
 }
 
 export default Module;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['module'] = Module;

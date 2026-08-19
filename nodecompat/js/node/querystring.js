@@ -31,4 +31,12 @@ export const unescape = decodeURIComponent;
 export const decode = parse;
 export const encode = stringify;
 
-export default { parse, stringify, escape, unescape, decode, encode };
+const __ns = { parse, stringify, escape, unescape, decode, encode };
+export default __ns;
+
+// Registered for CommonJS interop. A bundled CommonJS package may `require` a
+// builtin at run time — esbuild leaves those as dynamic requires when the
+// builtin is external — and require is synchronous, so it cannot import this
+// module itself. Evaluating this file publishes it instead; see the require
+// shim in prelude.js.
+(globalThis.__nodeRegistry ??= {})['querystring'] = __ns;
