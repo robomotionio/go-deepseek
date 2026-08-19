@@ -1,4 +1,4 @@
-package deepseek_test
+package runtime_test
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	deepseek "github.com/robomotionio/go-deepseek"
+	dsh "github.com/robomotionio/go-deepseek/internal/runtime"
 )
 
 // The gate: a real model, over the real network, driving the real harness on a
@@ -27,7 +27,7 @@ func TestLiveTurn(t *testing.T) {
 	}
 
 	dir := t.TempDir()
-	h, err := deepseek.New(deepseek.Config{
+	h, err := dsh.New(dsh.Config{
 		CWD:      dir,
 		Model:    model,
 		BaseURL:  os.Getenv("DEEPSEEK_BASE_URL"),
@@ -63,7 +63,7 @@ func TestLiveTurn(t *testing.T) {
 	}
 	t.Logf("cold boot: %v", time.Since(booted))
 
-	result, err := h.Run(ctx, "gate", deepseek.Text(
+	result, err := h.Run(ctx, "gate", dsh.Text(
 		"Reply with exactly the word HARNESS-OK and nothing else."))
 	if err != nil {
 		t.Fatalf("run: %v", err)
@@ -98,7 +98,7 @@ func TestLiveToolUse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, err := deepseek.New(deepseek.Config{
+	h, err := dsh.New(dsh.Config{
 		CWD:      dir,
 		Model:    model,
 		BaseURL:  os.Getenv("DEEPSEEK_BASE_URL"),
@@ -124,7 +124,7 @@ func TestLiveToolUse(t *testing.T) {
 	if err := h.Start(ctx); err != nil {
 		t.Fatalf("start: %v", err)
 	}
-	result, err := h.Run(ctx, "tools", deepseek.Text(
+	result, err := h.Run(ctx, "tools", dsh.Text(
 		"The file notes.txt in the current directory has a line that says BROKEN. "+
 			"Replace that one line with the word FIXED, leaving every other line as it is. "+
 			"Use your file tools."))

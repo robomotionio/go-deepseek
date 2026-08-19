@@ -1,4 +1,4 @@
-package deepseek_test
+package runtime_test
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	deepseek "github.com/robomotionio/go-deepseek"
+	dsh "github.com/robomotionio/go-deepseek/internal/runtime"
 )
 
 // What the gate is supposed to measure: how long a cold boot takes, and what it
@@ -20,7 +20,7 @@ func TestBootCost(t *testing.T) {
 	runtime.GC()
 	runtime.ReadMemStats(&before)
 
-	h, err := deepseek.New(deepseek.Config{
+	h, err := dsh.New(dsh.Config{
 		CWD:      dir,
 		Model:    "deepseek-v4-flash",
 		Provider: "deepseek-official",

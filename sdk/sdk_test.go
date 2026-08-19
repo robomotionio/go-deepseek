@@ -276,3 +276,98 @@ func TestLiveRun(t *testing.T) {
 		t.Error("no chunks were streamed — OnEvent saw nothing as it arrived")
 	}
 }
+
+func TestComposeIsAdjustable(t *testing.T) {
+	cfg := sdk.Config{CWD: t.TempDir(), Model: "deepseek-v4-flash"}
+	entries := sdk.Compose(cfg)
+	if len(entries) == 0 {
+		t.Fatal("the default composition is empty")
+	}
+
+	find := func(list []sdk.Entry, id string) *sdk.Entry {
+		for i := range list {
+			if list[i].ID == id {
+				return &list[i]
+			}
+		}
+		return nil
+	}
+	if find(entries, "tool-fs") == nil {
+		t.Error("the default composition has no filesystem tools")
+	}
+
+	added := sdk.Add(entries, sdk.Entry{ID: "web", Name: "@deepseek-ai/dsh-tool-web"})
+	if find(added, "web") == nil {
+		t.Error("Add did not add the entry")
+	}
+	if len(entries) != len(added)-1 {
+		t.Error("Add mutated the list it was given")
+	}
+
+	off := sdk.Disable(added, "persistence", true)
+	if entry := find(off, "persistence"); entry == nil || !entry.Disabled {
+		t.Error("Disable did not disable the entry")
+	}
+	if entry := find(added, "persistence"); entry != nil && entry.Disabled {
+		t.Error("Disable mutated the list it was given")
+	}
+
+	tuned := sdk.With(added, "tool-todo", map[string]any{"allowParallelInProgress": false})
+	if entry := find(tuned, "tool-todo"); entry == nil || entry.Config["allowParallelInProgress"] != false {
+		t.Error("With did not replace the config")
+	}
+}
+
+// A composition set on the Config has to actually reach the harness. Naming a
+// plugin that does not exist is the cheapest proof: it fails at Open, where a
+// composition that was ignored would have started happily.
+func TestCompositionReachesTheHarness(t *testing.T) {
+	if testing.Short() {
+		t.Skip("booting the harness takes a moment")
+	}
+	dir := t.TempDir()
+	cfg := sdk.Config{CWD: dir, Env: map[string]string{"HOME": dir}}
+	cfg.Composition = sdk.Add(sdk.Compose(cfg), sdk.Entry{
+		ID:   "nope",
+		Name: "@deepseek-ai/dsh-not-a-real-plugin",
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	h, err := sdk.Open(ctx, cfg)
+	if err == nil {
+		h.Close()
+		t.Fatal("a composition naming a plugin that does not exist should fail to start")
+	}
+	if !strings.Contains(err.Error(), "dsh-not-a-real-plugin") {
+		t.Fatalf("the failure does not name the plugin: %v", err)
+	}
+}
+
+func TestPluginsAndVersion(t *testing.T) {
+	plugins := sdk.Plugins()
+	if len(plugins) == 0 {
+		t.Fatal("the bundle reports no plugins")
+	}
+	var found bool
+	for _, p := range plugins {
+		if p == "@deepseek-ai/dsh-tool-fs" {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("the filesystem tools are not in the bundle: %v", plugins[:min(5, len(plugins))])
+	}
+	version, commit := sdk.HarnessVersion()
+	if version == "" || commit == "" {
+		t.Fatalf("the bundle does not record where it came from: %q @ %q", version, commit)
+	}
+	t.Logf("harness %s @ %s, %d plugins", version, commit[:12], len(plugins))
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}

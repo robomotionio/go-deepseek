@@ -1,4 +1,4 @@
-package deepseek
+package runtime
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/robomotionio/go-deepseek/bundle"
+	"github.com/robomotionio/go-deepseek/internal/bundle"
 )
 
 // Every bundled module has to evaluate on its own. It is a cheap test and it has

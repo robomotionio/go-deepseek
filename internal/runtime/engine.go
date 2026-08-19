@@ -1,4 +1,4 @@
-package deepseek
+package runtime
 
 // The runtime assembly: an engine, a Node surface, and the harness, wired into
 // one Runtime with a module resolver that knows which is which.
@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/robomotionio/go-deepseek/bundle"
-	"github.com/robomotionio/go-deepseek/nodecompat"
+	"github.com/robomotionio/go-deepseek/internal/bundle"
+	"github.com/robomotionio/go-deepseek/internal/nodecompat"
 	"github.com/robomotionio/goant"
 )
 

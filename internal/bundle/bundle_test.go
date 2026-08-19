@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/robomotionio/go-deepseek/bundle"
+	"github.com/robomotionio/go-deepseek/internal/bundle"
 )
 
 func TestManifestLoads(t *testing.T) {

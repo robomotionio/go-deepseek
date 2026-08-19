@@ -1,4 +1,4 @@
-package deepseek_test
+package runtime_test
 
 import (
 	"context"
@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	deepseek "github.com/robomotionio/go-deepseek"
+	dsh "github.com/robomotionio/go-deepseek/internal/runtime"
 )
 
 // The gate: the composition boots on goant, with no Node.js involved.
 func TestBootsTheComposition(t *testing.T) {
 	dir := t.TempDir()
-	h, err := deepseek.New(deepseek.Config{
+	h, err := dsh.New(dsh.Config{
 		CWD:      dir,
 		Model:    "deepseek-v4-flash",
 		Provider: "deepseek-official",

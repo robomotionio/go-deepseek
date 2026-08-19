@@ -1,114 +1,63 @@
 # go-deepseek
 
-Run the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) inside
-a Go program. No Node.js, no native addons, nothing to fetch at run time — the
-harness is compiled into the binary and executed by a pure-Go JavaScript engine.
-
-```go
-h, err := deepseek.New(deepseek.Config{
-    CWD:      workdir,
-    Provider: "deepseek-official",
-    Model:    "deepseek-v4-flash",
-    Env:      map[string]string{"DEEPSEEK_API_KEY": key},
-})
-if err != nil { return err }
-defer h.Close()
-
-if err := h.Start(ctx); err != nil { return err }
-result, err := h.Run(ctx, "session-1", deepseek.Text("Fix the failing test in add.js."))
-fmt.Println(result.Text)
-```
-
-## Why it exists
-
-The upstream Python SDK is a subprocess driver: it spawns a prebuilt single-file
-Node executable shipped as a platform wheel. PyPI has those wheels for
-`manylinux_2_28_x86_64`, `manylinux_2_28_aarch64` and `macosx_14_0_arm64` only —
-no Windows, no macOS x64 — and the unpacked runtime measures 196 MB. Anything
-built on it inherits that platform matrix and that payload.
-
-This package inherits Go's instead: **linux, darwin and windows on both amd64
-and arm64**, from one toolchain, with the harness inside the binary.
-
-## How it is put together
-
-| Piece | What it does |
-|---|---|
-| [goant](https://github.com/robomotionio/goant) | The JavaScript engine. Pure Go, CGO-free, 99.4% of test262. |
-| `nodecompat` | The Node.js and web-platform surface: `node:fs`, `path`, `crypto`, `zlib`, `fetch`, streams, `Buffer`, `URL`. Computation in JavaScript, the machine in Go. |
-| `bundle` | The harness itself — one ES module per package, generated from a pinned checkout by `tools/bundle/build.mjs` and committed. |
-| the root package | `Config`, `Compose`, `Harness`: composing the plugin list and running turns. |
-| `sdk` | The client API, shaped like the official Python SDK, over either carrier. |
-
-Everything the harness can reach is one Go object (`nodecompat`'s host bindings),
-which is what makes the operating-system surface small enough to read and small
-enough to fence. `child_process`, `worker_threads` and `vm` are refused by name.
-
-## Measurements
-
-On one idle Linux x86-64 laptop, against `deepseek/deepseek-v4-flash-0731`
-through a gateway:
-
-| | |
-|---|---|
-| Cold boot (parse and mount the 8-entry composition) | **0.37 s** |
-| Go heap after boot | **58 MB** |
-| One text turn | **3.2 s**, 20 session events |
-| One tool-using turn (read a file, edit it, verify) | **4.2 s**, 72 events, 3 tool calls |
-| Bundle compiled into the binary | 12.5 MB across 64 modules |
-
-(Measured with `go test -run TestBootCost -v .`; the first figures recorded for
-this were four times worse, taken while a conformance suite was saturating the
-same machine. Worth knowing when you measure it yourself.)
-
-## The composition
-
-Everything in the harness is a plugin, and a deployment is a list of them. The
-default list is the minimal useful agent — a model, a session that persists, a
-filesystem it can read and edit, a todo list:
-
-```go
-entries := deepseek.Compose(cfg)
-entries = deepseek.With(entries, "tool-todo", map[string]any{"allowParallelInProgress": false})
-entries = deepseek.Disable(entries, "persistence", true)
-```
-
-Two rules the harness imposes, restated here because both are quiet traps:
-
-- An entry's config **replaces** the plugin's defaults rather than merging into
-  them. An override that mentions one key discards the rest.
-- The YAML form supports `!!js`, which is arbitrary JavaScript the loader
-  evaluates. Nothing here emits it and `validate` rejects it in anything a caller
-  supplied — a composition that arrives from outside the program is data.
-
-## The SDK
-
-`sdk/` is the client API, deliberately the same shape as the [official Python
-SDK](https://github.com/deepseek-ai/deepseek-harness/tree/master/python/sdk) — a
-harness, sessions, and a run that returns the final response, the finish reason
-and the events it saw — so that a program written against one translates to the
-other.
+The [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) as a
+pure-Go SDK. No Node.js, no native addons, nothing to fetch at run time — the
+harness is compiled into your binary and executed by a pure-Go JavaScript
+engine.
 
 ```go
 import "github.com/robomotionio/go-deepseek/sdk"
 
 h, err := sdk.Open(ctx, sdk.Config{
     Model:  "deepseek-v4-flash",
-    CWD:    workdir,          // the agent's working directory, and its fence
-    APIKey: key,              // or leave empty and set DEEPSEEK_API_KEY
+    APIKey: key,        // or leave empty and set DEEPSEEK_API_KEY
+    CWD:    workdir,    // where the agent works, and the fence it works inside
 })
 if err != nil {
     return err
 }
 defer h.Close()
 
-result, err := h.Run(ctx, sdk.Text("Say hi."))
+result, err := h.Run(ctx, sdk.Text("Fix the failing test in add.js."))
 if err != nil {
     return err
 }
-fmt.Println(result.FinalResponse)   // "Hi!"
-fmt.Println(result.FinishReason)    // "completed"
+fmt.Println(result.FinalResponse)
 ```
+
+That is a real coding agent: it reads files, edits them, runs its tools, keeps a
+session log, and streams its reasoning — inside your process, on one goroutine,
+with a filesystem fence you set.
+
+```
+go get github.com/robomotionio/go-deepseek
+```
+
+## Why
+
+The official Python SDK is a subprocess driver: it spawns a prebuilt single-file
+Node executable shipped as a platform wheel. PyPI has those wheels for
+`manylinux_2_28_x86_64`, `manylinux_2_28_aarch64` and `macosx_14_0_arm64` only —
+no Windows, no macOS x64 — and the unpacked runtime measures 196 MB. Anything
+built on it inherits that platform matrix and that payload.
+
+This inherits Go's instead: **linux, darwin and windows on both amd64 and
+arm64**, from one toolchain, with the harness inside the binary and nothing to
+install beside it.
+
+| | |
+|---|---|
+| Cold boot (parse and mount the default composition) | **0.37 s** |
+| Go heap after boot | **58 MB** |
+| One text turn | **3.2 s** |
+| One tool-using turn (read a file, edit it, verify) | **4.2 s**, 3 tool calls |
+| Harness compiled into the binary | 12.5 MB across 64 modules |
+
+(`go test -run TestBootCost -v ./internal/runtime`. Measure it on an idle
+machine: the first numbers recorded here were four times worse, taken while a
+conformance suite was saturating the same laptop.)
+
+## Using it
 
 ### A conversation
 
@@ -118,14 +67,40 @@ sessions do not, and may run concurrently.
 ```go
 session := h.Session("ticket-4171")
 
-first, _ := session.Run(ctx, sdk.Text("Read main.go and tell me what it does."))
-second, _ := session.Run(ctx, sdk.Text("Now add a test for the part you just described."))
+_, _ = session.Run(ctx, sdk.Text("Read main.go and tell me what it does."))
+second, err := session.Run(ctx, sdk.Text("Now add a test for the part you described."))
 
-fmt.Println(second.FinalResponse, second.ToolCalls())
+fmt.Println(second.FinalResponse, second.ToolCalls(), second.Duration)
 ```
 
 `h.NewSession()` gives a session a fresh random id; `h.Run` is shorthand for a
-session used once.
+session used once. The session id is also the name of its log under
+`Config.SessionRoot`, so a session resumes by using its id again.
+
+### Talking to a gateway
+
+Point it anywhere that speaks the DeepSeek chat-completions API — OpenRouter, a
+proxy, a local server — with `BaseURL`, `APIKey` and that endpoint's model id:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{
+    BaseURL: "https://openrouter.ai/api/v1",
+    APIKey:  os.Getenv("OPENROUTER_API_KEY"),
+    Model:   "deepseek/deepseek-v4-flash-0731",   // the gateway's id for it
+    CWD:     workdir,
+})
+```
+
+`Provider` is deliberately absent there, and that is the one thing about this
+worth reading twice: it names the ROUTE the composition registers, not the
+vendor at the other end. The default composition registers exactly one route,
+`deepseek-official`, and that route is what the adapter's `BaseURL` points
+somewhere else. Set `Provider` only when your composition mounts an adapter that
+registers a different route name.
+
+The endpoint is also read from the environment when the fields are empty:
+`DEEPSEEK_BASE_URL` and `DEEPSEEK_API_KEY`, the same variables the harness and
+the Python SDK use.
 
 ### Streaming
 
@@ -154,9 +129,59 @@ result, err := h.Run(ctx, sdk.Text("Refactor the parser."),
 
 Event payloads stay as raw JSON on purpose: the harness defines dozens of event
 types whose shapes move with it, so `Decode` into whatever you actually read
-beats a generated struct per type that has to be maintained against every
-release. `OnNotification` sees everything, including the events of subagent
-sessions a delegation created.
+beats a generated struct per type maintained against every release.
+`OnNotification` sees everything, including the events of subagent sessions a
+delegation created.
+
+### Fencing the agent
+
+`CWD` is where the agent works and, by default, the only place its tools can
+reach — along with its session directory and the temporary directory. Widen that
+deliberately or not at all:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{
+    CWD:   "/srv/checkouts/app",
+    Roots: []string{"/srv/checkouts/app", "/srv/reference"},   // and nothing else
+    Env:   map[string]string{"DEEPSEEK_API_KEY": key},         // not the process's own
+})
+```
+
+`Env` is the whole environment the harness sees. Passing a map rather than
+inheriting is how a credential that has nothing to do with this agent stays out
+of reach of the shell it might run.
+
+### Composing the harness
+
+Everything in the harness is a plugin, and a deployment is a list of them. The
+default is the minimal useful agent: a model, a session that persists, a
+filesystem the agent can read and edit, and a todo list. Add a capability, take
+one away, or configure one:
+
+```go
+cfg := sdk.Config{CWD: workdir, Model: "deepseek-v4-flash"}
+
+entries := sdk.Compose(cfg)
+entries = sdk.Add(entries, sdk.Entry{ID: "web", Name: "@deepseek-ai/dsh-tool-web"})
+entries = sdk.Disable(entries, "persistence", true)      // keep the config, mount nothing
+entries = sdk.With(entries, "tool-todo", map[string]any{ // replaces, never merges
+    "allowParallelInProgress": false,
+})
+cfg.Composition = entries
+
+h, err := sdk.Open(ctx, cfg)
+```
+
+`sdk.Plugins()` lists what the embedded bundle can mount — anything else has to
+go into the bundle first, see below. Two rules worth knowing, because both are
+quiet traps:
+
+- An entry's config **replaces** the plugin's defaults rather than merging into
+  them. An override that mentions one key discards the rest.
+- The YAML form of a composition supports `!!js`, which is arbitrary JavaScript
+  the loader evaluates. Nothing here emits it and a composition is validated
+  before it mounts — a composition that arrives from outside your program is
+  data, and a value in it that executes is code with your process's privileges.
 
 ### When a turn fails
 
@@ -169,26 +194,56 @@ result, err := h.Run(ctx, sdk.Text("..."))
 if err != nil {
     return err                       // transport, protocol, or cancellation
 }
-if turnErr := sdk.TurnError(result.Events); turnErr != nil {
-    log.Println("the model could not finish:", turnErr)
+switch result.FinishReason {
+case "completed":
+    fmt.Println(result.FinalResponse)
+case "max-tokens":
+    fmt.Println("truncated:", result.FinalResponse)
+case "error":
+    log.Println(sdk.TurnError(result.Events))
     // sdk: turn failed: Insufficient credits (BILLING 402)
 }
 ```
 
 Pass `sdk.FailOnTurnError()` to have `Run` return that as an error instead. The
-sentinels are `sdk.ErrTurnFailed`, `sdk.ErrProtocol`, `sdk.ErrTransportClosed`,
-`sdk.ErrClosed`, and `*sdk.RPCError` for a runtime that refused a request.
+sentinels are `sdk.ErrTurnFailed`, `sdk.ErrProtocol`, `sdk.ErrTransportClosed`
+and `sdk.ErrClosed`, plus `*sdk.RPCError` for a runtime that refused a request.
 
 ### Cancelling
 
 The context governs the run. Cancelling it stops the turn — the request in
-flight is aborted rather than left to finish and be discarded:
+flight is aborted rather than left to finish and be billed:
 
 ```go
 ctx, cancel := context.WithTimeout(ctx, 2*time.Minute)
 defer cancel()
+
 result, err := h.Run(ctx, sdk.Text("Do the long thing."))
+if errors.Is(err, context.DeadlineExceeded) {
+    // the session log still holds everything that happened before the deadline
+}
 ```
+
+### Watching the runtime
+
+Two questions have no other way to be asked, so there are two hooks for them:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{
+    CWD: workdir,
+    TraceHTTP: func(step string, id int64, detail string) {
+        log.Println("http", step, id, detail)     // fetch, response, chunk, eof, cancel
+    },
+    TraceTimers: func(kind string, delayMs, id float64, stack string) {
+        if delayMs > 10_000 {
+            log.Println("long timer", kind, delayMs, stack)
+        }
+    },
+})
+```
+
+The first answers "is the stream stalled, or slow?"; the second answers "what is
+keeping this alive?". Each of them found a real bug during development.
 
 ### Another carrier
 
@@ -202,8 +257,8 @@ h, err := sdk.Open(ctx, sdk.Config{Model: "deepseek-v4-flash"},
 
 Nothing above the carrier changes: same results, same events, same errors. Use
 it for a build carrying plugins the embedded bundle does not, or a runtime
-version pinned separately from this package. `sdk.WithCarrier` takes one of your
-own — a fake for tests, or a transport this package does not implement.
+pinned separately from this package. `sdk.WithCarrier` takes one of your own — a
+fake for tests, or a transport this package does not implement.
 
 ### What a run means
 
@@ -214,20 +269,59 @@ subagent finishing — contributes to it too. This is upstream's rule, restated
 here because "the answer to my question" is the natural reading and is not what
 the field is.
 
-## Regenerating the bundle
+## How it works
 
-Maintainers only, and only when moving to a new upstream revision:
-
-```bash
-make update                      # fetch upstream, build it, regenerate, test
-make update HARNESS_REF=dsh-v0.1.0-rc.8    # move to another revision
-make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
-make show                        # what the committed bundle was built from
+```
+your program
+     │
+     ▼
+   sdk                    sessions, runs, streaming, errors — the only API
+     │
+     ├── in process ────► internal/runtime   goant + the Node surface + the harness
+     └── or subprocess ─► JSON-RPC over stdio to a prebuilt runtime
 ```
 
-`bundle/manifest.json` records the harness version and commit it was built from.
+| Piece | What it is |
+|---|---|
+| [goant](https://github.com/robomotionio/goant) | The JavaScript engine. Pure Go, CGO-free, 99.4% of test262. |
+| `internal/nodecompat` | The Node.js and web-platform surface — `node:fs`, `path`, `crypto`, `zlib`, `fetch`, streams, `Buffer`, `URL`. Computation in JavaScript, the machine in Go. |
+| `internal/bundle` | The harness itself: one ES module per package, generated from a pinned checkout and committed. |
+| `internal/runtime` | Mounts a composition and runs turns on one goroutine. |
+
+Everything the harness can reach is one Go object — `nodecompat`'s host bindings
+— which is what makes the operating-system surface small enough to read and
+small enough to fence. `child_process`, `worker_threads` and `vm` are refused by
+name: a capability that dangerous should be granted deliberately, not acquired
+by importing a module.
+
+## Tracking upstream
+
+The bundle is a generated artifact, committed like any other. Regenerating it
+needs node, pnpm and git; using it needs none of them.
+
+```bash
+make update                                   # fetch upstream, build, regenerate, test
+make update HARNESS_REF=dsh-v0.1.0-rc.8       # move to another revision
+make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
+make show                                     # what the committed bundle was built from
+```
+
+`make verify` is the test that matters afterwards: every bundled module must
+still evaluate on the engine. A new upstream revision reaching for a Node API
+this runtime does not have fails there, naming the module, rather than later
+during a plugin mount.
+
+## Status
+
+The harness is a developer preview at `0.1.0-rc.7` whose session format is still
+version zero, and upstream says breaking changes will happen. The bundle is
+pinned by tag, and `sdk.HarnessVersion()` reports which one you have.
+
+Not everything upstream ships is bundled. Excluded, with the reason recorded in
+the manifest: anything needing `node:sqlite`, native image processing, worker
+threads, `node:vm`, or a pseudo-terminal. `sdk.Plugins()` lists what is there.
 
 ## Licences
 
 MIT. The harness is MIT; goant is MIT; `web-streams-polyfill`, vendored into
-`nodecompat/js/vendor/`, is MIT. See `NOTICE`.
+`internal/nodecompat/js/vendor/`, is MIT. See `NOTICE`.

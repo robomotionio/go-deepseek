@@ -1,4 +1,4 @@
-package deepseek
+package runtime
 
 // The composition: the entry list that decides what the harness IS.
 //

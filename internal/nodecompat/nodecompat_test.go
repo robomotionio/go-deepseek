@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/robomotionio/go-deepseek/nodecompat"
+	"github.com/robomotionio/go-deepseek/internal/nodecompat"
 	"github.com/robomotionio/goant"
 )
 

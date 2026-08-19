@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	deepseek "github.com/robomotionio/go-deepseek"
+	runtime "github.com/robomotionio/go-deepseek/internal/runtime"
 )
 
 // The in-process carrier: the harness runs inside this program, on the embedded
@@ -21,12 +21,18 @@ import (
 type inProcess struct {
 	cfg *Config
 
-	harness deepseek.Harness
+	harness runtime.Harness
 
-	mu       sync.Mutex
-	sink     func(Notification)
-	sinkOnce sync.Once
-	done     chan struct{}
+	mu   sync.Mutex
+	sink func(Notification)
+
+	// fanning records that the reader goroutine below was actually started, so
+	// that Close waits for it only when there is something to wait for. Without
+	// the flag, a harness that failed to START left Close blocked forever on a
+	// goroutine that never ran — a hang on the error path, which is the worst
+	// place to have one.
+	fanning bool
+	done    chan struct{}
 }
 
 func newInProcess(cfg *Config) Carrier {
@@ -45,26 +51,32 @@ func (p *inProcess) Start(ctx context.Context) error {
 		env["HOME"] = p.cfg.CWD
 	}
 
-	h, err := deepseek.New(deepseek.Config{
+	h, err := runtime.New(runtime.Config{
 		Provider:    p.cfg.Provider,
 		Model:       p.cfg.Model,
 		BaseURL:     p.cfg.BaseURL,
 		APIKey:      p.cfg.APIKey,
 		MaxTokens:   p.cfg.MaxTokens,
 		CWD:         p.cfg.CWD,
+		Roots:       p.cfg.Roots,
 		SessionRoot: p.cfg.SessionRoot,
+		Composition: p.cfg.Composition,
+		MemoryLimit: p.cfg.MemoryLimit,
 		Env:         env,
 		Stdout:      p.cfg.Stdout,
 		Stderr:      p.cfg.Stderr,
+		TraceTimers: p.cfg.TraceTimers,
+		TraceHTTP:   p.cfg.TraceHTTP,
 	})
 	if err != nil {
 		return err
 	}
-	p.harness = h
 	if err := h.Start(ctx); err != nil {
 		h.Close()
 		return err
 	}
+	p.harness = h
+	p.fanning = true
 	// One reader owns the harness's event channel for the carrier's life and
 	// hands each event to whichever run is in flight. The channel has a single
 	// consumer by design — a second one would take events away from the first —
@@ -108,9 +120,9 @@ func (p *inProcess) Prompt(ctx context.Context, sessionID string, input Input, s
 		p.mu.Unlock()
 	}()
 
-	blocks := make([]deepseek.Block, len(input))
+	blocks := make([]runtime.Block, len(input))
 	for i, b := range input {
-		blocks[i] = deepseek.Block{Type: b.Type, Text: b.Text}
+		blocks[i] = runtime.Block{Type: b.Type, Text: b.Text}
 	}
 	_, err := p.harness.Run(ctx, sessionID, blocks)
 	return err
@@ -121,6 +133,11 @@ func (p *inProcess) Close() error {
 		return nil
 	}
 	err := p.harness.Close()
-	<-p.done
+	if p.fanning {
+		// Closing the harness closes its event channel, which is what ends the
+		// reader. Waiting for it means no notification arrives after Close
+		// returns.
+		<-p.done
+	}
 	return err
 }

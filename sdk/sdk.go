@@ -50,10 +50,35 @@ type Config struct {
 	// with less.
 	Env map[string]string
 
+	// Roots widens the filesystem fence beyond CWD. Empty fences the agent to
+	// CWD, its session directory and the temporary directory — which is the
+	// setting to leave alone unless the agent has a reason to read elsewhere.
+	Roots []string
+
+	// Composition is the plugin list the harness is built from. Nil uses the
+	// default — see Compose, which returns that list to adjust.
+	//
+	// In-process only: a runtime driven over JSON-RPC composes itself.
+	Composition []Entry
+
+	// MemoryLimit bounds the JavaScript heap, in bytes. Zero means no limit,
+	// which means a plugin that runs away takes the process with it rather than
+	// failing.
+	MemoryLimit uint64
+
 	// Stdout and Stderr receive anything the harness prints. Nil discards it,
 	// because a library that writes to the program's stdout uninvited is a
 	// library people work around.
 	Stdout, Stderr func([]byte)
+
+	// TraceTimers and TraceHTTP report what the runtime is doing underneath: the
+	// timers it arms, and each step of each request. Both are off unless set,
+	// and both exist because two questions have no other way to be asked —
+	// "what is keeping this alive?" and "is the stream stalled, or slow?".
+	//
+	// In-process only.
+	TraceTimers func(kind string, delayMs float64, id float64, stack string)
+	TraceHTTP   func(step string, id int64, detail string)
 
 	// carrier, when set, replaces the default in-process one. Set through
 	// WithRuntimeBinary or WithCarrier.

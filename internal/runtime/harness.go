@@ -9,7 +9,7 @@
 //
 // A Harness owns one JavaScript world on one goroutine. Every method here is
 // safe to call from any goroutine; each is a message to that one.
-package deepseek
+package runtime
 
 import (
 	"context"
