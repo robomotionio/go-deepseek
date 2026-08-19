@@ -205,6 +205,131 @@ This is the alternative to handing an agent a shell and hoping. A tool has a
 name, a schema, a fence you wrote in Go, and an implementation you can test
 without a model in the room.
 
+### A whole program
+
+Everything above is a fragment. This is a whole one — a Go plugin, streaming and
+a real turn — that compiles and runs as it stands:
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"time"
+
+	"github.com/robomotionio/go-deepseek/sdk"
+)
+
+func main() {
+	// Ctrl-C cancels the turn: the request in flight is aborted rather than
+	// left to finish and be billed.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
+	workdir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	h, err := sdk.Open(ctx, sdk.Config{
+		// An OpenRouter gateway. For DeepSeek itself, drop BaseURL and use
+		// "deepseek-v4-flash" as the model.
+		BaseURL: "https://openrouter.ai/api/v1",
+		APIKey:  os.Getenv("OPENROUTER_API_KEY"),
+		Model:   "deepseek/deepseek-v4-flash-0731",
+
+		// Where the agent works, and the fence its tools cannot reach outside.
+		CWD: workdir,
+
+		// A tool of our own, in Go, beside the harness's own read/edit/bash.
+		Plugins: []sdk.Plugin{{
+			ID: "deploys",
+			Tools: []sdk.Tool{{
+				Name:        "last_deploy",
+				Description: "When a service was last deployed, and by whom. The only way to know this.",
+				Parameters: map[string]any{
+					"service": map[string]any{
+						"type":        "string",
+						"required":    true,
+						"description": "The service name, e.g. \"checkout\".",
+					},
+				},
+				Execute: lastDeploy,
+			}},
+		}},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer h.Close()
+
+	result, err := h.Run(ctx,
+		sdk.Text("When did checkout last go out, and does CHANGELOG.md mention it?"),
+		sdk.OnEvent(func(e sdk.Event) {
+			switch e.Type {
+			case "assistant/chunk":
+				// Print the reply as it arrives rather than after it.
+				var chunk struct {
+					Chunk struct {
+						Type string `json:"type"`
+						Text string `json:"text"`
+					} `json:"chunk"`
+				}
+				if e.Decode(&chunk) == nil && chunk.Chunk.Type == "text-delta" {
+					fmt.Print(chunk.Chunk.Text)
+				}
+			case "tool/call":
+				fmt.Fprintln(os.Stderr, "\n[tool]", string(e.Data))
+			}
+		}))
+	if err != nil {
+		log.Fatal(err) // transport, protocol, or the Ctrl-C above
+	}
+
+	fmt.Printf("\n\n%s in %v (session %s)\n",
+		result.FinishReason, result.Duration.Round(time.Millisecond), result.SessionID)
+}
+
+// lastDeploy is an ordinary Go function. It runs on its own goroutine, and the
+// context is cancelled if the agent stops waiting for it.
+func lastDeploy(ctx context.Context, args json.RawMessage) (string, error) {
+	var in struct {
+		Service string `json:"service"`
+	}
+	if err := json.Unmarshal(args, &in); err != nil {
+		return "", err
+	}
+	// Your database, your internal API, whatever this program can reach. The
+	// error text goes to the model, so it is worth writing for that reader.
+	if in.Service != "checkout" {
+		return "", fmt.Errorf("no service named %q; known services: checkout, search", in.Service)
+	}
+	return "checkout v4.2.1, deployed 2026-08-17 14:03 UTC by rita@example.com", nil
+}
+```
+
+In a directory with a `CHANGELOG.md`, that prints:
+
+```
+[tool] {"turn":1,"step":1,"callId":"...","name":"last_deploy","arguments":"{\"service\": \"checkout\"}"}
+[tool] {"turn":1,"step":1,"callId":"...","name":"read","arguments":"{\"file_path\": \"CHANGELOG.md\"}"}
+
+**When:** Checkout last went out as **v4.2.1 on 2026-08-17 14:03 UTC**, deployed by rita@example.com.
+
+**Does CHANGELOG.md mention it?** Yes — CHANGELOG.md has an entry for `v4.2.1 - 2026-08-17`
+noting "checkout: faster cart totals," which matches that deployment.
+
+completed in 4.059s (session session-5a7af6692c8d97f8)
+```
+
+One turn, two tools: the Go function this program supplied, and the harness's own
+`read` reaching a file inside the fence. Neither one knows the other is unusual.
+
 ### Composing the harness
 
 Everything in the harness is a plugin, and a deployment is a list of them. The
