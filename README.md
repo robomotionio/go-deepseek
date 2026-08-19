@@ -313,6 +313,7 @@ reachable by name** — there is no per-capability wrapper to wait for:
 | `ctx.Call(path, args…)` | anything else: `tools.register`, `systemPrompt.section`, `sessionProjections.register` |
 | `ctx.Effect(inverse)` | a revertible effect whose inverse is Go, recovered LIFO on unmount (runs synchronously; use `ctx.OnDispose` for teardown that blocks) |
 | `ctx.Func` / `ctx.SyncFunc` | a Go closure as a JavaScript function — a tool's execute, a listener, a service method |
+| `sdk.Undefined()` | JavaScript's `undefined`, which a Go `nil` is not: it crosses as `null`, and a `ctx.tools.guard` reading `string \| undefined` denies every call in the harness on anything else |
 
 Three properties are worth stating because they are the ones that make this a
 component rather than a callback bag.
@@ -626,6 +627,12 @@ cfg.Composition = entries
 
 h, err := sdk.Open(ctx, cfg)
 ```
+
+`sdk.Compose` reads the Config exactly as `Open` would, defaults and environment
+included — the same endpoint from `DEEPSEEK_BASE_URL`, the same working
+directory. It has to: an entry list is data, and it FREEZES what it read, so a
+composition built from a Config that had not been defaulted yet would aim the
+model adapter at the default endpoint however carefully the environment was set.
 
 `sdk.Plugins()` lists what the embedded bundle can mount — anything else has to
 go into the bundle first, see below. Two rules worth knowing, because both are

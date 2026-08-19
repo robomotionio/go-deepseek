@@ -39,6 +39,13 @@ Everything below was captured from a real run against the OpenRouter gateway,
 with `…` marking where a long answer was trimmed. Model prose varies run to run;
 the assertions do not.
 
+> **A known flake, so it does not read as your mistake.** Opening a *second*
+> harness in the same process and running a turn on it hangs some of the time —
+> measured at 3–5 rounds in 10 with a tight open/close loop, and rarely with the
+> two that example 02 opens. It predates these examples (a controlled A/B pinned
+> it to the runtime, not to anything here) and affects only 02 and 05, the two
+> that open more than one. Re-run it.
+
 ## The tour
 
 | # | Directory | The harness idea | Seam / event |
@@ -82,18 +89,24 @@ deliberately.
 ## 02 · chat — a conversation, and the log underneath it
 
 A stdin REPL on one session, streamed token by token off `assistant/chunk`.
-When it ends, the program **reads the session log back off disk and reprints the
-conversation** — a transcript it never held in memory.
+When it ends the program does two things, and together they are the lesson.
 
-That is the lesson: the harness does not hand you the conversation, it appends
-every turn to a durable ordered log, and the model's history, a resume and an
-audit are all derived from it. Upstream:
+It **reads the session log back off disk and reprints the conversation** — a
+transcript it never held in memory. Then it opens a **second harness on the same
+session id** and asks it what was said first, and the second one knows.
+
+The harness does not hand you the conversation. It appends every turn to a
+durable ordered log, and the model's history, a resume and an audit are all
+derived from that. A session id is not a handle — it is the name of a log, which
+is why using one again in a new process continues rather than restarts.
+Upstream:
 [`docs/subsystems/persistence.md`](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/subsystems/persistence.md),
 [`docs/capability-seams.md`](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/capability-seams.md).
 
 The example also reconfigures the persistence provider through the composition
 (plain JSONL instead of the default zstd), which is what makes the log readable
-here without a decompressor.
+here without a decompressor. Both compressions resume; only one is legible to
+`jq`.
 
 ```sh
 printf 'Name a fruit. One word.\nWhat colour is it? One word.\n' | go run ./examples/02-chat
@@ -127,6 +140,15 @@ dsh> Orange
   assistant/message        2
   step/end                 2
   turn/end                 2
+
+The log is the durable copy: ordered, self-describing, and readable
+by anything — including, next, by a second harness.
+
+--- a second harness, same session id ---
+"Name a fruit. One word."
+
+[the first thing said was "Name a fruit. One word."]
+PASS: a second process picked the conversation back up.
 ```
 
 **What a run is.** A run owns the interval from the prompt being durably
@@ -290,13 +312,12 @@ presets and plan mode are all listeners on this same waterfall upstream. The
 loop was not modified.
 
 > **A trap the example documents in full.** A guard's contract is
-> `string | undefined`, and the bridge encodes a Go `nil` as JSON `null` — which
-> in JavaScript is *not* `undefined`. A guard returning `nil` therefore denies
-> **every** call in the harness, with the reason `null`. The example holds a
-> real `undefined` once (`ctx.At("_noObjection")`) and returns that instead. The
-> leading underscore is load-bearing: cordis reads `_`-prefixed properties
-> straight off the context, while any other unknown name is refused as an
-> undeclared service.
+> `string | undefined`, and Go has no `undefined` — nor has JSON, so a Go `nil`
+> crosses the bridge as `null`, which in JavaScript is *not* `undefined`. A
+> guard returning `nil` therefore denies **every** call in the harness, with the
+> reason `null`. `sdk.Undefined()` is how Go says undefined and means it: a
+> bridge marker rather than a held reference, so it costs no call and is safe to
+> return from the synchronous callback a guard has to be.
 
 Upstream: [`docs/tool-execution-pipeline.md`](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/tool-execution-pipeline.md).
 
@@ -498,11 +519,6 @@ examples lie.
   fails closed, so `{kind:"ask"}` denies. Example 07 gates inside the
   `tools/pre-execute` handler instead.
 - **`bash` is absent by default**, for the reason example 10 exists.
-- **Resuming a stored session from a new process is not wired up.** The log is
-  complete enough for it and upstream's loop has the API (`agentLoop.resume`),
-  but this SDK's boot script only calls `agentLoop.create`. Example 02 proves
-  the durability it can prove — reading the log back — and says plainly what it
-  cannot.
 
 ## Ground rules these follow
 
