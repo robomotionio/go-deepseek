@@ -1,7 +1,7 @@
 # examples — a tour of the DeepSeek Harness, hosted in Go
 
-Ten runnable programs, simple to complex. Each one proves a single idea about
-the harness, is self-contained, and can be copied out of here whole.
+Twelve runnable programs, simple to complex. Each one proves a single idea
+about the harness, is self-contained, and can be copied out of here whole.
 
 ```
 go run ./examples/01-hello
@@ -19,7 +19,9 @@ patch.
 
 **A Go program can be one of those listeners.** That is what the tour is for.
 By example 10 a Go function is filling a capability seam the JavaScript runtime
-cannot, and the agent gains a tool this program never registered.
+cannot, and the agent gains a tool this program never registered. By example 12
+one model has taught another something neither could have known, and the lesson
+outlives both processes in a file the agents cannot reach.
 
 ## Running them
 
@@ -51,7 +53,10 @@ the assertions do not.
 > confined to that shape: example 07, which opens a single harness, hit it once
 > in roughly eight runs, then passed six for six.
 >
-> Any example can hit it. Re-run.
+> Any example can hit it. Re-run. Example 12 also shows the recovery: on this
+> exact signature it resumes the session once, telling the model the cutoff was
+> infrastructure — the captured run below hit it mid-replay and finished the
+> job anyway, because everything a turn needs survives the dead one.
 
 ## The tour
 
@@ -67,6 +72,8 @@ the assertions do not.
 | 08 | [`08-audit`](08-audit) | Wrap to measure, observe to record; effects revert themselves. | `tools/execute`, `tools/result`, `ctx.Effect` |
 | 09 | [`09-context`](09-context) | Every step can carry facts the model cannot know. | `ctx.systemPrompt.section()` |
 | 10 | [`10-shell`](10-shell) | Go fills a seam the JavaScript runtime cannot. The agent gains `bash`. | `ctx.shell` |
+| 11 | [`11-learning`](11-learning) | The agent gains a capability it did not have, and keeps it. | `ctx.skills.register()` |
+| 12 | [`12-advanced-learning`](12-advanced-learning) | An RPA job learned once and replayed cheaply, checked against the site's own state. | `ctx.skills.register()`, Go tools |
 
 ---
 
@@ -533,6 +540,167 @@ and the example says so where it does it.
 Upstream: [`docs/subsystems/shell.md`](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/subsystems/shell.md),
 [`docs/capability-seams.md`](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/capability-seams.md).
 
+## 11 · learning — a capability it did not have, and keeps
+
+Three turns and two processes.
+
+The agent is asked something no model can know, and cannot answer. It is then
+told the rule, and calls `learn` — a Go tool. Go decides whether that is worth
+keeping, registers it on `ctx.skills`, and appends it to a file. Then a **second
+process** opens on the same workspace, replays that file into `ctx.skills` at
+mount, and is asked the ORIGINAL question on a session that has never been
+spoken to. It loads the skill and answers.
+
+`ctx.skills` is the seam upstream fills from `.dsh/skills` with
+`@deepseek-ai/dsh-skill-filesystem`. `ctx.skills.register` reaches it from Go,
+which means the host decides what the agent is allowed to remember.
+
+**The memory is the host's, not the agent's.** `learned.jsonl` is written
+outside `Config.Roots`, so the agent's own `read` cannot reach it — and that is
+what makes the third turn mean anything. A file inside the workspace would leave
+"it read its notes" as an explanation exactly as good as "it loaded the skill",
+and the whole point is that those are different. The program asserts the
+separation rather than claiming it.
+
+Three facts the example documents because none of them is obvious and each
+cost time:
+
+- **A Go plugin's calls cross the bridge only while the event loop is running** —
+  during `Apply`, and during a turn. Between turns the owning goroutine is parked
+  waiting for work, so a bridge call made from the host in that gap BLOCKS rather
+  than failing. Learning therefore happens inside a tool call, which is where it
+  belongs: the agent decides it has learned something and says so by calling a
+  tool.
+- **A learned skill is knowledge, not code.** Go cannot evaluate JavaScript the
+  model wrote — `node:vm` is refused by this runtime by name, and upstream's
+  self-referential toolset (`@deepseek-ai/dsh-tool-cordis`, which `web-cordis`
+  demonstrates) is not in this bundle because its runner needs exactly that.
+- **A skill invisible in the catalog might as well not exist.** A registered
+  skill is loadable only by exact name, and the model learns the names from an
+  `<available_skills>` catalog that `tool-skill` injects — but only when every
+  skill provider reports its discovery complete, and bundled
+  `skill-filesystem` cannot complete here (see "What is deliberately not
+  here"). One incomplete provider suppresses the whole catalog, silently. A
+  model told "load your skill" then guesses a plausible name, misses, and
+  falls back to not knowing — so both 11 and 12 point that provider at no
+  roots on the spine's composition entry, which is also the truth of this
+  deployment: every skill in it is host-registered.
+
+From a captured run:
+
+```
+--- turn 1: cold ---
+I don't know how to work this out, and I'll say so plainly.
+The workspace available to me contains no reference materials about part
+RM-7 … no procedure for computing "flux tolerance" from a bore size. …
+
+--- turn 2: taught ---
+The flux tolerance of part RM-7 (bore 12 mm) is **21.45 mm** …
+[tools: learn skill]
+
+--- turn 3: a second process, same question, no conversation ---
+21.45 mm
+The flux tolerance is calculated as: bore (12 mm) × 1.8 − 0.4 = 21.2 mm, plus
+an additional 0.25 mm because part RM-7 ends in an odd digit (7) …
+[tools: skill]
+```
+
+Turn 2 is worth a second look: `learn` first, then `skill` — the catalog
+updated mid-conversation when the registration landed, and the model loaded
+its own minutes-old lesson to check what it had written.
+
+## 12 · advanced-learning — a day's RPA, learned once
+
+The capstone of the two. Example 11 taught the agent a fact; this one has it
+learn a **job**.
+
+This program serves a **Workmonth HR portal** on loopback with six pending
+leave requests in it, and gives the agent two Go functions — `open` and
+`submit` — holding a cookie jar and an `http.Client` fenced to that one origin.
+That is a browser in the only sense an RPA needs one. Nothing else about the
+site is in the prompt: no map, no field names, no policy.
+
+```
+run 1   explore   sign in, wander, find the policy, decide six requests,
+                  then record the whole route with `learn`
+RESET             the queue goes back to six pending, every session forgotten
+run 2   replay    a new process, a new session, the same task, and the lesson
+                  replayed into ctx.skills before the first token
+```
+
+**The portal is awkward on purpose**, in the specific ways enterprise software
+is awkward: login fields called `u` and `p`, a session cookie, a per-page token
+a POST is refused without, a queue that paginates, the leave policy on a page
+nothing links to prominently, and a denial reason that must begin with the rule
+that failed or be rejected. None of it is hard. It is just unknowable without
+going and finding out — which is the cost the example is about paying once.
+
+**What is measured.** The portal counts every HTTP request it serves, so the
+two runs are compared on what actually costs time and money: trips to the site,
+tool calls, and wall clock. The exploring run pays for the map. The replaying
+run has it.
+
+**How it is verified**, which is the half that makes this more than a demo. The
+portal is a Go struct in this process. When a run finishes, the assertions read
+that struct — never the agent's summary — and check all six decisions against
+the policy written in Go beside the handbook page. Three approvals and three
+denials, each denial naming the one rule it actually breaks. `TOR-2045` is the
+one that matters: sick leave starting inside the month-end blackout with no
+notice at all, so a run that skipped the exemption sentence denies it and the
+audit says so.
+
+From a captured run — the same job, twice:
+
+```
+                               run 1     run 2
+  HTTP requests                   15        10
+  tool calls                      17        11
+  wall clock                   2m32s       57s
+  queue cleared correctly        yes       yes
+
+--- run 2: tools called ---
+  skill submit submit open open open submit open open open open
+  · skill {"name": "workmonth-leave-queue"}
+
+--- run 2: what the portal was asked for ---
+  POST /login
+  GET /desk
+  GET /timeoff/export
+  GET /handbook/leave-policy
+  GET /timeoff/bulk
+  POST /timeoff/bulk-decide
+  GET /timeoff
+  …
+```
+
+Run 1 wandered: the desk, the handbook, both queue pages, three detail pages —
+then found `/timeoff/export`, decided the queue in bulk, and recorded
+`workmonth-leave-queue`. Run 2's first tool call loads that lesson by name, and
+its first HTTP request is `POST /login`: it never fetched the login page,
+because the lesson already says what the form takes. The queue itself is still
+read fresh — it is the site that is not re-learned.
+
+Set `DSH_EXPLORER_MODEL` and `DSH_OPERATOR_MODEL` to two different ids on your
+gateway to have one model do the exploring and another do the work — which is
+the shape a deployment actually wants, because only one of the two has to be
+clever.
+
+**It has a test**, like example 10, and for the same reason: the portal and the
+browser have to work before a model is worth spending. `go test
+./examples/12-advanced-learning` walks the entire job with no model at all —
+the token trap, the reason format, the pagination, the bulk route, and the
+fence that keeps the browser on one origin.
+
+> Why a stand-in and not a live site. Robomotion's training systems
+> ([workmonth.robomotion.online](https://workmonth.robomotion.online) and its
+> siblings) are static React SPAs with zero backend — real RPA against them
+> drives a headed Chrome, which is a dependency these examples do not take. The
+> stand-in borrows their personas, their `GLX-` worker ids and their published
+> credentials, and buys two things a live site cannot: the same six requests
+> every run, and verification that reads the portal's own state instead of
+> believing the agent.
+
+
 ---
 
 ## What is deliberately not here
@@ -547,6 +715,26 @@ examples lie.
   fails closed, so `{kind:"ask"}` denies. Example 07 gates inside the
   `tools/pre-execute` handler instead.
 - **`bash` is absent by default**, for the reason example 10 exists.
+- **No self-mounting-plugin example**, which is what upstream's `web-cordis`
+  shows. `@deepseek-ai/dsh-tool-cordis` is not in this bundle — `cordis_define`,
+  `cordis_inspect` and `dynamicCordisRunner` appear in no bundled module — and
+  its runner needs `node:vm`, which this runtime refuses by name. Example 11 is
+  the reachable half of that claim: the agent extends its own capabilities, with
+  knowledge rather than with code.
+- **No filesystem-backed skills.** `@deepseek-ai/dsh-skill-filesystem` is
+  bundled and mounted, but its discovery cannot complete here: it watches its
+  roots with chokidar, and `fs.watch` is deliberately unimplemented in this
+  runtime. Incomplete discovery has a quiet consequence — `tool-skill`
+  withholds the whole `<available_skills>` catalog until every provider
+  reports complete, so a registered skill stays loadable by exact name while
+  nothing tells the model the name. 11 and 12 therefore point the provider at
+  no roots (`skills.filesystem.includeDefaultRoots: false` on the spine's
+  entry) and keep their durable copy in a file the host owns, which is the
+  better place for it anyway. Chasing this surfaced a real compat bug, since
+  fixed: `os.homedir()` answered the host's home rather than the composed
+  `HOME`, aiming every skill root the provider derives from it outside the
+  fence — where the fenced filesystem refuses with EACCES, which is not
+  "absent" and poisoned discovery a second way.
 
 ## Ground rules these follow
 
