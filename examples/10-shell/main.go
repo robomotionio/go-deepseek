@@ -433,7 +433,7 @@ func (t *tail) collected() map[string]any {
 	return map[string]any{"text": string(t.buf), "truncated": t.truncated}
 }
 
-// environ is the child
+// environ is the child's whole environment: the fixed base first, then the
 // caller's extras, then the harness's managed DSH_* facts last, so a caller
 // entry can never displace a managed one.
 func environ(spec request) []string {

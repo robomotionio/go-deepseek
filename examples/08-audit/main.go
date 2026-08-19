@@ -1,6 +1,6 @@
 // Command audit writes one JSONL record per tool call, from Go.
 //
-// What it proves two things at once.
+// What it proves, it proves two things at once.
 //
 // WRAP TO MEASURE, OBSERVE TO RECORD. The tool pipeline offers several places
 // to stand, and upstream's own selection rule (docs/cookbook/adding-a-tool.md
