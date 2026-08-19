@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -146,4 +148,81 @@ func contains(values []string, want string) bool {
 		}
 	}
 	return false
+}
+
+// The live proof that a Go component is more than a tool: this one wraps the
+// tool pipeline, so it observes every call the model makes — including the
+// harness's own tools, which it never registered and knows nothing about.
+func TestLiveComponentSeesToolCalls(t *testing.T) {
+	key := os.Getenv("OPENROUTER_API_KEY")
+	if key == "" {
+		t.Skip("set OPENROUTER_API_KEY to run the live component turn")
+	}
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "note.txt"), []byte("the answer is plum\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	var mu sync.Mutex
+	var observed []string
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	defer cancel()
+
+	h, err := sdk.Open(ctx, sdk.Config{
+		BaseURL: "https://openrouter.ai/api/v1",
+		APIKey:  key,
+		Model:   "deepseek/deepseek-v4-flash-0731",
+		CWD:     dir,
+		Env:     map[string]string{"HOME": dir},
+		Plugins: []sdk.Plugin{{
+			ID:     "auditor",
+			Inject: []string{"tools"},
+			Apply: func(pc *sdk.Context) error {
+				_, err := pc.On("tools/pre-execute", func(args []json.RawMessage) (any, error) {
+					var execution struct {
+						Name string `json:"name"`
+					}
+					if len(args) > 0 {
+						_ = json.Unmarshal(args[0], &execution)
+					}
+					mu.Lock()
+					observed = append(observed, execution.Name)
+					mu.Unlock()
+					// Continue the waterfall: the last argument is `next`, and a
+					// listener that does not call it has denied the call.
+					next, err := pc.Value(args[len(args)-1]).Object()
+					if err != nil {
+						return nil, err
+					}
+					decision, err := next.Invoke()
+					if err != nil {
+						return nil, err
+					}
+					return json.RawMessage(decision.JSON()), nil
+				})
+				return err
+			},
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+
+	result, err := h.Run(ctx, sdk.Text("Read note.txt and tell me the answer."))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%v, finish=%q, said %q", result.Duration, result.FinishReason, result.FinalResponse)
+
+	mu.Lock()
+	defer mu.Unlock()
+	if len(observed) == 0 {
+		t.Fatal("the Go component saw no tool calls")
+	}
+	t.Logf("the Go component observed: %v", observed)
+	if !strings.Contains(strings.ToLower(result.FinalResponse), "plum") {
+		t.Errorf("the turn did not read the file: %q", result.FinalResponse)
+	}
 }

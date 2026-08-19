@@ -71,7 +71,7 @@ func TestGoPluginValidation(t *testing.T) {
 		want   string
 	}{
 		{"no id", dsh.Plugin{Tools: []dsh.Tool{ok()}}, "no ID"},
-		{"nothing registered", dsh.Plugin{ID: "empty"}, "registers nothing"},
+		{"contributes nothing", dsh.Plugin{ID: "empty"}, "neither Tools nor Apply"},
 		{"no description", dsh.Plugin{ID: "p", Tools: []dsh.Tool{{Name: "t", Execute: ok().Execute}}}, "no description"},
 		{"no execute", dsh.Plugin{ID: "p", Tools: []dsh.Tool{{Name: "t", Description: "d"}}}, "no Execute"},
 	}

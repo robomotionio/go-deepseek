@@ -205,6 +205,68 @@ This is the alternative to handing an agent a shell and hoping. A tool has a
 name, a schema, a fence you wrote in Go, and an implementation you can test
 without a model in the room.
 
+### Beyond tools: the whole component
+
+A tool is one entry in a registry. A **component** — what cordis calls a plugin —
+is the unit the harness is actually built from: a coeffect specification (the
+services it declares it needs), an effect function that installs what it
+contributes, and a fiber with a lifecycle. All of that reaches Go.
+
+```go
+sdk.Plugin{
+    ID:      "policy",
+    Inject:  []string{"tools"},        // declared, and enforced
+    Provide: []string{"approval"},     // others may now depend on this
+    Apply: func(ctx *sdk.Context) error {
+        // Wrap every tool call the agent makes — including the harness's own.
+        _, err := ctx.On("tools/pre-execute", func(args []json.RawMessage) (any, error) {
+            var call struct{ Name string `json:"name"` }
+            _ = json.Unmarshal(args[0], &call)
+            audit.Record(call.Name)
+
+            next, err := ctx.Value(args[len(args)-1]).Object()   // continue the waterfall
+            if err != nil {
+                return nil, err
+            }
+            decision, err := next.Invoke()
+            return json.RawMessage(decision.JSON()), err
+        })
+        return err
+    },
+}
+```
+
+`Apply` receives the component's own cordis context, and **any path on it is
+reachable by name** — there is no per-capability wrapper to wait for:
+
+| | |
+|---|---|
+| `ctx.Service("fs")` | read a seam it declared, then call it: `fs.CallForObject("resolve", p)` then `fs.Call("readText", target)` |
+| `ctx.Provide("approval", …)` | become a provider others inject; unmounting withdraws it and them |
+| `ctx.On(event, fn)` | any event or waterfall, including `tools/pre-execute`, `tools/execute`, `tools/post-execute` |
+| `ctx.Call(path, args…)` | anything else: `tools.register`, `systemPrompt.section`, `sessionProjections.register` |
+| `ctx.Effect(inverse)` | a revertible effect whose inverse is Go, recovered LIFO on unmount |
+| `ctx.Func` / `ctx.SyncFunc` | a Go closure as a JavaScript function — a tool's execute, a listener, a service method |
+
+Three properties are worth stating because they are the ones that make this a
+component rather than a callback bag.
+
+**The declaration is enforced.** `ctx.Service("fs")` without `Inject: ["fs"]`
+fails with the harness's own error — *cannot get property "fs" without inject*.
+The declaration is a capability request, and reading past it is refused.
+
+**An unsatisfied component waits.** Declare a service nothing provides and it
+stays unmounted, without erroring; it activates if a provider appears and
+unmounts again if one leaves.
+
+**What it installed is withdrawn.** Effects revert LIFO when the component
+unmounts, whether it unmounts because you closed the harness or because a
+dependency went away. You name the inverse; nothing else is your problem.
+
+The one thing Go cannot do is be **hot-replaced**. Retracting a component's code
+needs a module registry to evict it from, and Go has none — its code is compiled
+in. The fiber is fully composable; the Go behind it changes only by restarting.
+
 ### A whole program
 
 Everything above is a fragment. This is a whole one — a Go plugin, streaming and

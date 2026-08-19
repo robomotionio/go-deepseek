@@ -253,17 +253,15 @@ type harness struct {
 	stopped  chan struct{}
 	startErr chan error
 
-	// base is cancelled when the harness shuts down, and every host tool call
-	// derives from it: closing the harness has to stop the work it started, or
-	// Close returns while goroutines are still writing files.
+	// base is cancelled when the harness shuts down, and every Go plugin's work
+	// derives from it: closing the harness has to stop what it started, or Close
+	// returns while goroutines are still writing files.
 	base       context.Context
 	cancelBase context.CancelFunc
 
-	// calls holds the cancel of every host tool call in flight, so that an abort
-	// arriving from the harness reaches the goroutine doing the work. Guarded
-	// because the goroutine clears its own entry.
-	callsMu sync.Mutex
-	calls   map[string]context.CancelFunc
+	// bridge carries everything between Go plugins and their cordis contexts.
+	// Nil when the composition has no Go plugins.
+	bridge *bridge
 }
 
 // request is one unit of work for the owning goroutine.
@@ -412,11 +410,15 @@ func (h *harness) own() {
 	defer close(h.events)
 
 	h.base, h.cancelBase = context.WithCancel(context.Background())
-	h.calls = map[string]context.CancelFunc{}
-	// Cancelling before the engine closes, not after: a tool goroutine holding a
-	// file or a request should be told to stop while the world it answers into
+	// Cancelling before the engine closes, not after: a plugin goroutine holding
+	// a file or a request should be told to stop while the world it answers into
 	// still exists.
 	defer h.cancelBase()
+	defer func() {
+		if h.bridge != nil {
+			h.bridge.close()
+		}
+	}()
 
 	eng, err := newEngine(h.cfg, h.cfg.Resolver)
 	if err != nil {
@@ -461,7 +463,7 @@ func (h *harness) install(eng *engine) error {
 	}); err != nil {
 		return err
 	}
-	if err := h.installHostCalls(eng); err != nil {
+	if err := h.installBridge(eng); err != nil {
 		return err
 	}
 	entries, err := json.Marshal(h.cfg.Composition)
@@ -475,59 +477,14 @@ func (h *harness) install(eng *engine) error {
 	return nil
 }
 
-// installHostCalls binds the two functions a Go plugin's generated module calls.
-//
-// The shape is the whole point: __dshGoCall returns a promise it has not settled
-// and will not settle on this goroutine. The engine holds the loop open for it,
-// the tool runs on a goroutine of its own, and the answer arrives whenever it
-// arrives — so a tool that takes four seconds costs the agent four seconds of
-// waiting rather than four seconds of a stopped JavaScript world.
-func (h *harness) installHostCalls(eng *engine) error {
+// installBridge wires the Go plugin bridge, if there is anything to bridge.
+func (h *harness) installBridge(eng *engine) error {
 	if len(h.cfg.Plugins) == 0 {
 		return nil
 	}
-	if err := eng.rt.Set("__dshGoCall", func(pluginID, toolName, callID, args string) (goant.Value, error) {
-		tool := findTool(h.cfg.Plugins, pluginID, toolName)
-		if tool == nil {
-			// Thrown into the tool's execute, which the registry turns into a
-			// failed call the model is told about, rather than a broken turn.
-			return goant.Value{}, fmt.Errorf("deepseek: no Go tool %q in plugin %q", toolName, pluginID)
-		}
-		promise, resolve, reject := eng.rt.NewPromise()
-		ctx, cancel := context.WithCancel(h.base)
-		h.callsMu.Lock()
-		h.calls[callID] = cancel
-		h.callsMu.Unlock()
-
-		go func() {
-			defer func() {
-				h.callsMu.Lock()
-				delete(h.calls, callID)
-				h.callsMu.Unlock()
-				cancel()
-			}()
-			out, err := runTool(ctx, tool, args)
-			if err != nil {
-				// Every path settles the promise. One that does not is a loop
-				// that never finishes and a turn that never ends, which is the
-				// worst failure available here.
-				_ = reject(err)
-				return
-			}
-			_ = resolve(out)
-		}()
-		return promise, nil
-	}); err != nil {
-		return err
-	}
-	return eng.rt.Set("__dshGoCancel", func(callID string) {
-		h.callsMu.Lock()
-		cancel := h.calls[callID]
-		h.callsMu.Unlock()
-		if cancel != nil {
-			cancel()
-		}
-	})
+	h.bridge = newBridge(eng.rt, h.cfg.Plugins)
+	h.bridge.base = h.base
+	return h.bridge.install()
 }
 
 // bootstrap runs the boot module, which mounts the composition. Its top level

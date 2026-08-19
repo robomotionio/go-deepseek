@@ -2,28 +2,36 @@ package runtime
 
 // Plugins written in Go.
 //
-// Everything in the harness is a plugin, and the loader mounts one by importing
-// its specifier and calling the module's apply(ctx, config). Nothing in that
-// contract requires the module to be JavaScript anybody wrote: a module is a
-// source string the resolver hands back, and the resolver is ours. So a Go
-// plugin here is a REAL cordis plugin — mounted by the same loader, in the same
-// tree, with the same lifecycle — whose body forwards into Go.
+// The harness is built out of cordis components, and the paper behind cordis
+// defines one precisely: a component pairs a COEFFECT SPECIFICATION — the
+// services it declares it needs — with an EFFECT FUNCTION that installs what it
+// contributes. Instantiating it produces a fiber with a lifecycle, and every
+// mutation the effect function makes through the context is tracked so that
+// unloading recovers it.
 //
-// The generated module is deliberately thin, and registers tools and nothing
-// else. Mirroring the whole cordis API in Go would be a translation layer to
-// maintain against every upstream release, for a surface most programs never
-// touch; the tool registry is the seam that actually matters to a program
-// embedding an agent, because it is how the agent reaches something only the
-// host can do — a database, an internal API, a device, a function you already
-// wrote.
+// A Go plugin here is that, with the effect function in Go:
 //
-// The asynchrony is the part worth understanding. A JavaScript world runs on one
-// goroutine, so a tool that blocked it while Go worked would stall the agent,
-// the timers, and every request in flight. Instead the call returns a pending
-// promise immediately, the work runs on its own goroutine, and the promise is
-// settled from there. The engine counts an unsettled host promise as a reason to
-// keep the loop alive, which is what makes the turn wait for an answer that has
-// not been produced yet.
+//	Plugin{
+//	    ID:      "approvals",
+//	    Inject:  []string{"tools"},          // the coeffect specification
+//	    Provide: []string{"approval"},       // what it becomes a provider of
+//	    Apply: func(ctx *Context) error {    // the effect function
+//	        return ctx.Provide("approval", map[string]any{...})
+//	    },
+//	}
+//
+// What reaches Go is not a fixed list of capabilities. Apply receives the
+// component's own cordis context and can call ANY path on it — register a tool,
+// provide a service, listen to an event, wrap every tool call, contribute a
+// prompt section, install a revertible effect — because the bridge names paths
+// rather than enumerating features. Whatever the harness gains upstream is
+// reachable the day it lands, without a change here.
+//
+// The one thing Go cannot do is be hot-replaced. Retracting a component's code
+// needs a module registry to evict it from, and Go has none: a Go plugin's code
+// is compiled in. Its FIBER is fully composable — it mounts, unmounts, reacts to
+// a dependency appearing or leaving, and recovers its effects — but replacing
+// the Go behind it means restarting the process.
 
 import (
 	"context"
@@ -32,19 +40,39 @@ import (
 	"strings"
 )
 
-// Plugin is a cordis plugin implemented in Go.
-//
-// It appears in the composition like any other entry and mounts like any other
-// plugin. What it contributes is Tools: functions the agent can call that run in
-// this process, with everything the process can reach.
+// Plugin is a cordis component implemented in Go.
 type Plugin struct {
-	// ID is the composition entry's id, and the name the plugin reports to the
-	// harness. It is also what the entry's specifier is built from, so it must
-	// be unique among the composition's entries.
+	// ID names the component. It is the composition entry's id, the name the
+	// harness reports, and what the generated module's specifier is built from,
+	// so it must be unique among the composition's entries.
 	ID string
 
-	// Tools are registered on ctx.tools when the plugin mounts, and unregistered
-	// when it is disposed.
+	// Inject is the coeffect specification: the services this component needs.
+	// It is enforced, not documentation — the context refuses to resolve a
+	// service that was not declared, and the component stays unmounted until
+	// every declared service has a provider, then unmounts again if one leaves.
+	//
+	// Registering a tool needs "tools"; it is added automatically when Tools is
+	// used.
+	Inject []string
+
+	// Provide lists the services this component registers, which is what lets
+	// other components inject them. The registration itself happens in Apply,
+	// through Context.Provide.
+	Provide []string
+
+	// Config is the entry's configuration, handed to Apply as Context.Config.
+	Config map[string]any
+
+	// Apply is the effect function: it runs when the component mounts, on its
+	// own goroutine, and everything it installs is recovered when the component
+	// unmounts. Returning an error fails the mount, which fails the composition
+	// rather than leaving a half-built tree.
+	Apply func(ctx *Context) error
+
+	// Tools is the common case made short: these are registered on ctx.tools
+	// when the component mounts, before Apply runs. A plugin may use Tools,
+	// Apply, or both.
 	Tools []Tool
 }
 
@@ -67,36 +95,319 @@ type Tool struct {
 	//	        "description": "The city to report on."},
 	//	}
 	//
-	// The harness validates arguments against this before Execute is reached, so
-	// a call that arrives has already been checked.
+	// The harness compiles it and validates arguments against it before Execute
+	// is reached, so a call that arrives has already been checked.
 	Parameters map[string]any
 
-	// Execute runs the call, on its own goroutine, off the one that owns the
-	// JavaScript world. Returning a value settles the call; returning an error
-	// fails it, and the model is told what the error said — so the message is
-	// part of the interface, and "invalid city: Berlim" gets a retry where
-	// "error" gets a shrug.
+	// Execute runs the call, on its own goroutine. Returning a value settles the
+	// call; returning an error fails it, and the model is shown what the error
+	// said — so the message is part of the interface.
 	//
-	// args is the validated arguments as JSON. The returned string is what the
-	// model reads, so it can be prose or JSON, whichever the model can use.
-	//
-	// The context is cancelled when the harness closes, and when the harness
-	// abandons the call — a turn the caller cancelled, a tool-call timeout.
-	// Respect it: work that ignores cancellation keeps running after the agent
-	// has stopped waiting for it.
+	// The context is cancelled when the harness closes and when the harness
+	// abandons the call: a cancelled turn, a tool-call timeout.
 	Execute func(ctx context.Context, args json.RawMessage) (string, error)
 }
 
 // pluginScheme keys a Go plugin's generated module. The scheme is what keeps it
-// from ever colliding with a bundled package or a Node builtin, so resolution
-// needs no precedence rule.
+// from ever colliding with a bundled package or a Node builtin.
 const pluginScheme = "go:"
 
 func (p Plugin) specifier() string { return pluginScheme + p.ID }
 
+// injects returns the declared coeffects, with what the sugar implies.
+func (p Plugin) injects() []string {
+	declared := append([]string(nil), p.Inject...)
+	if len(p.Tools) > 0 {
+		for _, name := range declared {
+			if name == "tools" {
+				return declared
+			}
+		}
+		declared = append(declared, "tools")
+	}
+	return declared
+}
+
+// Object is something in the JavaScript world that Go is holding: a context, a
+// service, a session, a disposer. Calls on it reach the one that exists rather
+// than a copy of it.
+type Object struct {
+	bridge *bridge
+	ref    int64
+}
+
+// Call invokes a method by dotted path and returns what it produced. A promise
+// is awaited, so Call answers with the value rather than the promise.
+//
+//	ctx.Call("tools.register", definition)
+//	ctx.Call("emit", "my/event", payload)
+//	fs.Call("readFile", path)
+//
+// Arguments are encoded as JSON, except for values made by Context.Func and
+// Context.SyncFunc, which arrive as real functions, and other Objects, which
+// arrive as themselves.
+func (o *Object) Call(path string, args ...any) (Value, error) {
+	raw, err := o.bridge.perform("call", o.ref, path, args)
+	return Value{raw: raw, bridge: o.bridge}, err
+}
+
+// Get reads a property by dotted path.
+func (o *Object) Get(path string) (Value, error) {
+	raw, err := o.bridge.perform("get", o.ref, path, nil)
+	return Value{raw: raw, bridge: o.bridge}, err
+}
+
+// At holds the value at a path so that it can be called on. This is how a
+// service is reached: ctx.At("fs") is the filesystem service itself, not a
+// snapshot of its fields.
+func (o *Object) At(path string) (*Object, error) {
+	raw, err := o.bridge.perform("hold", o.ref, path, nil)
+	if err != nil {
+		return nil, err
+	}
+	return Value{raw: raw, bridge: o.bridge}.Object()
+}
+
+// CallForObject invokes a method and holds its result, for a call that answers
+// with something live rather than with data.
+func (o *Object) CallForObject(path string, args ...any) (*Object, error) {
+	raw, err := o.bridge.perform("callHold", o.ref, path, args)
+	if err != nil {
+		return nil, err
+	}
+	return Value{raw: raw, bridge: o.bridge}.Object()
+}
+
+// Invoke calls this object itself, for the ones that are functions — the
+// disposer On and Provide answer with.
+func (o *Object) Invoke(args ...any) (Value, error) {
+	return o.Call("", args...)
+}
+
+// Release lets go of the object. Everything a component holds is released when
+// it unmounts, so this is for a program that holds many and wants them gone
+// sooner.
+func (o *Object) Release() error {
+	_, err := o.bridge.perform("call", 0, "__dshBridge.release", []any{o.ref})
+	return err
+}
+
+// ref encodes an Object as an argument.
+func (o *Object) MarshalJSON() ([]byte, error) { return json.Marshal(jsRef{Ref: o.ref}) }
+
+// Value is one answer from the JavaScript world.
+type Value struct {
+	raw    json.RawMessage
+	bridge *bridge
+}
+
+// JSON is the raw answer.
+func (v Value) JSON() json.RawMessage { return v.raw }
+
+// Decode unmarshals the answer.
+func (v Value) Decode(out any) error {
+	if len(v.raw) == 0 {
+		return nil
+	}
+	return json.Unmarshal(v.raw, out)
+}
+
+// String renders the answer as text: a JSON string without its quotes, anything
+// else as its JSON.
+func (v Value) String() string {
+	var text string
+	if json.Unmarshal(v.raw, &text) == nil {
+		return text
+	}
+	return string(v.raw)
+}
+
+// Object interprets the answer as something held. It is an error if it is not.
+func (v Value) Object() (*Object, error) {
+	var held jsRef
+	if err := json.Unmarshal(v.raw, &held); err != nil || held.Ref == 0 {
+		return nil, fmt.Errorf("deepseek: %s is data, not an object", truncate(string(v.raw)))
+	}
+	return &Object{bridge: v.bridge, ref: held.Ref}, nil
+}
+
+func truncate(s string) string {
+	if len(s) > 120 {
+		return s[:120] + "…"
+	}
+	return s
+}
+
+// Context is a Go plugin's cordis context: the component's own view of the
+// system, through which it reads services and installs everything it
+// contributes.
+type Context struct {
+	*Object
+
+	// Plugin is the component's id.
+	Plugin string
+
+	// Config is the entry's configuration, as JSON.
+	Config json.RawMessage
+}
+
+// Func makes a Go function callable from JavaScript. It runs on its own
+// goroutine and answers with a promise, so it may block — which is what a tool's
+// execute, an event listener or a service method usually needs to do.
+func (c *Context) Func(fn Handler) any {
+	return c.bridge.register(c.ref, fn, false)
+}
+
+// SyncFunc makes a Go function callable and answers immediately, on the
+// goroutine that owns the JavaScript world.
+//
+// Use it only where cordis requires an answer rather than a promise: a tool's
+// render, a guard's verdict, a prompt section's text. It must not block and must
+// not call back across the bridge, because it is occupying the goroutine that
+// would have to serve it.
+func (c *Context) SyncFunc(fn Handler) any {
+	return c.bridge.register(c.ref, fn, true)
+}
+
+// Service holds one of the services this component declared in Inject.
+//
+// An undeclared service is refused by the context itself: the declaration is a
+// capability request, and reading past it is the error the paradigm exists to
+// make impossible.
+func (c *Context) Service(name string) (*Object, error) { return c.At(name) }
+
+// Provide registers this component as the provider of a service. Other
+// components that inject the name become satisfied, and unmounting this one
+// withdraws the binding and unmounts them.
+//
+// The value is usually a map of methods made with Func:
+//
+//	ctx.Provide("approval", map[string]any{
+//	    "request": ctx.Func(func(args []json.RawMessage) (any, error) { ... }),
+//	})
+func (c *Context) Provide(name string, value any) error {
+	_, err := c.Call("provide", name, value)
+	return err
+}
+
+// Set binds a value into the context's service store, the plain form of
+// provision.
+func (c *Context) Set(name string, value any) error {
+	_, err := c.Call("set", name, value)
+	return err
+}
+
+// On subscribes to an event and returns a disposer. Listening is a revertible
+// effect, so unmounting removes the listener whether or not the disposer is
+// called.
+//
+// This is the way into everything the harness announces, including the tool-call
+// waterfalls — "tools/pre-execute", "tools/execute", "tools/post-execute" —
+// which is how a Go plugin audits, gates or wraps every call the agent makes.
+func (c *Context) On(event string, fn Handler) (*Object, error) {
+	return c.CallForObject("on", event, c.Func(fn))
+}
+
+// Emit announces an event.
+func (c *Context) Emit(event string, args ...any) error {
+	_, err := c.Call("emit", append([]any{event}, args...)...)
+	return err
+}
+
+// Effect installs a revertible effect whose inverse is Go. The inverse runs when
+// the component unmounts, in reverse order, alongside the ones cordis tracked
+// itself.
+func (c *Context) Effect(inverse func()) error {
+	_, err := c.Call("effect", c.SyncFunc(func([]json.RawMessage) (any, error) {
+		return c.Func(func([]json.RawMessage) (any, error) {
+			inverse()
+			return nil, nil
+		}), nil
+	}))
+	return err
+}
+
+// OnDispose runs fn when the component unmounts. Effect is the same thing
+// expressed to cordis; this one is for a Go-side inverse that the harness has no
+// reason to know about.
+func (c *Context) OnDispose(fn func()) { c.bridge.onDispose(c.ref, fn) }
+
+// Value interprets one argument a callback received, so that a handler can
+// reach a live object JavaScript passed it — the `next` of a waterfall, a
+// session, an execution.
+//
+//	next, err := ctx.Value(args[1]).Object()
+//	decision, err := next.Invoke()
+func (c *Context) Value(raw json.RawMessage) Value {
+	return Value{raw: raw, bridge: c.bridge}
+}
+
+// Logger returns the component's named logger.
+func (c *Context) Logger(name string) (*Object, error) {
+	return c.CallForObject("logger", name)
+}
+
+// RegisterTool registers one tool on ctx.tools.
+func (c *Context) RegisterTool(tool Tool) error {
+	if err := validateTool(tool, c.Plugin); err != nil {
+		return err
+	}
+	parameters := tool.Parameters
+	if parameters == nil {
+		parameters = map[string]any{}
+	}
+	execute := tool.Execute
+	// defineTool lives on the global bridge object, not on the context: handle 0
+	// is the global scope.
+	global := &Object{bridge: c.bridge, ref: 0}
+	definition, err := global.CallForObject("__dshBridge.defineTool", map[string]any{
+		"name":        tool.Name,
+		"description": tool.Description,
+		"parameters":  parameters,
+		"output": map[string]any{
+			// The Go side answers with text, so the schema says text and the
+			// rendering is the identity. A tool wanting structure puts JSON in it.
+			"schema": map[string]any{"type": "string"},
+			"render": c.SyncFunc(func(args []json.RawMessage) (any, error) {
+				text := ""
+				if len(args) > 1 {
+					_ = json.Unmarshal(args[1], &text)
+				}
+				return []map[string]any{{"type": "text", "text": text}}, nil
+			}),
+		},
+		"execute": c.Func(func(args []json.RawMessage) (any, error) {
+			var arguments json.RawMessage = []byte("{}")
+			if len(args) > 0 {
+				arguments = args[0]
+			}
+			// The turn's own cancellation reaches the tool through the context
+			// the harness gives the call; this one ends when the harness does.
+			return execute(c.bridge.callContext(), arguments)
+		}),
+	})
+	if err != nil {
+		return err
+	}
+	_, err = c.Call("tools.register", definition)
+	return err
+}
+
+// runApply mounts one Go component: the sugar first, then the effect function.
+func (b *bridge) runApply(plugin *Plugin, ctx *Context) error {
+	for _, tool := range plugin.Tools {
+		if err := ctx.RegisterTool(tool); err != nil {
+			return err
+		}
+	}
+	if plugin.Apply == nil {
+		return nil
+	}
+	return plugin.Apply(ctx)
+}
+
 // validatePlugins refuses what would otherwise fail during a mount, or worse,
-// during a turn — an anonymous plugin, a tool with no way for the model to know
-// what it is for, a name already taken.
+// during a turn.
 func validatePlugins(plugins []Plugin, entries []Entry) error {
 	ids := map[string]bool{}
 	owners := map[string]string{}
@@ -116,17 +427,12 @@ func validatePlugins(plugins []Plugin, entries []Entry) error {
 				return fmt.Errorf("deepseek: Go plugin %q collides with a composition entry of the same id", p.ID)
 			}
 		}
-		if len(p.Tools) == 0 {
-			return fmt.Errorf("deepseek: Go plugin %q registers nothing", p.ID)
+		if len(p.Tools) == 0 && p.Apply == nil {
+			return fmt.Errorf("deepseek: Go plugin %q has neither Tools nor Apply, so it would contribute nothing", p.ID)
 		}
 		for _, tool := range p.Tools {
-			switch {
-			case tool.Name == "":
-				return fmt.Errorf("deepseek: Go plugin %q has a tool with no name", p.ID)
-			case tool.Description == "":
-				return fmt.Errorf("deepseek: tool %q has no description, which is all the model would have to go on", tool.Name)
-			case tool.Execute == nil:
-				return fmt.Errorf("deepseek: tool %q has no Execute", tool.Name)
+			if err := validateTool(tool, p.ID); err != nil {
+				return err
 			}
 			if owner, ok := owners[tool.Name]; ok {
 				return fmt.Errorf("deepseek: tool %q is registered by both %q and %q", tool.Name, owner, p.ID)
@@ -137,62 +443,45 @@ func validatePlugins(plugins []Plugin, entries []Entry) error {
 	return nil
 }
 
-// pluginModule generates the plugin's JavaScript face.
-//
-// It is generated rather than written because the parts that vary — names,
-// descriptions, parameter schemas — come from Go and have to arrive as literals
-// the loader can read at mount time. Everything else is the same eleven lines
-// per tool.
-func pluginModule(p Plugin) (string, error) {
-	var b strings.Builder
-	b.WriteString("// Generated by go-deepseek: the JavaScript face of a Go plugin.\n")
-	b.WriteString("// Registering tools is all it does; each one forwards into Go.\n")
-	b.WriteString("import { defineTool } from '@deepseek-ai/dsh-tools';\n\n")
-	fmt.Fprintf(&b, "export const name = %s;\n", literal(p.ID))
-	b.WriteString("export const inject = ['tools'];\n\n")
-	b.WriteString("// One call id per call, so that an abort names the call it aborts.\n")
-	b.WriteString("let calls = 0;\n\n")
-	b.WriteString("export function apply(ctx) {\n")
-	for i, tool := range p.Tools {
-		params := tool.Parameters
-		if params == nil {
-			params = map[string]any{}
-		}
-		schema, err := json.Marshal(params)
-		if err != nil {
-			return "", fmt.Errorf("deepseek: tool %q parameters: %w", tool.Name, err)
-		}
-		if i > 0 {
-			b.WriteString("\n")
-		}
-		fmt.Fprintf(&b, `  ctx.tools.register(defineTool({
-    name: %s,
-    description: %s,
-    parameters: %s,
-    output: {
-      // The Go side answers with text, so the schema says text and the
-      // rendering is the identity. A tool that wants structure puts JSON in it.
-      schema: { type: 'string' },
-      render: (_args, value) => [{ type: 'text', text: value }],
-    },
-    execute: (args, exec) => {
-      const call = %s + '#' + (++calls);
-      const settled = globalThis.__dshGoCall(%s, %s, call, JSON.stringify(args));
-      // The harness aborts a call it has stopped waiting for: a cancelled turn,
-      // a tool-call timeout. Forwarding that cancels the Go context, which is
-      // the only thing that can actually stop work already running over there.
-      const signal = exec && exec.signal;
-      if (signal) {
-        if (signal.aborted) globalThis.__dshGoCancel(call);
-        else signal.addEventListener('abort', () => globalThis.__dshGoCancel(call), { once: true });
-      }
-      return settled;
-    },
-  }));
-`, literal(tool.Name), literal(tool.Description), schema,
-			literal(p.ID), literal(p.ID), literal(tool.Name))
+func validateTool(tool Tool, plugin string) error {
+	switch {
+	case tool.Name == "":
+		return fmt.Errorf("deepseek: Go plugin %q has a tool with no name", plugin)
+	case tool.Description == "":
+		return fmt.Errorf("deepseek: tool %q has no description, which is all the model would have to go on", tool.Name)
+	case tool.Execute == nil:
+		return fmt.Errorf("deepseek: tool %q has no Execute", tool.Name)
 	}
-	b.WriteString("}\n")
+	return nil
+}
+
+// pluginModule generates the component's JavaScript face.
+//
+// It is small on purpose. The module exists to be a cordis component — to carry
+// the name, the coeffect specification and the provided keys where the loader
+// reads them, since those are read from the module rather than passed at
+// runtime — and to hand its context to Go. Everything else happens across the
+// bridge.
+func pluginModule(p Plugin) (string, error) {
+	inject, err := json.Marshal(p.injects())
+	if err != nil {
+		return "", err
+	}
+	provide, err := json.Marshal(p.Provide)
+	if err != nil {
+		return "", err
+	}
+	var b strings.Builder
+	b.WriteString("// Generated by go-deepseek: the cordis face of a Go component.\n")
+	b.WriteString("// Its name, coeffects and provided keys are read from this module by the\n")
+	b.WriteString("// loader; its behaviour is in Go, one bridge call away.\n")
+	fmt.Fprintf(&b, "import { apply as toGo } from %s;\n\n", literal(bridgeModule))
+	fmt.Fprintf(&b, "export const name = %s;\n", literal(p.ID))
+	fmt.Fprintf(&b, "export const inject = %s;\n", inject)
+	if len(p.Provide) > 0 {
+		fmt.Fprintf(&b, "export const provide = %s;\n", provide)
+	}
+	fmt.Fprintf(&b, "\nexport function apply(ctx, config) {\n  return toGo(%s, ctx, config);\n}\n", literal(p.ID))
 	return b.String(), nil
 }
 
@@ -201,9 +490,6 @@ func pluginModule(p Plugin) (string, error) {
 func literal(s string) string {
 	encoded, err := json.Marshal(s)
 	if err != nil {
-		// json.Marshal fails on a string only for invalid UTF-8, which it
-		// replaces rather than refusing; this is unreachable and the fallback is
-		// a literal that is at least syntactically a string.
 		return `""`
 	}
 	return string(encoded)
@@ -215,18 +501,21 @@ func literal(s string) string {
 func pluginEntries(plugins []Plugin) []Entry {
 	entries := make([]Entry, 0, len(plugins))
 	for _, p := range plugins {
-		entries = append(entries, Entry{ID: p.ID, Name: p.specifier()})
+		entries = append(entries, Entry{ID: p.ID, Name: p.specifier(), Config: p.Config})
 	}
 	return entries
 }
 
-// pluginModules generates every plugin's module, keyed by specifier, for the
-// engine's resolver to serve.
+// pluginModules generates every plugin's module, plus the bridge they share.
 func pluginModules(plugins []Plugin) (map[string]string, error) {
 	if len(plugins) == 0 {
 		return nil, nil
 	}
-	modules := make(map[string]string, len(plugins))
+	bridgeSource, err := jsFS.ReadFile("js/bridge.js")
+	if err != nil {
+		return nil, fmt.Errorf("deepseek: bridge script is missing: %w", err)
+	}
+	modules := map[string]string{bridgeModule: string(bridgeSource)}
 	for _, p := range plugins {
 		source, err := pluginModule(p)
 		if err != nil {
@@ -235,36 +524,4 @@ func pluginModules(plugins []Plugin) (map[string]string, error) {
 		modules[p.specifier()] = source
 	}
 	return modules, nil
-}
-
-// findTool looks up what a call names. A miss is a mistake in the generated
-// module rather than in anything a caller wrote, but it is reported rather than
-// panicked on, because the alternative is taking down a process over a typo.
-func findTool(plugins []Plugin, pluginID, toolName string) *Tool {
-	for i := range plugins {
-		if plugins[i].ID != pluginID {
-			continue
-		}
-		for j := range plugins[i].Tools {
-			if plugins[i].Tools[j].Name == toolName {
-				return &plugins[i].Tools[j]
-			}
-		}
-	}
-	return nil
-}
-
-// runTool calls a host tool with the failures it might produce contained.
-//
-// A panic in a tool is the host program's bug, not the agent's, and the agent is
-// the wrong thing to kill for it: the call fails, the model is told, and the
-// turn carries on. The message keeps the panic value because that is the only
-// part that says what happened.
-func runTool(ctx context.Context, tool *Tool, args string) (out string, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("tool %q panicked: %v", tool.Name, r)
-		}
-	}()
-	return tool.Execute(ctx, json.RawMessage(args))
 }

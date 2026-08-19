@@ -6,8 +6,41 @@ import (
 	runtime "github.com/robomotionio/go-deepseek/internal/runtime"
 )
 
-// Plugins written in Go: how the agent reaches something only this program can
-// do.
+// Components written in Go.
+//
+// The harness is built out of cordis components, and a component is a coeffect
+// specification — the services it declares it needs — paired with an effect
+// function that installs what it contributes. A Go plugin here is that, with the
+// effect function in Go, mounted by the same loader into the same tree.
+//
+// What reaches Go is not a fixed list of capabilities. Apply receives the
+// component's own context and can call any path on it, so anything the harness
+// offers is reachable by name — including whatever it gains upstream, on the day
+// it lands.
+//
+//	sdk.Plugin{
+//	    ID:      "policy",
+//	    Inject:  []string{"tools"},
+//	    Provide: []string{"approval"},
+//	    Apply: func(ctx *sdk.Context) error {
+//	        _, err := ctx.On("tools/pre-execute", func(args []json.RawMessage) (any, error) {
+//	            next, err := ctx.Value(args[len(args)-1]).Object()   // the waterfall continues
+//	            if err != nil {
+//	                return nil, err
+//	            }
+//	            decision, err := next.Invoke()
+//	            return json.RawMessage(decision.JSON()), err
+//	        })
+//	        return err
+//	    },
+//	}
+//
+// The one thing Go cannot do is be hot-replaced: retracting a component's code
+// needs a module registry to evict it from, and Go has none. The FIBER is fully
+// composable — it mounts, unmounts, waits for a dependency, reverts its effects —
+// but replacing the Go behind it means restarting the process.
+//
+// Tools are the common case, kept short:
 //
 // The harness is made of plugins, and the tools an agent calls come from them.
 // A Go plugin is one of those — mounted by the same loader, in the same tree,
@@ -50,12 +83,30 @@ import (
 // WithRuntimeBinary) is a separate program and cannot call back into this one;
 // Open reports that rather than starting a harness whose tools would be missing.
 
-// Plugin is a cordis plugin implemented in Go. Its ID names it in the
-// composition, and its Tools are what it contributes.
+// Plugin is a cordis component implemented in Go: a coeffect specification
+// (Inject), the services it becomes a provider of (Provide), and an effect
+// function (Apply) that installs what it contributes.
 type Plugin = runtime.Plugin
 
 // Tool is one function the agent can call. See Plugin for the whole shape.
 type Tool = runtime.Tool
+
+// Context is a Go component's cordis context — the component's own view of the
+// system. Apply receives one, and everything the harness offers is reachable
+// through it by name: register a tool, provide a service, read one it declared,
+// listen to an event, wrap every tool call, install a revertible effect.
+type Context = runtime.Context
+
+// Object is something live in the harness that Go is holding: a service, a
+// session, a disposer. Calls on it reach the one that exists.
+type Object = runtime.Object
+
+// Value is one answer from the harness.
+type Value = runtime.Value
+
+// Handler is a Go function the harness can call. Arguments arrive as JSON, one
+// per parameter.
+type Handler = runtime.Handler
 
 // ToolSchema is one tool as the model is shown it.
 type ToolSchema = runtime.ToolSchema
