@@ -553,8 +553,12 @@ func (h *harness) turn(eng *engine, reqCtx context.Context, sessionID string, in
 		return nil, fmt.Errorf("deepseek: turn: %w", err)
 	}
 	var result Result
-	if err := json.Unmarshal([]byte(settled.String()), &result); err != nil {
-		return nil, fmt.Errorf("deepseek: turn result: %w", err)
+	answer := settled.String()
+	if err := json.Unmarshal([]byte(answer), &result); err != nil {
+		// Say what came back. "unexpected end of JSON input" on its own names
+		// nothing, and the interesting case is an EMPTY answer — a turn whose
+		// promise settled without a value — which reads identically.
+		return nil, fmt.Errorf("deepseek: turn result: %w (the runtime answered %q)", err, answer)
 	}
 	result.Duration = time.Since(started)
 	return &result, nil

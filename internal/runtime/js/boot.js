@@ -136,7 +136,7 @@ function waitForIdle(ctx, agent) {
   });
 }
 
-function agentFor(ctx, sessionId, agentOptions) {
+async function agentFor(ctx, sessionId, agentOptions) {
   const existing = agents.get(sessionId);
   if (existing) return existing;
   const loop = ctx.get('agentLoop') ?? ctx.agentLoop;
@@ -147,9 +147,51 @@ function agentFor(ctx, sessionId, agentOptions) {
   // path ("notes.txt is not an absolute path"), and the agent spends its turn
   // guessing at paths instead of reading the file.
   const { cwd, ...options } = agentOptions;
-  const agent = loop.create(SessionId(sessionId), options, cwd ? { cwd } : {});
+  const agent = await openAgent(ctx, loop, sessionId, options, cwd);
   agents.set(sessionId, agent);
   return agent;
+}
+
+/**
+ * Open the agent for a session id: RESUME it when the id already has a stored
+ * log, and create it fresh when it does not.
+ *
+ * Both halves are needed, and only creating is the bug this replaced. A session
+ * id is durable — it is the name of its log — so using one again in a new
+ * process is how a conversation continues. Creating on an id that already has
+ * history does not start over; the persistence layer sees a stored log that
+ * does not match the fresh session and refuses the turn with an id collision,
+ * which reads like corruption and is really "you asked for a new session with
+ * an old name".
+ */
+async function openAgent(ctx, loop, sessionId, options, cwd) {
+  if (await isStored(ctx, sessionId)) {
+    // No cwd here on purpose: a resumed session keeps the workspace recorded in
+    // its own header. Overriding it would repoint the file tools halfway
+    // through a conversation whose history is full of the old paths.
+    const handle = await loop.resume(ctx, {
+      resumeSessionId: SessionId(sessionId),
+      agentOptions: options,
+    });
+    return handle.agent;
+  }
+  return loop.create(SessionId(sessionId), options, cwd ? { cwd } : {});
+}
+
+/** Whether this id already has a persisted log to resume from. */
+async function isStored(ctx, sessionId) {
+  const persistence = ctx.get('sessionPersistence');
+  // A composition with no persistence has nothing to resume from, and a
+  // backend that cannot be listed is not evidence that history exists — both
+  // fall through to creating, which is what this runtime did unconditionally
+  // before.
+  if (!persistence) return false;
+  try {
+    const stored = await persistence.list();
+    return stored.some((header) => String(header.id) === String(sessionId));
+  } catch {
+    return false;
+  }
 }
 
 // finalText is the answer as a caller means it: the text of the last assistant
@@ -183,7 +225,7 @@ function turnOutcome(events) {
 async function run(sessionId, text, agentOptions) {
   const ctx = context;
   if (!ctx) throw new Error('the harness has not been started');
-  const agent = agentFor(ctx, sessionId, agentOptions);
+  const agent = await agentFor(ctx, sessionId, agentOptions);
   const forwarding = forwardEvents(ctx, sessionId, agent);
   try {
     const before = agent.session ? agent.session.events.length : 0;
