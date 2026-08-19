@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="A Go gopher riding the DeepSeek whale" width="320">
+</p>
+
 # go-deepseek
 
 The [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) as a
