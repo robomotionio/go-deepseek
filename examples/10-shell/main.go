@@ -340,21 +340,25 @@ func (s *shell) run(args []json.RawMessage) (any, error) {
 	err := cmd.Run()
 	took := time.Since(started)
 
-	// A command that never started has no exit status to report; one that ran
-	// always has one, including when a signal ended it.
-	if err != nil && cmd.ProcessState == nil {
-		s.note(fmt.Sprintf("FAILED   %-40s %v", clip(spec.Command), err), false)
-		out := collected(127, stdout, stderr, timeout)
-		out["stderr"] = map[string]any{"text": err.Error(), "truncated": false}
-		return out, nil
-	}
-
+	// The deadline is asked about first, because it is the more accurate answer
+	// whenever both could apply: a deadline that fires during fork/exec leaves
+	// no ProcessState behind, and reporting that as "could not start it" would
+	// name the symptom instead of the cause.
 	if ctx.Err() != nil {
 		s.note(fmt.Sprintf("TIMEOUT  %-40s after %v", clip(spec.Command), timeout), false)
 		out := collected(0, stdout, stderr, timeout)
 		out["exitCode"] = nil
 		out["signal"] = "SIGKILL"
 		out["timedOut"] = true
+		return out, nil
+	}
+
+	// A command that never started has no exit status to report; one that ran
+	// always has one, including when a signal ended it.
+	if err != nil && cmd.ProcessState == nil {
+		s.note(fmt.Sprintf("FAILED   %-40s %v", clip(spec.Command), err), false)
+		out := collected(127, stdout, stderr, timeout)
+		out["stderr"] = map[string]any{"text": err.Error(), "truncated": false}
 		return out, nil
 	}
 
@@ -515,15 +519,7 @@ func parse(command string) (argv []string, refusal string) {
 // example stops and a real executor keeps going.
 func fence(argv []string) string {
 	for _, arg := range argv[1:] {
-		candidate := arg
-		if strings.HasPrefix(arg, "-") {
-			// A flag, unless it carries its value inline (--file=PATH).
-			_, value, found := strings.Cut(arg, "=")
-			if !found {
-				continue
-			}
-			candidate = value
-		}
+		candidate := pathIn(arg)
 		if candidate == "" {
 			continue
 		}
@@ -535,6 +531,35 @@ func fence(argv []string) string {
 				return fmt.Sprintf("%q climbs out of the workspace", candidate)
 			}
 		}
+	}
+	return ""
+}
+
+// pathIn digs the path out of one argument, or answers "" when there is none.
+//
+// A flag is not always just a flag. `--file=PATH` carries one after the `=`,
+// and short options carry one with no separator at all — `grep -f/etc/passwd`
+// is how GNU getopt spells `grep -f /etc/passwd`, and reading only up to an `=`
+// walks straight past it. That was a real hole: every check below would have
+// been skipped for an argument that names an absolute path.
+func pathIn(arg string) string {
+	if !strings.HasPrefix(arg, "-") {
+		return arg
+	}
+	flag := strings.TrimLeft(arg, "-")
+	if _, value, found := strings.Cut(flag, "="); found {
+		return value
+	}
+	// A value attached to a short option. It begins at the first separator, or
+	// at a climbing segment when one comes earlier — so that `-f../x` is
+	// refused for climbing rather than mislabelled as absolute.
+	sep := strings.IndexAny(flag, `/\`)
+	up := strings.Index(flag, "..")
+	switch {
+	case up >= 0 && (sep < 0 || up < sep):
+		return flag[up:]
+	case sep >= 0:
+		return flag[sep:]
 	}
 	return ""
 }

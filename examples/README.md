@@ -488,15 +488,16 @@ The agent gets a shell, and your program decides what a shell means:
 
 ```
 --- every command, as this program saw it ---
-  REFUSED  ls -la; echo "---"; wc -l inventory.txt… ";" chains, redirects or substitutes, and this shell runs exactly one program
-  REFUSED  curl https://example.com 2>&1            ">" chains, redirects or substitutes, and this shell runs exactly one program
-  REFUSED  cat /etc/hostname 2>&1                   ">" chains, redirects or substitutes, and this shell runs exactly one program
-  ran      wc -l inventory.txt                      exit 0 in 1ms
+  ran      ls -la                                   exit 0 in 2ms
+  ran      cat inventory.txt                        exit 0 in 1ms
+  REFUSED  count=$(awk '{n++} END {print n}' inven… "$" chains, redirects or substitutes, and this shell runs exactly one program
+  REFUSED  cat inventory.txt | sort | tail -1       "|" chains, redirects or substitutes, and this shell runs exactly one program
   REFUSED  curl https://example.com                 "curl" is not on the allowlist; allowed programs are cat, cut, echo, grep, head, ls, sort, tail, wc
   REFUSED  cat /etc/hostname                        "/etc/hostname" is an absolute path, and this shell reaches only the workspace
+  ran      wc -l inventory.txt                      exit 0 in 1ms
   ran      sort inventory.txt                       exit 0 in 1ms
 
-[2 commands run, 5 refused by the host program]
+[4 commands run, 4 refused by the host program]
 [allowlist refused a program: true | the fence refused a path: true]
 ```
 
@@ -504,8 +505,14 @@ The agent gets a shell, and your program decides what a shell means:
 decides which *programs* run. It says nothing about which *files* they touch —
 `cat` is a safe program and `cat /etc/passwd` is not a safe command, and
 `ctx.fs` does not reach a subprocess. So the executor also requires every
-argument to be a relative path that stays put, which is why the last refusal
-above exists. A program allowlist on its own would have let that one through.
+argument to be a relative path that stays put, which is why `cat /etc/hostname`
+is refused above. A program allowlist on its own would have let it through.
+
+Getting that second fence right is fiddlier than it looks, which is why it is
+the one part of the tour with its own test (`fence_test.go`). A review of this
+branch found the first hole in it: `grep -f/etc/passwd` is how GNU getopt
+spells `grep -f /etc/passwd`, and a check that only understood `--flag=value`
+walked straight past it.
 
 Note what the executor does *not* do: hand the string to `bash -c`. The tool
 tells the model it is talking to bash; this executor answers a deliberately
