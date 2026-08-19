@@ -19,6 +19,14 @@
 // effect's inverse, a service's methods: cordis wants functions, and Go has
 // closures. A marker in the encoded value ({"$fn": n}) is revived here into a
 // real function that calls back into Go.
+//
+// THREE KEYS ARE RESERVED, at any depth of anything Go sends: `$fn` (a Go
+// callback), `$ref` (a held JavaScript object) and `$undefined` (see
+// runtime.Undefined). An object that carries one of them is interpreted rather
+// than copied, so Go data whose own keys collide is not deliverable — encode it
+// under a wrapper, or as a string. Worth saying out loud now that
+// sdk.Undefined() makes one of the three a public, encouraged spelling rather
+// than an internal detail.
 
 // The one upstream import here. Registering a tool means handing the registry a
 // definition built by defineTool, which compiles the parameter spec into JSON
