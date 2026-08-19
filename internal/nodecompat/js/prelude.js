@@ -255,6 +255,131 @@
     }
   }
 
+  // --- Buffer's numeric accessors -------------------------------------------
+  //
+  // A Node Buffer is a binary READER as well as a byte array, and code that
+  // parses a format reaches for these rather than for a DataView. The session
+  // log reader is one such caller: it walks Zstandard frame headers with
+  // readUInt32LE, readUInt8 and readUIntLE, so a Buffer without them cannot
+  // read back a log this runtime itself wrote. That failure arrives as
+  // "undefined is not a function" a long way from its cause, which is the
+  // argument for implementing the whole family rather than the three in use.
+  //
+  // They are generated from one table so the spellings cannot drift apart, and
+  // they range-check the way Node's do: a silent out-of-range read is how a
+  // parser returns a wrong answer instead of failing.
+
+  const fixedWidth = {
+    UInt8: ['getUint8', 'setUint8', 1, false],
+    UInt16LE: ['getUint16', 'setUint16', 2, true],
+    UInt16BE: ['getUint16', 'setUint16', 2, false],
+    UInt32LE: ['getUint32', 'setUint32', 4, true],
+    UInt32BE: ['getUint32', 'setUint32', 4, false],
+    Int8: ['getInt8', 'setInt8', 1, false],
+    Int16LE: ['getInt16', 'setInt16', 2, true],
+    Int16BE: ['getInt16', 'setInt16', 2, false],
+    Int32LE: ['getInt32', 'setInt32', 4, true],
+    Int32BE: ['getInt32', 'setInt32', 4, false],
+    FloatLE: ['getFloat32', 'setFloat32', 4, true],
+    FloatBE: ['getFloat32', 'setFloat32', 4, false],
+    DoubleLE: ['getFloat64', 'setFloat64', 8, true],
+    DoubleBE: ['getFloat64', 'setFloat64', 8, false],
+    BigUInt64LE: ['getBigUint64', 'setBigUint64', 8, true],
+    BigUInt64BE: ['getBigUint64', 'setBigUint64', 8, false],
+    BigInt64LE: ['getBigInt64', 'setBigInt64', 8, true],
+    BigInt64BE: ['getBigInt64', 'setBigInt64', 8, false],
+  };
+
+  function outOfRange(name, value, max) {
+    const error = new RangeError(
+      `The value of "${name}" is out of range. It must be >= 0 and <= ${max}. Received ${value}`);
+    error.code = 'ERR_OUT_OF_RANGE';
+    return error;
+  }
+
+  // The view is over the Buffer's own window, so an offset is relative to the
+  // Buffer rather than to the ArrayBuffer it may be a slice of. Getting that
+  // wrong reads a neighbour's bytes and reports no error at all.
+  function windowOf(buf, offset, size) {
+    const max = buf.length - size;
+    if (!Number.isInteger(offset) || offset < 0 || offset > max) {
+      throw outOfRange('offset', offset, max < 0 ? 0 : max);
+    }
+    return new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  }
+
+  for (const suffix of Object.keys(fixedWidth)) {
+    const [get, set, size, little] = fixedWidth[suffix];
+    Buffer.prototype['read' + suffix] = function (offset = 0) {
+      return windowOf(this, offset, size)[get](offset, little);
+    };
+    Buffer.prototype['write' + suffix] = function (value, offset = 0) {
+      windowOf(this, offset, size)[set](offset, value, little);
+      return offset + size;
+    };
+    // Node spells the unsigned ones both ways — readUInt8 and readUint8 — and
+    // code in the wild uses both, so both are here.
+    if (suffix.includes('UInt')) {
+      const alias = suffix.replace('UInt', 'Uint');
+      Buffer.prototype['read' + alias] = Buffer.prototype['read' + suffix];
+      Buffer.prototype['write' + alias] = Buffer.prototype['write' + suffix];
+    }
+  }
+
+  // The variable-width pair, 1 to 6 bytes. They exist because formats store
+  // 24- and 48-bit fields, and 48 bits is the widest a JavaScript number holds
+  // exactly — which is why Node caps them there and why these do too.
+  function checkByteLength(byteLength) {
+    if (!Number.isInteger(byteLength) || byteLength < 1 || byteLength > 6) {
+      throw outOfRange('byteLength', byteLength, 6);
+    }
+  }
+
+  function readVariable(buf, offset, byteLength, signed, little) {
+    checkByteLength(byteLength);
+    const view = windowOf(buf, offset, byteLength);
+    let value = 0;
+    for (let i = 0; i < byteLength; i++) {
+      const at = little ? offset + byteLength - 1 - i : offset + i;
+      value = value * 256 + view.getUint8(at);
+    }
+    if (!signed) return value;
+    const half = Math.pow(2, byteLength * 8 - 1);
+    return value >= half ? value - half * 2 : value;
+  }
+
+  function writeVariable(buf, value, offset, byteLength, little) {
+    checkByteLength(byteLength);
+    const view = windowOf(buf, offset, byteLength);
+    let rest = Math.floor(Number(value));
+    if (rest < 0) rest += Math.pow(2, byteLength * 8);
+    for (let i = 0; i < byteLength; i++) {
+      const at = little ? offset + i : offset + byteLength - 1 - i;
+      view.setUint8(at, rest % 256);
+      rest = Math.floor(rest / 256);
+    }
+    return offset + byteLength;
+  }
+
+  const variableWidth = {
+    UIntLE: [false, true], UIntBE: [false, false],
+    IntLE: [true, true], IntBE: [true, false],
+  };
+  for (const suffix of Object.keys(variableWidth)) {
+    const [signed, little] = variableWidth[suffix];
+    Buffer.prototype['read' + suffix] = function (offset = 0, byteLength = 1) {
+      return readVariable(this, offset, byteLength, signed, little);
+    };
+    Buffer.prototype['write' + suffix] = function (value, offset = 0, byteLength = 1) {
+      return writeVariable(this, value, offset, byteLength, little);
+    };
+    if (suffix.includes('UInt')) {
+      const alias = suffix.replace('UInt', 'Uint');
+      Buffer.prototype['read' + alias] = Buffer.prototype['read' + suffix];
+      Buffer.prototype['write' + alias] = Buffer.prototype['write' + suffix];
+    }
+  }
+
   g.Buffer = Buffer;
 
   // --- Blob -----------------------------------------------------------------

@@ -164,6 +164,92 @@ func TestBufferAndEncoding(t *testing.T) {
 	}
 }
 
+// Buffer is a binary reader too, and the session-log reader depends on it: it
+// walks Zstandard frame headers with readUInt32LE, readUInt8 and readUIntLE.
+// Without them a log this runtime wrote is a log it cannot open, and the
+// symptom — "undefined is not a function" — names nothing.
+//
+// Every expected value below was produced by running the same expressions on
+// real Node, because "it returns a number" is not the property that matters.
+func TestBufferNumericAccessors(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		// The first four bytes are a real Zstandard frame magic, which is the
+		// read that mattered.
+		const buf = Buffer.from([0x28, 0xb5, 0x2f, 0xfd, 0x24, 0x08, 0x91, 0x00,
+		                         0x00, 0xff, 0xfe, 0x80, 0x01, 0x02, 0x03, 0x04]);
+		const out = [];
+		out.push(buf.readUInt8(0));
+		out.push(buf.readUInt32LE(0));
+		out.push(buf.readUInt32BE(0));
+		out.push(buf.readUIntLE(4, 3));
+		out.push(buf.readUIntBE(4, 3));
+		out.push(buf.readInt8(1));
+		out.push(buf.readInt16LE(9));
+		out.push(buf.readInt16BE(9));
+		out.push(buf.readIntLE(9, 3));
+		out.push(buf.readIntBE(9, 3));
+		out.push(buf.readUint8(0));
+		out.push(buf.readUintLE(4, 3));
+		out.push(String(buf.readBigUInt64LE(0)));
+		out.push(String(buf.readBigInt64BE(8)));
+		out.push(buf.readFloatLE(0).toPrecision(8));
+		out.push(buf.readDoubleBE(0).toPrecision(8));
+		// A slice, because an offset is relative to the Buffer and not to the
+		// ArrayBuffer it may be a window on. Getting that wrong reads a
+		// neighbour's bytes and reports nothing.
+		const tail = buf.subarray(4);
+		out.push(tail.readUInt8(0));
+		out.push(tail.readUIntLE(0, 3));
+		// Writers round-trip and answer with the next offset.
+		const w = Buffer.alloc(8);
+		out.push(w.writeUInt32LE(0xdeadbeef, 0));
+		out.push(w.readUInt32LE(0));
+		out.push(w.writeUIntBE(0x0102030405, 0, 5));
+		out.push(w.readUIntBE(0, 5));
+		out.push(w.writeIntLE(-1234567, 0, 4));
+		out.push(w.readIntLE(0, 4));
+		// Out of range is an error rather than a wrong answer.
+		try { buf.readUInt32LE(13); out.push('no throw'); } catch (e) { out.push(e.code); }
+		try { buf.readUIntLE(0, 7); out.push('no throw'); } catch (e) { out.push(e.code); }
+		globalThis.result = out.join('|');
+	`)
+	want := "40|4247762216|682962941|9504804|2361489|-75|-257|-2|-8323329|-384|40|9504804|" +
+		"40822826582652200|72055944787395332|-1.4597220e+37|1.3765768e-112|36|9504804|" +
+		"4|3735928559|5|4328719365|4|-1234567|ERR_OUT_OF_RANGE|ERR_OUT_OF_RANGE"
+	if got != want {
+		t.Fatalf("\n got %s\nwant %s", got, want)
+	}
+}
+
+// createZstdDecompress is PROBED rather than used: the session-log reader builds
+// one to ask whether this release exposes a private fast path, then falls back
+// to the public one-shot API. Throwing there does not decline the fast path, it
+// takes the read down with it — so it must answer, and must still refuse to
+// pretend it is a stream.
+func TestZstdDecompressProbeDeclinesRatherThanThrows(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { createZstdDecompress, createGzip } from 'node:zlib';
+		const out = [];
+		const probe = createZstdDecompress({ chunkSize: 1024 });
+		// What the reader actually inspects, and the answer it needs.
+		out.push('handle=' + typeof probe._handle);
+		out.push('writeState=' + (probe._writeState instanceof Uint32Array));
+		out.push('symbols=' + Reflect.ownKeys(probe).filter((k) => typeof k === 'symbol').length);
+		probe.close();
+		out.push('closed');
+		// It is not a stream, and says so rather than behaving like one.
+		try { probe.write('x'); out.push('wrote'); } catch { out.push('write refused'); }
+		try { createGzip(); out.push('made a gzip stream'); } catch { out.push('createGzip refused'); }
+		globalThis.result = out.join('|');
+	`)
+	want := "handle=undefined|writeState=false|symbols=0|closed|write refused|createGzip refused"
+	if got != want {
+		t.Fatalf("\n got %s\nwant %s", got, want)
+	}
+}
+
 // A decoder fed one byte at a time must not turn a multi-byte character into
 // replacement characters, which is the whole point of streaming mode and the
 // thing SSE parsing depends on.
