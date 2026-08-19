@@ -38,6 +38,12 @@ type jsFunc struct {
 	Sync bool  `json:"$sync,omitempty"`
 }
 
+// jsUndefined is JavaScript's undefined, encoded. See Undefined, which is the
+// only thing that makes one.
+type jsUndefined struct {
+	Undefined bool `json:"$undefined"`
+}
+
 // jsRef names a JavaScript value the bridge is holding. It is how a live object
 // — a service, a context, a session — is passed back to the world it lives in
 // rather than copied out of it.

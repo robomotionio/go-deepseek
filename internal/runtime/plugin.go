@@ -343,6 +343,36 @@ func (c *Context) Effect(inverse func()) error {
 // connection, waiting for a worker.
 func (c *Context) OnDispose(fn func()) { c.bridge.onDispose(c.ref, fn) }
 
+// Undefined is JavaScript's undefined, as a value a Go plugin can pass or
+// return.
+//
+// It exists because Go has no undefined and JSON has no undefined, so a Go nil
+// crosses the bridge as null — and the harness distinguishes the two in places
+// where getting it wrong is silent and total. The tools guard is the sharp one.
+// Its contract is `string | undefined`, where a string is a denial reason and
+// undefined means "no objection", and the registry tests the result against
+// undefined rather than for truthiness. A guard that returns nil therefore
+// denies EVERY tool call in the harness, with the reason "null", and the agent
+// spends its turn being told no by something that meant to say nothing.
+//
+//	nothing := runtime.Undefined()
+//	ctx.Call("tools.guard", ctx.SyncFunc(func(args []json.RawMessage) (any, error) {
+//	    if forbidden(args) {
+//	        return "that file holds credentials", nil
+//	    }
+//	    return nothing, nil
+//	}))
+//
+// It is a marker rather than a held reference, so it costs no bridge call and
+// no handle: it is safe to return from SyncFunc, which must not call back
+// across the bridge. Inside a map or a slice it works the same way, though note
+// that a property set to undefined still EXISTS on the JavaScript object — an
+// undefined value is not an absent key.
+//
+// One direction only. A JavaScript undefined reaching Go still arrives as null,
+// because a Go value has nowhere else to put it.
+func Undefined() any { return jsUndefined{Undefined: true} }
+
 // Value interprets one argument a callback received, so that a handler can
 // reach a live object JavaScript passed it — the `next` of a waterfall, a
 // session, an execution.

@@ -141,6 +141,113 @@ func TestLiveGoPlugin(t *testing.T) {
 	}
 }
 
+// The marker's wire form, which the JavaScript half matches on by name. A
+// rename here is silent on the Go side and total on the other one: every guard
+// starts denying, so the shape is worth pinning.
+func TestUndefinedMarshalsToTheBridgeMarker(t *testing.T) {
+	encoded, err := json.Marshal(sdk.Undefined())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(encoded) != `{"$undefined":true}` {
+		t.Fatalf("the undefined marker is %s", encoded)
+	}
+	// And the thing it exists to not be.
+	var nothing any
+	if encoded, _ = json.Marshal(nothing); string(encoded) != "null" {
+		t.Fatalf("a Go nil encodes as %s, so the marker would be unnecessary", encoded)
+	}
+}
+
+// A monotonic guard, from Go, with both of its answers exercised: a string
+// denies the call, and sdk.Undefined() lets it through.
+//
+// The second half is the one that needed the marker. A guard returning a Go nil
+// answers null, the registry tests `!== undefined`, and every call in the
+// harness is denied with the reason "null" — including the read this turn
+// depends on. So a passing read here is the proof that Go can say nothing.
+func TestLiveGuardAllowsWithUndefined(t *testing.T) {
+	key := os.Getenv("DEEPSEEK_API_KEY")
+	if key == "" {
+		t.Skip("set DEEPSEEK_API_KEY to run the live guard turn")
+	}
+	model := os.Getenv("DEEPSEEK_MODEL")
+	if model == "" {
+		model = "deepseek-v4-flash"
+	}
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "note.txt"), []byte("the answer is plum\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	var mu sync.Mutex
+	var allowed, denied []string
+
+	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
+	defer cancel()
+
+	h, err := sdk.Open(ctx, sdk.Config{
+		BaseURL: os.Getenv("DEEPSEEK_BASE_URL"),
+		APIKey:  key,
+		Model:   model,
+		CWD:     dir,
+		Env:     map[string]string{"HOME": dir},
+		Plugins: []sdk.Plugin{{
+			ID:     "guardian",
+			Inject: []string{"tools"},
+			Apply: func(pc *sdk.Context) error {
+				nothing := sdk.Undefined()
+				_, err := pc.Call("tools.guard", pc.SyncFunc(func(args []json.RawMessage) (any, error) {
+					var exec struct {
+						Name string `json:"name"`
+					}
+					if len(args) > 0 {
+						_ = json.Unmarshal(args[0], &exec)
+					}
+					mu.Lock()
+					defer mu.Unlock()
+					if strings.Contains(exec.Name, "write") || exec.Name == "edit" {
+						denied = append(denied, exec.Name)
+						return "this agent is read-only", nil
+					}
+					allowed = append(allowed, exec.Name)
+					return nothing, nil
+				}))
+				return err
+			},
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+
+	result, err := h.Run(ctx, sdk.Text(
+		"Read note.txt and tell me the answer. Then write that same answer into copy.txt "+
+			"and tell me whether it worked."))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%v, finish=%q, said %q", result.Duration, result.FinishReason, result.FinalResponse)
+
+	mu.Lock()
+	defer mu.Unlock()
+	t.Logf("guard allowed %v, denied %v", allowed, denied)
+
+	// Allowed: the read went through, so undefined meant "no objection".
+	if len(allowed) == 0 {
+		t.Fatal("the guard allowed nothing — undefined did not reach the registry as undefined")
+	}
+	if !strings.Contains(strings.ToLower(result.FinalResponse), "plum") {
+		t.Errorf("the turn never read the file, so the guard denied what it meant to allow: %q",
+			result.FinalResponse)
+	}
+	// Denied: and the denial is on disk, not merely reported.
+	if _, err := os.Stat(filepath.Join(dir, "copy.txt")); err == nil {
+		t.Error("copy.txt exists: the guard's denial was not enforced")
+	}
+}
+
 func contains(values []string, want string) bool {
 	for _, value := range values {
 		if value == want {
