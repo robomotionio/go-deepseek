@@ -149,35 +149,8 @@ func Open(ctx context.Context, cfg Config, opts ...Option) (*Harness, error) {
 			opt(&cfg)
 		}
 	}
-	if cfg.Provider == "" {
-		cfg.Provider = "deepseek-official"
-	}
-	if cfg.Model == "" {
-		cfg.Model = "deepseek-v4-flash"
-	}
-	if cfg.CWD == "" {
-		wd, err := os.Getwd()
-		if err != nil {
-			return nil, fmt.Errorf("sdk: no working directory: %w", err)
-		}
-		cfg.CWD = wd
-	}
-	abs, err := filepath.Abs(cfg.CWD)
-	if err != nil {
-		return nil, fmt.Errorf("sdk: working directory: %w", err)
-	}
-	cfg.CWD = abs
-	if cfg.SessionRoot == "" {
-		cfg.SessionRoot = filepath.Join(cfg.CWD, ".sessions")
-	}
-	if cfg.APIKey == "" {
-		cfg.APIKey = cfg.Env["DEEPSEEK_API_KEY"]
-	}
-	if cfg.APIKey == "" {
-		cfg.APIKey = os.Getenv("DEEPSEEK_API_KEY")
-	}
-	if cfg.BaseURL == "" {
-		cfg.BaseURL = os.Getenv("DEEPSEEK_BASE_URL")
+	if err := cfg.resolve(); err != nil {
+		return nil, err
 	}
 
 	carrier := cfg.carrier
@@ -189,6 +162,52 @@ func Open(ctx context.Context, cfg Config, opts ...Option) (*Harness, error) {
 		return nil, err
 	}
 	return &Harness{cfg: cfg, carrier: carrier, sessions: map[string]*sync.Mutex{}}, nil
+}
+
+// resolve fills in every default, so that a Config means the same thing
+// wherever it is read.
+//
+// It is shared with Compose, and that sharing is the point rather than tidiness.
+// A composition is built FROM a Config and freezes what it read: the model
+// route, the adapter's endpoint, the agent's working directory. When only Open
+// applied the defaults, building a composition first and opening with it second
+// produced an adapter aimed at the default endpoint however carefully
+// DEEPSEEK_BASE_URL was set — and the symptom was a 401 from the wrong host,
+// which reads as a bad key and is not one.
+func (cfg *Config) resolve() error {
+	if cfg.Provider == "" {
+		cfg.Provider = "deepseek-official"
+	}
+	if cfg.Model == "" {
+		cfg.Model = "deepseek-v4-flash"
+	}
+	if cfg.CWD == "" {
+		wd, err := os.Getwd()
+		if err != nil {
+			return fmt.Errorf("sdk: no working directory: %w", err)
+		}
+		cfg.CWD = wd
+	}
+	abs, err := filepath.Abs(cfg.CWD)
+	if err != nil {
+		return fmt.Errorf("sdk: working directory: %w", err)
+	}
+	cfg.CWD = abs
+	if cfg.SessionRoot == "" {
+		cfg.SessionRoot = filepath.Join(cfg.CWD, ".sessions")
+	}
+	// The environment is consulted last and only for what was left empty, so an
+	// explicit field always wins over an ambient one.
+	if cfg.APIKey == "" {
+		cfg.APIKey = cfg.Env["DEEPSEEK_API_KEY"]
+	}
+	if cfg.APIKey == "" {
+		cfg.APIKey = os.Getenv("DEEPSEEK_API_KEY")
+	}
+	if cfg.BaseURL == "" {
+		cfg.BaseURL = os.Getenv("DEEPSEEK_BASE_URL")
+	}
+	return nil
 }
 
 // Close releases the harness and everything it started.
