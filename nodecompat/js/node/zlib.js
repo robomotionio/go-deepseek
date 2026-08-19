@@ -1,7 +1,7 @@
 // node:zlib — one-shot compression in every spelling the API offers.
 //
 // zstd is the one that matters here: session logs are JSONL compressed with it,
-// so this is what lets a robot read back a session it wrote. The rest come along
+// so this is what lets the runtime read back a session it wrote. The rest come along
 // because the standard library has them.
 
 const host = globalThis.__nodeHost;

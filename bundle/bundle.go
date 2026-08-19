@@ -154,7 +154,7 @@ func (b *Bundle) Resolve(specifier, referrer string) (source, path string, ok bo
 }
 
 // source reads a module out of the embedded filesystem, caching it: the same
-// module is asked for once per Runtime and a robot may run many.
+// module is asked for once per Runtime and a host may run many.
 func (b *Bundle) source(file string) (string, error) {
 	b.mu.RLock()
 	src, ok := b.loaded[file]

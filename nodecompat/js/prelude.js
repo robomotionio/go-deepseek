@@ -739,8 +739,8 @@
     nextTick: (fn, ...args) => queueMicrotask(() => fn(...args)),
     emitWarning: (warning) => { console.error('Warning:', warning); },
     // The event surface is inert on purpose. There is no process to signal: the
-    // Runtime is one part of a robot, and a plugin listening for SIGINT must not
-    // be told about the host's.
+    // Runtime is one part of a larger program, and a plugin listening for SIGINT
+    // must not be told about the host's.
     on: () => process, once: () => process, off: () => process,
     removeListener: () => process, removeAllListeners: () => process,
     setMaxListeners: () => process, listeners: () => [],

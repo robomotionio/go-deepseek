@@ -106,9 +106,13 @@ function forwardEvents(ctx, sessionId, agent) {
       emit(sessionId, JSON.stringify({ type: 'runtime/event-error', data: { message: String(err) } }));
     }
   };
-  const dispose = ctx.on('session/event', (payload) => {
-    if (payload?.session?.id && payload.session.id !== sessionId) return;
-    push(payload.event ?? payload);
+  // (session, event) — two arguments, not one payload object. Reading it as one
+  // meant the filter never matched and nothing was ever streamed: every event
+  // arrived at the end of the turn instead, in a burst, from the replay below.
+  // The JSON-RPC server plugin upstream subscribes the same way.
+  const dispose = ctx.on('session/event', (session, event) => {
+    if (session && String(session.id) !== String(sessionId)) return;
+    push(event);
   });
   return { dispose, push };
 }

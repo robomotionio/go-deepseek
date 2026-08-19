@@ -59,9 +59,9 @@ type Config struct {
 	// rules it does.
 	Composition []Entry
 
-	// Env is the environment the harness sees. Nil means an empty one: a robot
-	// inheriting every variable of the process that started it is how a
-	// credential ends up somewhere it was never meant to go.
+	// Env is the environment the harness sees. Nil means an empty one: inheriting
+	// every variable of the process that started it is how a credential ends up
+	// somewhere it was never meant to go.
 	Env map[string]string
 
 	// MemoryLimit bounds the JavaScript heap, in bytes. Zero means no limit,

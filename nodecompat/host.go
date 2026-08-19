@@ -44,9 +44,9 @@ type Options struct {
 	CWD string
 
 	// Env is what process.env exposes. A nil map means an empty environment,
-	// NOT the process's own: inheriting every variable a robot happens to have
-	// is how credentials end up in a subprocess by accident. Pass os.Environ()
-	// explicitly if that is what you want.
+	// NOT the process's own: inheriting every variable the host happens to have
+	// is how a credential ends up somewhere nobody meant it to be. Pass
+	// os.Environ() explicitly if that is what you want.
 	Env map[string]string
 
 	// Argv is process.argv. Defaults to a plausible two-element form.
@@ -103,8 +103,8 @@ type Compat struct {
 	cancels map[int64]context.CancelFunc
 
 	// exitCode is what a script asked to exit with. There is no os.Exit here:
-	// the Runtime is one part of a robot, and a plugin calling process.exit must
-	// not take the rest of it down.
+	// the Runtime is one part of a larger program, and a plugin calling
+	// process.exit must not take the rest of it down.
 	exitCode *int
 }
 

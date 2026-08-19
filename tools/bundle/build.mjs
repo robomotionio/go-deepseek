@@ -3,7 +3,7 @@
 // This is a maintainer's tool, not part of the build. It runs against a
 // deepseek-harness checkout with Node and pnpm available, and its output — one
 // ESM file per package, plus a manifest — is committed as a generated artifact.
-// A robot then needs none of that: the files are compiled into the binary and
+// Using it then needs none of that: the files are compiled into the binary and
 // served to the engine by the module resolver.
 //
 // Why one file per package rather than one file for everything:
@@ -65,10 +65,9 @@ function indexWorkspace(root) {
   return index;
 }
 
-// The v1 plugin set: what the Robomotion package composes, and nothing else.
-// Adding a plugin here is what makes it available to a composition; a
-// composition naming something outside this list fails at build time, here,
-// rather than at run time on a robot.
+// The plugin set this bundle carries. Adding a plugin here is what makes it
+// available to a composition; a composition naming something outside this list
+// fails at build time, here, rather than at run time.
 const ENTRIES = [
   // the kernel and the loader
   '@deepseek-ai/cordis',

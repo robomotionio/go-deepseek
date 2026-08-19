@@ -3,7 +3,7 @@ package nodecompat
 // The JavaScript half of the layer, embedded in the binary.
 //
 // These are ordinary ES modules and scripts, compiled into the Go binary with
-// go:embed so that a robot needs nothing on disk to run them. They are the
+// go:embed so that nothing has to be on disk for them to run. They are the
 // implementation of everything that is computation rather than capability: the
 // path algebra, the Buffer methods, the event emitter, the stream classes, the
 // Node API shapes over the host bindings in this package.

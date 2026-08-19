@@ -46,8 +46,8 @@ func TestBootCost(t *testing.T) {
 		float64(after.HeapAlloc)/(1<<20), float64(after.HeapAlloc-before.HeapAlloc)/(1<<20))
 	t.Logf("peak process RSS proxy (Sys): %.1f MB", float64(after.Sys)/(1<<20))
 
-	// A guard rather than a benchmark: the number that matters is whether a
-	// robot can boot this at all, and ten seconds would mean it cannot.
+	// A guard rather than a benchmark: the number that matters is whether a host
+	// can boot this at all, and ten seconds would mean it cannot.
 	if boot > 30*time.Second {
 		t.Errorf("cold boot took %v, which is too slow to be worth having", boot)
 	}

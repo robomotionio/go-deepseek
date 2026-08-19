@@ -38,6 +38,7 @@ and arm64**, from one toolchain, with the harness inside the binary.
 | `nodecompat` | The Node.js and web-platform surface: `node:fs`, `path`, `crypto`, `zlib`, `fetch`, streams, `Buffer`, `URL`. Computation in JavaScript, the machine in Go. |
 | `bundle` | The harness itself — one ES module per package, generated from a pinned checkout by `tools/bundle/build.mjs` and committed. |
 | the root package | `Config`, `Compose`, `Harness`: composing the plugin list and running turns. |
+| `sdk` | The client API, shaped like the official Python SDK, over either carrier. |
 
 Everything the harness can reach is one Go object (`nodecompat`'s host bindings),
 which is what makes the operating-system surface small enough to read and small
@@ -45,17 +46,20 @@ enough to fence. `child_process`, `worker_threads` and `vm` are refused by name.
 
 ## Measurements
 
-On one Linux x86-64 laptop, against `deepseek/deepseek-v4-flash-0731` through
-OpenRouter:
+On one idle Linux x86-64 laptop, against `deepseek/deepseek-v4-flash-0731`
+through a gateway:
 
 | | |
 |---|---|
-| Cold boot (parse + mount the 8-entry composition) | **5.0 s** |
-| Warm boot (same process, second Runtime) | **1.2 s** |
+| Cold boot (parse and mount the 8-entry composition) | **0.37 s** |
 | Go heap after boot | **58 MB** |
-| One text turn | **3.2 s**, 16 session events |
-| One tool-using turn (read a file, edit it, verify) | **17.6 s**, 131 events, 3 tool calls |
-| Bundle size compiled into the binary | 12.5 MB across 63 modules |
+| One text turn | **3.2 s**, 20 session events |
+| One tool-using turn (read a file, edit it, verify) | **4.2 s**, 72 events, 3 tool calls |
+| Bundle compiled into the binary | 12.5 MB across 64 modules |
+
+(Measured with `go test -run TestBootCost -v .`; the first figures recorded for
+this were four times worse, taken while a conformance suite was saturating the
+same machine. Worth knowing when you measure it yourself.)
 
 ## The composition
 
@@ -75,15 +79,46 @@ Two rules the harness imposes, restated here because both are quiet traps:
   them. An override that mentions one key discards the rest.
 - The YAML form supports `!!js`, which is arbitrary JavaScript the loader
   evaluates. Nothing here emits it and `validate` rejects it in anything a caller
-  supplied — a composition arriving from a designer or a saved flow is data.
+  supplied — a composition that arrives from outside the program is data.
+
+## The SDK
+
+`sdk/` is the same API the official Python SDK offers — a harness, sessions, a
+run that returns the final response, the finish reason and the events it saw —
+so that a program written against one translates to the other:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{Model: "deepseek-v4-flash"})
+if err != nil { return err }
+defer h.Close()
+
+result, err := h.Run(ctx, sdk.Text("Say hi."),
+    sdk.OnEvent(func(e sdk.Event) { log.Println(e.Type) }))
+fmt.Println(result.FinalResponse, result.FinishReason)
+```
+
+It reaches the harness two ways, and hides which:
+
+- **In process** (the default): the embedded harness above, no subprocess.
+- **Over JSON-RPC**: `sdk.WithRuntimeBinary(path)` launches a prebuilt harness
+  executable and speaks newline-delimited JSON to it — the same protocol, method
+  names and run-interval rule as the Python SDK, so it drives an executable
+  upstream built.
+
+A run owns the interval from the prompt being durably received to the next
+whole-agent idle, and its result describes that interval rather than an answer
+attributable to the prompt. That is upstream's rule, restated because the
+natural reading is the other one.
 
 ## Regenerating the bundle
 
 Maintainers only, and only when moving to a new upstream revision:
 
 ```bash
-node tools/bundle/build.mjs --harness ../deepseek-harness --out bundle
-go test ./...        # every bundled module must still evaluate
+make update                      # fetch upstream, build it, regenerate, test
+make update HARNESS_REF=dsh-v0.1.0-rc.8    # move to another revision
+make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
+make show                        # what the committed bundle was built from
 ```
 
 `bundle/manifest.json` records the harness version and commit it was built from.

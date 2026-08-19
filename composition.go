@@ -12,8 +12,9 @@ package deepseek
 //     silently discards the rest.
 //   - The YAML form supports `!!js`, which is arbitrary JavaScript evaluated by
 //     the loader. Nothing here emits it, and validate rejects it in anything a
-//     caller supplied: a composition arriving from a designer or a saved flow is
-//     data, and a value in it that executes is a way to run code on a robot.
+//     caller supplied: a composition that arrives from outside the program is
+//     data, and a value in it that executes is arbitrary code with the host's
+//     privileges.
 
 import (
 	"fmt"
@@ -174,10 +175,10 @@ func validate(entries []Entry) error {
 // rejectExecutable refuses a config that carries a `!!js` expression.
 //
 // The loader evaluates those, so a composition that arrives from outside — a
-// designer, a saved flow, an API request — is a way to run arbitrary JavaScript
-// on the robot. Nothing this package emits contains one, so finding one means it
-// came from somewhere it should not have, and the right response is to refuse
-// rather than to sanitise.
+// configuration file, a database row, an API request — is a way to run arbitrary
+// JavaScript with the host's privileges. Nothing this package emits contains
+// one, so finding one means it came from somewhere it should not have, and the
+// right response is to refuse rather than to sanitise.
 func rejectExecutable(value any, where string) error {
 	switch v := value.(type) {
 	case string:

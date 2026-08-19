@@ -3,8 +3,8 @@ package nodecompat
 // Compression.
 //
 // zstd is the one that has to be here: the session log is JSONL compressed with
-// it, so a robot that cannot decompress zstd cannot read back a session it wrote
-// five minutes ago. gzip and deflate come along because they are in the standard
+// it, so a runtime that cannot decompress zstd cannot read back a session it
+// wrote five minutes ago. gzip and deflate come along because they are in the standard
 // library and because HTTP responses arrive in them.
 //
 // Everything is one-shot. Node's zlib is stream-shaped, and the shim wraps these

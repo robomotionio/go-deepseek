@@ -64,7 +64,7 @@ func TestLiveTurn(t *testing.T) {
 	t.Logf("cold boot: %v", time.Since(booted))
 
 	result, err := h.Run(ctx, "gate", deepseek.Text(
-		"Reply with exactly the word ROBOMOTION and nothing else."))
+		"Reply with exactly the word HARNESS-OK and nothing else."))
 	if err != nil {
 		t.Fatalf("run: %v", err)
 	}
@@ -73,7 +73,7 @@ func TestLiveTurn(t *testing.T) {
 	if result.Text == "" {
 		t.Fatal("the model produced no text")
 	}
-	if !strings.Contains(strings.ToUpper(result.Text), "ROBOMOTION") {
+	if !strings.Contains(strings.ToUpper(result.Text), "HARNESS-OK") {
 		t.Errorf("unexpected answer: %q", result.Text)
 	}
 }

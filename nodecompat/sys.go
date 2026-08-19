@@ -90,8 +90,8 @@ func (c *Compat) processBindings() map[string]any {
 }
 
 // exit records that the script asked to stop. There is no os.Exit here on
-// purpose: the Runtime is embedded in a robot that has other work, and a plugin
-// calling process.exit must not take it down.
+// purpose: the Runtime is embedded in a program that has other work, and a
+// plugin calling process.exit must not take it down.
 func (c *Compat) exit(code int) {
 	c.mu.Lock()
 	c.exitCode = &code

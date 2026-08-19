@@ -220,7 +220,7 @@ export const globSync = () => { throw Object.assign(new Error('fs.globSync is no
 export function watch() {
   // Deliberate. A watcher is a long-lived host resource with no owner in this
   // design, and everything here that watches files does so to notice edits a
-  // person made — which is not something an embedded robot run has.
+  // person made — which an embedded, non-interactive run does not have.
   throw Object.assign(new Error('fs.watch is not supported in this runtime'), { code: 'ERR_NOT_IMPLEMENTED' });
 }
 export const watchFile = watch;

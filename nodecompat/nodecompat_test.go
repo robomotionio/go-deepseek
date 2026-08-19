@@ -382,7 +382,7 @@ func TestFetchAbort(t *testing.T) {
 func TestProcessAndOS(t *testing.T) {
 	rt, _ := newRuntime(t, nodecompat.Options{
 		CWD: "/somewhere",
-		Env: map[string]string{"DEEPSEEK_API_KEY": "sk-test", "HOME": "/home/robot"},
+		Env: map[string]string{"DEEPSEEK_API_KEY": "sk-test", "HOME": "/home/agent"},
 	})
 	got := run(t, rt, `
 		import os from 'node:os';
