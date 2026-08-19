@@ -39,12 +39,19 @@ Everything below was captured from a real run against the OpenRouter gateway,
 with `…` marking where a long answer was trimmed. Model prose varies run to run;
 the assertions do not.
 
-> **A known flake, so it does not read as your mistake.** Opening a *second*
-> harness in the same process and running a turn on it hangs some of the time —
-> measured at 3–5 rounds in 10 with a tight open/close loop, and rarely with the
-> two that example 02 opens. It predates these examples (a controlled A/B pinned
-> it to the runtime, not to anything here) and affects only 02 and 05, the two
-> that open more than one. Re-run it.
+> **A known flake, so it does not read as your mistake.** A turn occasionally
+> fails to settle. It shows up two ways: the run hangs, or it comes back with
+> `turn result: unexpected end of JSON input (the runtime answered "")`.
+>
+> It predates these examples and belongs to the runtime rather than to anything
+> here — a controlled A/B, with only `internal/runtime/js/boot.js` differing,
+> measured 5 hangs in 10 rounds on the unmodified `main` and 3 in 10 with this
+> branch's changes. It is most reproducible with a tight open-a-harness /
+> run-a-turn / close loop (which is why the A/B used one), but it is not
+> confined to that shape: example 07, which opens a single harness, hit it once
+> in roughly eight runs, then passed six for six.
+>
+> Any example can hit it. Re-run.
 
 ## The tour
 
@@ -481,23 +488,37 @@ The agent gets a shell, and your program decides what a shell means:
 
 ```
 --- every command, as this program saw it ---
-  REFUSED  ls -la; find . -name inventory.txt 2>/d… ";" chains, redirects or substitutes, and this shell runs exactly one program
-  ran      ls -la                                   exit 0 in 4ms
-  REFUSED  find . -name inventory.txt               "find" is not on the allowlist; allowed programs are cat, cut, echo, grep, head, ls, sort, tail, wc
+  REFUSED  ls -la; echo "---"; wc -l inventory.txt… ";" chains, redirects or substitutes, and this shell runs exactly one program
+  REFUSED  curl https://example.com 2>&1            ">" chains, redirects or substitutes, and this shell runs exactly one program
+  REFUSED  cat /etc/hostname 2>&1                   ">" chains, redirects or substitutes, and this shell runs exactly one program
   ran      wc -l inventory.txt                      exit 0 in 1ms
-  ran      sort inventory.txt                       exit 0 in 1ms
-  ran      cat inventory.txt                        exit 0 in 0s
   REFUSED  curl https://example.com                 "curl" is not on the allowlist; allowed programs are cat, cut, echo, grep, head, ls, sort, tail, wc
+  REFUSED  cat /etc/hostname                        "/etc/hostname" is an absolute path, and this shell reaches only the workspace
+  ran      sort inventory.txt                       exit 0 in 1ms
 
-[4 commands run, 3 refused by the Go allowlist]
+[2 commands run, 5 refused by the host program]
+[allowlist refused a program: true | the fence refused a path: true]
 ```
 
-Every command is allowlisted, time-boxed and logged by code you own, in your
-language, in your process — rather than by a sandbox configured from outside and
-hoped to be right. Note what the executor does *not* do: hand the string to
-`bash -c`. The tool tells the model it is talking to bash; this executor answers
-a deliberately smaller question, and there is no shell present to be injected
-into.
+**Two fences, and the second is the one that gets forgotten.** The allowlist
+decides which *programs* run. It says nothing about which *files* they touch —
+`cat` is a safe program and `cat /etc/passwd` is not a safe command, and
+`ctx.fs` does not reach a subprocess. So the executor also requires every
+argument to be a relative path that stays put, which is why the last refusal
+above exists. A program allowlist on its own would have let that one through.
+
+Note what the executor does *not* do: hand the string to `bash -c`. The tool
+tells the model it is talking to bash; this executor answers a deliberately
+smaller question, and there is no shell present to be injected into. The
+chaining refusal is therefore not an injection defence — a `;` in an argv is
+inert — it is the executor declining to pretend it is a shell, so that
+`ls -la; rm -rf /` fails loudly instead of running `ls` with four odd arguments.
+
+Portability, since the surrounding prose advertises Go's: the allowlist names
+POSIX coreutils, so example 10 needs them on `PATH`. On stock Windows without
+WSL or Git Bash every command fails "executable file not found" — loudly, but
+it fails. The seam and the Go executor are portable; this executor's *policy*
+is not, and the policy is the part you would replace.
 
 The request's optional `AbortSignal` is dropped in favour of the Go deadline,
 and the example says so where it does it.
