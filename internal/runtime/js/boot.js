@@ -178,20 +178,31 @@ async function openAgent(ctx, loop, sessionId, options, cwd) {
   return loop.create(SessionId(sessionId), options, cwd ? { cwd } : {});
 }
 
-/** Whether this id already has a persisted log to resume from. */
+/**
+ * Whether this id already has a persisted log to resume from.
+ *
+ * The two "no" answers are not the same, and conflating them is how a real
+ * failure gets rediscovered later wearing the wrong name. A composition with no
+ * persistence HAS no history, so creating is correct and silent. A backend that
+ * THREW — a corrupt store, both a compressed and a plain log for one id, a
+ * filesystem error — has not answered the question at all: falling through to
+ * create on that would meet the stored log again at the next write and report a
+ * generic id collision, several layers from the thing that actually broke. So
+ * the throw is raised here, where it still says what happened.
+ */
 async function isStored(ctx, sessionId) {
   const persistence = ctx.get('sessionPersistence');
-  // A composition with no persistence has nothing to resume from, and a
-  // backend that cannot be listed is not evidence that history exists — both
-  // fall through to creating, which is what this runtime did unconditionally
-  // before.
   if (!persistence) return false;
+  let stored;
   try {
-    const stored = await persistence.list();
-    return stored.some((header) => String(header.id) === String(sessionId));
-  } catch {
-    return false;
+    stored = await persistence.list();
+  } catch (error) {
+    throw new Error(
+      `cannot tell whether session "${sessionId}" has a stored log: ${error?.message ?? error}`,
+      { cause: error },
+    );
   }
+  return stored.some((header) => String(header.id) === String(sessionId));
 }
 
 // finalText is the answer as a caller means it: the text of the last assistant
