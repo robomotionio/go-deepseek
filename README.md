@@ -83,32 +83,136 @@ Two rules the harness imposes, restated here because both are quiet traps:
 
 ## The SDK
 
-`sdk/` is the same API the official Python SDK offers — a harness, sessions, a
-run that returns the final response, the finish reason and the events it saw —
-so that a program written against one translates to the other:
+`sdk/` is the client API, deliberately the same shape as the [official Python
+SDK](https://github.com/deepseek-ai/deepseek-harness/tree/master/python/sdk) — a
+harness, sessions, and a run that returns the final response, the finish reason
+and the events it saw — so that a program written against one translates to the
+other.
 
 ```go
-h, err := sdk.Open(ctx, sdk.Config{Model: "deepseek-v4-flash"})
-if err != nil { return err }
+import "github.com/robomotionio/go-deepseek/sdk"
+
+h, err := sdk.Open(ctx, sdk.Config{
+    Model:  "deepseek-v4-flash",
+    CWD:    workdir,          // the agent's working directory, and its fence
+    APIKey: key,              // or leave empty and set DEEPSEEK_API_KEY
+})
+if err != nil {
+    return err
+}
 defer h.Close()
 
-result, err := h.Run(ctx, sdk.Text("Say hi."),
-    sdk.OnEvent(func(e sdk.Event) { log.Println(e.Type) }))
-fmt.Println(result.FinalResponse, result.FinishReason)
+result, err := h.Run(ctx, sdk.Text("Say hi."))
+if err != nil {
+    return err
+}
+fmt.Println(result.FinalResponse)   // "Hi!"
+fmt.Println(result.FinishReason)    // "completed"
 ```
 
-It reaches the harness two ways, and hides which:
+### A conversation
 
-- **In process** (the default): the embedded harness above, no subprocess.
-- **Over JSON-RPC**: `sdk.WithRuntimeBinary(path)` launches a prebuilt harness
-  executable and speaks newline-delimited JSON to it — the same protocol, method
-  names and run-interval rule as the Python SDK, so it drives an executable
-  upstream built.
+Turns on one session share history and run one at a time. Turns on different
+sessions do not, and may run concurrently.
+
+```go
+session := h.Session("ticket-4171")
+
+first, _ := session.Run(ctx, sdk.Text("Read main.go and tell me what it does."))
+second, _ := session.Run(ctx, sdk.Text("Now add a test for the part you just described."))
+
+fmt.Println(second.FinalResponse, second.ToolCalls())
+```
+
+`h.NewSession()` gives a session a fresh random id; `h.Run` is shorthand for a
+session used once.
+
+### Streaming
+
+`OnEvent` sees each of the session's own events as the harness records it, which
+is how a reply is rendered as it arrives rather than after it:
+
+```go
+result, err := h.Run(ctx, sdk.Text("Refactor the parser."),
+    sdk.OnEvent(func(e sdk.Event) {
+        switch e.Type {
+        case "assistant/chunk":
+            var chunk struct {
+                Chunk struct {
+                    Type string `json:"type"`
+                    Text string `json:"text"`
+                } `json:"chunk"`
+            }
+            if e.Decode(&chunk) == nil && chunk.Chunk.Type == "text-delta" {
+                fmt.Print(chunk.Chunk.Text)
+            }
+        case "tool/call":
+            fmt.Println("\n[tool]", string(e.Data))
+        }
+    }))
+```
+
+Event payloads stay as raw JSON on purpose: the harness defines dozens of event
+types whose shapes move with it, so `Decode` into whatever you actually read
+beats a generated struct per type that has to be maintained against every
+release. `OnNotification` sees everything, including the events of subagent
+sessions a delegation created.
+
+### When a turn fails
+
+A turn that ends in a provider error is a described outcome, not a transport
+failure: by default it comes back as a result whose `FinishReason` is `"error"`,
+with the events that explain it.
+
+```go
+result, err := h.Run(ctx, sdk.Text("..."))
+if err != nil {
+    return err                       // transport, protocol, or cancellation
+}
+if turnErr := sdk.TurnError(result.Events); turnErr != nil {
+    log.Println("the model could not finish:", turnErr)
+    // sdk: turn failed: Insufficient credits (BILLING 402)
+}
+```
+
+Pass `sdk.FailOnTurnError()` to have `Run` return that as an error instead. The
+sentinels are `sdk.ErrTurnFailed`, `sdk.ErrProtocol`, `sdk.ErrTransportClosed`,
+`sdk.ErrClosed`, and `*sdk.RPCError` for a runtime that refused a request.
+
+### Cancelling
+
+The context governs the run. Cancelling it stops the turn — the request in
+flight is aborted rather than left to finish and be discarded:
+
+```go
+ctx, cancel := context.WithTimeout(ctx, 2*time.Minute)
+defer cancel()
+result, err := h.Run(ctx, sdk.Text("Do the long thing."))
+```
+
+### Another carrier
+
+The same API drives a prebuilt harness executable instead of the embedded one,
+over the Python SDK's JSON-RPC protocol:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{Model: "deepseek-v4-flash"},
+    sdk.WithRuntimeBinary("/opt/dsh/dsh-jsonrpc-agent"))
+```
+
+Nothing above the carrier changes: same results, same events, same errors. Use
+it for a build carrying plugins the embedded bundle does not, or a runtime
+version pinned separately from this package. `sdk.WithCarrier` takes one of your
+own — a fake for tests, or a transport this package does not implement.
+
+### What a run means
 
 A run owns the interval from the prompt being durably received to the next
-whole-agent idle, and its result describes that interval rather than an answer
-attributable to the prompt. That is upstream's rule, restated because the
-natural reading is the other one.
+whole-agent idle, and its result describes THAT INTERVAL rather than an answer
+attributable to the prompt. Anything else queued — steering, injected context, a
+subagent finishing — contributes to it too. This is upstream's rule, restated
+here because "the answer to my question" is the natural reading and is not what
+the field is.
 
 ## Regenerating the bundle
 
