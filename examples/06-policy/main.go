@@ -197,21 +197,16 @@ func apply(workdir string, record func(layer, name, verdict string)) func(*sdk.C
 		// ---- layer 2: the monotonic guard -----------------------------------
 
 		// A guard's contract is `string | undefined`: a string denies, and
-		// UNDEFINED means "no objection". That distinction matters here,
-		// because the bridge encodes a Go nil as JSON `null` — and in
-		// JavaScript `null` is not `undefined`. A guard returning nil would
-		// therefore deny EVERY call in the harness, with the reason "null".
+		// UNDEFINED means "no objection". That distinction is load-bearing,
+		// because Go has no undefined and neither has JSON — a Go nil crosses
+		// the bridge as `null`, and in JavaScript `null` is not `undefined`.
+		// A guard returning nil would therefore deny EVERY call in the harness,
+		// with the reason "null", including the reads this turn depends on.
 		//
-		// So the component holds a real `undefined` once and returns THAT when
-		// it has nothing to say. ctx.At holds the value a path names rather
-		// than copying it, and an absent property names undefined. The leading
-		// underscore is the load-bearing part: cordis reads `_`-prefixed
-		// properties straight off the context, while any other unknown name is
-		// treated as an undeclared service and refused outright.
-		noObjection, err := ctx.At("_noObjection")
-		if err != nil {
-			return fmt.Errorf("policy: could not hold an undefined: %w", err)
-		}
+		// sdk.Undefined() is how Go says undefined and means it. It is a bridge
+		// marker rather than a held reference, so it costs no call and is safe
+		// to return from the SyncFunc below.
+		noObjection := sdk.Undefined()
 
 		_, err = ctx.Call("tools.guard", ctx.SyncFunc(func(args []json.RawMessage) (any, error) {
 			name, path := callOf(workdir, args)

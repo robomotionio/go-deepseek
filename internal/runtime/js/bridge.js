@@ -45,10 +45,20 @@ export function release(handle) {
   refs.delete(handle);
 }
 
-/** Go value -> JavaScript value. Markers become functions and held objects. */
+/** Go value -> JavaScript value. Markers become functions, held objects, undefined. */
 function revive(value) {
   if (value === null || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(revive);
+  // JSON has no undefined and Go has no undefined, so a Go nil crosses as null.
+  // That is wrong wherever the harness distinguishes the two, and it does: a
+  // tools guard reads `string | undefined` and denies on anything that is not
+  // undefined, so a guard answering null denies every call in the harness with
+  // the reason "null". The marker is how Go says undefined and means it.
+  //
+  // One direction only. Encoding does not produce this marker, because a JS
+  // undefined reaching Go has nowhere to land in a Go value and null is the
+  // honest rendering of it there.
+  if (value.$undefined === true) return undefined;
   if (typeof value.$fn === 'number') return goFunction(value.$fn, value.$sync === true);
   if (typeof value.$ref === 'number') return deref(value.$ref);
   const out = {};

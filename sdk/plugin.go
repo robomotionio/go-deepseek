@@ -108,6 +108,27 @@ type Value = runtime.Value
 // per parameter.
 type Handler = runtime.Handler
 
+// Undefined is JavaScript's undefined, as a value a Go plugin can return.
+//
+// Go has no undefined and neither has JSON, so a Go nil crosses as null — and
+// the harness distinguishes the two where it matters most quietly. A tool guard
+// reads `string | undefined`: a string denies the call, undefined means "no
+// objection", and the registry tests against undefined rather than for
+// truthiness. A guard returning nil denies EVERY call in the harness with the
+// reason "null".
+//
+//	nothing := sdk.Undefined()
+//	ctx.Call("tools.guard", ctx.SyncFunc(func(args []json.RawMessage) (any, error) {
+//	    if forbidden(args) {
+//	        return "that file holds credentials", nil
+//	    }
+//	    return nothing, nil
+//	}))
+//
+// It is a marker, not a held reference: no bridge call, no handle, and safe to
+// return from a SyncFunc.
+func Undefined() any { return runtime.Undefined() }
+
 // ToolSchema is one tool as the model is shown it.
 type ToolSchema = runtime.ToolSchema
 
