@@ -531,6 +531,42 @@ func TestProcessAndOS(t *testing.T) {
 	}
 }
 
+// os.homedir() is $HOME — the composed environment's, not the host's. Node
+// answers the environment first and the user database second, and an embedder
+// that fences the runtime into a workspace sets HOME inside that fence: a
+// homedir that ignored it aimed every path upstream derives from it — skill
+// roots, config dirs — at the operator's real home, outside the fence, where
+// the filesystem answers EACCES. userInfo().homedir stays the operating
+// system's answer, which is Node's documented behavior for that one.
+func TestHomedirIsTheComposedHome(t *testing.T) {
+	hostHome, err := os.UserHomeDir()
+	if err != nil {
+		t.Skipf("no host home to compare against: %v", err)
+	}
+
+	rt, _ := newRuntime(t, nodecompat.Options{
+		CWD: "/work",
+		Env: map[string]string{"HOME": "/work/home"},
+	})
+	got := run(t, rt, `
+		import os from 'node:os';
+		globalThis.result = [os.homedir(), os.userInfo().homedir].join('|');
+	`)
+	if want := "/work/home|" + hostHome; got != want {
+		t.Fatalf("\n got %s\nwant %s", got, want)
+	}
+
+	// And with no HOME composed, the host's answer is the fallback.
+	rt, _ = newRuntime(t, nodecompat.Options{CWD: "/work"})
+	got = run(t, rt, `
+		import os from 'node:os';
+		globalThis.result = os.homedir();
+	`)
+	if got != hostHome {
+		t.Fatalf("fallback homedir: got %q, want %q", got, hostHome)
+	}
+}
+
 // The refusals are part of the contract: a capability that is missing on purpose
 // should say so where the mistake was made.
 func TestAbsentBuiltinsAreNamed(t *testing.T) {

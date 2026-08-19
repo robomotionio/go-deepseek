@@ -24,11 +24,21 @@ func (c *Compat) osBindings() map[string]any {
 	return map[string]any{
 		"platform": func() string { return c.opts.Platform },
 		"arch":     func() string { return nodeArch(runtime.GOARCH) },
+		// Node's os.homedir() answers $HOME first and consults the user
+		// database only when it is unset — and here "the process's
+		// environment" is opts.Env, the one the embedder composed, not the
+		// host's. Asking the host first inverted that: a runtime fenced into a
+		// workspace with HOME set inside it reported the operator's real home,
+		// and everything upstream that derives a path from homedir() — skill
+		// roots, config dirs — aimed outside the fence and was refused.
+		// (userInfo below is different on purpose: Node documents ITS homedir
+		// as the operating system's answer, $HOME notwithstanding.)
 		"homedir": func() string {
-			if h, err := os.UserHomeDir(); err == nil {
+			if h := c.opts.Env["HOME"]; h != "" {
 				return h
 			}
-			return c.opts.Env["HOME"]
+			h, _ := os.UserHomeDir()
+			return h
 		},
 		"tmpdir": os.TempDir,
 		"hostname": func() string {
