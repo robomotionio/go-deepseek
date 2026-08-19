@@ -28,10 +28,23 @@ type Entry = runtime.Entry
 //	entries := sdk.Compose(cfg)
 //	entries = sdk.Add(entries, sdk.Entry{ID: "web", Name: "@deepseek-ai/dsh-tool-web"})
 //	cfg.Composition = sdk.Disable(entries, "persistence", true)
+//
+// It reads the Config exactly as Open would, defaults and environment included:
+// the same endpoint from DEEPSEEK_BASE_URL, the same working directory, the
+// same session root. That matters because the composition FREEZES what it read
+// — an entry list is data, and Open mounts it as written — so a composition
+// built from a Config that had not been defaulted yet would aim the model
+// adapter at the default endpoint no matter what the environment said, and
+// answer with a 401 that reads exactly like a bad key.
 func Compose(cfg Config) []Entry {
+	// The only way this fails is a process whose working directory cannot be
+	// named, and Open reports that properly a moment later. Composing is
+	// pure — there is nothing here to abandon — so it carries on with what it
+	// has rather than growing an error return that every caller would ignore.
+	_ = cfg.resolve()
 	return runtime.Compose(runtime.Config{
-		Provider:    orDefault(cfg.Provider, "deepseek-official"),
-		Model:       orDefault(cfg.Model, "deepseek-v4-flash"),
+		Provider:    cfg.Provider,
+		Model:       cfg.Model,
 		BaseURL:     cfg.BaseURL,
 		MaxTokens:   cfg.MaxTokens,
 		CWD:         cfg.CWD,
@@ -68,10 +81,3 @@ func Plugins() []string { return runtime.BundledPlugins() }
 // was built from. Worth logging: the harness is a developer preview whose
 // session format is still version zero.
 func HarnessVersion() (version, commit string) { return runtime.BundleVersion() }
-
-func orDefault(value, fallback string) string {
-	if value == "" {
-		return fallback
-	}
-	return value
-}
