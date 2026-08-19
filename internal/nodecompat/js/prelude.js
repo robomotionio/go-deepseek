@@ -266,33 +266,40 @@
   // argument for implementing the whole family rather than the three in use.
   //
   // They are generated from one table so the spellings cannot drift apart, and
-  // they range-check the way Node's do: a silent out-of-range read is how a
-  // parser returns a wrong answer instead of failing.
+  // they range-check the way Node's do — offset, byte length AND value. All
+  // three matter for the same reason: a silent out-of-range access is how a
+  // parser returns a wrong answer instead of failing. DataView would happily
+  // wrap 300 into a byte; Node throws, so these throw.
 
+  // suffix -> [getter, setter, bytes, littleEndian, min, max]. A null bound is
+  // "no range check", which is correct for the float pair: any finite number is
+  // representable, with precision loss rather than an error.
+  const U64 = 18446744073709551615n;
+  const I64 = 9223372036854775807n;
   const fixedWidth = {
-    UInt8: ['getUint8', 'setUint8', 1, false],
-    UInt16LE: ['getUint16', 'setUint16', 2, true],
-    UInt16BE: ['getUint16', 'setUint16', 2, false],
-    UInt32LE: ['getUint32', 'setUint32', 4, true],
-    UInt32BE: ['getUint32', 'setUint32', 4, false],
-    Int8: ['getInt8', 'setInt8', 1, false],
-    Int16LE: ['getInt16', 'setInt16', 2, true],
-    Int16BE: ['getInt16', 'setInt16', 2, false],
-    Int32LE: ['getInt32', 'setInt32', 4, true],
-    Int32BE: ['getInt32', 'setInt32', 4, false],
-    FloatLE: ['getFloat32', 'setFloat32', 4, true],
-    FloatBE: ['getFloat32', 'setFloat32', 4, false],
-    DoubleLE: ['getFloat64', 'setFloat64', 8, true],
-    DoubleBE: ['getFloat64', 'setFloat64', 8, false],
-    BigUInt64LE: ['getBigUint64', 'setBigUint64', 8, true],
-    BigUInt64BE: ['getBigUint64', 'setBigUint64', 8, false],
-    BigInt64LE: ['getBigInt64', 'setBigInt64', 8, true],
-    BigInt64BE: ['getBigInt64', 'setBigInt64', 8, false],
+    UInt8: ['getUint8', 'setUint8', 1, false, 0, 255],
+    UInt16LE: ['getUint16', 'setUint16', 2, true, 0, 65535],
+    UInt16BE: ['getUint16', 'setUint16', 2, false, 0, 65535],
+    UInt32LE: ['getUint32', 'setUint32', 4, true, 0, 4294967295],
+    UInt32BE: ['getUint32', 'setUint32', 4, false, 0, 4294967295],
+    Int8: ['getInt8', 'setInt8', 1, false, -128, 127],
+    Int16LE: ['getInt16', 'setInt16', 2, true, -32768, 32767],
+    Int16BE: ['getInt16', 'setInt16', 2, false, -32768, 32767],
+    Int32LE: ['getInt32', 'setInt32', 4, true, -2147483648, 2147483647],
+    Int32BE: ['getInt32', 'setInt32', 4, false, -2147483648, 2147483647],
+    FloatLE: ['getFloat32', 'setFloat32', 4, true, null, null],
+    FloatBE: ['getFloat32', 'setFloat32', 4, false, null, null],
+    DoubleLE: ['getFloat64', 'setFloat64', 8, true, null, null],
+    DoubleBE: ['getFloat64', 'setFloat64', 8, false, null, null],
+    BigUInt64LE: ['getBigUint64', 'setBigUint64', 8, true, 0n, U64],
+    BigUInt64BE: ['getBigUint64', 'setBigUint64', 8, false, 0n, U64],
+    BigInt64LE: ['getBigInt64', 'setBigInt64', 8, true, -I64 - 1n, I64],
+    BigInt64BE: ['getBigInt64', 'setBigInt64', 8, false, -I64 - 1n, I64],
   };
 
-  function outOfRange(name, value, max) {
+  function outOfRange(name, value, min, max) {
     const error = new RangeError(
-      `The value of "${name}" is out of range. It must be >= 0 and <= ${max}. Received ${value}`);
+      `The value of "${name}" is out of range. It must be >= ${min} and <= ${max}. Received ${value}`);
     error.code = 'ERR_OUT_OF_RANGE';
     return error;
   }
@@ -303,27 +310,42 @@
   function windowOf(buf, offset, size) {
     const max = buf.length - size;
     if (!Number.isInteger(offset) || offset < 0 || offset > max) {
-      throw outOfRange('offset', offset, max < 0 ? 0 : max);
+      throw outOfRange('offset', offset, 0, max < 0 ? 0 : max);
     }
     return new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
   }
 
+  function checkValue(value, min, max) {
+    if (min === null) return;   // the float pair takes any number
+    if (value < min || value > max) throw outOfRange('value', value, min, max);
+  }
+
+  // Enumerable, by assignment, which looks like an oversight and is not: Node's
+  // Buffer predates classes and assigns its prototype methods the same way, so
+  // a `for...in` over a Buffer THERE already yields readUInt8 and the rest
+  // alongside the indices. Hiding them here would be the divergence. Checked
+  // against Node before writing it down.
+  function define(name, fn) {
+    Buffer.prototype[name] = fn;
+  }
+
+  // Node spells the unsigned ones both ways — readUInt8 and readUint8 — and
+  // code in the wild uses both, so each definition lands under both names.
+  function defineBoth(verb, suffix, fn) {
+    define(verb + suffix, fn);
+    if (suffix.includes('UInt')) define(verb + suffix.replace('UInt', 'Uint'), fn);
+  }
+
   for (const suffix of Object.keys(fixedWidth)) {
-    const [get, set, size, little] = fixedWidth[suffix];
-    Buffer.prototype['read' + suffix] = function (offset = 0) {
+    const [get, set, size, little, min, max] = fixedWidth[suffix];
+    defineBoth('read', suffix, function (offset = 0) {
       return windowOf(this, offset, size)[get](offset, little);
-    };
-    Buffer.prototype['write' + suffix] = function (value, offset = 0) {
+    });
+    defineBoth('write', suffix, function (value, offset = 0) {
+      checkValue(value, min, max);
       windowOf(this, offset, size)[set](offset, value, little);
       return offset + size;
-    };
-    // Node spells the unsigned ones both ways — readUInt8 and readUint8 — and
-    // code in the wild uses both, so both are here.
-    if (suffix.includes('UInt')) {
-      const alias = suffix.replace('UInt', 'Uint');
-      Buffer.prototype['read' + alias] = Buffer.prototype['read' + suffix];
-      Buffer.prototype['write' + alias] = Buffer.prototype['write' + suffix];
-    }
+    });
   }
 
   // The variable-width pair, 1 to 6 bytes. They exist because formats store
@@ -331,7 +353,7 @@
   // exactly — which is why Node caps them there and why these do too.
   function checkByteLength(byteLength) {
     if (!Number.isInteger(byteLength) || byteLength < 1 || byteLength > 6) {
-      throw outOfRange('byteLength', byteLength, 6);
+      throw outOfRange('byteLength', byteLength, 1, 6);
     }
   }
 
@@ -348,11 +370,13 @@
     return value >= half ? value - half * 2 : value;
   }
 
-  function writeVariable(buf, value, offset, byteLength, little) {
+  function writeVariable(buf, value, offset, byteLength, signed, little) {
     checkByteLength(byteLength);
+    const span = Math.pow(2, byteLength * 8);
+    checkValue(value, signed ? -span / 2 : 0, signed ? span / 2 - 1 : span - 1);
     const view = windowOf(buf, offset, byteLength);
     let rest = Math.floor(Number(value));
-    if (rest < 0) rest += Math.pow(2, byteLength * 8);
+    if (rest < 0) rest += span;
     for (let i = 0; i < byteLength; i++) {
       const at = little ? offset + i : offset + byteLength - 1 - i;
       view.setUint8(at, rest % 256);
@@ -367,18 +391,14 @@
   };
   for (const suffix of Object.keys(variableWidth)) {
     const [signed, little] = variableWidth[suffix];
-    Buffer.prototype['read' + suffix] = function (offset = 0, byteLength = 1) {
+    defineBoth('read', suffix, function (offset = 0, byteLength = 1) {
       return readVariable(this, offset, byteLength, signed, little);
-    };
-    Buffer.prototype['write' + suffix] = function (value, offset = 0, byteLength = 1) {
-      return writeVariable(this, value, offset, byteLength, little);
-    };
-    if (suffix.includes('UInt')) {
-      const alias = suffix.replace('UInt', 'Uint');
-      Buffer.prototype['read' + alias] = Buffer.prototype['read' + suffix];
-      Buffer.prototype['write' + alias] = Buffer.prototype['write' + suffix];
-    }
+    });
+    defineBoth('write', suffix, function (value, offset = 0, byteLength = 1) {
+      return writeVariable(this, value, offset, byteLength, signed, little);
+    });
   }
+
 
   g.Buffer = Buffer;
 

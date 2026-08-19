@@ -222,6 +222,47 @@ func TestBufferNumericAccessors(t *testing.T) {
 	}
 }
 
+// The write side range-checks its VALUE, not just its offset. DataView wraps
+// silently — 300 becomes 44 — and Node throws instead, because a parser that
+// stores the wrong byte without complaining is the failure this whole family
+// exists to avoid. Every expectation below came from running the same
+// expressions on real Node.
+func TestBufferWriteRangeChecks(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		const out = [];
+		const w = Buffer.alloc(8);
+		const t = (label, fn) => {
+			try { out.push(label + '=' + fn()); } catch (e) { out.push(label + '=' + e.code); }
+		};
+		t('u8_300', () => w.writeUInt8(300));
+		t('u8_255', () => w.writeUInt8(255));
+		t('i8_neg129', () => w.writeInt8(-129));
+		t('i8_neg128', () => w.writeInt8(-128));
+		t('u16_70000', () => w.writeUInt16LE(70000));
+		t('u32_neg1', () => w.writeUInt32LE(-1));
+		t('varI3_big', () => w.writeIntLE(99999999, 0, 3));
+		t('varI3_ok', () => w.writeIntLE(-8388608, 0, 3));
+		t('varU3_neg1', () => w.writeUIntLE(-1, 0, 3));
+		t('varU6_max', () => w.writeUIntLE(281474976710655, 0, 6));
+		t('varU6_over', () => w.writeUIntLE(281474976710656, 0, 6));
+		// The float pair takes any number: out of range means precision loss
+		// there, not an error, and Node agrees.
+		t('f32_1e39', () => w.writeFloatLE(1e39));
+		t('f64_1e308', () => w.writeDoubleLE(1e308));
+		t('big_neg1', () => w.writeBigUInt64LE(-1n));
+		t('big_max', () => w.writeBigUInt64LE(18446744073709551615n));
+		globalThis.result = out.join('|');
+	`)
+	want := "u8_300=ERR_OUT_OF_RANGE|u8_255=1|i8_neg129=ERR_OUT_OF_RANGE|i8_neg128=1|" +
+		"u16_70000=ERR_OUT_OF_RANGE|u32_neg1=ERR_OUT_OF_RANGE|varI3_big=ERR_OUT_OF_RANGE|" +
+		"varI3_ok=3|varU3_neg1=ERR_OUT_OF_RANGE|varU6_max=6|varU6_over=ERR_OUT_OF_RANGE|" +
+		"f32_1e39=4|f64_1e308=8|big_neg1=ERR_OUT_OF_RANGE|big_max=8"
+	if got != want {
+		t.Fatalf("\n got %s\nwant %s", got, want)
+	}
+}
+
 // createZstdDecompress is PROBED rather than used: the session-log reader builds
 // one to ask whether this release exposes a private fast path, then falls back
 // to the public one-shot API. Throwing there does not decline the fast path, it
