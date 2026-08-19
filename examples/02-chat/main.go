@@ -3,9 +3,12 @@
 //
 // What it proves: the SESSION LOG is the source of truth. The harness does not
 // keep the conversation in a variable it hands you — it appends every turn to a
-// durable, ordered log, and everything above (the model's history, a resume, an
-// audit) is derived from that log. This program never held the transcript, and
-// prints it anyway, by parsing the file the harness wrote.
+// durable, ordered log, and everything above it (the model's history, a resume,
+// an audit) is derived from that log. This program shows both halves of that:
+// it prints the transcript by PARSING THE FILE, having never held it in memory,
+// and then opens a SECOND HARNESS on the same session id and asks it what was
+// said first. The second one knows, because the conversation was never in the
+// first process to begin with.
 //
 // That is what makes ctx.sessionPersistence a capability SEAM rather than a
 // feature: the default composition binds @deepseek-ai/dsh-session-persistence-jsonl
@@ -60,24 +63,20 @@ func main() {
 	}
 	defer os.RemoveAll(workdir)
 
-	cfg := sdk.Config{
-		Model: model(),
-		CWD:   workdir,
-
-		// Set explicitly because the composition below is built from this
-		// Config, and Compose reads the fields AS THEY ARE. Open fills BaseURL
-		// from DEEPSEEK_BASE_URL for you — but only after a hand-built
-		// composition has already frozen the adapter's endpoint. A composition
-		// assembled before that produces an adapter pointing at the default
-		// endpoint, and the symptom is a 401 that looks like a bad key.
-		BaseURL: os.Getenv("DEEPSEEK_BASE_URL"),
-	}
+	cfg := sdk.Config{Model: model(), CWD: workdir}
 
 	// Reconfigure the persistence provider to write plain JSONL rather than the
 	// default zstd — so the log this program reads back at the end is legible
-	// without a decompressor. Note that the config REPLACES the plugin's
-	// defaults rather than merging into them, so `root` has to be restated even
-	// though only `compression` is changing.
+	// to anything, including the reader below and your eyes. Two things worth
+	// noticing about this call:
+	//
+	// The config REPLACES the plugin's defaults rather than merging into them,
+	// so `root` has to be restated even though only `compression` is changing.
+	//
+	// And Compose reads this Config exactly as Open would, environment
+	// included — the endpoint from DEEPSEEK_BASE_URL, the working directory,
+	// the session root — so a composition built here and opened below agree
+	// about all of them.
 	sessionRoot := filepath.Join(workdir, ".sessions")
 	cfg.Composition = sdk.With(sdk.Compose(cfg), "persistence", map[string]any{
 		"root":        sessionRoot,
@@ -137,7 +136,48 @@ func main() {
 	// The conversation, reconstructed from the file by a program that never had
 	// it in memory. One JSON object per line: a header, then every event in seq
 	// order — which is also why a session can be replayed, audited or forked.
-	replay(logPath)
+	first := replay(logPath)
+
+	// ---- and now the other half --------------------------------------------
+
+	// A second harness. A fresh JavaScript world, a fresh everything — and the
+	// same session id, which is durable because it IS the name of the log. The
+	// runtime loads that log and resumes the conversation rather than starting
+	// a new one on top of it.
+	if first == "" {
+		return
+	}
+	fmt.Println("\n--- a second harness, same session id ---")
+	again, err := sdk.Open(ctx, cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer again.Close()
+
+	result, err := again.Session(sessionID).Run(ctx, sdk.Text(
+		"What was the very first thing I asked you in this conversation? "+
+			"Quote it back to me. If you have no history, say so plainly."))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(result.FinalResponse)
+
+	// THE ASSERTION. The second process has to name something only the first
+	// one was told. Anything else and the history did not survive.
+	quoted := strings.Fields(strings.ToLower(first))
+	hit := 0
+	answer := strings.ToLower(result.FinalResponse)
+	for _, word := range quoted {
+		if len(word) > 3 && strings.Contains(answer, word) {
+			hit++
+		}
+	}
+	fmt.Printf("\n[the first thing said was %q]\n", first)
+	if hit == 0 {
+		fmt.Println("FAIL: the second harness did not resume the conversation.")
+		os.Exit(1)
+	}
+	fmt.Println("PASS: a second process picked the conversation back up.")
 }
 
 // stream renders the reply as it arrives. Event payloads stay as raw JSON
@@ -183,9 +223,10 @@ func findLog(root string) string {
 	return found
 }
 
-// replay reads the durable log and prints the conversation it holds, plus a
-// census of everything else in it.
-func replay(path string) {
+// replay reads the durable log, prints the conversation it holds and a census
+// of everything else in it, and answers with the first thing the user said —
+// which is what the resumed harness above is asked to remember.
+func replay(path string) string {
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
@@ -194,6 +235,7 @@ func replay(path string) {
 
 	census := map[string]int{}
 	var order []string
+	firstSaid := ""
 	lines := bufio.NewScanner(file)
 	lines.Buffer(make([]byte, 0, 1<<20), 1<<24)
 
@@ -221,11 +263,13 @@ func replay(path string) {
 				envelope.ID, envelope.CWD,
 				time.UnixMilli(envelope.CreatedAt).Format(time.RFC3339))
 		case "user/message", "assistant/message":
-			who := "you"
+			who, text := "you", messageText(envelope.Data)
 			if envelope.Type == "assistant/message" {
 				who = "dsh"
+			} else if firstSaid == "" {
+				firstSaid = text
 			}
-			fmt.Printf("%s> %s\n", who, oneLine(messageText(envelope.Data)))
+			fmt.Printf("%s> %s\n", who, oneLine(text))
 		}
 	}
 	if err := lines.Err(); err != nil {
@@ -237,15 +281,9 @@ func replay(path string) {
 		fmt.Printf("  %-24s %d\n", kind, census[kind])
 	}
 
-	// Worth being exact about, because the obvious next question has an
-	// unsatisfying answer today: the log is complete enough to resume from, and
-	// upstream's agent loop has the API for it (agentLoop.resume), but this
-	// SDK's boot script only ever calls agentLoop.create. So a second process
-	// cannot pick this conversation back up yet — it would collide with the
-	// stored log rather than continue it.
 	fmt.Println("\nThe log is the durable copy: ordered, self-describing, and readable")
-	fmt.Println("by anything. Resuming a stored session from a new process is not")
-	fmt.Println("wired up in this SDK yet — see the note in this file.")
+	fmt.Println("by anything — including, next, by a second harness.")
+	return firstSaid
 }
 
 // messageText pulls the text blocks out of a user/ or assistant/message.
