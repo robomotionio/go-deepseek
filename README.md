@@ -33,17 +33,50 @@ with a filesystem fence you set.
 go get github.com/robomotionio/go-deepseek
 ```
 
-## Why
+## What is the DeepSeek Harness?
 
-The official Python SDK is a subprocess driver: it spawns a prebuilt single-file
-Node executable shipped as a platform wheel. PyPI has those wheels for
-`manylinux_2_28_x86_64`, `manylinux_2_28_aarch64` and `macosx_14_0_arm64` only —
-no Windows, no macOS x64 — and the unpacked runtime measures 196 MB. Anything
-built on it inherits that platform matrix and that payload.
+DeepSeek Harness (`dsh`) is an open-source agent harness developed by
+[DeepSeek AI](https://deepseek.com). It uses an architecture where **everything
+is a plugin**, and is powered by [Cordis](https://github.com/cordiverse/cordis),
+whose design is described in [_A Programming Paradigm for Spatiotemporal
+Composability_](https://github.com/cordiverse/paper).
+
+"Everything is a plugin" is not a note on how it happens to be built. It is the
+entire configuration surface: a deployment **is** a list of plugins — the model
+adapter, the session log, the filesystem the agent may reach, each tool it may
+call — and changing the list is how you change what the agent is. There is no
+second place to configure anything.
+
+That is what makes a Go SDK for it worth building rather than wrapping.
+[Composing the harness](#composing-the-harness) is that list, from Go. And
+because the list is the only surface, a plugin written in Go is not an extension
+point bolted on the side: it is [an entry on the same
+list](#beyond-tools-the-whole-component), mounted by the same loader, with the
+same lifecycle as the harness's own.
+
+## Why go-deepseek?
+
+**Because a Go program could not run one.** The harness is TypeScript, and the
+supported way to embed it is the official Python SDK — which is a subprocess
+driver: it spawns a prebuilt single-file Node executable shipped as a platform
+wheel. PyPI has those wheels for `manylinux_2_28_x86_64`,
+`manylinux_2_28_aarch64` and `macosx_14_0_arm64` only — no Windows, no macOS x64
+— and the unpacked runtime measures 196 MB. Anything built on it inherits that
+platform matrix and that payload.
 
 This inherits Go's instead: **linux, darwin and windows on both amd64 and
 arm64**, from one toolchain, with the harness inside the binary and nothing to
-install beside it.
+install beside it. `go build` is the whole story; there is no Node.js to
+provision on the machine that runs it, and no second artifact to ship.
+
+**And because a subprocess is the wrong shape for what people actually want.**
+Driving an agent over a pipe means everything you give it lives on the far side
+of a protocol: a tool is an RPC endpoint you host, a policy is a message you
+answer, and the failure modes are the transport's. Running the harness *in* the
+process collapses that. A tool is a Go function. A policy that governs every
+tool call — including the harness's own — is a Go function. Cancellation is a
+`context.Context`. There is no protocol between your code and the agent's,
+because there is no gap for one to cross.
 
 | | |
 |---|---|
