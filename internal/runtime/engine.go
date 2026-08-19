@@ -5,11 +5,13 @@ package runtime
 //
 // Resolution order is the whole of the interesting design here, and it is:
 //
-//  1. the bundle — a package the harness ships wins, including one whose name
+//  1. a Go plugin's generated module, which nothing else can name because the
+//     `go:` scheme is not a specifier anything else uses;
+//  2. the bundle — a package the harness ships wins, including one whose name
 //     collides with a Node builtin (`events` and `assert` both exist on npm);
-//  2. node: builtins, whether spelled `node:fs` or `fs`;
-//  3. the host's own resolver, if it supplied one, for user-authored plugins;
-//  4. nothing, which is a load failure naming the specifier.
+//  3. node: builtins, whether spelled `node:fs` or `fs`;
+//  4. the host's own resolver, if it supplied one, for user-authored plugins;
+//  5. nothing, which is a load failure naming the specifier.
 //
 // A Runtime is single-goroutine, so everything here happens on the goroutine
 // that owns it. See harness.go for how that is arranged.
@@ -32,6 +34,9 @@ type engine struct {
 	// extra is the host's own resolver, consulted after the bundle and the
 	// builtins. It is where a user-authored plugin comes from.
 	extra Resolver
+
+	// plugins are the generated modules of the Go plugins, by specifier.
+	plugins map[string]string
 }
 
 // Resolver is a host's module resolution, for modules that are neither the
@@ -46,7 +51,11 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 	if err != nil {
 		return nil, err
 	}
-	e := &engine{bundle: b, extra: extra}
+	modules, err := pluginModules(cfg.Plugins)
+	if err != nil {
+		return nil, err
+	}
+	e := &engine{bundle: b, extra: extra, plugins: modules}
 
 	rt := goant.New(
 		// The wall clock, because a retry backoff that retries instantly is not
@@ -62,12 +71,12 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 
 	version, commit := b.Version()
 	compat, err := nodecompat.Install(rt, nodecompat.Options{
-		CWD:      cfg.CWD,
-		Env:      cfg.Env,
-		Roots:    cfg.Roots,
-		Argv:     []string{"node", "dsh"},
-		Stdout:   cfg.Stdout,
-		Stderr:   cfg.Stderr,
+		CWD:         cfg.CWD,
+		Env:         cfg.Env,
+		Roots:       cfg.Roots,
+		Argv:        []string{"node", "dsh"},
+		Stdout:      cfg.Stdout,
+		Stderr:      cfg.Stderr,
 		Platform:    cfg.Platform,
 		TraceTimers: cfg.TraceTimers,
 		TraceHTTP:   cfg.TraceHTTP,
@@ -91,6 +100,9 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 // resolve is the module resolver the engine installs. See the file comment for
 // the order and why it is that order.
 func (e *engine) resolve(specifier, referrer string) (source, path string, err error) {
+	if src, ok := e.plugins[specifier]; ok {
+		return src, specifier, nil
+	}
 	if src, p, ok, err := e.bundle.Resolve(specifier, referrer); err != nil {
 		return "", "", err
 	} else if ok {
@@ -117,6 +129,8 @@ func describeMissing(specifier string) string {
 	switch {
 	case strings.HasPrefix(specifier, "node:"):
 		return fmt.Sprintf("%q is not implemented by this runtime", specifier)
+	case strings.HasPrefix(specifier, pluginScheme):
+		return fmt.Sprintf("%q names a Go plugin that is not in Config.Plugins", specifier)
 	case strings.HasPrefix(specifier, "@deepseek-ai/"):
 		return fmt.Sprintf("%q is not in the bundle — add it to the entry list in tools/bundle/build.mjs and regenerate", specifier)
 	case strings.HasPrefix(specifier, ".") || strings.HasPrefix(specifier, "/"):

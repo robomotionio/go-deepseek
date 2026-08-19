@@ -151,6 +151,60 @@ h, err := sdk.Open(ctx, sdk.Config{
 inheriting is how a credential that has nothing to do with this agent stays out
 of reach of the shell it might run.
 
+### Giving the agent your own tools
+
+A plugin is how the harness gains a capability, and a tool is how the agent
+reaches one. Both can be Go:
+
+```go
+h, err := sdk.Open(ctx, sdk.Config{
+    CWD: workdir,
+    Plugins: []sdk.Plugin{{
+        ID: "inventory",
+        Tools: []sdk.Tool{{
+            Name:        "stock_level",
+            Description: "The number of units of a part that are in stock.",
+            Parameters: map[string]any{
+                "sku": map[string]any{"type": "string", "required": true,
+                    "description": "The part number."},
+            },
+            Execute: func(ctx context.Context, args json.RawMessage) (string, error) {
+                var in struct {
+                    SKU string `json:"sku"`
+                }
+                if err := json.Unmarshal(args, &in); err != nil {
+                    return "", err
+                }
+                return inventory.Report(ctx, in.SKU)   // your code, your process
+            },
+        }},
+    }},
+})
+```
+
+This is a real cordis plugin, not a side channel: the loader mounts it, it sits
+in the same tree as the harness's own, and `stock_level` appears in the registry
+beside `read` and `bash`. `h.Tools(ctx)` lists them, which is how you confirm a
+plugin registered what it meant to.
+
+Two things about it are worth knowing.
+
+**The description is the interface.** It is the whole of what the model knows
+about the tool beyond its parameters, so an empty one is refused rather than
+mounted. The same goes for the error a tool returns: the model is shown it, so
+`invalid part number: RM-7` gets a corrected retry where `error` gets a shrug.
+
+**Each call runs on its own goroutine**, not the one that owns the JavaScript
+world, and the turn waits for a promise settled from Go. A tool that takes a
+second costs the agent a second of waiting rather than freezing everything else
+the harness is doing. The context is cancelled when the harness closes and when
+the harness abandons the call — a cancelled turn, a tool-call timeout — so
+honouring it is what stops work nobody is waiting for any more.
+
+This is the alternative to handing an agent a shell and hoping. A tool has a
+name, a schema, a fence you wrote in Go, and an implementation you can test
+without a model in the room.
+
 ### Composing the harness
 
 Everything in the harness is a plugin, and a deployment is a list of them. The
@@ -319,7 +373,9 @@ pinned by tag, and `sdk.HarnessVersion()` reports which one you have.
 
 Not everything upstream ships is bundled. Excluded, with the reason recorded in
 the manifest: anything needing `node:sqlite`, native image processing, worker
-threads, `node:vm`, or a pseudo-terminal. `sdk.Plugins()` lists what is there.
+threads, `node:vm`, or a pseudo-terminal. `sdk.Plugins()` lists what is there,
+and a capability none of them covers can be written in Go instead of bundled —
+see "Giving the agent your own tools".
 
 ## Licences
 

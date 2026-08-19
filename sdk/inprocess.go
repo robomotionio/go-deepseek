@@ -61,6 +61,7 @@ func (p *inProcess) Start(ctx context.Context) error {
 		Roots:       p.cfg.Roots,
 		SessionRoot: p.cfg.SessionRoot,
 		Composition: p.cfg.Composition,
+		Plugins:     p.cfg.Plugins,
 		MemoryLimit: p.cfg.MemoryLimit,
 		Env:         env,
 		Stdout:      p.cfg.Stdout,
@@ -126,6 +127,15 @@ func (p *inProcess) Prompt(ctx context.Context, sessionID string, input Input, s
 	}
 	_, err := p.harness.Run(ctx, sessionID, blocks)
 	return err
+}
+
+// Tools answers what the registry holds, which only the in-process carrier can
+// do — see Harness.Tools.
+func (p *inProcess) Tools(ctx context.Context) ([]ToolSchema, error) {
+	if p.harness == nil {
+		return nil, ErrNotStarted
+	}
+	return p.harness.Tools(ctx)
 }
 
 func (p *inProcess) Close() error {

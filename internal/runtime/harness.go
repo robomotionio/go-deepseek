@@ -87,6 +87,11 @@ type Config struct {
 	// Resolver supplies modules that are neither the harness nor Node — a plugin
 	// the host compiled itself. Optional.
 	Resolver Resolver
+
+	// Plugins are cordis plugins implemented in Go. Each one is mounted by the
+	// loader like any other entry, and registers tools that run in this process.
+	// See plugin.go.
+	Plugins []Plugin
 }
 
 // Entry is one row of the composition: a plugin, its id, and its configuration.
@@ -145,6 +150,17 @@ type Result struct {
 	Duration time.Duration `json:"-"`
 }
 
+// ToolSchema is one tool as the model is shown it.
+type ToolSchema struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+
+	// Parameters is the JSON Schema of the arguments, left as JSON because it is
+	// a schema — something to forward, render or validate against, not something
+	// to model in Go.
+	Parameters json.RawMessage `json:"parameters,omitempty"`
+}
+
 // SessionEvent is one event from the harness's own stream, in its own
 // vocabulary. The payload is left as raw JSON: the harness defines dozens of
 // event types and inventing a Go struct for each would be a translation to
@@ -166,6 +182,10 @@ type Harness interface {
 	// Run performs one turn and returns what it produced. Turns on one session
 	// id share an agent and its history; a new id starts fresh.
 	Run(ctx context.Context, sessionID string, input []Block) (*Result, error)
+
+	// Tools lists the tools the agent can call, as the model is shown them. It
+	// is the way to confirm that a plugin registered what it meant to.
+	Tools(ctx context.Context) ([]ToolSchema, error)
 
 	// Events is the session event stream. It is buffered and lossy by design: a
 	// consumer that stops reading must not stall the agent, so events are
@@ -202,6 +222,13 @@ func New(cfg Config) (Harness, error) {
 	if len(cfg.Composition) == 0 {
 		cfg.Composition = Compose(cfg)
 	}
+	if err := validatePlugins(cfg.Plugins, cfg.Composition); err != nil {
+		return nil, err
+	}
+	// A Go plugin is an entry like any other, so it joins the composition before
+	// it is validated rather than after: one check, and one place that decides
+	// whether a composition is well formed.
+	cfg.Composition = append(cfg.Composition, pluginEntries(cfg.Plugins)...)
 	if err := validate(cfg.Composition); err != nil {
 		return nil, err
 	}
@@ -225,19 +252,34 @@ type harness struct {
 	requests chan *request
 	stopped  chan struct{}
 	startErr chan error
+
+	// base is cancelled when the harness shuts down, and every host tool call
+	// derives from it: closing the harness has to stop the work it started, or
+	// Close returns while goroutines are still writing files.
+	base       context.Context
+	cancelBase context.CancelFunc
+
+	// calls holds the cancel of every host tool call in flight, so that an abort
+	// arriving from the harness reaches the goroutine doing the work. Guarded
+	// because the goroutine clears its own entry.
+	callsMu sync.Mutex
+	calls   map[string]context.CancelFunc
 }
 
 // request is one unit of work for the owning goroutine.
+//
+// It is a closure rather than a turn because a turn is not the only thing that
+// needs the engine, and everything that does has to happen on the one goroutine
+// that owns it. Anything else is a data race that looks like working code.
 type request struct {
-	ctx       context.Context
-	sessionID string
-	input     []Block
-	reply     chan replyMessage
+	ctx   context.Context
+	job   func(*engine) (any, error)
+	reply chan replyMessage
 }
 
 type replyMessage struct {
-	result *Result
-	err    error
+	value any
+	err   error
 }
 
 var errClosed = errors.New("deepseek: harness is closed")
@@ -281,7 +323,39 @@ func (h *harness) Run(ctx context.Context, sessionID string, input []Block) (*Re
 	if sessionID == "" {
 		sessionID = "main"
 	}
-	req := &request{ctx: ctx, sessionID: sessionID, input: input, reply: make(chan replyMessage, 1)}
+	value, err := h.submit(ctx, func(eng *engine) (any, error) {
+		return h.turn(eng, ctx, sessionID, input)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return value.(*Result), nil
+}
+
+// Tools lists what the agent can call: every tool the composition registered,
+// the harness's own and a Go plugin's alike.
+func (h *harness) Tools(ctx context.Context) ([]ToolSchema, error) {
+	value, err := h.submit(ctx, func(eng *engine) (any, error) {
+		return h.listTools(eng)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return value.([]ToolSchema), nil
+}
+
+// submit hands one job to the owning goroutine and waits for its answer.
+func (h *harness) submit(ctx context.Context, job func(*engine) (any, error)) (any, error) {
+	h.mu.Lock()
+	started, closed := h.started, h.closed
+	h.mu.Unlock()
+	if closed {
+		return nil, errClosed
+	}
+	if !started {
+		return nil, errors.New("deepseek: harness has not been started")
+	}
+	req := &request{ctx: ctx, job: job, reply: make(chan replyMessage, 1)}
 	select {
 	case h.requests <- req:
 	case <-h.stopped:
@@ -291,11 +365,11 @@ func (h *harness) Run(ctx context.Context, sessionID string, input []Block) (*Re
 	}
 	select {
 	case reply := <-req.reply:
-		return reply.result, reply.err
+		return reply.value, reply.err
 	case <-h.stopped:
 		return nil, errClosed
 	case <-ctx.Done():
-		// The turn keeps running on the owning goroutine until its own context
+		// The job keeps running on the owning goroutine until its own context
 		// check stops it; interrupting the engine is what actually ends it, and
 		// that is done by the goroutine itself when it sees the context is done.
 		return nil, ctx.Err()
@@ -337,6 +411,13 @@ func (h *harness) own() {
 	defer close(h.stopped)
 	defer close(h.events)
 
+	h.base, h.cancelBase = context.WithCancel(context.Background())
+	h.calls = map[string]context.CancelFunc{}
+	// Cancelling before the engine closes, not after: a tool goroutine holding a
+	// file or a request should be told to stop while the world it answers into
+	// still exists.
+	defer h.cancelBase()
+
 	eng, err := newEngine(h.cfg, h.cfg.Resolver)
 	if err != nil {
 		h.startErr <- err
@@ -355,8 +436,8 @@ func (h *harness) own() {
 	h.startErr <- nil
 
 	for req := range h.requests {
-		result, err := h.turn(eng, req)
-		req.reply <- replyMessage{result: result, err: err}
+		value, err := req.job(eng)
+		req.reply <- replyMessage{value: value, err: err}
 	}
 	h.shutdown(eng)
 }
@@ -380,6 +461,9 @@ func (h *harness) install(eng *engine) error {
 	}); err != nil {
 		return err
 	}
+	if err := h.installHostCalls(eng); err != nil {
+		return err
+	}
 	entries, err := json.Marshal(h.cfg.Composition)
 	if err != nil {
 		return fmt.Errorf("deepseek: composition: %w", err)
@@ -389,6 +473,61 @@ func (h *harness) install(eng *engine) error {
 		return fmt.Errorf("deepseek: options: %w", err)
 	}
 	return nil
+}
+
+// installHostCalls binds the two functions a Go plugin's generated module calls.
+//
+// The shape is the whole point: __dshGoCall returns a promise it has not settled
+// and will not settle on this goroutine. The engine holds the loop open for it,
+// the tool runs on a goroutine of its own, and the answer arrives whenever it
+// arrives — so a tool that takes four seconds costs the agent four seconds of
+// waiting rather than four seconds of a stopped JavaScript world.
+func (h *harness) installHostCalls(eng *engine) error {
+	if len(h.cfg.Plugins) == 0 {
+		return nil
+	}
+	if err := eng.rt.Set("__dshGoCall", func(pluginID, toolName, callID, args string) (goant.Value, error) {
+		tool := findTool(h.cfg.Plugins, pluginID, toolName)
+		if tool == nil {
+			// Thrown into the tool's execute, which the registry turns into a
+			// failed call the model is told about, rather than a broken turn.
+			return goant.Value{}, fmt.Errorf("deepseek: no Go tool %q in plugin %q", toolName, pluginID)
+		}
+		promise, resolve, reject := eng.rt.NewPromise()
+		ctx, cancel := context.WithCancel(h.base)
+		h.callsMu.Lock()
+		h.calls[callID] = cancel
+		h.callsMu.Unlock()
+
+		go func() {
+			defer func() {
+				h.callsMu.Lock()
+				delete(h.calls, callID)
+				h.callsMu.Unlock()
+				cancel()
+			}()
+			out, err := runTool(ctx, tool, args)
+			if err != nil {
+				// Every path settles the promise. One that does not is a loop
+				// that never finishes and a turn that never ends, which is the
+				// worst failure available here.
+				_ = reject(err)
+				return
+			}
+			_ = resolve(out)
+		}()
+		return promise, nil
+	}); err != nil {
+		return err
+	}
+	return eng.rt.Set("__dshGoCancel", func(callID string) {
+		h.callsMu.Lock()
+		cancel := h.calls[callID]
+		h.callsMu.Unlock()
+		if cancel != nil {
+			cancel()
+		}
+	})
 }
 
 // bootstrap runs the boot module, which mounts the composition. Its top level
@@ -423,16 +562,16 @@ func withStack(err error) error {
 
 // turn runs one request. The engine is interrupted if the caller's context ends,
 // which is what makes a cancelled turn actually stop rather than finish quietly.
-func (h *harness) turn(eng *engine, req *request) (*Result, error) {
+func (h *harness) turn(eng *engine, reqCtx context.Context, sessionID string, input []Block) (*Result, error) {
 	started := time.Now()
-	stop := eng.rt.WithContext(req.ctx)
+	stop := eng.rt.WithContext(reqCtx)
 	defer func() {
 		stop()
 		eng.rt.ClearInterrupt()
 	}()
 
 	text := ""
-	for _, block := range req.input {
+	for _, block := range input {
 		text += block.Text
 	}
 	agentOptions := map[string]any{
@@ -448,11 +587,11 @@ func (h *harness) turn(eng *engine, req *request) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	promise, err := run.Function().Call(req.sessionID, text, agentOptions)
+	promise, err := run.Function().Call(sessionID, text, agentOptions)
 	if err != nil {
 		return nil, fmt.Errorf("deepseek: run: %w", err)
 	}
-	settled, err := eng.rt.AwaitContext(req.ctx, promise)
+	settled, err := eng.rt.AwaitContext(reqCtx, promise)
 	if err != nil {
 		return nil, fmt.Errorf("deepseek: turn: %w", err)
 	}
@@ -462,6 +601,28 @@ func (h *harness) turn(eng *engine, req *request) (*Result, error) {
 	}
 	result.Duration = time.Since(started)
 	return &result, nil
+}
+
+// listTools asks the registry what it holds. It runs on the owning goroutine,
+// like everything else that touches the engine.
+func (h *harness) listTools(eng *engine) ([]ToolSchema, error) {
+	call, err := eng.rt.Get("__dsh")
+	if err != nil {
+		return nil, err
+	}
+	fn, err := call.Object().Get("tools")
+	if err != nil {
+		return nil, err
+	}
+	value, err := fn.Function().Call()
+	if err != nil {
+		return nil, fmt.Errorf("deepseek: tools: %w", withStack(err))
+	}
+	var schemas []ToolSchema
+	if err := json.Unmarshal([]byte(value.String()), &schemas); err != nil {
+		return nil, fmt.Errorf("deepseek: tools: %w", err)
+	}
+	return schemas, nil
 }
 
 // shutdown disposes the cordis tree so that plugins holding processes or files
@@ -487,4 +648,3 @@ func (h *harness) shutdown(eng *engine) {
 // compile-time check that the implementation satisfies the interface a caller
 // programs against.
 var _ Harness = (*harness)(nil)
-

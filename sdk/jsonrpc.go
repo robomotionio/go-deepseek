@@ -71,6 +71,13 @@ type rpcResponse struct {
 }
 
 func (c *jsonrpcCarrier) Start(ctx context.Context) error {
+	if len(c.cfg.Plugins) > 0 {
+		// A Go plugin's tools are Go functions in THIS process. A prebuilt
+		// runtime is a different program with no way back into it, so a harness
+		// started here would be missing every tool the caller asked for — and
+		// would only say so when the model tried to call one.
+		return &StartError{Reason: "Go plugins run in process; a prebuilt runtime cannot call back into this program"}
+	}
 	c.pending = map[int64]chan *rpcResponse{}
 	c.listeners = map[int64]func(Notification){}
 	c.readDone = make(chan struct{})

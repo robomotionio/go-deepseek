@@ -23,7 +23,7 @@ func TestEveryModuleEvaluates(t *testing.T) {
 	dir := t.TempDir()
 	for _, spec := range specs {
 		if _, refused := b.Refused(spec); refused {
-			continue   // a stub that throws on use is supposed to throw
+			continue // a stub that throws on use is supposed to throw
 		}
 		t.Run(spec, func(t *testing.T) {
 			eng, err := newEngine(Config{CWD: dir, Roots: []string{dir}, Env: map[string]string{"HOME": dir}}, nil)

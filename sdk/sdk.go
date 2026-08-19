@@ -61,6 +61,13 @@ type Config struct {
 	// In-process only: a runtime driven over JSON-RPC composes itself.
 	Composition []Entry
 
+	// Plugins are plugins written in Go: tools the agent can call that run in
+	// this process. See plugin.go, which is where the interesting part is.
+	//
+	// In-process only: a runtime driven over JSON-RPC is a separate program and
+	// cannot call back into this one.
+	Plugins []Plugin
+
 	// MemoryLimit bounds the JavaScript heap, in bytes. Zero means no limit,
 	// which means a plugin that runs away takes the process with it rather than
 	// failing.

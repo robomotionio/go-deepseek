@@ -212,6 +212,17 @@ async function run(sessionId, text, agentOptions) {
   }
 }
 
+// tools reports the registry's view of what the agent can call. `schemas()` is
+// the same projection the model is shown, so what this lists is what the model
+// sees — including a tool a Go plugin registered.
+function tools() {
+  const ctx = context;
+  if (!ctx) throw new Error('the harness has not been started');
+  const registry = ctx.get('tools');
+  if (!registry) throw new Error('the composition registers no tool service');
+  return JSON.stringify(registry.schemas(), replacer);
+}
+
 async function dispose() {
   agents.clear();
   if (context) {
@@ -222,7 +233,7 @@ async function dispose() {
 
 // The control surface Go calls. Assigned to the global rather than exported
 // because the Go side reaches it by name after the module has evaluated.
-globalThis.__dsh = { boot, run, dispose };
+globalThis.__dsh = { boot, run, tools, dispose };
 
 // Booting is part of evaluating this module, so a composition that will not
 // mount fails at Start rather than at the first turn.

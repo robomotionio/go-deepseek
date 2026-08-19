@@ -29,6 +29,11 @@ var (
 	// ErrTurnFailed reports a turn that ended with a provider error. The wrapped
 	// message carries what the provider said.
 	ErrTurnFailed = errors.New("sdk: turn failed")
+
+	// ErrUnsupported reports something this carrier cannot do — asking a
+	// subprocess runtime for what an in-process registry holds. It is a property
+	// of how the harness is reached, not a failure of the call.
+	ErrUnsupported = errors.New("sdk: this carrier does not support that")
 )
 
 // RPCError is an error response from the runtime: the harness understood the
