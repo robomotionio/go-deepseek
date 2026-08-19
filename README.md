@@ -94,6 +94,35 @@ because there is no gap for one to cross.
 machine: the first numbers recorded here were four times worse, taken while a
 conformance suite was saturating the same laptop.)
 
+## Examples
+
+What follows this section is a reference, written as fragments with two whole
+programs at the end of it. [`examples/`](examples) is the other way in: ten whole
+programs, simple to complex, each proving one idea about the harness and each
+runnable without editing anything.
+
+```sh
+export DEEPSEEK_API_KEY=...
+go run ./examples/01-hello
+```
+
+| | |
+|---|---|
+| [`01-hello`](examples/01-hello) | An agent runs inside your process. |
+| [`02-chat`](examples/02-chat) | The session log is the source of truth. |
+| [`03-workspace`](examples/03-workspace) | Capability is fenced by composition, not by trust. |
+| [`04-tools`](examples/04-tools) | The agent's tools come from plugins; yours can be Go functions. |
+| [`05-composition`](examples/05-composition) | The plugin list *is* the product. Two agents from one binary. |
+| [`06-policy`](examples/06-policy) | A reorderable waterfall, plus a guard nobody can undo. |
+| [`07-approval`](examples/07-approval) | A Go handler may block, so a human can stand in the pipeline. |
+| [`08-audit`](examples/08-audit) | Wrap to measure, observe to record; effects revert themselves. |
+| [`09-context`](examples/09-context) | Every step can carry facts the model cannot know. |
+| [`10-shell`](examples/10-shell) | Go fills a seam the JavaScript runtime cannot, and the agent gains `bash`. |
+
+[`examples/README.md`](examples/README.md) is the tour: what each one proves,
+which seam or event it sits on, the upstream document for it, and the output
+each actually produced. Standard library only; no new dependencies.
+
 ## Using it
 
 ### A conversation
