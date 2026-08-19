@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	goruntime "runtime"
 	"strings"
 	"testing"
 	"time"
@@ -480,6 +481,50 @@ func TestComposeAppliesTheSameDefaultsAsOpen(t *testing.T) {
 			t.Errorf("an explicit BaseURL was overridden by the environment: %v", entry.Config["baseURL"])
 		}
 	}
+}
+
+// The ordering inside resolve(), pinned. Compose cannot report an error, so
+// what a failing os.Getwd() costs is decided entirely by what runs before it.
+// It used to cost the endpoint, the credential and the model as well, none of
+// which depend on a working directory — and a composition freezes whatever it
+// was handed, so that produced an adapter aimed at the wrong host with nothing
+// said about it.
+func TestComposeKeepsTheEndpointWhenTheDirectoryCannotBeNamed(t *testing.T) {
+	if goruntime.GOOS == "windows" {
+		t.Skip("removing the working directory out from under the process is a POSIX trick")
+	}
+	// The one reliable way to make os.Getwd fail: stand in a directory and
+	// delete it.
+	gone := filepath.Join(t.TempDir(), "gone")
+	if err := os.Mkdir(gone, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	t.Chdir(gone)
+	if err := os.Remove(gone); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Getwd(); err == nil {
+		t.Skip("this platform still names a deleted working directory")
+	}
+
+	t.Setenv("DEEPSEEK_BASE_URL", "https://gateway.example/v1")
+	t.Setenv("DEEPSEEK_API_KEY", "sk-from-the-environment")
+
+	entries := sdk.Compose(sdk.Config{})
+	for _, entry := range entries {
+		if entry.ID != "llm-deepseek" {
+			continue
+		}
+		if got := entry.Config["baseURL"]; got != "https://gateway.example/v1" {
+			t.Fatalf("the adapter's baseURL is %v; an unnameable directory took the endpoint with it", got)
+		}
+		models, ok := entry.Config["models"].([]map[string]any)
+		if !ok || len(models) == 0 || models[0]["id"] != "deepseek-v4-flash" {
+			t.Errorf("the model default went too: %#v", entry.Config["models"])
+		}
+		return
+	}
+	t.Fatal("the composition has no llm-deepseek entry")
 }
 
 func TestComposeIsAdjustable(t *testing.T) {

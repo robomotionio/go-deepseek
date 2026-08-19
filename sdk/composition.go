@@ -38,9 +38,15 @@ type Entry = runtime.Entry
 // answer with a 401 that reads exactly like a bad key.
 func Compose(cfg Config) []Entry {
 	// The only way this fails is a process whose working directory cannot be
-	// named, and Open reports that properly a moment later. Composing is
-	// pure — there is nothing here to abandon — so it carries on with what it
-	// has rather than growing an error return that every caller would ignore.
+	// named — and only for a Config that named none itself, which is the
+	// unusual case here. Composing is pure, so there is nothing to abandon, and
+	// growing an error return every caller would ignore buys nothing: Open
+	// resolves the same Config and reports the same failure a moment later.
+	//
+	// What matters is what survives it. resolve() applies the model route, the
+	// endpoint and the credential BEFORE anything that can fail, so a
+	// composition built on that path is missing the working directory alone
+	// rather than silently pointing at the wrong endpoint.
 	_ = cfg.resolve()
 	return runtime.Compose(runtime.Config{
 		Provider:    cfg.Provider,

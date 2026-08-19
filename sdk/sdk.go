@@ -175,12 +175,32 @@ func Open(ctx context.Context, cfg Config, opts ...Option) (*Harness, error) {
 // DEEPSEEK_BASE_URL was set — and the symptom was a 401 from the wrong host,
 // which reads as a bad key and is not one.
 func (cfg *Config) resolve() error {
+	// Everything that cannot fail comes first, deliberately. The only failure
+	// below is a process whose working directory cannot be named, and it used to
+	// return from the middle of this function — taking the endpoint, the key and
+	// the model down with it for no reason, since none of them depend on it.
+	// Compose cannot report an error, so what it freezes on that path is exactly
+	// what this ordering decides.
 	if cfg.Provider == "" {
 		cfg.Provider = "deepseek-official"
 	}
 	if cfg.Model == "" {
 		cfg.Model = "deepseek-v4-flash"
 	}
+	// The environment is consulted only for what was left empty, so an explicit
+	// field always wins over an ambient one.
+	if cfg.APIKey == "" {
+		cfg.APIKey = cfg.Env["DEEPSEEK_API_KEY"]
+	}
+	if cfg.APIKey == "" {
+		cfg.APIKey = os.Getenv("DEEPSEEK_API_KEY")
+	}
+	if cfg.BaseURL == "" {
+		cfg.BaseURL = os.Getenv("DEEPSEEK_BASE_URL")
+	}
+
+	// And now the part that can. A caller who set CWD never reaches Getwd at
+	// all, which is the case Compose is usually asked about.
 	if cfg.CWD == "" {
 		wd, err := os.Getwd()
 		if err != nil {
@@ -195,17 +215,6 @@ func (cfg *Config) resolve() error {
 	cfg.CWD = abs
 	if cfg.SessionRoot == "" {
 		cfg.SessionRoot = filepath.Join(cfg.CWD, ".sessions")
-	}
-	// The environment is consulted last and only for what was left empty, so an
-	// explicit field always wins over an ambient one.
-	if cfg.APIKey == "" {
-		cfg.APIKey = cfg.Env["DEEPSEEK_API_KEY"]
-	}
-	if cfg.APIKey == "" {
-		cfg.APIKey = os.Getenv("DEEPSEEK_API_KEY")
-	}
-	if cfg.BaseURL == "" {
-		cfg.BaseURL = os.Getenv("DEEPSEEK_BASE_URL")
 	}
 	return nil
 }
