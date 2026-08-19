@@ -117,7 +117,7 @@ go run ./examples/01-hello
 | [`07-approval`](examples/07-approval) | A Go handler may block, so a human can stand in the pipeline. |
 | [`08-audit`](examples/08-audit) | Wrap to measure, observe to record; effects revert themselves. |
 | [`09-context`](examples/09-context) | Every step can carry facts the model cannot know. |
-| [`10-shell`](examples/10-shell) | Go fills a seam the JavaScript runtime cannot, and the agent gains `bash`. |
+| [`10-shell`](examples/10-shell) | Go fills a seam the JavaScript runtime cannot, and the agent gains `bash`. (Its allowlist names POSIX coreutils, so this one wants them on `PATH`.) |
 
 [`examples/README.md`](examples/README.md) is the tour: what each one proves,
 which seam or event it sits on, the upstream document for it, and the output

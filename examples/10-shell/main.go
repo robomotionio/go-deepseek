@@ -21,6 +21,15 @@
 // and logged by code you own, in your language, in your process — rather than
 // by a sandbox you configure from outside and hope you configured right.
 //
+// WHAT AN ALLOWLIST DOES NOT DO, because it is the thing most likely to be
+// assumed. Naming the programs does not fence the FILES they touch: `cat` is a
+// safe program and `cat /etc/passwd` is not a safe command. `ctx.fs` fences the
+// filesystem tools, and nothing about that fence reaches a subprocess — so an
+// executor has to draw its own line, and this one draws two. The command is an
+// argv, never a shell string, so there is nothing to inject into. And every
+// argument is checked below, because a program allowlist without an argument
+// policy confines nothing worth confining.
+//
 // Seam: ctx.shell — @deepseek-ai/dsh-shell's ShellExecutor, whose abstract
 // surface is exactly resolve/run/start plus an optional sandboxMode getter.
 //
@@ -136,8 +145,9 @@ func main() {
 	fmt.Println("\n--- the turn ---")
 	result, err := h.Run(ctx, sdk.Text(
 		"Using the shell: how many lines are in inventory.txt, and which line "+
-			"sorts last alphabetically? Then try to run `curl https://example.com` "+
-			"and tell me what happened."))
+			"sorts last alphabetically? Then try two things that should not work "+
+			"and tell me exactly what each said: run `curl https://example.com`, "+
+			"and read the file /etc/hostname with cat."))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -153,13 +163,31 @@ func main() {
 			ran++
 		}
 	}
-	fmt.Printf("\n[%d commands run, %d refused by the Go allowlist]\n", ran, refused)
+	fmt.Printf("\n[%d commands run, %d refused by the host program]\n", ran, refused)
 
 	if ran == 0 {
 		log.Fatal("FAIL: the agent never reached the shell")
 	}
 	if refused == 0 {
-		log.Fatal("FAIL: nothing was refused, so the allowlist was never exercised")
+		log.Fatal("FAIL: nothing was refused, so neither fence was exercised")
+	}
+
+	// Both fences, separately. The allowlist decides which PROGRAMS run; the
+	// argument check decides which FILES they may name. A program allowlist on
+	// its own would have let `cat /etc/hostname` through, because cat is on it.
+	var byProgram, byPath bool
+	for _, entry := range executor.log() {
+		switch {
+		case strings.Contains(entry.line, "not on the allowlist"):
+			byProgram = true
+		case strings.Contains(entry.line, "absolute path"), strings.Contains(entry.line, "climbs out"):
+			byPath = true
+		}
+	}
+	fmt.Printf("[allowlist refused a program: %v | the fence refused a path: %v]\n",
+		byProgram, byPath)
+	if !byProgram || !byPath {
+		log.Fatal("FAIL: one of the two fences was never exercised")
 	}
 }
 
@@ -282,10 +310,15 @@ func (s *shell) run(args []json.RawMessage) (any, error) {
 		s.note(fmt.Sprintf("REFUSED  %-40s %s", clip(spec.Command), refusal), true)
 		// 126 is the shell's own "found it, would not run it". The reason goes
 		// on stderr, where the model reads it and adapts.
-		return result(126, "", "refused by the host program: "+refusal, false), nil
+		return refused(refusal), nil
 	}
 
+	maxBytes := int(spec.StdoutMaxBytes)
+	if maxBytes <= 0 {
+		maxBytes = defaultMaxBytes
+	}
 	timeout := time.Duration(spec.TimeoutMS) * time.Millisecond
+
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -295,72 +328,108 @@ func (s *shell) run(args []json.RawMessage) (any, error) {
 	// harness's own DSH_* facts merge last, which is upstream's rule.
 	cmd.Env = environ(spec)
 
+	// Collected as it arrives, not afterwards. cmd.Output() would read the
+	// whole stream into memory and leave the cap to trim what gets REPORTED —
+	// a budget that bounds the report and not the process, which is the wrong
+	// half. These bound both.
+	stdout := &tail{max: maxBytes}
+	stderr := &tail{max: maxBytes}
+	cmd.Stdout, cmd.Stderr = stdout, stderr
+
 	started := time.Now()
-	stdout, err := cmd.Output()
-	var stderr []byte
-	var exitErr *exec.ExitError
-	if errors.As(err, &exitErr) {
-		stderr = exitErr.Stderr
-	}
+	err := cmd.Run()
 	took := time.Since(started)
 
-	timedOut := ctx.Err() != nil
-	code := cmd.ProcessState.ExitCode()
-	switch {
-	case timedOut:
-		s.note(fmt.Sprintf("TIMEOUT  %-40s after %v", clip(spec.Command), timeout), false)
-		out := result(0, string(stdout), string(stderr), true)
-		out["exitCode"] = nil
-		out["signal"] = "SIGKILL"
-		out["timeoutMs"] = timeout.Milliseconds()
-		return capped(out, spec.StdoutMaxBytes), nil
-	case err != nil && exitErr == nil:
-		// Could not start it at all: not found, not executable. Still an
-		// outcome, not an infrastructure failure.
+	// A command that never started has no exit status to report; one that ran
+	// always has one, including when a signal ended it.
+	if err != nil && cmd.ProcessState == nil {
 		s.note(fmt.Sprintf("FAILED   %-40s %v", clip(spec.Command), err), false)
-		return capped(result(127, "", err.Error(), false), spec.StdoutMaxBytes), nil
+		out := collected(127, stdout, stderr, timeout)
+		out["stderr"] = map[string]any{"text": err.Error(), "truncated": false}
+		return out, nil
 	}
 
+	if ctx.Err() != nil {
+		s.note(fmt.Sprintf("TIMEOUT  %-40s after %v", clip(spec.Command), timeout), false)
+		out := collected(0, stdout, stderr, timeout)
+		out["exitCode"] = nil
+		out["signal"] = "SIGKILL"
+		out["timedOut"] = true
+		return out, nil
+	}
+
+	code := cmd.ProcessState.ExitCode()
 	s.note(fmt.Sprintf("ran      %-40s exit %d in %v",
 		clip(spec.Command), code, took.Round(time.Millisecond)), false)
-	out := result(code, string(stdout), string(stderr), false)
-	out["timeoutMs"] = timeout.Milliseconds()
-	return capped(out, spec.StdoutMaxBytes), nil
+	return collected(code, stdout, stderr, timeout), nil
 }
 
-// result builds upstream's ShellRunResult. Its shape is small and fixed:
+// collected builds upstream's ShellRunResult. Its shape is small and fixed:
 // exitCode, signal, timedOut, aborted, timeoutMs, and two CollectedOutputs.
-func result(exitCode int, stdout, stderr string, timedOut bool) map[string]any {
+func collected(exitCode int, stdout, stderr *tail, timeout time.Duration) map[string]any {
 	return map[string]any{
 		"exitCode":  exitCode,
 		"signal":    nil,
-		"timedOut":  timedOut,
+		"timedOut":  false,
+		"aborted":   false,
+		"timeoutMs": timeout.Milliseconds(),
+		"stdout":    stdout.collected(),
+		"stderr":    stderr.collected(),
+	}
+}
+
+// refused is the result for a command this executor would not run at all.
+func refused(reason string) map[string]any {
+	return map[string]any{
+		"exitCode":  126,
+		"signal":    nil,
+		"timedOut":  false,
 		"aborted":   false,
 		"timeoutMs": defaultTimeout.Milliseconds(),
-		"stdout":    map[string]any{"text": stdout, "truncated": false},
-		"stderr":    map[string]any{"text": stderr, "truncated": false},
+		"stdout":    map[string]any{"text": "", "truncated": false},
+		"stderr": map[string]any{
+			"text":      "refused by the host program: " + reason,
+			"truncated": false,
+		},
 	}
 }
 
-// capped enforces the resolved output budget. Upstream's CollectedOutput keeps
-// the TAIL when it truncates, and says so, so that the model knows it is
-// reading the end of something rather than the whole of it.
-func capped(out map[string]any, maxBytes int64) map[string]any {
-	if maxBytes <= 0 {
-		maxBytes = defaultMaxBytes
-	}
-	for _, stream := range []string{"stdout", "stderr"} {
-		collected, _ := out[stream].(map[string]any)
-		text, _ := collected["text"].(string)
-		if int64(len(text)) > maxBytes {
-			collected["text"] = text[int64(len(text))-maxBytes:]
-			collected["truncated"] = true
+// tail keeps the LAST max bytes of a stream and says when it dropped any,
+// which is the shape upstream's CollectedOutput describes — a truncated
+// capture is the END of the output, and the model is told so rather than left
+// to assume it read the whole thing.
+//
+// It never holds more than max, so the budget bounds this process's memory and
+// not merely its report.
+type tail struct {
+	max       int
+	buf       []byte
+	truncated bool
+}
+
+func (t *tail) Write(p []byte) (int, error) {
+	n := len(p)
+	switch {
+	case t.max <= 0:
+		return n, nil
+	case len(p) >= t.max:
+		t.truncated = t.truncated || len(t.buf) > 0 || len(p) > t.max
+		t.buf = append(t.buf[:0], p[len(p)-t.max:]...)
+	default:
+		if over := len(t.buf) + len(p) - t.max; over > 0 {
+			t.truncated = true
+			t.buf = append(t.buf[:0], t.buf[over:]...)
 		}
+		t.buf = append(t.buf, p...)
 	}
-	return out
+	return n, nil
 }
 
-// environ is the child's environment: this executor's own base, then the
+func (t *tail) collected() map[string]any {
+	return map[string]any{"text": string(t.buf), "truncated": t.truncated}
+}
+
+// environ is the child
 // caller's extras, then the harness's managed DSH_* facts last, so a caller
 // entry can never displace a managed one.
 func environ(spec request) []string {
@@ -388,36 +457,102 @@ func environ(spec request) []string {
 // Note what it does NOT do: hand the string to `bash -c`. The tool tells the
 // model it is talking to bash, and this executor answers a deliberately smaller
 // question — which is the freedom the seam gives you. There is no shell here to
-// be injected into.
+// be injected into, so the checks below are not injection defences; they are
+// this executor deciding what it is willing to be.
 func parse(command string) (argv []string, refusal string) {
 	command = strings.TrimSpace(command)
 	if command == "" {
 		return nil, "the command is empty"
 	}
-	if i := strings.IndexAny(command, chaining); i >= 0 {
-		return nil, fmt.Sprintf(
-			"%q chains, redirects or substitutes, and this shell runs exactly one program",
-			string(command[i]))
-	}
 
-	argv, ok := split(command)
+	words, ok := split(command)
 	if !ok {
 		return nil, "the command has an unterminated quote"
+	}
+
+	// The chaining check runs on the SPLIT words rather than the raw string,
+	// and skips the quoted ones. Both halves matter. A `;` inside quotes is an
+	// ordinary character that a shell would have passed through, so refusing
+	// `grep "a;b" notes.txt` would be this executor inventing a rule. A `;`
+	// outside quotes means the model expected a shell — and since there is not
+	// one, running only the first word with the rest as its arguments would do
+	// something quietly wrong instead of saying so.
+	for _, word := range words {
+		if word.quoted {
+			continue
+		}
+		if i := strings.IndexAny(word.text, chaining); i >= 0 {
+			return nil, fmt.Sprintf(
+				"%q chains, redirects or substitutes, and this shell runs exactly one program",
+				string(word.text[i]))
+		}
+	}
+
+	argv = make([]string, len(words))
+	for i, word := range words {
+		argv[i] = word.text
 	}
 	if !allowed[argv[0]] {
 		return nil, fmt.Sprintf("%q is not on the allowlist; allowed programs are %s",
 			argv[0], strings.Join(allowlist(), ", "))
 	}
+	if refusal := fence(argv); refusal != "" {
+		return nil, refusal
+	}
 	return argv, ""
 }
 
-// split is a quote-aware field split — enough for `grep -c "" file.txt`, and
+// fence keeps the command's ARGUMENTS inside the workspace.
+//
+// This is the half an allowlist does not cover, and the half worth having.
+// `cat` is a safe program; `cat /etc/passwd` is not a safe command, and every
+// program on the list above will read whatever path it is handed. So paths are
+// required to be relative and to stay put: the command runs with cmd.Dir set to
+// the workspace, and a relative path with no `..` in it cannot leave.
+//
+// A symlink inside the workspace still points wherever it points — closing that
+// means resolving every argument against the real path, which is where an
+// example stops and a real executor keeps going.
+func fence(argv []string) string {
+	for _, arg := range argv[1:] {
+		candidate := arg
+		if strings.HasPrefix(arg, "-") {
+			// A flag, unless it carries its value inline (--file=PATH).
+			_, value, found := strings.Cut(arg, "=")
+			if !found {
+				continue
+			}
+			candidate = value
+		}
+		if candidate == "" {
+			continue
+		}
+		if filepath.IsAbs(candidate) || strings.HasPrefix(candidate, "~") {
+			return fmt.Sprintf("%q is an absolute path, and this shell reaches only the workspace", candidate)
+		}
+		for _, part := range strings.Split(filepath.ToSlash(candidate), "/") {
+			if part == ".." {
+				return fmt.Sprintf("%q climbs out of the workspace", candidate)
+			}
+		}
+	}
+	return ""
+}
+
+// word is one argument and whether it arrived quoted, which is the only thing
+// the chaining check needs to tell data from punctuation.
+type word struct {
+	text   string
+	quoted bool
+}
+
+// split is a quote-aware field split — enough for `grep -c "a;b" file.txt`, and
 // deliberately no more.
-func split(command string) ([]string, bool) {
-	var argv []string
+func split(command string) ([]word, bool) {
+	var words []word
 	var current strings.Builder
 	var quote rune
-	inWord := false
+	inWord, wasQuoted := false, false
 
 	for _, r := range command {
 		switch {
@@ -428,12 +563,12 @@ func split(command string) ([]string, bool) {
 				current.WriteRune(r)
 			}
 		case r == '\'' || r == '"':
-			quote, inWord = r, true
+			quote, inWord, wasQuoted = r, true, true
 		case r == ' ' || r == '\t':
 			if inWord {
-				argv = append(argv, current.String())
+				words = append(words, word{text: current.String(), quoted: wasQuoted})
 				current.Reset()
-				inWord = false
+				inWord, wasQuoted = false, false
 			}
 		default:
 			current.WriteRune(r)
@@ -444,9 +579,9 @@ func split(command string) ([]string, bool) {
 		return nil, false
 	}
 	if inWord {
-		argv = append(argv, current.String())
+		words = append(words, word{text: current.String(), quoted: wasQuoted})
 	}
-	return argv, len(argv) > 0
+	return words, len(words) > 0
 }
 
 func allowlist() []string {
