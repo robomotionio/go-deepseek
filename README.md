@@ -392,6 +392,154 @@ completed in 4.059s (session session-5a7af6692c8d97f8)
 One turn, two tools: the Go function this program supplied, and the harness's own
 `read` reaching a file inside the fence. Neither one knows the other is unusual.
 
+### A policy component, whole
+
+The program above gives the agent a tool. This one gives it a **governor**: a Go
+component that wraps every tool call the harness already has and refuses the ones
+it does not like. It registers no tools of its own.
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+	"strings"
+
+	"github.com/robomotionio/go-deepseek/sdk"
+)
+
+// A policy component: it wraps every tool call the agent makes, records it, and
+// refuses the ones that would write outside the documentation.
+//
+// Nothing here registers a tool. This component governs the tools the harness
+// already has — `read`, `write`, `edit` — which it did not create and knows
+// nothing about beyond their names.
+func policy(audit func(name, verdict string)) sdk.Plugin {
+	writes := map[string]bool{"write": true, "edit": true, "str_replace_editor": true}
+
+	return sdk.Plugin{
+		ID:     "policy",
+		Inject: []string{"tools"}, // declared, and enforced: undeclared is refused
+		Apply: func(ctx *sdk.Context) error {
+			_, err := ctx.On("tools/pre-execute", func(args []json.RawMessage) (any, error) {
+				var call struct {
+					Name      string `json:"name"`
+					Arguments struct {
+						Path string `json:"path"`
+						File string `json:"file_path"`
+					} `json:"arguments"`
+				}
+				_ = json.Unmarshal(args[0], &call)
+
+				path := call.Arguments.File
+				if path == "" {
+					path = call.Arguments.Path
+				}
+				if writes[call.Name] {
+					// Fail closed. A policy that allows what it could not read is
+					// not a policy, and a model that sends a malformed call gets
+					// told so rather than getting through.
+					reason := ""
+					switch {
+					case path == "":
+						reason = "no path in the call, so it cannot be checked"
+					case !strings.HasSuffix(path, ".md"):
+						reason = "this agent may only write Markdown, and " + path + " is not a .md file"
+					}
+					if reason != "" {
+						audit(call.Name, "denied: "+reason)
+						// The reason reaches the model, so write it for that
+						// reader: a good one earns a corrected retry.
+						return map[string]any{"kind": "deny", "reason": reason}, nil
+					}
+				}
+
+				audit(call.Name, "allowed "+path)
+				// Continue the waterfall. The last argument is `next`, and a
+				// listener that does not call it has decided the call itself.
+				next, err := ctx.Value(args[len(args)-1]).Object()
+				if err != nil {
+					return nil, err
+				}
+				decision, err := next.Invoke()
+				if err != nil {
+					return nil, err
+				}
+				return json.RawMessage(decision.JSON()), nil
+			})
+			return err
+		},
+	}
+}
+
+func main() {
+	ctx := context.Background()
+	workdir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	h, err := sdk.Open(ctx, sdk.Config{
+		BaseURL: "https://openrouter.ai/api/v1",
+		APIKey:  os.Getenv("OPENROUTER_API_KEY"),
+		Model:   "deepseek/deepseek-v4-flash-0731",
+		CWD:     workdir,
+		Plugins: []sdk.Plugin{policy(func(name, verdict string) {
+			fmt.Fprintf(os.Stderr, "[policy] %-8s %s\n", name, verdict)
+		})},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer h.Close()
+
+	// What the agent can call, the harness's own tools included.
+	tools, err := h.Tools(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	names := make([]string, len(tools))
+	for i, tool := range tools {
+		names[i] = tool.Name
+	}
+	fmt.Println("tools:", strings.Join(names, " "))
+
+	result, err := h.Run(ctx, sdk.Text(
+		"Write the line 'hello' into notes.txt, then write the same line into notes.md. "+
+			"Tell me which ones worked."))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("\n" + result.FinalResponse)
+}
+```
+
+Run it in an empty directory:
+
+```
+tools: read write edit str_replace_editor todo_write skill job_output job_list job_kill
+[policy] write    denied: this agent may only write Markdown, and notes.txt is not a .md file
+[policy] write    allowed notes.md
+
+Here's what happened:
+
+- **notes.txt**: ❌ **Failed** — the agent is restricted to writing Markdown files only,
+  so `notes.txt` was rejected.
+- **notes.md**: ✅ **Worked** — the file was created with the line `hello`.
+
+So only **notes.md** succeeded.
+```
+
+Afterwards the directory holds `notes.md` and nothing else, which is the part
+that matters: the refusal was enforced, not merely reported. The model was told
+why in words it could act on, and the tools being governed — `write`, `edit` —
+are the harness's own. The component never registered them and knows nothing
+about them beyond their names.
+
 ### Composing the harness
 
 Everything in the harness is a plugin, and a deployment is a list of them. The
