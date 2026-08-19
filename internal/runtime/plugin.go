@@ -315,11 +315,21 @@ func (c *Context) Emit(event string, args ...any) error {
 }
 
 // Effect installs a revertible effect whose inverse is Go. The inverse runs when
-// the component unmounts, in reverse order, alongside the ones cordis tracked
-// itself.
+// the component unmounts, LIFO, interleaved correctly with the inverses cordis
+// tracked itself.
+//
+// It runs SYNCHRONOUSLY, on the goroutine that owns the JavaScript world, and
+// that is what buys the ordering: cordis invokes disposers last-installed-first,
+// but an inverse that only STARTS the work and returns is ordered by nothing.
+// An effect that opened something another effect went on to use would then be
+// closed out of order, some of the time — which is the shape of bug that shows
+// up once in eight runs and never in the one you are watching.
+//
+// So an inverse must not block and must not call back across the bridge. For
+// teardown that needs to do either, use OnDispose.
 func (c *Context) Effect(inverse func()) error {
 	_, err := c.Call("effect", c.SyncFunc(func([]json.RawMessage) (any, error) {
-		return c.Func(func([]json.RawMessage) (any, error) {
+		return c.SyncFunc(func([]json.RawMessage) (any, error) {
 			inverse()
 			return nil, nil
 		}), nil
@@ -327,9 +337,10 @@ func (c *Context) Effect(inverse func()) error {
 	return err
 }
 
-// OnDispose runs fn when the component unmounts. Effect is the same thing
-// expressed to cordis; this one is for a Go-side inverse that the harness has no
-// reason to know about.
+// OnDispose runs fn when the component unmounts, after every effect has been
+// reverted, on a goroutine of its own and in reverse order of registration. This
+// is where teardown that has to block belongs — draining a queue, closing a
+// connection, waiting for a worker.
 func (c *Context) OnDispose(fn func()) { c.bridge.onDispose(c.ref, fn) }
 
 // Value interprets one argument a callback received, so that a handler can

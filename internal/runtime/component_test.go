@@ -201,12 +201,18 @@ func TestComponentEffectsAreReverted(t *testing.T) {
 
 	mu.Lock()
 	defer mu.Unlock()
-	if len(order) != 3 {
+	// The whole sequence, exactly: effects LIFO first, then the Go teardown.
+	// Asserting only the membership would have missed the ordering bug that
+	// appeared once in eight runs, when the inverses were asynchronous and
+	// therefore ordered by nothing.
+	want := []string{"second effect", "first effect", "go disposer"}
+	if len(order) != len(want) {
 		t.Fatalf("not everything was reverted: %v", order)
 	}
-	// Cordis recovers effects LIFO, and the Go disposers run the same way.
-	if order[0] != "second effect" || order[1] != "first effect" {
-		t.Errorf("effects were not reverted in reverse order: %v", order)
+	for i := range want {
+		if order[i] != want[i] {
+			t.Fatalf("reverted %v, want %v", order, want)
+		}
 	}
 	t.Logf("reverted: %v", order)
 }

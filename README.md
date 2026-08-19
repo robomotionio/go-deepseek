@@ -245,7 +245,7 @@ reachable by name** — there is no per-capability wrapper to wait for:
 | `ctx.Provide("approval", …)` | become a provider others inject; unmounting withdraws it and them |
 | `ctx.On(event, fn)` | any event or waterfall, including `tools/pre-execute`, `tools/execute`, `tools/post-execute` |
 | `ctx.Call(path, args…)` | anything else: `tools.register`, `systemPrompt.section`, `sessionProjections.register` |
-| `ctx.Effect(inverse)` | a revertible effect whose inverse is Go, recovered LIFO on unmount |
+| `ctx.Effect(inverse)` | a revertible effect whose inverse is Go, recovered LIFO on unmount (runs synchronously; use `ctx.OnDispose` for teardown that blocks) |
 | `ctx.Func` / `ctx.SyncFunc` | a Go closure as a JavaScript function — a tool's execute, a listener, a service method |
 
 Three properties are worth stating because they are the ones that make this a
