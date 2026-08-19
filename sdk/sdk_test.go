@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io/fs"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/klauspost/compress/zstd"
 	"github.com/robomotionio/go-deepseek/sdk"
 )
 
@@ -274,6 +277,208 @@ func TestLiveRun(t *testing.T) {
 	}
 	if deltas == 0 {
 		t.Error("no chunks were streamed — OnEvent saw nothing as it arrived")
+	}
+}
+
+// A session id is durable — it IS the name of its log — so using one again in a
+// new process is how a conversation continues. This is the pair of fixes that
+// makes that true: the runtime now RESUMES a stored id instead of creating a
+// fresh session on top of it, and the Buffer accessors the zstd log reader
+// needs now exist, so the default compressed log can actually be read back.
+//
+// It needs no model. A dud key fails the turn at the provider, which is a
+// described outcome rather than a transport failure — and the interesting part
+// happened before that: the second harness loaded the first one's log and
+// appended to it instead of colliding with it.
+func TestSessionResumesAStoredLog(t *testing.T) {
+	if testing.Short() {
+		t.Skip("booting the harness twice takes a moment")
+	}
+	dir := t.TempDir()
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	defer cancel()
+
+	// The DEFAULT composition, so the log is zstd — the shape that could not be
+	// read back at all before.
+	cfg := sdk.Config{
+		CWD: dir,
+		Env: map[string]string{"DEEPSEEK_API_KEY": "sk-not-a-real-key", "HOME": dir},
+	}
+
+	first, err := sdk.Open(ctx, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// The dud key fails this turn at the provider, which is expected and is what
+	// keeps the test offline. The session is still opened, logged and closed.
+	_, firstErr := first.Session("continued").Run(ctx, sdk.Text("the first thing said"))
+	t.Logf("first turn ended with: %v", firstErr)
+	if err := first.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	second, err := sdk.Open(ctx, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, secondErr := second.Session("continued").Run(ctx, sdk.Text("the second thing said"))
+	if err := second.Close(); err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("second turn ended with: %v", secondErr)
+
+	// Reaching the provider at all is the result that matters. Before the fix
+	// the second turn never got there: it failed with "already has a persisted
+	// log on disk that does not match this live session (id collision)",
+	// because the runtime created a fresh session on an id that already had
+	// history instead of resuming it.
+	if secondErr != nil && strings.Contains(secondErr.Error(), "id collision") {
+		t.Fatalf("the stored session was not resumed: %v", secondErr)
+	}
+
+	// The proof is on disk: one log, holding both turns. A collision would have
+	// left the second turn unwritten.
+	log := readSessionLog(t, filepath.Join(dir, ".sessions"))
+	for _, want := range []string{"the first thing said", "the second thing said"} {
+		if !strings.Contains(log, want) {
+			t.Errorf("the resumed log does not carry %q", want)
+		}
+	}
+}
+
+// readSessionLog finds the one session log under root and returns its text,
+// decompressing it when the default zstd persistence wrote it.
+func readSessionLog(t *testing.T, root string) string {
+	t.Helper()
+	var path string
+	if err := filepath.WalkDir(root, func(at string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() || !strings.HasPrefix(d.Name(), "session.jsonl") {
+			return err
+		}
+		path = at
+		return fs.SkipAll
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if path == "" {
+		t.Fatalf("no session log was written under %s", root)
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasSuffix(path, ".zstd") {
+		return string(raw)
+	}
+	decoder, err := zstd.NewReader(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer decoder.Close()
+	// The persistence appends one frame per flush, so this is several frames
+	// concatenated rather than one.
+	text, err := decoder.DecodeAll(raw, nil)
+	if err != nil {
+		t.Fatalf("the zstd session log will not decode: %v", err)
+	}
+	return string(text)
+}
+
+// The live half of the same claim: a second process picks the conversation back
+// up and can answer from what the first one was told.
+func TestLiveSessionResume(t *testing.T) {
+	key := os.Getenv("DEEPSEEK_API_KEY")
+	if key == "" {
+		t.Skip("set DEEPSEEK_API_KEY to resume a session for real")
+	}
+	model := os.Getenv("DEEPSEEK_MODEL")
+	if model == "" {
+		model = "deepseek-v4-flash"
+	}
+	dir := t.TempDir()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+	defer cancel()
+
+	cfg := sdk.Config{
+		CWD:     dir,
+		Model:   model,
+		BaseURL: os.Getenv("DEEPSEEK_BASE_URL"),
+		Env:     map[string]string{"DEEPSEEK_API_KEY": key, "HOME": dir},
+	}
+
+	first, err := sdk.Open(ctx, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := first.Session("memory").Run(ctx,
+		sdk.Text("Remember this codeword: MARMALADE. Reply with just the word OK.")); err != nil {
+		first.Close()
+		t.Fatal(err)
+	}
+	if err := first.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	second, err := sdk.Open(ctx, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer second.Close()
+
+	result, err := second.Session("memory").Run(ctx,
+		sdk.Text("What was the codeword? Reply with just the word."))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%v, finish=%q, said %q", result.Duration, result.FinishReason, result.FinalResponse)
+	if !strings.Contains(strings.ToUpper(result.FinalResponse), "MARMALADE") {
+		t.Errorf("the second process did not resume the conversation: %q", result.FinalResponse)
+	}
+}
+
+// A composition FREEZES what it read, so it has to read the Config the way Open
+// does — defaults and environment included. When it did not, building a
+// composition first and opening with it second produced an adapter pointed at
+// the default endpoint however carefully DEEPSEEK_BASE_URL was set, and the
+// symptom was a 401 from the wrong host: a bad-key error that is not one.
+func TestComposeAppliesTheSameDefaultsAsOpen(t *testing.T) {
+	t.Setenv("DEEPSEEK_BASE_URL", "https://gateway.example/v1")
+
+	// The zero Config: nothing named, everything defaulted.
+	entries := sdk.Compose(sdk.Config{})
+
+	find := func(id string) map[string]any {
+		for _, entry := range entries {
+			if entry.ID == id {
+				return entry.Config
+			}
+		}
+		t.Fatalf("the default composition has no %q entry", id)
+		return nil
+	}
+
+	// The endpoint the environment named, on the adapter that will use it.
+	if got := find("llm-deepseek")["baseURL"]; got != "https://gateway.example/v1" {
+		t.Errorf("the adapter's baseURL is %v, so the gateway was lost between Compose and Open", got)
+	}
+
+	// And the working directory, which is the same trap wearing a different
+	// hat: an agent configured with an empty cwd refuses every relative path.
+	agents, ok := find("agent-spine")["agents"].([]map[string]any)
+	if !ok || len(agents) == 0 {
+		t.Fatalf("the spine entry carries no agents: %#v", find("agent-spine"))
+	}
+	cwd, _ := agents[0]["cwd"].(string)
+	if cwd == "" || !filepath.IsAbs(cwd) {
+		t.Errorf("the agent's cwd is %q, want the process's own absolute directory", cwd)
+	}
+
+	// An explicit field still wins over the ambient one.
+	named := sdk.Compose(sdk.Config{BaseURL: "https://explicit.example/v1", CWD: t.TempDir()})
+	for _, entry := range named {
+		if entry.ID == "llm-deepseek" && entry.Config["baseURL"] != "https://explicit.example/v1" {
+			t.Errorf("an explicit BaseURL was overridden by the environment: %v", entry.Config["baseURL"])
+		}
 	}
 }
 
