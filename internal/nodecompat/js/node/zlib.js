@@ -79,7 +79,33 @@ export const createGunzip = noStreams('createGunzip');
 export const createDeflate = noStreams('createDeflate');
 export const createInflate = noStreams('createInflate');
 export const createZstdCompress = noStreams('createZstdCompress');
-export const createZstdDecompress = noStreams('createZstdDecompress');
+
+// createZstdDecompress is the one that must EXIST rather than throw, because
+// callers PROBE it instead of using it. Node's session-log reader builds one
+// only to ask whether this release exposes a private fast path, reads a handful
+// of internal fields off it, and falls back to the public one-shot API when
+// they are not there — so throwing here does not decline the fast path, it
+// takes the whole read down with it, and a log this runtime wrote becomes a log
+// it cannot open.
+//
+// So this answers with a probe: it declines the private interface by having
+// none of it, it closes, and every real stream method on it throws. Nothing can
+// mistake it for a working stream, and the probe gets the "no" it came for.
+export function createZstdDecompress() {
+  const refuse = (method) => () => {
+    throw new Error(`zlib.createZstdDecompress().${method} is not available: `
+      + 'this runtime decompresses in one shot, not as a stream');
+  };
+  return {
+    close() {},
+    destroy() {},
+    write: refuse('write'),
+    end: refuse('end'),
+    read: refuse('read'),
+    pipe: refuse('pipe'),
+    on: refuse('on'),
+  };
+}
 
 const __ns = {
   constants,
