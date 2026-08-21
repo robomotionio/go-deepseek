@@ -114,12 +114,19 @@ have one model do the listening and another do the calling.
 
 ## The web face
 
-The demo also hangs on a wall:
+The demo also hangs on a wall — and here an `OPENROUTER_API_KEY` alone is
+enough, because the web demo checks both variables and aims itself:
 
 ```sh
+export OPENROUTER_API_KEY=...      # or the DEEPSEEK_* trio, which wins when set
 go run ./examples/13-phone-banking/web
 # open http://127.0.0.1:8013 and press START DEMO
 ```
+
+With only the OpenRouter key set, the demo uses `https://openrouter.ai/api/v1`
+and that endpoint's model id (`deepseek/deepseek-v4-flash-0731`) on its own;
+`DEEPSEEK_MODEL` and the `DSH_*_MODEL` variables still override the model.
+The startup banner says which credential it chose and where it is aimed.
 
 One binary, standard library only, page embedded. A touch-tone phone on the
 left — silver keys, an LCD that shows every digit pressed — and the call

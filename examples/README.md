@@ -837,7 +837,9 @@ same demo as a page to watch: a touch-tone phone whose keys light and click
 showing every digit, the prompts typing out beside it, and the two runs'
 found-it stamps and comparison table. Everything on the page is the agent's
 own tool-call stream over Server-Sent Events — one stdlib binary, page
-embedded, nothing scripted.
+embedded, nothing scripted. The web demo also accepts an `OPENROUTER_API_KEY`
+on its own: it checks both variables, prefers an explicit `DEEPSEEK_API_KEY`,
+and otherwise aims itself at OpenRouter with that endpoint's model id.
 
 
 ---

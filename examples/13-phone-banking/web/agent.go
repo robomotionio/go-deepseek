@@ -138,12 +138,17 @@ type answer struct {
 	took   time.Duration
 }
 
-func openHarness(ctx context.Context, model, workspace string, line *ivr, m *memory, canTeach bool) (*sdk.Harness, error) {
+func openHarness(ctx context.Context, c creds, model, workspace string, line *ivr, m *memory, canTeach bool) (*sdk.Harness, error) {
 	cfg := sdk.Config{
 		Model: model,
 		CWD:   workspace,
 		Roots: []string{workspace},
 		Env:   map[string]string{"HOME": workspace},
+
+		// Resolved by this program rather than left to the SDK's env reading,
+		// so that OPENROUTER_API_KEY alone is enough — see resolveCreds.
+		APIKey:  c.key,
+		BaseURL: c.base,
 
 		Plugins: []sdk.Plugin{
 			newHandset(line).plugin(),
@@ -224,14 +229,16 @@ func oneLine(s string) string {
 	return s
 }
 
-func pick(role string) string {
+// pick reads a role's model id; the fallback is the resolved endpoint's own
+// default, because DeepSeek and OpenRouter do not agree on the model's name.
+func pick(role, fallback string) string {
 	if id := os.Getenv(role); id != "" {
 		return id
 	}
 	if id := os.Getenv("DEEPSEEK_MODEL"); id != "" {
 		return id
 	}
-	return "deepseek-v4-flash"
+	return fallback
 }
 
 // ---- the courier, as in the parent ------------------------------------------

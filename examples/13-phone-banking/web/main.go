@@ -21,13 +21,18 @@
 // wall-clock time it took to find, the airtime it cost. The two stamps are
 // the comparison the parent example prints as a table.
 //
-// Run it:
+// Run it — an OPENROUTER_API_KEY alone is enough:
 //
-//	export DEEPSEEK_API_KEY=$OPENROUTER_API_KEY
-//	export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1
+//	export OPENROUTER_API_KEY=...      # aims the demo at openrouter.ai and
+//	go run ./examples/13-phone-banking/web   # picks that endpoint's model id
+//	# then open http://127.0.0.1:8013
+//
+// or the explicit way every example documents, which always wins when set:
+//
+//	export DEEPSEEK_API_KEY=...
+//	export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1   # or your gateway
 //	export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731
 //	go run ./examples/13-phone-banking/web
-//	# then open http://127.0.0.1:8013
 //
 // One binary: the page is embedded, the phone system is a Go struct, and the
 // only thing reached over the network is the model.
@@ -156,9 +161,55 @@ func (h *hub) broadcast(e event) {
 	}
 }
 
+// creds is where the demo's model calls will be served from, worked out once
+// at startup. The SDK itself reads only DEEPSEEK_API_KEY, so a machine that
+// holds an OPENROUTER_API_KEY and nothing else fails with MISSING_CREDENTIAL
+// — this resolver checks both. An explicit DEEPSEEK_API_KEY always wins;
+// OPENROUTER_API_KEY alone aims the demo at OpenRouter and switches the
+// default model to that endpoint's id, because the two endpoints do not
+// even agree on what the model is called.
+type creds struct {
+	key    string
+	base   string
+	model  string // the default model id for this endpoint
+	source string // which variable supplied the key; empty means neither did
+}
+
+func resolveCreds() creds {
+	c := creds{
+		key:    os.Getenv("DEEPSEEK_API_KEY"),
+		base:   os.Getenv("DEEPSEEK_BASE_URL"),
+		source: "DEEPSEEK_API_KEY",
+	}
+	if c.key == "" {
+		if or := os.Getenv("OPENROUTER_API_KEY"); or != "" {
+			c.key, c.source = or, "OPENROUTER_API_KEY"
+			if c.base == "" {
+				c.base = "https://openrouter.ai/api/v1"
+			}
+		}
+	}
+	if c.key == "" {
+		c.source = ""
+	}
+	// The default model follows the endpoint: deepseek-v4-flash at DeepSeek,
+	// deepseek/deepseek-v4-flash-0731 through OpenRouter. DEEPSEEK_MODEL and
+	// the DSH_*_MODEL variables still override either.
+	c.model = "deepseek-v4-flash"
+	if strings.Contains(c.base, "openrouter") {
+		c.model = "deepseek/deepseek-v4-flash-0731"
+	}
+	return c
+}
+
+const noKeyAdvice = "no API key found: export DEEPSEEK_API_KEY (any OpenAI-compatible gateway, " +
+	"with DEEPSEEK_BASE_URL), or just OPENROUTER_API_KEY — the demo aims itself at " +
+	"https://openrouter.ai/api/v1 and picks that endpoint's model id"
+
 // server owns the one demo that may run at a time.
 type server struct {
 	hub      *hub
+	creds    creds
 	explorer string
 	operator string
 
@@ -271,7 +322,7 @@ func (s *server) run(ctx context.Context, which int, model, workspace string, li
 	}
 
 	courier := newMemory(remembered)
-	h, err := openHarness(ctx, model, workspace, line, courier, canTeach)
+	h, err := openHarness(ctx, s.creds, model, workspace, line, courier, canTeach)
 	if err != nil {
 		s.hub.broadcast(event{Kind: "error", Text: err.Error()})
 		return nil, false
@@ -306,10 +357,12 @@ func main() {
 	addr := flag.String("addr", "127.0.0.1:8013", "address to serve the demo on")
 	flag.Parse()
 
+	c := resolveCreds()
 	s := &server{
 		hub:      newHub(),
-		explorer: pick("DSH_EXPLORER_MODEL"),
-		operator: pick("DSH_OPERATOR_MODEL"),
+		creds:    c,
+		explorer: pick("DSH_EXPLORER_MODEL", c.model),
+		operator: pick("DSH_OPERATOR_MODEL", c.model),
 	}
 
 	page := template.Must(template.ParseFS(pageFS, "index.html"))
@@ -331,6 +384,13 @@ func main() {
 	mux.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "POST only", http.StatusMethodNotAllowed)
+			return
+		}
+		if s.creds.key == "" {
+			// Answered on the page as well as here, because the person who
+			// pressed Start is looking at the page.
+			s.hub.broadcast(event{Kind: "error", Text: noKeyAdvice})
+			http.Error(w, noKeyAdvice, http.StatusPreconditionFailed)
 			return
 		}
 		s.mu.Lock()
@@ -389,6 +449,15 @@ func main() {
 	})
 
 	fmt.Printf("Meridian Trust Bank, on the wall: http://%s\n", *addr)
+	if c.source == "" {
+		fmt.Printf("credentials: NONE — %s\n", noKeyAdvice)
+	} else {
+		endpoint := c.base
+		if endpoint == "" {
+			endpoint = "DeepSeek official"
+		}
+		fmt.Printf("credentials: %s → %s\n", c.source, endpoint)
+	}
 	fmt.Printf("explorer: %s\noperator: %s\n", s.explorer, s.operator)
 	log.Fatal(http.ListenAndServe(*addr, mux))
 }

@@ -442,7 +442,9 @@
       clockStart('RUN ' + e.run + ' ·');
       log.appendChild(el('<p class="note">run ' + e.run + ' — ' +
         (e.run === 1 ? 'a caller who has never heard this menu (' + e.explorer + ')'
-                     : 'a fresh session, holding only the recorded skill (' + e.operator + ')') + '</p>'));
+                     : 'a fresh session, holding only the recorded skill (' + e.operator + '). ' +
+                       'The balance has CHANGED since run 1 — the lesson holds the route, never ' +
+                       'the number, so only a real call can answer correctly') + '</p>'));
       break;
     }
 
@@ -489,6 +491,15 @@
       log.appendChild(el('<div class="banner"><div class="big">$' + e.balance + '</div>' +
         '<div class="sub">credit card balance · heard after ' + fmtMs(e.elapsedMs) +
         ' · ' + fmtS(e.airtime) + ' of airtime · available credit $' + e.available + '</div></div>'));
+      if (e.run === 1) {
+        log.appendChild(el('<p class="note">the balance is only half of run 1&rsquo;s job — ' +
+          'it keeps going until the fastest route is worked out and recorded as a skill</p>'));
+      } else {
+        log.appendChild(el('<p class="note">a different figure than run 1 heard — the balance ' +
+          'moved during the reset, on purpose. A lesson that had memorized the number would ' +
+          'have read out a stale one; this figure did not exist when the lesson was written, ' +
+          'so it can only have come off the line</p>'));
+      }
       scrollLog();
       break;
     }
