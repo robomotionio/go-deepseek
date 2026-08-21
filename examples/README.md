@@ -1,6 +1,6 @@
 # examples — a tour of the DeepSeek Harness, hosted in Go
 
-Twelve runnable programs, simple to complex. Each one proves a single idea
+Thirteen runnable programs, simple to complex. Each one proves a single idea
 about the harness, is self-contained, and can be copied out of here whole.
 
 ```
@@ -74,6 +74,7 @@ the assertions do not.
 | 10 | [`10-shell`](10-shell) | Go fills a seam the JavaScript runtime cannot. The agent gains `bash`. | `ctx.shell` |
 | 11 | [`11-learning`](11-learning) | The agent gains a capability it did not have, and keeps it. | `ctx.skills.register()` |
 | 12 | [`12-advanced-learning`](12-advanced-learning) | An RPA job learned once and replayed cheaply, checked against the site's own state. | `ctx.skills.register()`, Go tools |
+| 13 | [`13-phone-banking`](13-phone-banking) | A telephone menu explored once; the second caller keys straight through it. | `ctx.skills.register()`, Go tools |
 
 ---
 
@@ -699,6 +700,99 @@ fence that keeps the browser on one origin.
 > credentials, and buys two things a live site cannot: the same six requests
 > every run, and verification that reads the portal's own state instead of
 > believing the agent.
+
+## 13 · phone-banking — a telephone menu, learned once
+
+Example 12's idea, on the oldest self-describing interface in production
+anywhere: an IVR — the bank line that reads its options aloud. *"For account
+services, press 1. For card services, press 2."* Everything the agent needs to
+know is spoken to it, and every word costs airtime, which is exactly the trade
+this example measures.
+
+This program is a **Meridian Trust Bank** phone line: a menu tree three deep,
+four departments of which three are decoys, an access code demanded at the
+door of anything private, and a credit card balance read out at the bottom of
+one path. The agent gets three Go functions — `dial`, `press`, `hangup` — and
+a question: what is the balance? Nothing about the tree is in the prompt
+beyond the number and the code. The model decides every key.
+
+```
+run 1   explore   dial, listen to each menu, choose a key, find the balance
+                  behind the access code — then record the route with `learn`
+RESET             the call log is wiped and THE BALANCE CHANGES, the way a
+                  balance does; the menus hold still
+run 2   replay    a new process, a new session, the same question, and the
+                  lesson replayed into ctx.skills before the first token
+```
+
+**The line supports keying ahead**, as real IVRs do: keys sent in one `press`
+are taken in order, and the menus keyed past are never played — not heard, not
+charged, not in the log. That is the mechanical reason a learned route is
+cheap. The first caller listens to every menu on the way down; a caller who
+knows the tree interrupts all of them.
+
+**What is measured.** The line logs every prompt it plays and every key it
+takes, and prices each prompt at spoken pace (150 words a minute) — so the two
+runs are compared on what a phone call actually costs: menus sat through, keys
+pressed, wrong turns, airtime.
+
+**How it is verified.** The balance is different on each run, so run 2 can
+only be right by dialing and hearing it fresh — a lesson that recorded the
+figure instead of the route would read out a stale number and fail. And the
+trail is the IVR's own log, never the agent's summary: "run 2 heard it fresh"
+is the credit-balance leaf sitting in the list of prompts the line actually
+played.
+
+From a captured run — the same question, twice:
+
+```
+                                run 1      run 2
+  prompts listened to               7          2
+  keys pressed                     20         10
+  airtime (simulated)           2m15s        45s
+  wall clock                    1m13s        21s
+  the balance on the line   $2,847.19  $1,983.47
+  reported correctly              yes        yes
+
+--- run 2: the call, leg by leg ---
+  dial 1-800-634-7100      → main-menu (21s)
+  press 23731942#2         → credit-balance (24s)
+  hangup                   ☎
+
+--- run 2: tools called ---
+  skill dial press hangup
+  · skill {"name": "meridian-trust-credit-card-balance"}
+```
+
+Run 1 listened its way down — main menu, card services, the access-code
+prompt, the card-balances menu, the balance — then hung up, redialed, and
+proved to itself that the whole route works as one keyed-ahead press before
+recording it. Run 2's first tool call loads that lesson by name, and its
+entire call is two prompts: the greeting it cannot skip, and the balance —
+with the new figure, $1,983.47, which did not exist when the lesson was
+written. The route survived the reset; a memorized figure would not have.
+
+The lesson run 1 recorded is worth reading in the program's output: the tree
+depth by depth, which key matters at each menu, how the code is entered, the
+one-press sequence `2 3 731942# 2` — and, because the prompt insisted, no
+balance anywhere in it. The host's `admissible` check polices only the shape;
+the model chose the content, and the assertion `the route, not the figure`
+checks it kept that promise.
+
+Set `DSH_EXPLORER_MODEL` and `DSH_OPERATOR_MODEL` to two different ids to have
+one model do the listening and another do the calling, as in example 12.
+
+**It has a test**, for the same reason 10 and 12 do: `go test
+./examples/13-phone-banking` walks the whole call with no model — the decoy
+department and its redirect, the access-code gate, the wrong-code refusal,
+star and 0, the keyed-ahead fast route, and the fence that keeps the handset
+on one number. The test proves the tree is walkable; the example is the model
+walking it.
+
+> The captured run above also shows the known flake from the top of this file
+> landing mid-example and being survived: run 2's first turn died in the
+> runtime, the program resumed the session once, and the call state, the
+> trail and the replayed skill were all still there.
 
 
 ---

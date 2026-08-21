@@ -97,7 +97,7 @@ conformance suite was saturating the same laptop.)
 ## Examples
 
 What follows this section is a reference, written as fragments with two whole
-programs at the end of it. [`examples/`](examples) is the other way in: twelve whole
+programs at the end of it. [`examples/`](examples) is the other way in: thirteen whole
 programs, simple to complex, each proving one idea about the harness and each
 runnable without editing anything.
 
@@ -120,6 +120,7 @@ go run ./examples/01-hello
 | [`10-shell`](examples/10-shell) | Go fills a seam the JavaScript runtime cannot, and the agent gains `bash`. (Its allowlist names POSIX coreutils, so this one wants them on `PATH`.) |
 | [`11-learning`](examples/11-learning) | The agent gains a capability it did not have, and the next process starts with it. |
 | [`12-advanced-learning`](examples/12-advanced-learning) | An RPA job worked out once, then replayed from what was learned — and checked. |
+| [`13-phone-banking`](examples/13-phone-banking) | A telephone menu explored once; the second caller keys straight through it. |
 
 [`examples/README.md`](examples/README.md) is the tour: what each one proves,
 which seam or event it sits on, the upstream document for it, and the output
