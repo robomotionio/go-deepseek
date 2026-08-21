@@ -15,14 +15,16 @@ package main
 // example. The first caller pays to listen; a caller who knows the tree keys
 // ahead and hears almost nothing.
 //
-// It is deliberately shaped the way real bank lines are shaped: a greeting
-// that plays before you can do anything, four top-level departments of which
-// three are decoys, an access code demanded at the door of anything private,
-// balances split between "account services" (checking and savings — with a
-// polite redirect) and "card services" (where the credit card actually is),
-// and a leaf that reads the figure out only when you have keyed the exact
-// path. None of it is hard. It is just unknowable without sitting through it,
-// which is the cost this example is about paying once.
+// It is deliberately shaped the way real bank lines are shaped, which is to
+// say against the caller: a greeting that plays before you can do anything;
+// department names that all sound equally likely to hold a balance — account
+// services, card services, member services; an access code at the door of
+// anything private; and leaves that only say what they are once you have
+// paid your way down to them. One branch even bottoms out in a balance that
+// is not the balance — rewards points. The credit card figure sits behind
+// the label a caller tries last. None of it is hard. It is just unknowable
+// without riding each branch to the bottom, which is the cost this example
+// is about paying once.
 //
 // And the balance CHANGES between the two runs, the way a balance does. That
 // is what keeps the lesson honest: a route written down is good tomorrow, a
@@ -69,111 +71,153 @@ type node struct {
 }
 
 // tree is the menu, three deep on the path that matters:
-// main-menu → card-services → card-balances → credit-balance.
-// Everything else is the realistic rest of a bank: decoys with their own
-// depth, one of which (deposit-balances) is where a caller asking about
-// balances goes first, hears checking and savings, and is redirected.
+// main-menu → member-services → self-service → credit-balance.
+// Every department name is plausible — a balance could live under account
+// services, card services or member services — and only the leaves say what
+// they are, so a cold caller has to ride branches to the bottom and back up.
+// The decoys are shaped to be tried FIRST: card services bottoms out in a
+// rewards POINTS balance, account services in a see-online-banking shrug,
+// and the credit card figure waits behind the label a caller tries last.
 func tree() map[string]*node {
 	return map[string]*node{
 		"main-menu": {
 			say: "Main menu. For account services, press 1. For card services, press 2. " +
-				"For loans and mortgages, press 3. For branch locations and hours, press 4. " +
+				"For member services, press 3. For rates and information, press 4. " +
 				"To hear these options again, press 0.",
 			keys: map[byte]string{'1': "account-services", '2': "card-services",
-				'3': "loans", '4': "branch-hours"},
+				'3': "member-services", '4': "rates-info"},
 		},
 
+		// Branch 1, the second-best guess: "the balance lives on the account."
+		// Three menus deep it turns out this department does not read numbers.
 		"account-services": {
-			say: "Account services. For checking and savings balances, press 1. " +
-				"For recent transactions, press 2. For routing and direct deposit information, " +
-				"press 3. For statements and tax documents, press 4. " +
-				"To return to the main menu, press star. To hear these options again, press 0.",
-			keys: map[byte]string{'1': "deposit-balances", '2': "recent-transactions",
-				'3': "routing-info", '4': "statements"},
+			say: "Account services. For account information, press 1. For account maintenance, " +
+				"press 2. For payment services, press 3. To return to the main menu, press " +
+				"star. To hear these options again, press 0.",
+			keys: map[byte]string{'1': "account-information", '2': "account-maintenance",
+				'3': "payment-services"},
 		},
-		"deposit-balances": {
-			auth: true,
-			say: "Your checking account balance is $1,240.06. Your savings account balance is " +
-				"$8,910.44. For credit card balances, return to the main menu and choose card " +
-				"services. To return to the previous menu, press star.",
+		"account-information": {
+			say: "Account information. For deposit accounts, press 1. For statements, press 2. " +
+				"For tax documents, press 3. To return to the previous menu, press star. " +
+				"To hear these options again, press 0.",
+			keys: map[byte]string{'1': "deposit-accounts", '2': "statements",
+				'3': "tax-documents"},
 		},
-		"recent-transactions": {
-			auth: true,
-			say: "Your last three transactions: card purchase, Fresh Fields Market, $31.80. " +
-				"Card purchase, Northside Fuel, $52.10. Direct deposit, Globex Logistics " +
-				"payroll, $2,120.00. To return to the previous menu, press star.",
-		},
-		"routing-info": {
-			say: "The bank routing number is 084921736. Your account numbers are available in " +
-				"online banking and on your statements. To return to the previous menu, press star.",
+		"deposit-accounts": {
+			say: "Balance and activity information for checking and savings accounts is " +
+				"available in online banking and at any Meridian ATM. To return to the " +
+				"previous menu, press star.",
 		},
 		"statements": {
-			say: "Statements and tax documents are available in online banking, under Documents. " +
+			say: "Statements are available in online banking, under Documents. To return to " +
+				"the previous menu, press star.",
+		},
+		"tax-documents": {
+			say: "Tax documents for the previous year are mailed in January and available in " +
+				"online banking. To return to the previous menu, press star.",
+		},
+		"account-maintenance": {
+			say: "To update your address or contact details, please call during business hours. " +
 				"To return to the previous menu, press star.",
+		},
+		"payment-services": {
+			say: "Payments made by phone post the next business day. To set up transfers, use " +
+				"online banking or the Meridian mobile app. To return to the previous menu, " +
+				"press star.",
 		},
 
+		// Branch 2, the best guess by vocabulary: it says card. Its deepest
+		// leaf even reads out a balance — of rewards points.
 		"card-services": {
-			say: "Card services. To activate a card, press 1. To report a card lost or stolen, " +
-				"press 2. For card balances and payments, press 3. For PIN services, press 4. " +
-				"To return to the main menu, press star. To hear these options again, press 0.",
-			keys: map[byte]string{'1': "activate-card", '2': "lost-stolen",
-				'3': "card-balances", '4': "pin-services"},
-		},
-		"activate-card": {
-			say: "Card activation is available in the Meridian mobile app, or by calling from " +
-				"the phone number we have on file. To return to the previous menu, press star.",
-		},
-		"lost-stolen": {
-			say: "To report a card lost or stolen, please stay on the line for the card security " +
-				"team. All of our agents are busy. Your expected wait time is over one hour. " +
-				"To return to the previous menu, press star.",
-		},
-		"card-balances": {
-			auth: true,
-			say: "Card balances and payments. For your debit card balance, press 1. For your " +
-				"credit card balance and available credit, press 2. To make a payment on your " +
-				"credit card, press 3. To return to the previous menu, press star. " +
+			say: "Card services. For card programs, press 1. For card assistance, press 2. " +
+				"For card activation, press 3. To return to the main menu, press star. " +
 				"To hear these options again, press 0.",
-			keys: map[byte]string{'1': "debit-balance", '2': "credit-balance", '3': "make-payment"},
+			keys: map[byte]string{'1': "card-programs", '2': "card-assistance",
+				'3': "card-activation"},
 		},
-		"debit-balance": {
-			say: "Your debit card draws on your checking account. The checking account balance " +
-				"is $1,240.06. To return to the previous menu, press star.",
+		"card-programs": {
+			say: "Card programs. For rewards, press 1. For travel benefits, press 2. " +
+				"To return to the previous menu, press star. To hear these options again, " +
+				"press 0.",
+			keys: map[byte]string{'1': "rewards", '2': "travel-benefits"},
+		},
+		"rewards": {
+			say: "Your rewards balance is 12,410 points. Points do not expire while the " +
+				"account is open. To return to the previous menu, press star.",
+		},
+		"travel-benefits": {
+			say: "Travel benefits are described in your cardholder agreement. To return to " +
+				"the previous menu, press star.",
+		},
+		"card-assistance": {
+			say: "To report a card lost or stolen, please stay on the line for the card " +
+				"security team. All of our agents are busy. Your expected wait time is over " +
+				"one hour. To return to the previous menu, press star.",
+		},
+		"card-activation": {
+			say: "Card activation is available in the Meridian mobile app. To return to the " +
+				"previous menu, press star.",
+		},
+
+		// Branch 3, the label nobody tries first — and the one that holds
+		// the money, behind the access code.
+		"member-services": {
+			say: "Member services. For self-service banking, press 1. For branch appointments, " +
+				"press 2. For lost and found, press 3. To return to the main menu, press " +
+				"star. To hear these options again, press 0.",
+			keys: map[byte]string{'1': "self-service", '2': "branch-appointments",
+				'3': "lost-found"},
+		},
+		"self-service": {
+			auth: true,
+			say: "Self-service banking. For deposit balances, press 1. For your credit card " +
+				"balance and available credit, press 2. For recent activity, press 3. " +
+				"To return to the previous menu, press star. To hear these options again, " +
+				"press 0.",
+			keys: map[byte]string{'1': "deposit-balances", '2': "credit-balance",
+				'3': "recent-activity"},
+		},
+		"deposit-balances": {
+			say: "Your checking account balance is $1,240.06. Your savings account balance is " +
+				"$8,910.44. To return to the previous menu, press star.",
 		},
 		"credit-balance": {
 			say: "Your credit card, ending 4417, has a current balance of ${CREDIT_BALANCE}. " +
 				"Your available credit is ${AVAILABLE_CREDIT}. Your next minimum payment of " +
 				"$85.00 is due September the 12th. To return to the previous menu, press star.",
 		},
-		"make-payment": {
-			say: "Payments made by phone post the next business day. To pay from your Meridian " +
-				"checking account, use online banking or the mobile app. To return to the " +
-				"previous menu, press star.",
+		"recent-activity": {
+			say: "Your last three transactions: card purchase, Fresh Fields Market, $31.80. " +
+				"Card purchase, Northside Fuel, $52.10. Direct deposit, Globex Logistics " +
+				"payroll, $2,120.00. To return to the previous menu, press star.",
 		},
-		"pin-services": {
-			say: "To choose or change a card PIN, visit any Meridian ATM with your card. " +
+		"branch-appointments": {
+			say: "To book a branch appointment, use the Meridian mobile app or online banking. " +
+				"To return to the previous menu, press star.",
+		},
+		"lost-found": {
+			say: "For lost and found, please contact your branch during business hours. " +
 				"To return to the previous menu, press star.",
 		},
 
-		"loans": {
-			say: "Loans and mortgages. For today's rates, press 1. For a payoff quote, press 2. " +
-				"To return to the main menu, press star. To hear these options again, press 0.",
-			keys: map[byte]string{'1': "loan-rates", '2': "payoff-quote"},
+		// Branch 4, honest filler: the one department that could not
+		// plausibly hold a balance, so nobody has to try it.
+		"rates-info": {
+			say: "Rates and information. For today's rates, press 1. For branch locations and " +
+				"hours, press 2. To return to the main menu, press star. To hear these " +
+				"options again, press 0.",
+			keys: map[byte]string{'1': "loan-rates", '2': "branch-hours"},
 		},
 		"loan-rates": {
 			say: "Today's rates: thirty-year fixed mortgage, 6.1 percent. Five-year auto, 7.4 " +
 				"percent. Rates change daily and your rate may differ. To return to the " +
 				"previous menu, press star.",
 		},
-		"payoff-quote": {
-			say: "For a payoff quote, please call during business hours and ask for the lending " +
-				"desk. To return to the previous menu, press star.",
-		},
-
 		"branch-hours": {
 			say: "Our branches are open Monday through Friday, nine to five, and Saturday, nine " +
 				"to noon. To find a branch or ATM, use the locator in the Meridian mobile app. " +
-				"To return to the main menu, press star.",
+				"To return to the previous menu, press star.",
 		},
 	}
 }

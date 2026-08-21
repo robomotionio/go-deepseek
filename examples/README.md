@@ -710,20 +710,36 @@ know is spoken to it, and every word costs airtime, which is exactly the trade
 this example measures.
 
 This program is a **Meridian Trust Bank** phone line: a menu tree three deep,
-four departments of which three are decoys, an access code demanded at the
-door of anything private, and a credit card balance read out at the bottom of
-one path. The agent gets three Go functions — `dial`, `press`, `hangup` — and
-a question: what is the balance? Nothing about the tree is in the prompt
-beyond the number and the code. The model decides every key.
+an access code demanded at the door of anything private, and a credit card
+balance read out at the bottom of one path. The agent gets three Go
+functions — `dial`, `press`, `hangup` — and a question: what is the balance?
+Nothing about the tree is in the prompt beyond the number and the code. The
+model decides every key.
 
 ```
-run 1   explore   dial, listen to each menu, choose a key, find the balance
-                  behind the access code — then record the route with `learn`
+run 1   explore   dial, listen, ride branch after branch to the bottom,
+                  find the balance behind the access code — then record
+                  the route with `learn`
 RESET             the call log is wiped and THE BALANCE CHANGES, the way a
                   balance does; the menus hold still
 run 2   replay    a new process, a new session, the same question, and the
                   lesson replayed into ctx.skills before the first token
 ```
+
+**The menu is deliberately unhelpful, and that is the design.** An earlier
+draft of this tree labelled its departments honestly — "card services", "card
+balances and payments" — and the exploring run walked straight down without a
+single wrong turn, because an IVR is self-describing and a model that READS
+never has to GUESS. The comparison still held (exploring costs listening even
+when every guess is right), but the exploration never showed. So the tree is
+now shaped the way real bank lines actually fail their callers: every
+department name is equally plausible — a balance could live under *account
+services*, *card services* or *member services* — only the **leaves** say
+what they are, one branch bottoms out in a balance that is not the balance
+(rewards points), and the credit card figure waits behind the label a caller
+tries last, carded. Now the first caller has to do what first callers do:
+ride a branch to the bottom, hear what is actually there, back out with star,
+and try the next.
 
 **The line supports keying ahead**, as real IVRs do: keys sent in one `press`
 are taken in order, and the menus keyed past are never played — not heard, not
@@ -743,56 +759,77 @@ trail is the IVR's own log, never the agent's summary: "run 2 heard it fresh"
 is the credit-balance leaf sitting in the list of prompts the line actually
 played.
 
-From a captured run — the same question, twice:
+From a captured run. Run 1's trail is the search, written in keys:
 
 ```
-                                run 1      run 2
-  prompts listened to               7          2
-  keys pressed                     20         10
-  airtime (simulated)           2m15s        45s
-  wall clock                    1m13s        21s
-  the balance on the line   $2,847.19  $1,983.47
-  reported correctly              yes        yes
+--- run 1: the call, leg by leg ---
+  dial 1-800-634-7100      → main-menu (20s)
+  press 2                  → card-services (14s)
+  press 1                  → card-programs (12s)
+  press *2                 → card-assistance (18s)
+  hangup                   ☎
+  dial 1-800-634-7100      → main-menu (20s)
+  press 1                  → account-services (14s)
+  press 1                  → account-information (14s)
+  …
+  press 1                  → rewards (11s)          ← a balance! …of points
+  press *2                 → travel-benefits (9s)
+  …
+  press *3                 → member-services (16s)
+  press 1                  → access-code (8s)
+  press 731942#            → self-service (23s)
+  press 2                  → credit-balance (15s)   ← BINGO
+  hangup                   ☎
+  dial 1-800-634-7100      → main-menu (20s)
+  press 31731942#2         → credit-balance (24s)   ← proving the fast route
+```
 
+And run 2's trail is the learned answer:
+
+```
 --- run 2: the call, leg by leg ---
-  dial 1-800-634-7100      → main-menu (21s)
-  press 23731942#2         → credit-balance (24s)
+  dial 1-800-634-7100      → main-menu (20s)
+  press 31731942#2         → credit-balance (24s)
   hangup                   ☎
 
 --- run 2: tools called ---
   skill dial press hangup
-  · skill {"name": "meridian-trust-credit-card-balance"}
+  · skill {"name": "meridian-trust-credit-balance"}
+
+                                run 1      run 2
+  prompts listened to              26          2
+  keys pressed                     43         10
+  wrong turns                      17          0
+  airtime (simulated)           6m34s        44s
+  wall clock                    2m58s        14s
+  the balance on the line   $2,847.19  $1,983.47
+  reported correctly              yes        yes
 ```
 
-Run 1 listened its way down — main menu, card services, the access-code
-prompt, the card-balances menu, the balance — then hung up, redialed, and
-proved to itself that the whole route works as one keyed-ahead press before
-recording it. Run 2's first tool call loads that lesson by name, and its
-entire call is two prompts: the greeting it cannot skip, and the balance —
-with the new figure, $1,983.47, which did not exist when the lesson was
-written. The route survived the reset; a memorized figure would not have.
+Run 2's entire call is two prompts: the greeting it cannot skip, and the
+balance — with the new figure, $1,983.47, which did not exist when the lesson
+was written. The route survived the reset; a memorized figure would not have.
 
-The lesson run 1 recorded is worth reading in the program's output: the tree
-depth by depth, which key matters at each menu, how the code is entered, the
-one-press sequence `2 3 731942# 2` — and, because the prompt insisted, no
-balance anywhere in it. The host's `admissible` check polices only the shape;
-the model chose the content, and the assertion `the route, not the figure`
-checks it kept that promise.
+The lesson run 1 recorded is worth reading in the program's output. It holds
+the tree depth by depth, the one-press sequence `31731942#2` — and the
+negative knowledge only exploration can buy: *"do NOT press 2 (card
+services) — the credit card balance is NOT under card services."* Seventeen
+wrong turns, distilled into one sentence no later session will ever pay for
+again. The host's `admissible` check polices only the shape; the model chose
+the content, and the assertion `the route, not the figure` checks the balance
+itself appears nowhere in it. (Reading its own lesson back *after* recording
+it is allowed — the captured run did exactly that, like example 11's — the
+assertion only insists nothing was loaded before `learn`.)
 
 Set `DSH_EXPLORER_MODEL` and `DSH_OPERATOR_MODEL` to two different ids to have
 one model do the listening and another do the calling, as in example 12.
 
 **It has a test**, for the same reason 10 and 12 do: `go test
-./examples/13-phone-banking` walks the whole call with no model — the decoy
-department and its redirect, the access-code gate, the wrong-code refusal,
-star and 0, the keyed-ahead fast route, and the fence that keeps the handset
-on one number. The test proves the tree is walkable; the example is the model
-walking it.
-
-> The captured run above also shows the known flake from the top of this file
-> landing mid-example and being survived: run 2's first turn died in the
-> runtime, the program resumed the session once, and the call state, the
-> trail and the replayed skill were all still there.
+./examples/13-phone-banking` walks the whole call with no model — the
+plausible-but-wrong branches down to their leaves, the rewards decoy, the
+access-code gate, the wrong-code refusal, star and 0, the keyed-ahead fast
+route, and the fence that keeps the handset on one number. The test proves
+the tree is walkable; the example is the model walking it.
 
 
 ---

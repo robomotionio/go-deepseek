@@ -43,34 +43,54 @@ func TestTheBalanceCanBeHeardWithTheseKeys(t *testing.T) {
 		}
 	}
 
-	// The natural wrong turn: balances live under account services, surely.
+	// The best guess by vocabulary: card services. Its deepest leaf reads a
+	// balance — of rewards points, which is not the balance, and no code was
+	// asked for on the way, which is a hint this branch holds nothing private.
+	if heard := press("2"); !strings.Contains(heard, "Card services") {
+		t.Fatalf("key 2 did not reach card services:\n%s", heard)
+	}
+	if heard := press("1"); !strings.Contains(heard, "Card programs") {
+		t.Fatalf("key 1 did not reach card programs:\n%s", heard)
+	}
+	heard = press("1")
+	if !strings.Contains(heard, "rewards balance") || !strings.Contains(heard, "points") {
+		t.Fatalf("the rewards leaf did not read a points balance:\n%s", heard)
+	}
+	if strings.Contains(heard, books[0].balance) {
+		t.Fatalf("the rewards leaf leaked the credit balance:\n%s", heard)
+	}
+
+	// The second guess: account services, three menus down to a shrug.
+	press("*") // card programs
+	press("*") // card services
+	press("*") // main menu
 	if heard := press("1"); !strings.Contains(heard, "Account services") {
 		t.Fatalf("key 1 did not reach account services:\n%s", heard)
 	}
-	// The code is demanded at the door of anything private.
+	press("1") // account information
+	if heard := press("1"); !strings.Contains(heard, "online banking") {
+		t.Fatalf("the deposit accounts leaf did not shrug:\n%s", heard)
+	}
+
+	// The label nobody tries first is where the money is — behind the code.
+	press("*") // account information
+	press("*") // account services
+	press("*") // main menu
+	if heard := press("3"); !strings.Contains(heard, "Member services") {
+		t.Fatalf("key 3 did not reach member services:\n%s", heard)
+	}
 	if heard := press("1"); !strings.Contains(heard, "access code") {
-		t.Fatalf("the balances leaf did not demand the code:\n%s", heard)
+		t.Fatalf("self-service did not demand the code:\n%s", heard)
 	}
 	// A wrong code is refused and asked for again.
 	if heard := press("000000#"); !strings.Contains(heard, "does not match") {
 		t.Fatalf("a wrong code was accepted:\n%s", heard)
 	}
-	// The right one lands on checking and savings — and the polite redirect.
 	heard = press(accessCode + "#")
-	for _, want := range []string{"Thank you", "checking account balance", "card services"} {
+	for _, want := range []string{"Thank you", "Self-service banking"} {
 		if !strings.Contains(heard, want) {
-			t.Fatalf("the deposit balances leaf is missing %q:\n%s", want, heard)
+			t.Fatalf("the right code did not open self-service banking:\n%s", heard)
 		}
-	}
-
-	// Star walks back up; the code is not demanded twice on one call.
-	press("*") // account services
-	press("*") // main menu
-	if heard := press("2"); !strings.Contains(heard, "Card services") {
-		t.Fatalf("key 2 did not reach card services:\n%s", heard)
-	}
-	if heard := press("3"); !strings.Contains(heard, "Card balances") {
-		t.Fatalf("an authenticated call was carded again:\n%s", heard)
 	}
 
 	// The leaf this example exists for.
@@ -95,6 +115,13 @@ func TestTheBalanceCanBeHeardWithTheseKeys(t *testing.T) {
 		t.Fatalf("an unoffered key was accepted:\n%s", heard)
 	}
 
+	// The code is not demanded twice on one call.
+	press("*") // member services
+	if heard := press("1"); !strings.Contains(heard, "Self-service banking") ||
+		strings.Contains(heard, "access code") {
+		t.Fatalf("an authenticated call was carded again:\n%s", heard)
+	}
+
 	// The trail is the line's own account: the leaf is in it, and hanging up
 	// is on the record too.
 	if !heardIn(line.legs(), "credit-balance") {
@@ -106,7 +133,7 @@ func TestTheBalanceCanBeHeardWithTheseKeys(t *testing.T) {
 
 	// The fast route, after the reset the real runs get: the balance has
 	// moved, the menus have not, and a caller who knows the tree keys ahead —
-	// dial, 23, code-pound-2 — hearing three prompts and taking no wrong turn.
+	// dial, 31, code-pound-2 — hearing three prompts and taking no wrong turn.
 	line.reset()
 	if line.figures().balance == books[0].balance {
 		t.Fatal("the reset did not move the balance")
@@ -114,7 +141,7 @@ func TestTheBalanceCanBeHeardWithTheseKeys(t *testing.T) {
 	if _, err := hs.dial(context.Background(), args(map[string]string{"number": bankNumber})); err != nil {
 		t.Fatal(err)
 	}
-	if heard := press("23"); !strings.Contains(heard, "access code") {
+	if heard := press("31"); !strings.Contains(heard, "access code") {
 		t.Fatalf("keying ahead to the carded door did not demand the code:\n%s", heard)
 	}
 	heard = press(accessCode + "#2")
@@ -144,7 +171,7 @@ func TestWhatTheCallerHears(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("\n%s", heard)
-	for _, keys := range []string{"2", "3", accessCode + "#", "2"} {
+	for _, keys := range []string{"3", "1", accessCode + "#", "2"} {
 		heard, err := hs.press(context.Background(), args(map[string]string{"keys": keys}))
 		if err != nil {
 			t.Fatal(err)

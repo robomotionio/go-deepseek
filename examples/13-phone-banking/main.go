@@ -105,7 +105,7 @@ const alsoRecord = "\n\nHearing the balance is only half of this job. You are NO
 // wrong-turn count: any prompt played from outside this set was a detour the
 // caller paid airtime for.
 var direct = map[string]bool{
-	"main-menu": true, "card-services": true, "card-balances": true,
+	"main-menu": true, "member-services": true, "self-service": true,
 	"access-code": true, "credit-balance": true,
 }
 
@@ -241,8 +241,8 @@ func main() {
 			"the exploring run wrote down the route it had just paid to hear"},
 		{"the route, not the figure", routeNotFigure,
 			"the lesson holds keys and menus, not a balance that is stale by the next call"},
-		{"run 1 had nothing", !cold.loaded(lessonName),
-			"the first pass could not have loaded what it had not written yet"},
+		{"run 1 had nothing", !cold.loadedBefore(lessonName),
+			"no load of the lesson before `learn` — reading it back afterwards is allowed"},
 		{"replayed at mount", student.replayed() > 0,
 			"Apply handed the lesson to ctx.skills before run 2's first token"},
 		{"the skill was loaded", warm.loaded(lessonName),
@@ -362,6 +362,22 @@ func (a answer) names() []string {
 // `skill` tool — the observation the whole example turns on.
 func (a answer) loaded(skill string) bool {
 	for _, c := range a.calls {
+		if c.name == "skill" && strings.Contains(c.args, skill) {
+			return true
+		}
+	}
+	return false
+}
+
+// loadedBefore says whether the run loaded the named skill before its first
+// `learn` call. Loading it AFTERWARDS is legitimate — example 11's captured
+// run did exactly that, reading back its own minutes-old lesson — but a load
+// before the lesson existed would mean the run began already knowing.
+func (a answer) loadedBefore(skill string) bool {
+	for _, c := range a.calls {
+		if c.name == "learn" {
+			return false
+		}
 		if c.name == "skill" && strings.Contains(c.args, skill) {
 			return true
 		}
