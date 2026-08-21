@@ -831,6 +831,14 @@ access-code gate, the wrong-code refusal, star and 0, the keyed-ahead fast
 route, and the fence that keeps the handset on one number. The test proves
 the tree is walkable; the example is the model walking it.
 
+**And it has a face.** `go run ./examples/13-phone-banking/web` serves the
+same demo as a page to watch: a touch-tone phone whose keys light and click
+(real DTMF, synthesized in the browser) as the agent presses them, an LCD
+showing every digit, the prompts typing out beside it, and the two runs'
+found-it stamps and comparison table. Everything on the page is the agent's
+own tool-call stream over Server-Sent Events — one stdlib binary, page
+embedded, nothing scripted.
+
 
 ---
 

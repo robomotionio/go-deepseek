@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian Trust Bank — phone banking, learned once</title>
+<style>
+  :root{
+    --bg0:#0b0c10; --bg1:#14161c;
+    --panel:#101218; --panel-edge:#232733;
+    --ink:#e8eaf0; --ink-dim:#8b91a0; --ink-faint:#565c6b;
+    --lcd-bg:#0c1710; --lcd-ink:#79f2a0; --lcd-dim:#2c4a37;
+    --amber:#f5b342; --green:#4ade80; --red:#f87171; --blue:#60a5fa;
+    --gold:#e7c26a;
+    --mono:ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink);
+    background:
+      radial-gradient(1100px 600px at 22% -10%, #1b2030 0%, transparent 60%),
+      radial-gradient(900px 500px at 95% 110%, #171d18 0%, transparent 55%),
+      linear-gradient(var(--bg1), var(--bg0));
+    min-height:100vh;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    padding:20px 28px 14px; border-bottom:1px solid var(--panel-edge);
+  }
+  .brand h1{font-size:19px; font-weight:650; letter-spacing:.4px}
+  .brand small{display:block; color:var(--ink-dim); font-size:12px; margin-top:2px}
+  .brand .num{font-family:var(--mono); color:var(--amber)}
+  .spacer{flex:1}
+  .badge{
+    font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+    padding:7px 12px; border-radius:999px; border:1px solid var(--panel-edge);
+    color:var(--ink-dim); background:#0d0f14; white-space:nowrap;
+  }
+  .badge.run1{color:#111; background:var(--amber); border-color:var(--amber); animation:pulse 1.6s infinite}
+  .badge.run2{color:#08130c; background:var(--green); border-color:var(--green); animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+  button#start{
+    font:600 14px var(--sans); letter-spacing:.06em;
+    color:#0d1117; background:linear-gradient(#8de6ac,#3fca6f);
+    border:none; border-radius:12px; padding:12px 26px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(64,200,110,.28), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .08s, box-shadow .2s, filter .2s;
+  }
+  button#start:hover{filter:brightness(1.06)}
+  button#start:active{transform:translateY(1px)}
+  button#start:disabled{
+    filter:grayscale(.7) brightness(.7); cursor:default; box-shadow:none;
+  }
+  #sound{
+    font-size:16px; background:#0d0f14; color:var(--ink-dim);
+    border:1px solid var(--panel-edge); border-radius:10px; padding:9px 12px; cursor:pointer;
+  }
+
+  /* ---------- layout ---------- */
+  main{display:flex; gap:26px; padding:24px 28px 40px; align-items:flex-start}
+  @media (max-width:900px){ main{flex-direction:column} }
+
+  /* ---------- the telephone ---------- */
+  .phone{
+    flex:0 0 350px; border-radius:26px; padding:22px 22px 26px;
+    background:linear-gradient(165deg,#2a2d36 0%, #191b21 40%, #101218 100%);
+    border:1px solid #333845;
+    box-shadow:0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    position:sticky; top:20px;
+  }
+  .phone .make{
+    text-align:center; font:600 11px var(--sans); letter-spacing:.42em;
+    color:#6b7180; margin-bottom:14px;
+  }
+  .grille{display:flex; justify-content:center; gap:5px; margin-bottom:14px}
+  .grille i{width:4px;height:4px;border-radius:50%;background:#3a3f4c;display:block}
+
+  .lcd{
+    background:var(--lcd-bg); border-radius:10px; padding:12px 14px;
+    border:1px solid #1d3427;
+    box-shadow:inset 0 3px 14px rgba(0,0,0,.75), 0 1px 0 rgba(255,255,255,.05);
+    font-family:var(--mono); margin-bottom:18px; min-height:64px;
+  }
+  .lcd .status{
+    font-size:11px; letter-spacing:.22em; color:var(--lcd-dim);
+    display:flex; justify-content:space-between;
+  }
+  .lcd .status .on{color:var(--lcd-ink); text-shadow:0 0 8px rgba(121,242,160,.55)}
+  .lcd .keysline{
+    margin-top:8px; font-size:22px; letter-spacing:.24em; min-height:26px;
+    color:var(--lcd-ink); text-shadow:0 0 10px rgba(121,242,160,.5);
+    overflow:hidden; white-space:nowrap; direction:rtl; text-align:left;
+  }
+  .lcd .keysline span{direction:ltr; unicode-bidi:bidi-override}
+
+  .keypad{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .key{
+    position:relative; height:64px; border-radius:14px; cursor:default;
+    background:linear-gradient(#fbfbfc 0%, #e5e7ec 55%, #cfd2d9 100%);
+    border:1px solid #b9bcc4;
+    box-shadow:0 5px 0 #9CA0AA, 0 8px 14px rgba(0,0,0,.45),
+               inset 0 1px 0 rgba(255,255,255,.9);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition:transform .06s, box-shadow .06s, filter .06s;
+    user-select:none;
+  }
+  .key b{font:700 24px var(--sans); color:#2b2e35; line-height:1}
+  .key small{font:600 8.5px var(--sans); letter-spacing:.28em; color:#8a8f9a; margin-top:3px; height:9px}
+  .key.pressed{
+    transform:translateY(4px);
+    box-shadow:0 1px 0 #9CA0AA, 0 3px 8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.9);
+    filter:brightness(1.02);
+  }
+  .key.pressed::after{
+    content:''; position:absolute; inset:-3px; border-radius:16px;
+    border:2px solid rgba(96,165,250,.85); box-shadow:0 0 18px rgba(96,165,250,.55);
+    pointer-events:none;
+  }
+  .phone .foot{
+    margin-top:16px; text-align:center; font:500 10px var(--mono);
+    letter-spacing:.18em; color:#565c6b;
+  }
+
+  /* ---------- right column ---------- */
+  .right{flex:1; min-width:0; display:flex; flex-direction:column; gap:16px}
+
+  .stamps{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .stamp{
+    border:1px dashed var(--panel-edge); border-radius:16px; padding:14px 18px;
+    background:var(--panel); min-height:86px; color:var(--ink-faint);
+    display:flex; flex-direction:column; justify-content:center; gap:4px;
+  }
+  .stamp .tag{font:600 11px var(--mono); letter-spacing:.2em}
+  .stamp.filled{border-style:solid}
+  .stamp.filled.r1{border-color:rgba(245,179,66,.5)}
+  .stamp.filled.r2{border-color:rgba(74,222,128,.5)}
+  .stamp .money{font:700 26px var(--sans); color:var(--gold); letter-spacing:.5px}
+  .stamp .when{font:500 12px var(--mono); color:var(--ink-dim)}
+
+  .transcript{
+    background:var(--panel); border:1px solid var(--panel-edge); border-radius:16px;
+    padding:18px 20px; min-height:340px; max-height:62vh; overflow-y:auto;
+    scroll-behavior:smooth;
+  }
+  .transcript .hint{color:var(--ink-faint); font-size:14px; padding:30px 6px; text-align:center}
+  .entry{margin:0 0 14px}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px}
+  .chip{
+    font:600 10.5px var(--mono); letter-spacing:.12em; padding:4px 9px;
+    border-radius:999px; border:1px solid var(--panel-edge); color:var(--ink-dim);
+  }
+  .chip.agent{color:var(--blue); border-color:rgba(96,165,250,.35); background:rgba(96,165,250,.07)}
+  .chip.node{color:var(--ink-dim)}
+  .chip.node.gold{color:var(--gold); border-color:rgba(231,194,106,.45); background:rgba(231,194,106,.08)}
+  .chip.node.bad{color:var(--red); border-color:rgba(248,113,113,.4)}
+  .chip.node.auth{color:var(--blue); border-color:rgba(96,165,250,.35)}
+  .said{
+    border-left:3px solid #262b38; padding:6px 0 6px 14px;
+    color:#c9cdd8; font-size:14.5px; line-height:1.65;
+  }
+  .said.gold{border-left-color:var(--gold); color:#efe3c2}
+  .said .caret{display:inline-block; width:7px; height:15px; background:var(--ink-dim);
+    vertical-align:-2px; margin-left:2px; animation:blink .8s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  .banner{
+    border-radius:14px; padding:16px 20px; margin:6px 0 16px;
+    background:linear-gradient(120deg, rgba(231,194,106,.16), rgba(231,194,106,.05));
+    border:1px solid rgba(231,194,106,.55);
+    box-shadow:0 0 40px rgba(231,194,106,.12);
+  }
+  .banner .big{font:700 24px var(--sans); color:var(--gold)}
+  .banner .sub{font:500 12.5px var(--mono); color:var(--ink-dim); margin-top:4px}
+
+  .card{
+    border-radius:14px; border:1px solid var(--panel-edge); background:#0d0f15;
+    padding:14px 18px; margin:6px 0 16px;
+  }
+  .card h3{font:600 11px var(--mono); letter-spacing:.22em; color:var(--ink-dim); margin-bottom:8px}
+  .card.lesson{border-color:rgba(231,194,106,.35)}
+  .card.lesson pre{
+    font:12.5px/1.6 var(--mono); color:#d8cba4; white-space:pre-wrap; word-break:break-word;
+  }
+  .card.answer p{font-style:italic; color:#aeb4c2; font-size:13.5px; line-height:1.6}
+  .card.error{border-color:rgba(248,113,113,.5)}
+  .card.error p{color:var(--red); font-family:var(--mono); font-size:13px}
+  .note{font:italic 12px var(--sans); color:var(--ink-faint); margin:4px 0 12px}
+
+  table.compare{width:100%; border-collapse:collapse; font-size:13.5px}
+  table.compare th, table.compare td{padding:7px 10px; text-align:right}
+  table.compare th{color:var(--ink-dim); font:600 11px var(--mono); letter-spacing:.14em}
+  table.compare td:first-child, table.compare th:first-child{text-align:left; color:var(--ink-dim)}
+  table.compare tr+tr td{border-top:1px solid #1a1d26}
+  td.win{color:var(--green); font-weight:650}
+  .verdict{margin-top:10px; color:var(--ink-dim); font-size:13px; line-height:1.6}
+
+  /* reset overlay */
+  #wipe{
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(8,9,12,.88); backdrop-filter:blur(3px); z-index:50; text-align:center;
+  }
+  #wipe .box{max-width:520px; padding:30px}
+  #wipe h2{font:700 26px var(--sans); color:var(--ink)}
+  #wipe p{color:var(--ink-dim); margin-top:10px; font-size:14px; line-height:1.6}
+  #wipe .money{color:var(--gold); font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Meridian Trust Bank</h1>
+    <small>automated line <span class="num">{{.Bank}}</span> · a phone tree learned once — example 13, live</small>
+  </div>
+  <div class="spacer"></div>
+  <span class="badge" id="clock">READY</span>
+  <span class="badge" id="runbadge">IDLE</span>
+  <button id="sound" title="toggle key tones">🔊</button>
+  <button id="start">▶&nbsp; START DEMO</button>
+</header>
+
+<main>
+  <section class="phone" aria-label="telephone">
+    <div class="make">M E R I D I A N</div>
+    <div class="grille"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="lcd">
+      <div class="status"><span id="lcdstate" class="">LINE IDLE</span><span id="lcdtime"></span></div>
+      <div class="keysline"><span id="lcdkeys"></span></div>
+    </div>
+    <div class="keypad" id="keypad"></div>
+    <div class="foot">DTMF · TOUCH-TONE</div>
+  </section>
+
+  <section class="right">
+    <div class="stamps">
+      <div class="stamp" id="stamp1"><span class="tag">RUN 1 · EXPLORING</span><span>not yet dialed</span></div>
+      <div class="stamp" id="stamp2"><span class="tag">RUN 2 · REPLAYING</span><span>waiting for run 1</span></div>
+    </div>
+    <div class="transcript" id="log">
+      <p class="hint">Press <b>START DEMO</b>. The agent will dial {{.Bank}} cold, listen its way
+      down the menu tree, and record the route it finds. Then the balance changes, the page resets,
+      and a second agent — armed only with the recorded skill — makes the same call in one press.<br><br>
+      explorer: <code>{{.Explorer}}</code> · operator: <code>{{.Operator}}</code></p>
+    </div>
+    <div id="finale"></div>
+  </section>
+</main>
+
+<div id="wipe"><div class="box">
+  <h2>RESET</h2>
+  <p>Every session is forgotten and the balance has moved to
+     <span class="money" id="wipebalance"></span>.<br>
+     The menus have not. What survives is the lesson —
+     in a file the agent cannot read, replayed into the next one before it wakes.</p>
+</div></div>
+
+<script>
+  // ---------- keypad ----------
+  const KEYS = [
+    ['1',''], ['2','ABC'], ['3','DEF'],
+    ['4','GHI'], ['5','JKL'], ['6','MNO'],
+    ['7','PQRS'], ['8','TUV'], ['9','WXYZ'],
+    ['*',''], ['0',''], ['#','']
+  ];
+  const keypad = document.getElementById('keypad');
+  const keyEls = {};
+  for (const pair of KEYS) {
+    const el = document.createElement('div');
+    el.className = 'key';
+    el.innerHTML = '<b>' + (pair[0] === '*' ? '✱' : pair[0]) + '</b><small>' + pair[1] + '</small>';
+    keypad.appendChild(el);
+    keyEls[pair[0]] = el;
+  }
+
+  // ---------- sound: real DTMF, synthesized ----------
+  const DTMF = {
+    '1':[697,1209],'2':[697,1336],'3':[697,1477],
+    '4':[770,1209],'5':[770,1336],'6':[770,1477],
+    '7':[852,1209],'8':[852,1336],'9':[852,1477],
+    '*':[941,1209],'0':[941,1336],'#':[941,1477]
+  };
+  let audio = null, soundOn = true;
+  function ensureAudio(){ if (!audio) audio = new (window.AudioContext||window.webkitAudioContext)(); }
+  function tone(freqs, dur, gain){
+    if (!soundOn || !audio) return;
+    const g = audio.createGain();
+    g.gain.setValueAtTime(0, audio.currentTime);
+    g.gain.linearRampToValueAtTime(gain, audio.currentTime + 0.01);
+    g.gain.linearRampToValueAtTime(0, audio.currentTime + dur);
+    g.connect(audio.destination);
+    for (const f of freqs) {
+      const o = audio.createOscillator();
+      o.frequency.value = f; o.type = 'sine';
+      o.connect(g); o.start(); o.stop(audio.currentTime + dur + 0.02);
+    }
+  }
+  const playKey  = k => tone(DTMF[k] || [500], 0.12, 0.05);
+  const playRing = () => { tone([440,480], 0.5, 0.035); };
+  const playHang = () => { tone([480,620], 0.14, 0.035); };
+  document.getElementById('sound').onclick = function(){
+    soundOn = !soundOn; this.textContent = soundOn ? '🔊' : '🔇';
+  };
+
+  // ---------- page elements ----------
+  const log = document.getElementById('log');
+  const lcdState = document.getElementById('lcdstate');
+  const lcdTime  = document.getElementById('lcdtime');
+  const lcdKeys  = document.getElementById('lcdkeys');
+  const runbadge = document.getElementById('runbadge');
+  const clockEl  = document.getElementById('clock');
+  const startBtn = document.getElementById('start');
+  const finale   = document.getElementById('finale');
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const fmtMs = ms => {
+    const s = Math.round(ms/1000);
+    return s < 60 ? s + 's' : Math.floor(s/60) + 'm ' + String(s%60).padStart(2,'0') + 's';
+  };
+  const fmtS = s => s < 60 ? s + 's' : Math.floor(s/60) + 'm ' + String(s%60).padStart(2,'0') + 's';
+  const nice = id => id.replace(/-/g,' ');
+
+  // ---------- live run clock ----------
+  let clockTimer = null, clockBase = 0;
+  function clockStart(label){
+    clockBase = Date.now();
+    clearInterval(clockTimer);
+    clockTimer = setInterval(() => {
+      clockEl.textContent = label + ' ' + fmtMs(Date.now() - clockBase);
+    }, 500);
+  }
+  function clockStop(text){ clearInterval(clockTimer); clockTimer = null; if (text) clockEl.textContent = text; }
+
+  // ---------- transcript helpers ----------
+  function scrollLog(){ log.scrollTop = log.scrollHeight; }
+  function el(html){ const d = document.createElement('div'); d.innerHTML = html; return d.firstElementChild; }
+  function chipRow(){ const r = el('<div class="entry"><div class="chips"></div></div>'); log.appendChild(r); scrollLog(); return r.querySelector('.chips'); }
+  let keyChips = null; // open row of agent key chips
+
+  function agentChip(text){
+    if (!keyChips) keyChips = chipRow();
+    keyChips.appendChild(el('<span class="chip agent">' + text + '</span>'));
+    scrollLog();
+  }
+
+  const nodeClass = n =>
+    n === 'credit-balance' ? 'gold' :
+    (n === 'invalid' || n === 'code-mismatch') ? 'bad' :
+    n === 'access-code' ? 'auth' : '';
+
+  async function typeOut(node, text, secs, instant){
+    keyChips = null;
+    const cls = nodeClass(node);
+    const entry = el(
+      '<div class="entry">' +
+        '<div class="chips"><span class="chip node ' + cls + '">☏ ' + nice(node) + '</span>' +
+        '<span class="chip">' + secs + 's of airtime</span></div>' +
+        '<div class="said ' + (cls === 'gold' ? 'gold' : '') + '"><span class="txt"></span><span class="caret"></span></div>' +
+      '</div>');
+    log.appendChild(entry); scrollLog();
+    const txt = entry.querySelector('.txt');
+    if (!instant) {
+      const step = Math.max(1, Math.round(text.length / 220)); // whole prompt in ~1.5s
+      for (let i = 0; i < text.length; i += step) {
+        txt.textContent = text.slice(0, i + step);
+        scrollLog();
+        await sleep(7);
+      }
+    }
+    txt.textContent = text;
+    entry.querySelector('.caret').remove();
+    scrollLog();
+    if (!instant) await sleep(220);
+  }
+
+  // ---------- LCD ----------
+  let airtime = 0;
+  function lcd(state, on){
+    lcdState.textContent = state;
+    lcdState.className = on ? 'on' : '';
+  }
+  function lcdShowKeys(s){ lcdKeys.textContent = s; }
+
+  // ---------- stamps, lesson, compare ----------
+  function stamp(run, balance, elapsedMs, airtimeS){
+    const box = document.getElementById('stamp' + run);
+    box.className = 'stamp filled r' + run;
+    box.innerHTML =
+      '<span class="tag">RUN ' + run + (run === 1 ? ' · EXPLORING' : ' · REPLAYING') + '</span>' +
+      '<span class="money">$' + balance + '</span>' +
+      '<span class="when">found in ' + fmtMs(elapsedMs) + ' · ' + fmtS(airtimeS) + ' of airtime</span>';
+  }
+
+  function compareCard(a, b){
+    // Values compared as numbers, formatted after — lower is the win.
+    const row = (label, xv, yv, fmt) => {
+      const f = fmt || (v => v);
+      return '<tr><td>' + label + '</td><td class="' + (xv < yv ? 'win' : '') + '">' + f(xv) +
+             '</td><td class="' + (yv < xv ? 'win' : '') + '">' + f(yv) + '</td></tr>';
+    };
+    finale.innerHTML =
+      '<div class="card"><h3>THE SAME QUESTION, TWICE</h3><table class="compare">' +
+      '<tr><th></th><th>RUN 1 · EXPLORE</th><th>RUN 2 · REPLAY</th></tr>' +
+      row('prompts listened to', a.prompts, b.prompts) +
+      row('keys pressed', a.keys, b.keys) +
+      row('wrong turns', a.wrong, b.wrong) +
+      row('airtime', a.airtimeS, b.airtimeS, fmtS) +
+      row('wall clock', a.wallMs, b.wallMs, fmtMs) +
+      row('tool calls', a.toolCalls, b.toolCalls) +
+      '<tr><td>balance on the line</td><td>$' + a.balance + '</td><td>$' + b.balance + '</td></tr>' +
+      '<tr><td>reported correctly</td><td>' + (a.reported ? '✓' : '✗') + '</td><td>' + (b.reported ? '✓' : '✗') + '</td></tr>' +
+      '</table><p class="verdict">The menus never moved. What changed is that the second caller had been ' +
+      'here before — in a file it cannot read, replayed into it before it picked up the handset.</p></div>';
+    finale.scrollIntoView({behavior:'smooth', block:'end'});
+  }
+
+  // ---------- the event queue ----------
+  const queue = [];
+  let busy = false;
+  function push(e){ queue.push(e); pump(); }
+  async function pump(){
+    if (busy) return;
+    busy = true;
+    while (queue.length) await handle(queue.shift());
+    busy = false;
+  }
+
+  let dialedKeys = '';
+
+  async function handle(e){
+    switch (e.kind) {
+
+    case 'run-start': {
+      log.innerHTML = ''; finale.innerHTML = ''; keyChips = null;
+      dialedKeys = ''; lcdShowKeys(''); lcdTime.textContent = '';
+      lcd('LINE IDLE', false);
+      runbadge.textContent = e.run === 1 ? 'RUN 1 · EXPLORING' : 'RUN 2 · REPLAYING';
+      runbadge.className = 'badge run' + e.run;
+      clockStart('RUN ' + e.run + ' ·');
+      log.appendChild(el('<p class="note">run ' + e.run + ' — ' +
+        (e.run === 1 ? 'a caller who has never heard this menu (' + e.explorer + ')'
+                     : 'a fresh session, holding only the recorded skill (' + e.operator + ')') + '</p>'));
+      break;
+    }
+
+    case 'dial': {
+      keyChips = null;
+      dialedKeys = ''; lcdShowKeys('');
+      lcd('RINGING…', true);
+      agentChip('☎ dial ' + e.number);
+      if (!e.replay) { playRing(); await sleep(650); }
+      lcd('IN CALL', true);
+      break;
+    }
+
+    case 'key': {
+      const k = e.key, btn = keyEls[k];
+      if (btn && !e.replay) {
+        btn.classList.add('pressed'); playKey(k);
+        setTimeout(() => btn.classList.remove('pressed'), 150);
+      }
+      dialedKeys += k;
+      lcdShowKeys(dialedKeys.slice(-13));
+      agentChip(k === '*' ? '✱' : k);
+      if (!e.replay) await sleep(170);
+      break;
+    }
+
+    case 'prompt': {
+      airtime = e.airtime;
+      lcdTime.textContent = fmtS(airtime);
+      await typeOut(e.node, e.text, e.secs, e.replay);
+      break;
+    }
+
+    case 'hangup': {
+      keyChips = null;
+      lcd('LINE IDLE', false); lcdTime.textContent = '';
+      log.appendChild(el('<p class="note">— hung up —</p>')); scrollLog();
+      if (!e.replay) { playHang(); await sleep(350); }
+      break;
+    }
+
+    case 'balance-heard': {
+      stamp(e.run, e.balance, e.elapsedMs, e.airtime);
+      log.appendChild(el('<div class="banner"><div class="big">$' + e.balance + '</div>' +
+        '<div class="sub">credit card balance · heard after ' + fmtMs(e.elapsedMs) +
+        ' · ' + fmtS(e.airtime) + ' of airtime · available credit $' + e.available + '</div></div>'));
+      scrollLog();
+      break;
+    }
+
+    case 'answer': {
+      log.appendChild(el('<div class="card answer"><h3>THE AGENT REPORTS</h3><p>“' +
+        e.answer.replace(/</g,'&lt;') + '”</p></div>'));
+      scrollLog();
+      break;
+    }
+
+    case 'run-done': {
+      clockStop('RUN ' + e.run + ' · ' + fmtMs(e.stats.wallMs));
+      if (e.lesson) {
+        log.appendChild(el('<div class="card lesson"><h3>WHAT IT WROTE DOWN · ' +
+          e.lesson.name + '</h3><pre>' + e.lesson.content.replace(/</g,'&lt;') + '</pre></div>'));
+        scrollLog();
+      }
+      break;
+    }
+
+    case 'reset': {
+      if (e.replay) break; // a catching-up page goes straight to run 2
+      document.getElementById('wipebalance').textContent = '$' + e.balance;
+      const w = document.getElementById('wipe');
+      w.style.display = 'flex';
+      await sleep(3400);
+      w.style.display = 'none';
+      break;
+    }
+
+    case 'compare': {
+      compareCard(e.run1, e.run2);
+      runbadge.textContent = 'DONE';
+      runbadge.className = 'badge';
+      startBtn.disabled = false;
+      startBtn.innerHTML = '↺&nbsp; RUN IT AGAIN';
+      break;
+    }
+
+    case 'note': {
+      log.appendChild(el('<p class="note">' + e.text + '</p>')); scrollLog();
+      break;
+    }
+
+    case 'error': {
+      log.appendChild(el('<div class="card error"><h3>ERROR</h3><p>' +
+        e.text.replace(/</g,'&lt;') + '</p></div>'));
+      scrollLog();
+      clockStop('ERROR'); runbadge.textContent = 'IDLE'; runbadge.className = 'badge';
+      startBtn.disabled = false;
+      break;
+    }
+
+    case 'hello': {
+      if (e.run > 0) { startBtn.disabled = true; runbadge.textContent = 'RUN ' + e.run + ' · IN PROGRESS'; }
+      break;
+    }
+    }
+  }
+
+  // ---------- wiring ----------
+  const es = new EventSource('/events');
+  es.onmessage = m => { try { push(JSON.parse(m.data)); } catch (_) {} };
+
+  startBtn.onclick = async () => {
+    ensureAudio();
+    if (audio && audio.state === 'suspended') audio.resume();
+    startBtn.disabled = true;
+    startBtn.textContent = 'RUNNING…';
+    const res = await fetch('/start', {method:'POST'});
+    if (!res.ok && res.status !== 409) {
+      startBtn.disabled = false;
+      startBtn.innerHTML = '▶&nbsp; START DEMO';
+    }
+  };
+</script>
+</body>
+</html>

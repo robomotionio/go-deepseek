@@ -112,6 +112,30 @@ go run ./examples/13-phone-banking
 Set `DSH_EXPLORER_MODEL` and `DSH_OPERATOR_MODEL` to two different ids to
 have one model do the listening and another do the calling.
 
+## The web face
+
+The demo also hangs on a wall:
+
+```sh
+go run ./examples/13-phone-banking/web
+# open http://127.0.0.1:8013 and press START DEMO
+```
+
+One binary, standard library only, page embedded. A touch-tone phone on the
+left — silver keys, an LCD that shows every digit pressed — and the call
+transcript typing out on the right. Every key that lights up and clicks
+(a real DTMF tone pair, synthesized in the browser) and every prompt that
+types out is the agent's own tool-call stream, broadcast live over
+Server-Sent Events at the pace the model actually works. Nothing is
+scripted and no browser robot clicks anything.
+
+When a run hears the balance, the page stamps the moment — the figure, the
+wall-clock time to find it, the airtime it cost. Run 1's stamp lands the
+hard way; then the reset overlay announces the balance has moved, the page
+wipes, and run 2's stamp lands in one keyed-ahead press. The final card is
+the parent example's comparison table. A page opened mid-run catches up
+instantly from the server's replay buffer and then continues live.
+
 ## The test
 
 `go test ./examples/13-phone-banking` walks the whole call with no model: the
@@ -129,5 +153,8 @@ the tree is walkable; the example is the model walking it.
 - `phone.go` — the handset: `dial`, `press`, `hangup`, and the one-number
   fence
 - `ivr_test.go` — the model-free walk
+- `web/` — the same demo as a page to watch: keypad, DTMF clicks, typed
+  prompts, stamps and the comparison, streamed live from the agent's own
+  tool calls
 
 Part of [the examples tour](../README.md).
