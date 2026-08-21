@@ -104,6 +104,31 @@ buy — *"do NOT press 2 (card services) — the credit card balance is NOT unde
 card services"* — seventeen wrong turns distilled into one sentence no later
 session will ever pay for again.
 
+## Who does what — deterministic code vs probabilistic AI
+
+The demo is a fixed laboratory with one variable in it: the caller. Every
+step below is either code (same on every run, checkable) or the model
+(different on every run, measured). The split is the showcase: the harness
+supplies the learning *machinery*; the model supplies the learning.
+
+| step | deterministic — the code | probabilistic — the AI |
+|---|---|---|
+| 1 · the world | The tree, every prompt's wording, the access code, both balance figures, the airtime pricing (150 wpm), the one-number fence — fixed Go data | — |
+| 2 · setup | Harness opened; `dial` / `press` / `hangup` and `learn` mounted; any recorded lesson replayed into `ctx.skills` before the first token | — |
+| 3 · the job | The prompt string, identical for both runs; run 1 gets the record-a-lesson half appended | — |
+| 4 · run 1 explores | The line answers each key: transitions, the auth gate, invalid handling, what each prompt costs | Every choice — which key to press, which branch to probe, when to back out with `*`, when to hang up and redial |
+| 5 · the fumbles | Digits at the code prompt buffer until `#`, exactly like a real IVR | Stray keys, wrong codes, detours — different on every run |
+| 6 · the balance heard | The figure itself is `books[0]`, decided by code | Recognizing it as the answer and reporting it correctly |
+| 7 · the lesson | The host's `admissible` check (name shape, description, minimum substance), the live registration, the durable JSONL write | Everything the lesson *says*: the route, the key sequence, the negative knowledge ("NOT under card services") — model-authored |
+| 8 · RESET | Trail wiped, sessions forgotten, balance moved to `books[1]` — the anti-cheat, pure code | — |
+| 9 · run 2 replays | The lesson handed to a fresh process at mount | Choosing to load the skill by name, trusting its route, keying `31731942#2` |
+| 10 · key-ahead | Menus keyed past are never played and never charged — mechanics | — |
+| 11 · measurement | The trail, prompts / keys / wrong turns / airtime / wall clock, the found-it stamps — read off the IVR's own log | — |
+| 12 · the verdict | The assertions: the fresh figure reported, no balance inside the lesson, strictly fewer prompts — code judges | Being *right* is the model's doing; being *checkable* is the code's |
+
+The web page belongs entirely in the left column: it renders the agent's
+real tool-call stream and invents nothing.
+
 ## Run it
 
 ```sh
