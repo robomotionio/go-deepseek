@@ -73,6 +73,7 @@ type event struct {
 
 	Balance   string `json:"balance,omitempty"`
 	Available string `json:"available,omitempty"`
+	From      string `json:"from,omitempty"` // reset only: the balance being left behind
 	ElapsedMS int64  `json:"elapsedMs,omitempty"`
 
 	Stats  *runStats   `json:"stats,omitempty"`
@@ -291,10 +292,12 @@ func (s *server) demo(ctx context.Context) {
 	}
 	s.hub.broadcast(event{Kind: "run-done", Run: 1, Stats: stats1, Lesson: lesson})
 
-	// A beat for the viewer to read the lesson, then the reset.
+	// A beat for the viewer to read the lesson, then the reset. The balance
+	// moves ON PURPOSE: it is the demo's anti-cheat check, and the overlay
+	// the page shows for this event says exactly that.
 	time.Sleep(6 * time.Second)
 	line.reset()
-	s.hub.broadcast(event{Kind: "reset", Balance: books[1].balance})
+	s.hub.broadcast(event{Kind: "reset", From: books[0].balance, Balance: books[1].balance})
 	time.Sleep(2 * time.Second)
 
 	// ---- run 2 ----

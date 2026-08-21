@@ -77,10 +77,14 @@ real IVRs do: keys sent in one `press` are taken in order and the menus keyed
 past are never played — which is the mechanical reason a learned route is
 cheap.
 
-The balance is **different on each run**, so run 2 can only be right by
-dialing and hearing it fresh — a lesson that recorded the figure instead of
-the route would read out a stale number and fail the assertion. The trail is
-the IVR's own log, never the agent's summary.
+The balance is **different on each run** — changed at the reset on purpose,
+because it is the demo's anti-cheat check. If the balance held still, run 2
+could "answer" without dialing at all: the lesson could simply memorize the
+figure, and learning would be indistinguishable from parroting. Because it
+moves, run 2 can only be right by dialing and hearing it fresh — a lesson
+that recorded the figure instead of the route reads out a stale number and
+fails the assertion. The trail is the IVR's own log, never the agent's
+summary.
 
 From the captured run:
 

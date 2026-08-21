@@ -203,10 +203,11 @@
     position:fixed; inset:0; display:none; align-items:center; justify-content:center;
     background:rgba(8,9,12,.88); backdrop-filter:blur(3px); z-index:50; text-align:center;
   }
-  #wipe .box{max-width:520px; padding:30px}
+  #wipe .box{max-width:560px; padding:30px}
   #wipe h2{font:700 26px var(--sans); color:var(--ink)}
-  #wipe p{color:var(--ink-dim); margin-top:10px; font-size:14px; line-height:1.6}
+  #wipe p{color:var(--ink-dim); margin-top:12px; font-size:14px; line-height:1.65}
   #wipe .money{color:var(--gold); font-family:var(--mono)}
+  #wipe b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -252,10 +253,14 @@
 
 <div id="wipe"><div class="box">
   <h2>RESET</h2>
-  <p>Every session is forgotten and the balance has moved to
-     <span class="money" id="wipebalance"></span>.<br>
-     The menus have not. What survives is the lesson —
-     in a file the agent cannot read, replayed into the next one before it wakes.</p>
+  <p>Every session is forgotten — and the balance is <b>deliberately changed</b>,
+     from <span class="money" id="wipefrom"></span> to
+     <span class="money" id="wipebalance"></span>, <b>so the model cannot cheat</b>.</p>
+  <p>If run 1&rsquo;s lesson had memorized the number, run 2 could answer without
+     dialing — and we could never tell learning from parroting. A memorized figure
+     is now stale and would be caught; the only way to be right is to really call
+     and hear it fresh. What survives the reset is the <b>route</b> — in a file the
+     agent cannot read, replayed into the next session before it wakes.</p>
 </div></div>
 
 <script>
@@ -496,9 +501,9 @@
           'it keeps going until the fastest route is worked out and recorded as a skill</p>'));
       } else {
         log.appendChild(el('<p class="note">a different figure than run 1 heard — the balance ' +
-          'moved during the reset, on purpose. A lesson that had memorized the number would ' +
-          'have read out a stale one; this figure did not exist when the lesson was written, ' +
-          'so it can only have come off the line</p>'));
+          'was changed at the reset ON PURPOSE, so the model cannot cheat by memorizing. ' +
+          'This figure did not exist when the lesson was written; it can only have come off ' +
+          'the line, which is the proof that run 2 learned the route, not the answer</p>'));
       }
       scrollLog();
       break;
@@ -523,10 +528,11 @@
 
     case 'reset': {
       if (e.replay) break; // a catching-up page goes straight to run 2
+      document.getElementById('wipefrom').textContent = '$' + (e.from || '…');
       document.getElementById('wipebalance').textContent = '$' + e.balance;
       const w = document.getElementById('wipe');
       w.style.display = 'flex';
-      await sleep(3400);
+      await sleep(6000); // long enough to actually read the why
       w.style.display = 'none';
       break;
     }

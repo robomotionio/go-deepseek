@@ -192,8 +192,9 @@ func main() {
 	// ---- the reset -----------------------------------------------------------
 
 	line.reset()
-	fmt.Printf("\n═══ reset · the balance is now $%s; the menus have not moved ═══\n",
-		books[1].balance)
+	fmt.Printf("\n═══ reset · the balance is now $%s — changed ON PURPOSE, so a run that\n"+
+		"    memorized the figure instead of the route would read out a stale number\n"+
+		"    and be caught; the menus have not moved ═══\n", books[1].balance)
 
 	// ---- run 2: key straight through -----------------------------------------
 
