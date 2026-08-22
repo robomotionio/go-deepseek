@@ -20,13 +20,13 @@
 // closures. A marker in the encoded value ({"$fn": n}) is revived here into a
 // real function that calls back into Go.
 //
-// THREE KEYS ARE RESERVED, at any depth of anything Go sends: `$fn` (a Go
-// callback), `$ref` (a held JavaScript object) and `$undefined` (see
-// runtime.Undefined). An object that carries one of them is interpreted rather
-// than copied, so Go data whose own keys collide is not deliverable — encode it
-// under a wrapper, or as a string. Worth saying out loud now that
-// sdk.Undefined() makes one of the three a public, encouraged spelling rather
-// than an internal detail.
+// FOUR KEYS ARE RESERVED, at any depth of anything Go sends: `$fn` (a Go
+// callback), `$promise` (a Go callback read as a promise-shaped property),
+// `$ref` (a held JavaScript object) and `$undefined` (see runtime.Undefined).
+// An object that carries one of them is interpreted rather than copied, so Go
+// data whose own keys collide is not deliverable — encode it under a wrapper,
+// or as a string. Worth saying out loud now that sdk.Undefined() makes one of
+// them a public, encouraged spelling rather than an internal detail.
 
 // The one upstream import here. Registering a tool means handing the registry a
 // definition built by defineTool, which compiles the parameter spec into JSON
@@ -68,6 +68,7 @@ function revive(value) {
   // honest rendering of it there.
   if (value.$undefined === true) return undefined;
   if (typeof value.$fn === 'number') return goFunction(value.$fn, value.$sync === true);
+  if (typeof value.$promise === 'number') return goThenable(value.$promise);
   if (typeof value.$ref === 'number') return deref(value.$ref);
   const out = {};
   for (const key of Object.keys(value)) out[key] = revive(value[key]);
@@ -110,6 +111,26 @@ function encode(value, seen) {
   for (const key of Object.keys(value)) out[key] = encode(value[key], seen);
   seen.delete(value);
   return out;
+}
+
+/**
+ * A Go callback, as a promise-shaped PROPERTY. See runtime.Context.Promise.
+ *
+ * A thenable rather than a promise, for two reasons. The Go call is not made
+ * until somebody awaits, so a handle nobody waits on costs nothing — and it is
+ * made once however many times the value is awaited, which matters when the Go
+ * side of it is a wait on a process. Everything that consumes a promise
+ * consumes this: await, .then, .catch, .finally, Promise.resolve.
+ */
+function goThenable(id) {
+  const call = goFunction(id, false);
+  let started;
+  const begin = () => (started ??= call());
+  return {
+    then: (onFulfilled, onRejected) => begin().then(onFulfilled, onRejected),
+    catch: (onRejected) => begin().catch(onRejected),
+    finally: (onFinally) => begin().finally(onFinally),
+  };
 }
 
 /** A Go callback, as a JavaScript function. */
