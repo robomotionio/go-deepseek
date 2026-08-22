@@ -1,7 +1,7 @@
-// ../../source/deepseek-harness/packages/llm/llm/lib/index.js
+// .harness/packages/llm/llm/lib/index.js
 import { createRequire } from "node:module";
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -26,7 +26,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -135,7 +135,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -174,7 +174,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -254,7 +254,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -479,7 +479,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -657,7 +657,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -896,7 +896,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError = class extends TypeError {
   name = "ValidationError";
@@ -1450,7 +1450,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -1727,7 +1727,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -1906,7 +1906,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -1992,7 +1992,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2090,7 +2090,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -2722,10 +2722,10 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var MAX_TIMER_DELAY_MS = 2147483647;
 
-// ../../source/deepseek-harness/packages/llm/llm/lib/index.js
+// .harness/packages/llm/llm/lib/index.js
 function MessageId(id) {
   return id;
 }
@@ -2890,7 +2890,7 @@ function errorChain(value) {
 function isHarnessError(value) {
   return value instanceof HarnessError;
 }
-var DEFAULT_MAX_RETRIES = 2;
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -2923,7 +2923,12 @@ var NORMAL_POLICY_KEYS = /* @__PURE__ */ new Set([
   "retryableCodes",
   "backoff"
 ]);
-var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set(["mode", "backoff"]);
+var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set([
+  "mode",
+  "maxRetries",
+  "retryableCodes",
+  "backoff"
+]);
 var BACKOFF_KEYS = /* @__PURE__ */ new Set([
   "initialDelayMs",
   "maxDelayMs",
@@ -3061,6 +3066,122 @@ function normalizeApiKey(raw) {
     value
   };
 }
+var OFFLOADED_IMAGE_TEXT = "[image omitted to keep the request within its image limit; older images are omitted first. If this image is still needed, read its file again when a path is available; otherwise ask the user to attach it again.]";
+function textOnlyImageText(ref) {
+  return `[image omitted because this model accepts text only; attachment sha256:${String(ref.attachmentId).slice(7, 15)}]`;
+}
+function requestImageHandleText(version2) {
+  return `Image ${version2.attachment.attachmentId}; request image ${version2.width}x${version2.height}px.`;
+}
+function contentHasImage(content) {
+  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
+}
+function base64Length(bytes) {
+  return Math.ceil(bytes / 3) * 4;
+}
+function collectImageLengths(blocks, lengths, policy) {
+  for (const block of blocks) if (block.type === "image") {
+    const bytes = policy.byteLength === void 0 ? block.attachment.bytes : policy.byteLength(block.attachment);
+    lengths.push(policy.representation === "base64" ? base64Length(bytes) : bytes);
+  } else if (block.type === "tool-result") collectImageLengths(block.content, lengths, policy);
+}
+function replaceOldestImages(blocks, remaining) {
+  let next;
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === "image" && remaining.count > 0) {
+      remaining.count -= 1;
+      next ??= blocks.slice(0, index);
+      next.push({
+        type: "text",
+        text: OFFLOADED_IMAGE_TEXT
+      });
+      continue;
+    }
+    if (block.type === "tool-result") {
+      const content = replaceOldestImages(block.content, remaining);
+      if (content !== block.content) {
+        next ??= blocks.slice(0, index);
+        next.push({
+          ...block,
+          content
+        });
+        continue;
+      }
+    }
+    next?.push(block);
+  }
+  return next ?? blocks;
+}
+function replaceImagesForTextModel(blocks) {
+  let next;
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === "image") {
+      next ??= blocks.slice(0, index);
+      next.push({
+        type: "text",
+        text: textOnlyImageText(block.attachment)
+      });
+      continue;
+    }
+    if (block.type === "tool-result") {
+      const content = replaceImagesForTextModel(block.content);
+      if (content !== block.content) {
+        next ??= blocks.slice(0, index);
+        next.push({
+          ...block,
+          content
+        });
+        continue;
+      }
+    }
+    next?.push(block);
+  }
+  return next ?? blocks;
+}
+function projectImagesForTextModel(messages) {
+  if (!messages.some((message) => contentHasImage(message.content))) return messages;
+  return messages.map((message) => {
+    const content = replaceImagesForTextModel(message.content);
+    return content === message.content ? message : {
+      ...message,
+      content
+    };
+  });
+}
+function offloadRequestImages(messages, maxRequestImageBytes) {
+  return offloadRequestImagesWithPolicy(messages, {
+    representation: "base64",
+    ...maxRequestImageBytes === void 0 ? {} : { maxBytes: maxRequestImageBytes },
+    byteQuantum: 1
+  });
+}
+function offloadRequestImagesWithPolicy(messages, policy) {
+  const lengths = [];
+  for (const message of messages) collectImageLengths(message.content, lengths, policy);
+  const total = lengths.reduce((sum, bytes) => sum + bytes, 0);
+  const excessCount = policy.maxImages === void 0 ? 0 : Math.max(0, lengths.length - policy.maxImages);
+  const excessBytes = policy.maxBytes === void 0 ? 0 : Math.max(0, total - policy.maxBytes);
+  if (excessCount === 0 && excessBytes === 0) return messages;
+  const countQuantum = policy.countQuantum ?? 1;
+  const byteQuantum = policy.byteQuantum ?? 1;
+  const removeCount = excessCount === 0 ? 0 : Math.ceil(excessCount / countQuantum) * countQuantum;
+  const removeBytes = excessBytes === 0 ? 0 : Math.ceil(excessBytes / byteQuantum) * byteQuantum;
+  let count = 0;
+  let removedBytes = 0;
+  for (const imageBytes of lengths) {
+    if (count >= removeCount && (removeBytes === 0 || (byteQuantum === 1 ? removedBytes >= removeBytes : removedBytes > removeBytes))) break;
+    removedBytes += imageBytes;
+    count += 1;
+  }
+  const remaining = { count };
+  return messages.map((message) => {
+    const content = replaceOldestImages(message.content, remaining);
+    return content === message.content ? message : {
+      ...message,
+      content
+    };
+  });
+}
 var { version } = createRequire(import.meta.url)("../package.json");
 var APP_IDENTITY = {
   product: "deepseek-harness",
@@ -3076,9 +3197,6 @@ function attributionHeaders(identity = APP_IDENTITY) {
 function assertNever(value, context) {
   const rendered = JSON.stringify(value) ?? String(value);
   throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
-}
-function contentHasImage(content) {
-  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
 }
 var BlockAssembler = class {
   partials = /* @__PURE__ */ new Map();
@@ -3212,6 +3330,21 @@ var BlockAssembler = class {
   blocks() {
     return this.assembled().blocks;
   }
+  /**
+  * Assemble the prefix an interrupted stream can safely finalize: closed and
+  * open text/reasoning blocks with non-whitespace content, in stream order.
+  * Tool calls are omitted because interruption precedes dispatch; retaining
+  * one would require a fabricated result. Open unknown blocks are also omitted.
+  * @returns the kept blocks; empty when nothing streamed before the interruption.
+  */
+  interruptedBlocks() {
+    return this.order.map((index) => {
+      const partial = this.mustGet(index);
+      const type = partial.block?.type ?? partial.blockType;
+      if (type !== "text" && type !== "reasoning") return void 0;
+      return this.assemble(partial, index);
+    }).filter((block) => (block?.type === "text" || block?.type === "reasoning") && block.text.trim() !== "");
+  }
   /** Usage from the `usage` chunk; undefined until one arrives. */
   get usage() {
     return this._usage;
@@ -3318,6 +3451,21 @@ var LlmAdapter = class {
       id: model,
       name: model
     });
+  }
+  /**
+  * Bind exact model metadata and the eventual request dispatch to one adapter generation.
+  * Dynamic adapters override this so settings changes between preparation and
+  * dispatch cannot combine one generation's capabilities with another's endpoint.
+  * @param provider - registered provider route.
+  * @param model - exact model id.
+  * @param signal - cancellation for model resolution.
+  * @returns model metadata and a one-generation stream entry point.
+  */
+  async prepareCall(provider, model, signal) {
+    return {
+      model: await this.resolveModel(provider, model, signal),
+      stream: (options) => this.stream(options)
+    };
   }
 };
 var LlmRuntime = class extends Service {
@@ -3577,8 +3725,12 @@ var LlmRuntime = class extends Service {
     return this.resolveModelInfoFor(this.registration(provider), model, signal);
   }
   async resolveModelInfoFor(registration, model, signal) {
+    const resolved = await registration.adapter.resolveModel(registration.provider.id, model, signal);
+    return this.normalizeModelInfo(registration, model, resolved);
+  }
+  /** Validate and detach one adapter-returned exact model result. */
+  normalizeModelInfo(registration, model, resolved) {
     const provider = registration.provider.id;
-    const resolved = await registration.adapter.resolveModel(provider, model, signal);
     if (typeof resolved.provider !== "string" || resolved.provider !== provider || typeof resolved.id !== "string" || resolved.id !== model || typeof resolved.name !== "string" || resolved.name.length === 0 || resolved.description !== void 0 && typeof resolved.description !== "string") throw new LlmError(`adapter returned invalid exact model metadata for provider "${provider}" model "${model}"`, "INVALID_MODEL_INFO");
     const context = resolved.context;
     if (context !== void 0 && (!Number.isInteger(context.contextWindow) || context.contextWindow <= 0)) throw new LlmError(`adapter returned invalid context metadata for provider "${provider}" model "${model}"`, "INVALID_MODEL_CONTEXT");
@@ -3631,6 +3783,10 @@ var LlmRuntime = class extends Service {
   }
   async resolveCallFor(registration, config, signal) {
     const info = await this.resolveModelInfoFor(registration, config.model, signal);
+    return this.resolveCallWithInfo(config, info);
+  }
+  /** Validate request controls against one already-bound exact model result. */
+  resolveCallWithInfo(config, info) {
     const defaulted = config.maxTokens === void 0 && info.defaultMaxTokens !== void 0 ? {
       ...config,
       maxTokens: info.defaultMaxTokens
@@ -3652,7 +3808,8 @@ var LlmRuntime = class extends Service {
     }
     return {
       config: resolvedConfig,
-      ...info.context === void 0 ? {} : { context: info.context }
+      ...info.context === void 0 ? {} : { context: info.context },
+      modelInfo: info
     };
   }
   /**
@@ -3665,7 +3822,9 @@ var LlmRuntime = class extends Service {
   */
   async prepareCall(config, signal) {
     const registration = this.registration(config.provider);
-    const resolved = await this.resolveCallFor(registration, config, signal);
+    const adapterCall = await registration.adapter.prepareCall(config.provider, config.model, signal);
+    const modelInfo = this.normalizeModelInfo(registration, config.model, adapterCall.model);
+    const resolved = this.resolveCallWithInfo(config, modelInfo);
     const resolvedConfig = deepFreeze(structuredClone(resolved.config));
     const context = resolved.context === void 0 ? void 0 : deepFreeze(structuredClone(resolved.context));
     const adapterDefaults = deepFreeze({
@@ -3678,13 +3837,16 @@ var LlmRuntime = class extends Service {
       retryPolicy: registration.retryPolicy,
       adapterDefaults,
       ...context === void 0 ? {} : { context },
+      ...modelInfo.inputModalities === void 0 ? {} : { inputModalities: Object.freeze([...modelInfo.inputModalities]) },
       stream: (options) => {
         if (dispatched) throw new LlmError("a prepared LLM call can only be dispatched once", "INVALID_PREPARED_CALL");
         if (!callConfigEquals(options, resolvedConfig)) throw new LlmError("prepared LLM call config changed before adapter dispatch", "INVALID_PREPARED_CALL");
         dispatched = true;
         return this.streamWithRegistration(options, {
           registration,
-          config: resolvedConfig
+          config: resolvedConfig,
+          modelInfo,
+          dispatch: (options2) => adapterCall.stream(options2)
         });
       }
     });
@@ -3725,7 +3887,20 @@ var LlmRuntime = class extends Service {
     let iterator;
     try {
       const registration = prepared?.registration ?? this.registration(options.provider);
-      const resolvedConfig = prepared === void 0 ? (await this.resolveCallFor(registration, options, options.signal)).config : prepared.config;
+      const adapter = registration.adapter;
+      let modelInfo;
+      let resolvedConfig;
+      let dispatch;
+      if (prepared === void 0) {
+        const adapterCall = await adapter.prepareCall(options.provider, options.model, options.signal);
+        modelInfo = this.normalizeModelInfo(registration, options.model, adapterCall.model);
+        resolvedConfig = this.resolveCallWithInfo(options, modelInfo).config;
+        dispatch = (options2) => adapterCall.stream(options2);
+      } else {
+        modelInfo = prepared.modelInfo;
+        resolvedConfig = prepared.config;
+        dispatch = prepared.dispatch;
+      }
       if (prepared !== void 0 && !callConfigEquals(options, resolvedConfig)) throw new LlmError("prepared LLM call config changed before adapter dispatch", "INVALID_PREPARED_CALL");
       const resolvedOptions = callConfigEquals(options, resolvedConfig) ? options : Object.isFrozen(options) ? deepFreeze({
         ...options,
@@ -3734,8 +3909,14 @@ var LlmRuntime = class extends Service {
         ...options,
         ...resolvedConfig
       };
-      const adapter = registration.adapter;
-      iterator = adapter.stream(this.forAdapter(resolvedOptions, adapter))[Symbol.asyncIterator]();
+      const projectedOptions = modelInfo.inputModalities !== void 0 && !modelInfo.inputModalities.includes("image") && resolvedOptions.messages.some((message) => contentHasImage(message.content)) ? Object.isFrozen(resolvedOptions) ? deepFreeze({
+        ...resolvedOptions,
+        messages: projectImagesForTextModel(resolvedOptions.messages)
+      }) : {
+        ...resolvedOptions,
+        messages: projectImagesForTextModel(resolvedOptions.messages)
+      } : resolvedOptions;
+      iterator = dispatch(this.forAdapter(projectedOptions, adapter))[Symbol.asyncIterator]();
     } catch (error) {
       yield adapterFailureChunk(error, options.signal);
       return;
@@ -3812,6 +3993,7 @@ export {
   LlmError,
   LlmRuntime,
   MessageId,
+  OFFLOADED_IMAGE_TEXT,
   ProviderRequestId,
   QUOTA_EXCEEDED_CODE,
   ReasoningEffortId,
@@ -3837,6 +4019,11 @@ export {
   isTokenDelta,
   markAgentLoopRequest,
   normalizeApiKey,
+  offloadRequestImages,
+  offloadRequestImagesWithPolicy,
+  projectImagesForTextModel,
+  requestImageHandleText,
   resolveRetryPolicy,
+  textOnlyImageText,
   userAgent
 };

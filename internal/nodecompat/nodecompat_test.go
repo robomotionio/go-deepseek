@@ -579,3 +579,39 @@ func TestAbsentBuiltinsAreNamed(t *testing.T) {
 		t.Fatalf("refusal did not explain itself: %v", err)
 	}
 }
+
+// The semantics `@deepseek-ai/dsh-atomic-write` builds its writer lock out of.
+// It takes the lock by creating a file with `flag: 'wx'` and decides that
+// somebody else holds it by reading `err.code === 'EEXIST'` — so a shim that
+// accepted the flag and overwrote, or that failed with any other code, would
+// turn a mutual-exclusion primitive into a no-op without failing anything.
+// `llm-deepseek` publishes its durable upload index through that lock, which is
+// why this is worth pinning rather than assuming.
+func TestExclusiveCreateReportsEEXIST(t *testing.T) {
+	dir := t.TempDir()
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: dir, Roots: []string{dir}})
+	got := run(t, rt, `
+		import { writeFileSync, readFileSync } from 'node:fs';
+		import path from 'node:path';
+		const file = path.join(`+quote(dir)+`, 'lock');
+		const checks = [];
+
+		writeFileSync(file, 'first', { flag: 'wx' });
+		checks.push('created=' + readFileSync(file, 'utf8'));
+
+		try {
+			writeFileSync(file, 'second', { flag: 'wx' });
+			checks.push('code=NONE');
+		} catch (error) {
+			checks.push('code=' + error.code);
+		}
+
+		// The loser must not have clobbered the winner's lock.
+		checks.push('kept=' + readFileSync(file, 'utf8'));
+		globalThis.result = checks.join('|');
+	`)
+	want := "created=first|code=EEXIST|kept=first"
+	if got != want {
+		t.Fatalf("exclusive create:\n got %s\nwant %s", got, want)
+	}
+}

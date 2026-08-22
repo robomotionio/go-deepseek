@@ -1,10 +1,10 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/platform/node/globalThis.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/platform/node/globalThis.js
 var _globalThis = typeof globalThis === "object" ? globalThis : global;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/version.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/version.js
 var VERSION = "1.9.0";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/internal/semver.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/internal/semver.js
 var re = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
 function _makeCompatibilityCheck(ownVersion) {
   var acceptedVersions = /* @__PURE__ */ new Set([ownVersion]);
@@ -71,7 +71,7 @@ function _makeCompatibilityCheck(ownVersion) {
 }
 var isCompatible = _makeCompatibilityCheck(VERSION);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/internal/global-utils.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/internal/global-utils.js
 var major = VERSION.split(".")[0];
 var GLOBAL_OPENTELEMETRY_API_KEY = /* @__PURE__ */ Symbol.for("opentelemetry.js.api." + major);
 var _global = _globalThis;
@@ -113,7 +113,7 @@ function unregisterGlobal(type, diag3) {
   }
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/ComponentLogger.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/ComponentLogger.js
 var __read = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -193,7 +193,7 @@ function logProxy(funcName, namespace, args) {
   return logger[funcName].apply(logger, __spreadArray([], __read(args), false));
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/types.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/types.js
 var DiagLogLevel;
 (function(DiagLogLevel2) {
   DiagLogLevel2[DiagLogLevel2["NONE"] = 0] = "NONE";
@@ -205,7 +205,7 @@ var DiagLogLevel;
   DiagLogLevel2[DiagLogLevel2["ALL"] = 9999] = "ALL";
 })(DiagLogLevel || (DiagLogLevel = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/internal/logLevelLogger.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/internal/logLevelLogger.js
 function createLogLevelDiagLogger(maxLevel, logger) {
   if (maxLevel < DiagLogLevel.NONE) {
     maxLevel = DiagLogLevel.NONE;
@@ -230,7 +230,7 @@ function createLogLevelDiagLogger(maxLevel, logger) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/diag.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/diag.js
 var __read2 = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -322,7 +322,7 @@ var DiagAPI = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/internal/baggage-impl.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/internal/baggage-impl.js
 var __read3 = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -410,10 +410,10 @@ var BaggageImpl = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/internal/symbol.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/internal/symbol.js
 var baggageEntryMetadataSymbol = /* @__PURE__ */ Symbol("BaggageEntryMetadata");
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/utils.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/utils.js
 var diag = DiagAPI.instance();
 function createBaggage(entries) {
   if (entries === void 0) {
@@ -434,7 +434,7 @@ function baggageEntryMetadataFromString(str) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context/context.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context/context.js
 function createContextKey(description) {
   return Symbol.for(description);
 }
@@ -463,7 +463,7 @@ var BaseContext = (
 );
 var ROOT_CONTEXT = new BaseContext();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/consoleLogger.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/consoleLogger.js
 var consoleMap = [
   { n: "error", c: "error" },
   { n: "warn", c: "warn" },
@@ -500,7 +500,7 @@ var DiagConsoleLogger = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/NoopMeter.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/NoopMeter.js
 var __extends = /* @__PURE__ */ (function() {
   var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
@@ -663,14 +663,14 @@ function createNoopMeter() {
   return NOOP_METER;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/Metric.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/Metric.js
 var ValueType;
 (function(ValueType2) {
   ValueType2[ValueType2["INT"] = 0] = "INT";
   ValueType2[ValueType2["DOUBLE"] = 1] = "DOUBLE";
 })(ValueType || (ValueType = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation/TextMapPropagator.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation/TextMapPropagator.js
 var defaultTextMapGetter = {
   get: function(carrier, key) {
     if (carrier == null) {
@@ -694,7 +694,7 @@ var defaultTextMapSetter = {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context/NoopContextManager.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context/NoopContextManager.js
 var __read4 = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -749,7 +749,7 @@ var NoopContextManager = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/context.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/context.js
 var __read5 = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -817,14 +817,14 @@ var ContextAPI = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/trace_flags.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/trace_flags.js
 var TraceFlags;
 (function(TraceFlags2) {
   TraceFlags2[TraceFlags2["NONE"] = 0] = "NONE";
   TraceFlags2[TraceFlags2["SAMPLED"] = 1] = "SAMPLED";
 })(TraceFlags || (TraceFlags = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/invalid-span-constants.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/invalid-span-constants.js
 var INVALID_SPANID = "0000000000000000";
 var INVALID_TRACEID = "00000000000000000000000000000000";
 var INVALID_SPAN_CONTEXT = {
@@ -833,7 +833,7 @@ var INVALID_SPAN_CONTEXT = {
   traceFlags: TraceFlags.NONE
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NonRecordingSpan.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NonRecordingSpan.js
 var NonRecordingSpan = (
   /** @class */
   (function() {
@@ -878,7 +878,7 @@ var NonRecordingSpan = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/context-utils.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/context-utils.js
 var SPAN_KEY = createContextKey("OpenTelemetry Context Key SPAN");
 function getSpan(context2) {
   return context2.getValue(SPAN_KEY) || void 0;
@@ -900,7 +900,7 @@ function getSpanContext(context2) {
   return (_a = getSpan(context2)) === null || _a === void 0 ? void 0 : _a.spanContext();
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/spancontext-utils.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/spancontext-utils.js
 var VALID_TRACEID_REGEX = /^([0-9a-f]{32})$/i;
 var VALID_SPANID_REGEX = /^[0-9a-f]{16}$/i;
 function isValidTraceId(traceId) {
@@ -916,7 +916,7 @@ function wrapSpanContext(spanContext) {
   return new NonRecordingSpan(spanContext);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NoopTracer.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NoopTracer.js
 var contextApi = ContextAPI.getInstance();
 var NoopTracer = (
   /** @class */
@@ -966,7 +966,7 @@ function isSpanContext(spanContext) {
   return typeof spanContext === "object" && typeof spanContext["spanId"] === "string" && typeof spanContext["traceId"] === "string" && typeof spanContext["traceFlags"] === "number";
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/ProxyTracer.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/ProxyTracer.js
 var NOOP_TRACER = new NoopTracer();
 var ProxyTracer = (
   /** @class */
@@ -999,7 +999,7 @@ var ProxyTracer = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NoopTracerProvider.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/NoopTracerProvider.js
 var NoopTracerProvider = (
   /** @class */
   (function() {
@@ -1012,7 +1012,7 @@ var NoopTracerProvider = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/ProxyTracerProvider.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/ProxyTracerProvider.js
 var NOOP_TRACER_PROVIDER = new NoopTracerProvider();
 var ProxyTracerProvider = (
   /** @class */
@@ -1038,7 +1038,7 @@ var ProxyTracerProvider = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/SamplingResult.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/SamplingResult.js
 var SamplingDecision;
 (function(SamplingDecision2) {
   SamplingDecision2[SamplingDecision2["NOT_RECORD"] = 0] = "NOT_RECORD";
@@ -1046,7 +1046,7 @@ var SamplingDecision;
   SamplingDecision2[SamplingDecision2["RECORD_AND_SAMPLED"] = 2] = "RECORD_AND_SAMPLED";
 })(SamplingDecision || (SamplingDecision = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/span_kind.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/span_kind.js
 var SpanKind;
 (function(SpanKind2) {
   SpanKind2[SpanKind2["INTERNAL"] = 0] = "INTERNAL";
@@ -1056,7 +1056,7 @@ var SpanKind;
   SpanKind2[SpanKind2["CONSUMER"] = 4] = "CONSUMER";
 })(SpanKind || (SpanKind = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/status.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/status.js
 var SpanStatusCode;
 (function(SpanStatusCode2) {
   SpanStatusCode2[SpanStatusCode2["UNSET"] = 0] = "UNSET";
@@ -1064,7 +1064,7 @@ var SpanStatusCode;
   SpanStatusCode2[SpanStatusCode2["ERROR"] = 2] = "ERROR";
 })(SpanStatusCode || (SpanStatusCode = {}));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/tracestate-validators.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/tracestate-validators.js
 var VALID_KEY_CHAR_RANGE = "[_0-9a-z-*/]";
 var VALID_KEY = "[a-z]" + VALID_KEY_CHAR_RANGE + "{0,255}";
 var VALID_VENDOR_KEY = "[a-z0-9]" + VALID_KEY_CHAR_RANGE + "{0,240}@[a-z]" + VALID_KEY_CHAR_RANGE + "{0,13}";
@@ -1078,7 +1078,7 @@ function validateValue(value) {
   return VALID_VALUE_BASE_REGEX.test(value) && !INVALID_VALUE_COMMA_EQUAL_REGEX.test(value);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/tracestate-impl.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/tracestate-impl.js
 var MAX_TRACE_STATE_ITEMS = 32;
 var MAX_TRACE_STATE_LEN = 512;
 var LIST_MEMBERS_SEPARATOR = ",";
@@ -1146,18 +1146,18 @@ var TraceStateImpl = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/utils.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace/internal/utils.js
 function createTraceState(rawTraceState) {
   return new TraceStateImpl(rawTraceState);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context-api.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/context-api.js
 var context = ContextAPI.getInstance();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag-api.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag-api.js
 var diag2 = DiagAPI.instance();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/NoopMeterProvider.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics/NoopMeterProvider.js
 var NoopMeterProvider = (
   /** @class */
   (function() {
@@ -1171,7 +1171,7 @@ var NoopMeterProvider = (
 );
 var NOOP_METER_PROVIDER = new NoopMeterProvider();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/metrics.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/metrics.js
 var API_NAME3 = "metrics";
 var MetricsAPI = (
   /** @class */
@@ -1200,10 +1200,10 @@ var MetricsAPI = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics-api.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/metrics-api.js
 var metrics = MetricsAPI.getInstance();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation/NoopTextMapPropagator.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation/NoopTextMapPropagator.js
 var NoopTextMapPropagator = (
   /** @class */
   (function() {
@@ -1221,7 +1221,7 @@ var NoopTextMapPropagator = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/context-helpers.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/baggage/context-helpers.js
 var BAGGAGE_KEY = createContextKey("OpenTelemetry Baggage Key");
 function getBaggage(context2) {
   return context2.getValue(BAGGAGE_KEY) || void 0;
@@ -1236,7 +1236,7 @@ function deleteBaggage(context2) {
   return context2.deleteValue(BAGGAGE_KEY);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/propagation.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/propagation.js
 var API_NAME4 = "propagation";
 var NOOP_TEXT_MAP_PROPAGATOR = new NoopTextMapPropagator();
 var PropagationAPI = (
@@ -1283,10 +1283,10 @@ var PropagationAPI = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation-api.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/propagation-api.js
 var propagation = PropagationAPI.getInstance();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/trace.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/api/trace.js
 var API_NAME5 = "trace";
 var TraceAPI = (
   /** @class */
@@ -1329,10 +1329,10 @@ var TraceAPI = (
   })()
 );
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace-api.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/trace-api.js
 var trace = TraceAPI.getInstance();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/index.js
+// .harness/node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/index.js
 var index_default = {
   context,
   diag: diag2,

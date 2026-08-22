@@ -1,11 +1,11 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
+// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
 import { EventEmitter } from "node:events";
 import { stat as statcb, Stats } from "node:fs";
 import { readdir, stat as stat2 } from "node:fs/promises";
 import * as sp2 from "node:path";
 import { readdirp, ReaddirpStream } from "readdirp";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/handler.js
+// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/handler.js
 import { watch as fs_watch, unwatchFile, watchFile } from "node:fs";
 import { realpath as fsrealpath, lstat, open, stat } from "node:fs/promises";
 import { type as osType } from "node:os";
@@ -764,7 +764,7 @@ var NodeFsHandler = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
+// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
 var SLASH = "/";
 var SLASH_SLASH = "//";
 var ONE_DOT = ".";

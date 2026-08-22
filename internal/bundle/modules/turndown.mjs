@@ -7,7 +7,7 @@ var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/turndown@7.2.4/node_modules/turndown/lib/turndown.es.js
+// .harness/node_modules/.pnpm/turndown@7.2.4/node_modules/turndown/lib/turndown.es.js
 function extend(destination) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];

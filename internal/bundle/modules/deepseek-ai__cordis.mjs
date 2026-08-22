@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -6,7 +6,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -69,7 +69,7 @@ var arrayBufferToBase64 = Binary.toBase64;
 var hexToArrayBuffer = Binary.fromHex;
 var arrayBufferToHex = Binary.toHex;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -108,7 +108,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -188,7 +188,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/lib/index.js
+// .harness/vendor/cordis/lib/index.js
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();

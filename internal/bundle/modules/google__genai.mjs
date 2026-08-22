@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/@google+genai@1.52.0_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3_/node_modules/@google/genai/dist/index.mjs
+// .harness/node_modules/.pnpm/@google+genai@1.52.0_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3_/node_modules/@google/genai/dist/index.mjs
 import pRetry, { AbortError } from "p-retry";
 function setDefaultBaseUrls(baseUrlParams) {
   baseUrlParams.geminiUrl;

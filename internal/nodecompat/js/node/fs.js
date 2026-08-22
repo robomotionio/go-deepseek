@@ -7,14 +7,14 @@ import { Buffer } from 'node:buffer';
 import * as promisesAPI from 'node:fs/promises';
 import {
   host, constants, asFsError, guard, makeStats, Dirent,
-  decode, encodeData, pathOf, fdOf, modeOf, toMs,
+  decode, encodeData, pathOf, fdOf, modeOf, flagOf, toMs,
 } from './_fsutil.js';
 
 export { constants, Dirent };
 
 export const readFileSync = guard((path, options) => decode(host.fs.readFile(pathOf(path)), options));
-export const writeFileSync = guard((path, data, options) => host.fs.writeFile(pathOf(path), encodeData(data, options), modeOf(options)));
-export const appendFileSync = guard((path, data, options) => host.fs.appendFile(pathOf(path), encodeData(data, options), modeOf(options)));
+export const writeFileSync = guard((path, data, options) => host.fs.writeFile(pathOf(path), encodeData(data, options), modeOf(options), flagOf(options)));
+export const appendFileSync = guard((path, data, options) => host.fs.appendFile(pathOf(path), encodeData(data, options), modeOf(options), flagOf(options)));
 export const existsSync = (path) => { try { return host.fs.exists(pathOf(path)); } catch { return false; } };
 export const statSync = guard((path, options) => statOrUndefined(pathOf(path), true, options));
 export const lstatSync = guard((path, options) => statOrUndefined(pathOf(path), false, options));

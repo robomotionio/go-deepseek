@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -23,7 +23,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -132,7 +132,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -171,7 +171,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -251,7 +251,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -476,7 +476,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -654,7 +654,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -893,7 +893,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError = class extends TypeError {
   name = "ValidationError";
@@ -1447,7 +1447,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -1724,7 +1724,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -1903,7 +1903,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -1989,7 +1989,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2087,10 +2087,10 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/agent-loop/lib/index.js
+// .harness/packages/core/agent-loop/lib/index.js
 import { randomUUID } from "node:crypto";
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -2722,7 +2722,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/packages/core/scope/src/store.ts
+// .harness/packages/core/scope/src/store.ts
 var NamedEntries = class {
   constructor(duplicateError) {
     this.duplicateError = duplicateError;
@@ -2921,7 +2921,7 @@ var ScopedLayers = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/index.ts
+// .harness/packages/core/scope/src/index.ts
 var kScope = /* @__PURE__ */ Symbol("dsh.scope");
 var carrierKeys = /* @__PURE__ */ new WeakMap();
 var scopeParents = /* @__PURE__ */ new WeakMap();
@@ -2984,7 +2984,7 @@ function scopeTarget(base, key) {
   return carrier;
 }
 
-// ../../source/deepseek-harness/packages/core/agent/src/inbox.ts
+// .harness/packages/core/agent/src/inbox.ts
 var Inbox = class {
   constructor(session, notifications) {
     this.session = session;
@@ -3151,7 +3151,7 @@ var Inbox = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/agent/src/dispatch.ts
+// .harness/packages/core/agent/src/dispatch.ts
 function agentCarrier(agent) {
   return scopeTarget(agent, agent);
 }
@@ -3195,7 +3195,7 @@ function assembleContextFor(agent, signal) {
   return { agent, scope: agent, ...signal === void 0 ? {} : { signal } };
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function MessageId(id) {
   return id;
 }
@@ -3203,7 +3203,7 @@ function CallId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/call-config.ts
+// .harness/packages/llm/llm/src/call-config.ts
 var AGENT_LOOP_REQUESTS = /* @__PURE__ */ new WeakSet();
 function callConfigEquals(a, b) {
   if (a.provider !== b.provider || a.model !== b.model || a.reasoningEffort !== b.reasoningEffort || a.temperature !== b.temperature || a.maxTokens !== b.maxTokens) return false;
@@ -3240,7 +3240,7 @@ function deepFreeze(value) {
   return value;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/message.ts
+// .harness/packages/llm/llm/src/message.ts
 function freezeMessage(message) {
   return deepFreeze(structuredClone(message));
 }
@@ -3278,10 +3278,10 @@ function createToolResultMessage(input) {
   });
 }
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var MAX_TIMER_DELAY_MS = 2147483647;
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -3333,8 +3333,8 @@ function errorChain(value) {
   return render(value);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -3365,17 +3365,17 @@ var RetryPolicySchema = src_default.union([
   alwaysPolicySchema
 ]);
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 
-// ../../source/deepseek-harness/packages/llm/llm/src/never.ts
+// .harness/packages/llm/llm/src/never.ts
 function assertNever(value, context) {
   const rendered = JSON.stringify(value) ?? String(value);
   throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/assembler.ts
+// .harness/packages/llm/llm/src/assembler.ts
 var BlockAssembler = class {
   partials = /* @__PURE__ */ new Map();
   order = [];
@@ -3492,6 +3492,21 @@ var BlockAssembler = class {
   blocks() {
     return this.assembled().blocks;
   }
+  /**
+   * Assemble the prefix an interrupted stream can safely finalize: closed and
+   * open text/reasoning blocks with non-whitespace content, in stream order.
+   * Tool calls are omitted because interruption precedes dispatch; retaining
+   * one would require a fabricated result. Open unknown blocks are also omitted.
+   * @returns the kept blocks; empty when nothing streamed before the interruption.
+   */
+  interruptedBlocks() {
+    return this.order.map((index) => {
+      const partial = this.mustGet(index);
+      const type = partial.block?.type ?? partial.blockType;
+      if (type !== "text" && type !== "reasoning") return void 0;
+      return this.assemble(partial, index);
+    }).filter((block) => (block?.type === "text" || block?.type === "reasoning") && block.text.trim() !== "");
+  }
   /** Usage from the `usage` chunk; undefined until one arrives. */
   get usage() {
     return this._usage;
@@ -3518,7 +3533,7 @@ var BlockAssembler = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/llm/llm/src/index.ts
+// .harness/packages/llm/llm/src/index.ts
 var LlmError = class extends HarnessError {
   /** Serializable facts retained beside this live Error. */
   failure;
@@ -3551,7 +3566,7 @@ var LlmError = class extends HarnessError {
   }
 };
 
-// ../../source/deepseek-harness/packages/settings/settings/src/redact.ts
+// .harness/packages/settings/settings/src/redact.ts
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -3601,7 +3616,7 @@ function redactSecrets(schema, value) {
   return { value: stripped, secrets };
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/index.ts
+// .harness/packages/settings/settings/src/index.ts
 var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
 function settingsNamespace(value) {
   if (!NAMESPACE_PATTERN.test(value)) {
@@ -4105,12 +4120,12 @@ function installSettingsSection(ctx, ns, schema, entry, hooks) {
   });
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/types.ts
+// .harness/packages/core/session/src/types.ts
 function SessionId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/json.ts
+// .harness/packages/core/session/src/json.ts
 function hasIntrinsicConstructor(prototype, name) {
   const descriptor = Object.getOwnPropertyDescriptor(prototype, "constructor");
   const constructor = descriptor?.value;
@@ -4235,7 +4250,7 @@ function isJsonValue(value) {
   return walkJsonValue(value, false) === true;
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/surface.ts
+// .harness/packages/core/session/src/surface.ts
 var SURFACE_EVENT_TYPES = /* @__PURE__ */ new Set([
   "user/message",
   "assistant/message",
@@ -4249,7 +4264,7 @@ function isReplacementSurfaceEvent(event) {
   return isSurfaceEvent(event) && event.surfaceOp !== "append";
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/request-header.ts
+// .harness/packages/core/session/src/request-header.ts
 function canonicalHeader(header) {
   const adapterDefaults = header.adapterDefaults;
   return {
@@ -4269,7 +4284,7 @@ function headerEquals(a, b) {
   return at.length === bt.length && at.every((tool, i) => sameSchema(tool, bt[i]));
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/preparation.ts
+// .harness/packages/core/session/src/preparation.ts
 var SessionPreparation = class _SessionPreparation {
   constructor(session, options) {
     this.options = options;
@@ -4296,7 +4311,7 @@ var SessionPreparation = class _SessionPreparation {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/system-prompt/src/index.ts
+// .harness/packages/core/system-prompt/src/index.ts
 var PERSONA_SECTION = "deployment:persona";
 var PERSONA_ORDER = 0;
 var VARIABLE_NAME = /^[a-z][a-z0-9_]*$/;
@@ -4588,7 +4603,7 @@ var SystemPrompt = class extends Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/tools/src/json-schema.ts
+// .harness/packages/core/tools/src/json-schema.ts
 var JsonSchemaError = class extends HarnessError {
   /** Individual schema violations in walk order. */
   violations;
@@ -5026,7 +5041,7 @@ function validateJsonSchemaValue(schema, value, path = "value") {
   return checkValue(schema, value, path);
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/schema.ts
+// .harness/packages/core/tools/src/schema.ts
 var ANNOTATION_KEYS = ["description", "title", "default", "examples"];
 function authorError(message) {
   throw new JsonSchemaError([message]);
@@ -5300,7 +5315,7 @@ function defineTool(options) {
   return tool;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/code-mode.ts
+// .harness/packages/core/tools/src/code-mode.ts
 var RUN_CODE_NAME = "run_code";
 var SDK_SECTION_ORDER = 150;
 var TYPESCRIPT_FLAVOR = {
@@ -5696,7 +5711,7 @@ ${result.logs.join("\n")}` : "";
   return definition;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/ts-types.ts
+// .harness/packages/core/tools/src/ts-types.ts
 var IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 function renderKey(name) {
   return IDENTIFIER.test(name) ? name : JSON.stringify(name);
@@ -5902,7 +5917,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/py-types.ts
+// .harness/packages/core/tools/src/py-types.ts
 var IDENTIFIER2 = /^[\p{XID_Start}_]\p{XID_Continue}*$/u;
 function isBareIdentifier(name) {
   return IDENTIFIER2.test(name) && name.normalize("NFKC") === name;
@@ -6201,7 +6216,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/index.ts
+// .harness/packages/core/tools/src/index.ts
 var COLLAPSE_SECTION_ORDER = 99;
 var CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly \u2014 a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
 var SDK_RENDERERS = {
@@ -7355,7 +7370,7 @@ function toolAbortedBeforeDispatchResult(prior) {
   };
 }
 
-// ../../source/deepseek-harness/packages/core/agent-loop/lib/index.js
+// .harness/packages/core/agent-loop/lib/index.js
 var SOURCE = "@deepseek-ai/dsh-system-prompt";
 var CLEARED = "Current runtime context: none. Earlier runtime-context snapshots no longer apply.";
 function isOwned(message) {
@@ -7898,18 +7913,41 @@ var ReactLoopAgent = class {
       const { request, preparedCall } = await this.buildRequest(turn, step, assembly.tools, system, this.session.deriveMessages(), signal);
       const assembler = new BlockAssembler();
       const chunkSeqs = [];
-      const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request);
-      signal.throwIfAborted();
-      for await (const chunk of stream) {
+      try {
+        const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request);
         signal.throwIfAborted();
-        chunkSeqs.push(this.session.append("assistant/chunk", {
-          turn,
-          step,
-          chunk
-        }).seq);
-        assembler.push(chunk);
+        for await (const chunk of stream) {
+          signal.throwIfAborted();
+          chunkSeqs.push(this.session.append("assistant/chunk", {
+            turn,
+            step,
+            chunk
+          }).seq);
+          assembler.push(chunk);
+        }
+        signal.throwIfAborted();
+      } catch (error) {
+        if (signal.aborted) {
+          const content = assembler.interruptedBlocks();
+          if (content.length > 0) this.session.append("assistant/message", {
+            turn,
+            step,
+            message: createAssistantMessage({
+              content,
+              source: {
+                provider: request.provider,
+                model: request.model
+              }
+            }),
+            interrupted: true,
+            ...assembler.usage === void 0 ? {} : { usage: assembler.usage }
+          }, {
+            surfaceOp: "append",
+            sourceEventSeqs: chunkSeqs
+          });
+        }
+        throw error;
       }
-      signal.throwIfAborted();
       const finish = assembler.finish;
       if (finish.kind === "error" || finish.kind === "aborted") {
         const action = await this.dispatch.waterfall("agent/request-error", {

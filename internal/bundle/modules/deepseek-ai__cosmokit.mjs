@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/lib/index.js
+// .harness/vendor/cosmokit/lib/index.js
 function noop() {
 }
 function isNullable(value) {

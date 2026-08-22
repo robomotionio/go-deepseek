@@ -15,9 +15,9 @@ var __commonJS = (cb, mod) => function __require2() {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/p-retry@4.6.2/node_modules/p-retry/index.js
+// .harness/node_modules/.pnpm/p-retry@4.6.2/node_modules/p-retry/index.js
 var require_index = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/p-retry@4.6.2/node_modules/p-retry/index.js"(exports, module) {
+  ".harness/node_modules/.pnpm/p-retry@4.6.2/node_modules/p-retry/index.js"(exports, module) {
     var retry = __require("retry");
     var networkErrorMsgs = [
       "Failed to fetch",

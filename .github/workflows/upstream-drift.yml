@@ -1,0 +1,117 @@
+# Watch the pin.
+#
+# The embedded bundle is a copy of deepseek-harness taken at one commit.
+# `.harness/` is gitignored and `internal/bundle/` is generated, so nothing in
+# this repository notices when that commit recedes — and a copy nobody watches
+# is how a fix that landed upstream stays unshipped here. Against the pin this
+# workflow replaces, the report's security section would have named the bwrap
+# PID-namespace escape for the fourteen days it went unnoticed.
+#
+# One issue, updated in place. A new issue every week is a notification channel
+# people mute; an issue that keeps changing under the same title is a to-do
+# item that stays visible until somebody moves the pin.
+
+name: upstream drift
+
+on:
+  schedule:
+    # Mondays, 07:00 UTC — early enough in the week that acting on it is still
+    # this week's work.
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: upstream-drift
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Check for drift
+        id: check
+        run: |
+          set +e
+          node tools/upstream/check.mjs > report.txt 2> report.err
+          status=$?
+          set -e
+          cat report.txt report.err
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          # Exit 2 means the check could not run — an unreachable upstream, a
+          # lockfile out of step with the bundle. That is a failure of this
+          # repository's own machinery and it should go red, unlike drift.
+          if [ "$status" -eq 2 ]; then exit 1; fi
+
+      - name: Open or update the drift issue
+        if: steps.check.outputs.status == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const report = fs.readFileSync('report.txt', 'utf8')
+            const lock = JSON.parse(fs.readFileSync('UPSTREAM.lock.json', 'utf8'))
+            const title = `upstream drift: pinned at ${lock.harness.ref}`
+            const body = [
+              `\`UPSTREAM.lock.json\` pins **${lock.harness.ref}** (\`${lock.harness.commit.slice(0, 12)}\`), pinned ${lock.harness.pinned}.`,
+              '',
+              'Commits since then that touch a path the bundle carries — anything reading as security work first:',
+              '',
+              '```',
+              report.trim(),
+              '```',
+              '',
+              '<details><summary>Moving the pin</summary>',
+              '',
+              '```sh',
+              'make sync HARNESS_REF=<ref>',
+              'make build',
+              'make bundle',
+              'make verify',
+              '```',
+              '',
+              'Then edit `UPSTREAM.lock.json` by hand — the pin is a decision, and the',
+              'reason it moved belongs in the diff.',
+              '</details>',
+              '',
+              `_Updated by ${context.workflow} at ${new Date().toISOString().slice(0, 10)}._`,
+            ].join('\n')
+
+            const { data: open } = await github.rest.issues.listForRepo({
+              ...context.repo, state: 'open', labels: 'upstream-drift', per_page: 100,
+            })
+            const existing = open[0]
+            if (existing) {
+              await github.rest.issues.update({ ...context.repo, issue_number: existing.number, title, body })
+              core.notice(`updated #${existing.number}`)
+            } else {
+              const { data: created } = await github.rest.issues.create({
+                ...context.repo, title, body, labels: ['upstream-drift'],
+              })
+              core.notice(`opened #${created.number}`)
+            }
+
+      - name: Close the drift issue when the pin catches up
+        if: steps.check.outputs.status == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: open } = await github.rest.issues.listForRepo({
+              ...context.repo, state: 'open', labels: 'upstream-drift', per_page: 100,
+            })
+            for (const issue of open) {
+              await github.rest.issues.createComment({
+                ...context.repo, issue_number: issue.number,
+                body: 'The pin now matches upstream for every bundled path. Closing.',
+              })
+              await github.rest.issues.update({ ...context.repo, issue_number: issue.number, state: 'closed' })
+            }

@@ -1,7 +1,7 @@
-// ../../source/deepseek-harness/packages/llm/llm-retry/lib/index.js
+// .harness/packages/llm/llm-retry/lib/index.js
 import { randomUUID } from "node:crypto";
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -23,7 +23,7 @@ function pick(source, keys, forced) {
   return result;
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -132,7 +132,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -212,7 +212,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -844,7 +844,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/packages/llm/llm-retry/lib/index.js
+// .harness/packages/llm/llm-retry/lib/index.js
 function RetryId(id) {
   return id;
 }

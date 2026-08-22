@@ -476,14 +476,19 @@ func open(ctx context.Context, workspace string, m *mentor) *sdk.Harness {
 
 	// A registered skill is only loadable BY NAME, and the model learns the
 	// names from a catalog `tool-skill` injects into the conversation — but
-	// only when every skill provider reports its discovery complete. The
-	// bundled `skill-filesystem` cannot, here: it watches its roots with
-	// chokidar, chokidar needs `fs.watch`, and this runtime deliberately lacks
-	// it — so it reports `complete: false`, and one incomplete provider
-	// suppresses the whole catalog without an error. Pointing the provider at
-	// no roots — the truth of this deployment, whose every skill is
-	// host-registered — lets discovery complete, and the fresh process of act
-	// three gets told what it knows instead of having to guess.
+	// only when every skill provider reports its discovery complete.
+	//
+	// `fs.watch` used to be the obstacle: the bundled `skill-filesystem`
+	// watches its roots with chokidar, this runtime had no watcher, and the
+	// provider reported `complete: false` — which suppresses the whole catalog
+	// without an error. The runtime implements `fs.watch` now (nodecompat), and
+	// `sdk.TestSkillDiscoveryCompletes` holds it to that, so the provider would
+	// complete on its own.
+	//
+	// Pointing it at no roots is kept anyway, because it is the truth of THIS
+	// deployment rather than a workaround: every skill here is host-registered,
+	// so a filesystem scan has nothing to find and asking for one only makes
+	// act three wait for an answer that is always empty.
 	entries := sdk.Compose(cfg)
 	for i := range entries {
 		if entries[i].ID == "agent-spine" {

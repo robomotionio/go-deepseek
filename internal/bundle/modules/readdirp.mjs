@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/readdirp@5.0.0/node_modules/readdirp/index.js
+// .harness/node_modules/.pnpm/readdirp@5.0.0/node_modules/readdirp/index.js
 import { lstat, readdir, realpath, stat } from "node:fs/promises";
 import { join as pjoin, relative as prelative, resolve as presolve, sep as psep } from "node:path";
 import { Readable } from "node:stream";

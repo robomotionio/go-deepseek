@@ -1,15 +1,16 @@
 # Regenerating the embedded harness.
 #
-# The bundle under bundle/ is a generated artifact, committed like any other
-# generated file: using it needs nothing but this repository, and building it
-# needs a machine with node, pnpm and git. That asymmetry is the point — the
+# The bundle under internal/bundle/ is a generated artifact, committed like any
+# other generated file: using it needs nothing but this repository, and building
+# it needs a machine with node, pnpm and git. That asymmetry is the point — the
 # tools are a maintainer's problem, not a deployment's.
 #
 #   make update     fetch upstream, rebuild it, regenerate the bundle, run tests
 #   make sync       fetch upstream into .harness/ at HARNESS_REF
 #   make build      build the harness's libraries in .harness/
-#   make bundle     regenerate bundle/ from .harness/
+#   make bundle     regenerate internal/bundle/ from .harness/
 #   make verify     go test ./... (every bundled module must still evaluate)
+#   make upstream-check  how far upstream has moved since UPSTREAM.lock.json
 #   make show       what the committed bundle was built from
 #
 # Point it at a checkout you already have instead of cloning:
@@ -23,9 +24,16 @@ HARNESS_REPO ?= https://github.com/deepseek-ai/deepseek-harness.git
 # that says breaking changes will happen and its session format is still version
 # zero — "latest" is a decision to take deliberately, not one to inherit from
 # whenever the last build happened to run.
-HARNESS_REF  ?= dsh-v0.1.0-rc.7
+HARNESS_REF  ?= dsh-v0.1.1-rc.2
 HARNESS_DIR  ?= .harness
-OUT          ?= bundle
+# Where the generated bundle lands. This must stay pointed at the directory
+# that bundle.go actually embeds. It read `bundle` until 0.3.0, which is where
+# the embedded copy lived before 528db2f moved it under internal/ — and every
+# consequence of the stale default was silent: `make bundle` filled a fresh
+# untracked ./bundle/, `make verify` passed because it was still testing the
+# old embedded copy, `git diff --stat $(OUT)` showed nothing, and `make show`
+# read a manifest that was not the shipped one.
+OUT          ?= internal/bundle
 
 # Node's default heap is generous enough to hide a runaway from you until the
 # machine is swapping. Bundling 60 packages needs nothing like this much.
@@ -35,7 +43,7 @@ NODE  ?= node
 PNPM  ?= pnpm
 GIT   ?= git
 
-.PHONY: update sync build bundle verify show clean-harness help
+.PHONY: update sync build bundle verify upstream-check upstream-drift-report show clean-harness help
 
 help:
 	@sed -n '1,30p' $(MAKEFILE_LIST) | sed 's/^# \{0,1\}//'
@@ -86,6 +94,26 @@ bundle:
 # a plugin mount.
 verify: crosscheck
 	go test ./... -count=1
+	@$(MAKE) --no-print-directory upstream-drift-report
+
+# Drift is REPORTED here, not enforced.
+#
+# A gate you cannot satisfy is a gate people learn to skip, and drift is not
+# fixable by editing this repository — somebody else committed. So `make verify`
+# stays a statement about this repository's own correctness and prints the
+# drift underneath it, where a maintainer who is already here will read it. The
+# weekly workflow is what escalates, by opening an issue that survives being
+# ignored; `make upstream-check` is the strict form, and exits non-zero.
+upstream-drift-report:
+	@echo
+	@$(NODE) tools/upstream/check.mjs --quiet || true
+
+# upstream-check answers one question: what has changed upstream, since the pin,
+# in a path this bundle actually carries — with anything that reads like security
+# work raised to the top. Exit 1 on drift, 2 if the check itself could not run.
+upstream-check:
+	@command -v $(NODE) >/dev/null || { echo "make upstream-check needs node"; exit 1; }
+	@$(NODE) tools/upstream/check.mjs
 
 # Every platform a Robomotion package ships to. Tests alone run on the host
 # only, so a unix-only symbol -- syscall.Stat_t was the one that got through --

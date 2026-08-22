@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -23,7 +23,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -132,7 +132,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -171,7 +171,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -251,7 +251,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -883,10 +883,10 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/lib/index.js
+// .harness/packages/shell/tool-bash/lib/index.js
 import { isAbsolute, resolve as resolve2 } from "node:path";
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -1111,7 +1111,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -1289,7 +1289,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -1528,7 +1528,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError2 = class extends TypeError {
   name = "ValidationError";
@@ -2082,7 +2082,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -2359,7 +2359,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -2538,7 +2538,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -2624,7 +2624,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2722,7 +2722,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/store.ts
+// .harness/packages/core/scope/src/store.ts
 var NamedEntries = class {
   constructor(duplicateError) {
     this.duplicateError = duplicateError;
@@ -2921,7 +2921,7 @@ var ScopedLayers = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/index.ts
+// .harness/packages/core/scope/src/index.ts
 var kScope = /* @__PURE__ */ Symbol("dsh.scope");
 var carrierKeys = /* @__PURE__ */ new WeakMap();
 var scopeParents = /* @__PURE__ */ new WeakMap();
@@ -2950,7 +2950,7 @@ function scopeTarget(base, key) {
   return carrier;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function MessageId(id) {
   return id;
 }
@@ -2958,7 +2958,7 @@ function CallId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/call-config.ts
+// .harness/packages/llm/llm/src/call-config.ts
 function deepFreeze(value) {
   const seen = /* @__PURE__ */ new WeakSet();
   const pending = [{ kind: "visit", node: value }];
@@ -2985,7 +2985,7 @@ function deepFreeze(value) {
   return value;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/message.ts
+// .harness/packages/llm/llm/src/message.ts
 function freezeMessage(message) {
   return deepFreeze(structuredClone(message));
 }
@@ -3002,10 +3002,10 @@ function createUserMessage(input) {
   });
 }
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var MAX_TIMER_DELAY_MS = 2147483647;
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -3029,8 +3029,8 @@ var EXCEEDS_MODEL_CONTEXT = new RegExp(
   "i"
 );
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -3061,17 +3061,17 @@ var RetryPolicySchema = src_default.union([
   alwaysPolicySchema
 ]);
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 
-// ../../source/deepseek-harness/packages/llm/llm/src/never.ts
+// .harness/packages/llm/llm/src/never.ts
 function assertNever(value, context) {
   const rendered = JSON.stringify(value) ?? String(value);
   throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/json.ts
+// .harness/packages/core/session/src/json.ts
 function hasIntrinsicConstructor(prototype, name2) {
   const descriptor = Object.getOwnPropertyDescriptor(prototype, "constructor");
   const constructor = descriptor?.value;
@@ -3196,7 +3196,7 @@ function isJsonValue(value) {
   return walkJsonValue(value, false) === true;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/json-schema.ts
+// .harness/packages/core/tools/src/json-schema.ts
 var JsonSchemaError = class extends HarnessError {
   /** Individual schema violations in walk order. */
   violations;
@@ -3634,7 +3634,7 @@ function validateJsonSchemaValue(schema, value, path = "value") {
   return checkValue(schema, value, path);
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/schema.ts
+// .harness/packages/core/tools/src/schema.ts
 var ANNOTATION_KEYS = ["description", "title", "default", "examples"];
 function authorError(message) {
   throw new JsonSchemaError([message]);
@@ -3908,7 +3908,7 @@ function defineTool(options) {
   return tool;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/code-mode.ts
+// .harness/packages/core/tools/src/code-mode.ts
 var RUN_CODE_NAME = "run_code";
 var SDK_SECTION_ORDER = 150;
 var TYPESCRIPT_FLAVOR = {
@@ -4304,7 +4304,7 @@ ${result.logs.join("\n")}` : "";
   return definition;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/ts-types.ts
+// .harness/packages/core/tools/src/ts-types.ts
 var IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 function renderKey(name2) {
   return IDENTIFIER.test(name2) ? name2 : JSON.stringify(name2);
@@ -4510,7 +4510,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/py-types.ts
+// .harness/packages/core/tools/src/py-types.ts
 var IDENTIFIER2 = /^[\p{XID_Start}_]\p{XID_Continue}*$/u;
 function isBareIdentifier(name2) {
   return IDENTIFIER2.test(name2) && name2.normalize("NFKC") === name2;
@@ -4809,7 +4809,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/index.ts
+// .harness/packages/core/tools/src/index.ts
 var COLLAPSE_SECTION_ORDER = 99;
 var CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly \u2014 a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
 var SDK_RENDERERS = {
@@ -5963,7 +5963,7 @@ function toolAbortedBeforeDispatchResult(prior) {
   };
 }
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/escalation.ts
+// .harness/packages/sandbox/sandbox/src/escalation.ts
 var WIDER_MODES = {
   "read-only": ["workspace-write", "danger-full-access"],
   "workspace-write": ["danger-full-access"]
@@ -6020,7 +6020,7 @@ async function approveEscalation(request, approval) {
   }
 }
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/roots.ts
+// .harness/packages/sandbox/sandbox/src/roots.ts
 import { realpathSync } from "node:fs";
 function canonicalPath(path) {
   try {
@@ -6030,7 +6030,7 @@ function canonicalPath(path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/redact.ts
+// .harness/packages/settings/settings/src/redact.ts
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -6080,7 +6080,7 @@ function redactSecrets(schema, value) {
   return { value: stripped, secrets };
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/index.ts
+// .harness/packages/settings/settings/src/index.ts
 var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
 function settingsNamespace(value) {
   if (!NAMESPACE_PATTERN.test(value)) {
@@ -6559,10 +6559,10 @@ var SettingsProvider = class extends Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/subprocess/subprocess/src/types.ts
+// .harness/packages/subprocess/subprocess/src/types.ts
 var DSH_ENV_PREFIX = "DSH_";
 
-// ../../source/deepseek-harness/packages/shell/shell/src/render.ts
+// .harness/packages/shell/shell/src/render.ts
 function parseExitStatus(text) {
   const signal = /\n\[killed by signal: ([^\]\n]+)\]$/.exec(text);
   if (signal?.[1] !== void 0) return { body: text.slice(0, signal.index), signal: signal[1] };
@@ -6571,10 +6571,10 @@ function parseExitStatus(text) {
   return { body: text, exitCode: 0 };
 }
 
-// ../../source/deepseek-harness/packages/shell/shell/src/index.ts
+// .harness/packages/shell/shell/src/index.ts
 var SHELL_SETTINGS_NAMESPACE = settingsNamespace("shell");
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/lib/index.js
+// .harness/packages/shell/tool-bash/lib/index.js
 function processOutcome(proc) {
   if (proc.status === "killed") return {
     status: "killed",

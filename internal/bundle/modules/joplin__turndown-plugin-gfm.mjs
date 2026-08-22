@@ -7,9 +7,9 @@ var __commonJS = (cb, mod) => function __require() {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@joplin+turndown-plugin-gfm@1.0.67/node_modules/@joplin/turndown-plugin-gfm/lib/turndown-plugin-gfm.cjs.js
+// .harness/node_modules/.pnpm/@joplin+turndown-plugin-gfm@1.0.67/node_modules/@joplin/turndown-plugin-gfm/lib/turndown-plugin-gfm.cjs.js
 var require_turndown_plugin_gfm_cjs = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@joplin+turndown-plugin-gfm@1.0.67/node_modules/@joplin/turndown-plugin-gfm/lib/turndown-plugin-gfm.cjs.js"(exports) {
+  ".harness/node_modules/.pnpm/@joplin+turndown-plugin-gfm@1.0.67/node_modules/@joplin/turndown-plugin-gfm/lib/turndown-plugin-gfm.cjs.js"(exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     var highlightRegExp = /highlight-(?:text|source)-([a-z0-9]+)/;
     function highlightedCodeBlock(turndownService) {

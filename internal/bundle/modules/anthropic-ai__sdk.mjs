@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs
 function __classPrivateFieldSet(receiver, state, value, kind, f) {
   if (kind === "m")
     throw new TypeError("Private method is not writable");
@@ -16,7 +16,7 @@ function __classPrivateFieldGet(receiver, state, kind, f) {
   return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs
 var uuid4 = function() {
   const { crypto } = globalThis;
   if (crypto?.randomUUID) {
@@ -28,7 +28,7 @@ var uuid4 = function() {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => (+c ^ randomByte() & 15 >> +c / 4).toString(16));
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs
 function isAbortError(err) {
   return typeof err === "object" && err !== null && // Spec-compliant fetch implementations
   ("name" in err && err.name === "AbortError" || // Expo fetch
@@ -59,7 +59,7 @@ var castToError = (err) => {
   return new Error(err);
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs
 var AnthropicError = class extends Error {
 };
 var APIError = class _APIError extends AnthropicError {
@@ -151,7 +151,7 @@ var RateLimitError = class extends APIError {
 var InternalServerError = class extends APIError {
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs
 var startsWithSchemeRegexp = /^[a-z][a-z0-9+.-]*:/i;
 var isAbsoluteURL = (url) => {
   return startsWithSchemeRegexp.test(url);
@@ -191,13 +191,13 @@ var safeJSON = (text) => {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs
 var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs
 var VERSION = "0.91.1";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs
 var isRunningInBrowser = () => {
   return (
     // @ts-ignore
@@ -331,7 +331,7 @@ var getPlatformHeaders = () => {
   return _platformHeaders ?? (_platformHeaders = getPlatformProperties());
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs
 function getDefaultFetch() {
   if (typeof fetch !== "undefined") {
     return fetch;
@@ -403,7 +403,7 @@ async function CancelReadableStream(stream) {
   await cancelPromise;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs
 var FallbackEncoder = ({ headers, body }) => {
   return {
     bodyHeaders: {
@@ -413,7 +413,7 @@ var FallbackEncoder = ({ headers, body }) => {
   };
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs
 function stringifyQuery(query) {
   return Object.entries(query).filter(([_, value]) => typeof value !== "undefined").map(([key, value]) => {
     if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
@@ -426,7 +426,7 @@ function stringifyQuery(query) {
   }).join("&");
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs
 function concatBytes(buffers) {
   let length = 0;
   for (const buffer of buffers) {
@@ -451,7 +451,7 @@ function decodeUTF8(bytes) {
   return (decodeUTF8_ ?? (decoder = new globalThis.TextDecoder(), decodeUTF8_ = decoder.decode.bind(decoder)))(bytes);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs
 var _LineDecoder_buffer;
 var _LineDecoder_carriageReturnIndex;
 var LineDecoder = class {
@@ -528,7 +528,7 @@ function findDoubleNewlineIndex(buffer) {
   return -1;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs
 var levelNumbers = {
   off: 0,
   error: 200,
@@ -601,7 +601,7 @@ var formatRequestDetails = (details) => {
   return details;
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs
 var _Stream_client;
 var Stream = class _Stream {
   constructor(iterator, controller, client) {
@@ -852,7 +852,7 @@ function partition(str, delimiter) {
   return [str, "", ""];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs
 async function defaultParseResponse(client, props) {
   const { response, requestLogID, retryOfRequestLogID, startTime } = props;
   const body = await (async () => {
@@ -902,7 +902,7 @@ function addRequestID(value, response) {
   });
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs
 var _APIPromise_client;
 var APIPromise = class _APIPromise extends Promise {
   constructor(client, responsePromise, parseResponse = defaultParseResponse) {
@@ -965,7 +965,7 @@ var APIPromise = class _APIPromise extends Promise {
 };
 _APIPromise_client = /* @__PURE__ */ new WeakMap();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs
 var _AbstractPage_client;
 var AbstractPage = class {
   constructor(client, response, body, options) {
@@ -1090,7 +1090,7 @@ var PageCursor = class extends AbstractPage {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs
 var checkFileSupport = () => {
   if (typeof File === "undefined") {
     const { process } = globalThis;
@@ -1168,7 +1168,7 @@ var addFormValue = async (form, key, value, stripFilenames) => {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs
 var isBlobLike = (value) => value != null && typeof value === "object" && typeof value.size === "number" && typeof value.type === "string" && typeof value.text === "function" && typeof value.slice === "function" && typeof value.arrayBuffer === "function";
 var isFileLike = (value) => value != null && typeof value === "object" && typeof value.name === "string" && typeof value.lastModified === "number" && isBlobLike(value);
 var isResponseLike = (value) => value != null && typeof value === "object" && typeof value.url === "string" && typeof value.blob === "function";
@@ -1224,14 +1224,14 @@ function propsForError(value) {
   return `; props: [${props.map((p) => `"${p}"`).join(", ")}]`;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs
 var APIResource = class {
   constructor(client) {
     this._client = client;
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs
 var brand_privateNullableHeaders = /* @__PURE__ */ Symbol.for("brand.privateNullableHeaders");
 function* iterateHeaders(headers) {
   if (!headers)
@@ -1294,7 +1294,7 @@ var buildHeaders = (newHeaders) => {
   return { [brand_privateNullableHeaders]: true, values: targetHeaders, nulls: nullHeaders };
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs
 function encodeURIPath(str) {
   return str.replace(/[^A-Za-z0-9\-._~!$&'()*+,;=:@]+/g, encodeURIComponent);
 }
@@ -1349,7 +1349,7 @@ ${underline}`);
 };
 var path = /* @__PURE__ */ createPathTagFunction(encodeURIPath);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments.mjs
 var Environments = class extends APIResource {
   /**
    * Create a new environment with the specified configuration.
@@ -1483,7 +1483,7 @@ var Environments = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/stainless-helper-header.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/stainless-helper-header.mjs
 var SDK_HELPER_SYMBOL = /* @__PURE__ */ Symbol("anthropic.sdk.stainlessHelper");
 function wasCreatedByStainlessHelper(value) {
   return typeof value === "object" && value !== null && SDK_HELPER_SYMBOL in value;
@@ -1526,7 +1526,7 @@ function stainlessHelperHeaderFromFile(file) {
   return {};
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs
 var Files = class extends APIResource {
   /**
    * List Files
@@ -1640,7 +1640,7 @@ var Files = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs
 var Models = class extends APIResource {
   /**
    * Get a specific model.
@@ -1692,7 +1692,7 @@ var Models = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs
 var UserProfiles = class extends APIResource {
   /**
    * Create User Profile
@@ -1802,7 +1802,7 @@ var UserProfiles = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs
 var Versions = class extends APIResource {
   /**
    * List Agent Versions
@@ -1830,7 +1830,7 @@ var Versions = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs
 var Agents = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -1950,7 +1950,7 @@ var Agents = class extends APIResource {
 };
 Agents.Versions = Versions;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs
 var Memories = class extends APIResource {
   /**
    * CreateMemory
@@ -2072,7 +2072,7 @@ var Memories = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs
 var MemoryVersions = class extends APIResource {
   /**
    * GetMemoryVersion
@@ -2145,7 +2145,7 @@ var MemoryVersions = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs
 var MemoryStores = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -2277,7 +2277,7 @@ var MemoryStores = class extends APIResource {
 MemoryStores.Memories = Memories;
 MemoryStores.MemoryVersions = MemoryVersions;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs
 var MODEL_NONSTREAMING_TOKENS = {
   "claude-opus-4-20250514": 8192,
   "claude-opus-4-0": 8192,
@@ -2289,7 +2289,7 @@ var MODEL_NONSTREAMING_TOKENS = {
   "claude-opus-4-1@20250805": 8192
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs
 function getOutputFormat(params) {
   return params?.output_format ?? params?.output_config?.format;
 }
@@ -2362,7 +2362,7 @@ function parseBetaOutputFormat(params, content) {
   }
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs
 var tokenize = (input) => {
   let current = 0;
   let tokens = [];
@@ -2582,7 +2582,7 @@ var generate = (tokens) => {
 };
 var partialParse = (input) => JSON.parse(generate(unstrip(strip(tokenize(input)))));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs
 var _BetaMessageStream_instances;
 var _BetaMessageStream_currentMessageSnapshot;
 var _BetaMessageStream_params;
@@ -3197,7 +3197,7 @@ var BetaMessageStream = class _BetaMessageStream {
 function checkNever(x) {
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs
 var ToolError = class extends Error {
   constructor(content) {
     const message = typeof content === "string" ? content : content.map((block) => {
@@ -3211,7 +3211,7 @@ var ToolError = class extends Error {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs
 var DEFAULT_TOKEN_THRESHOLD = 1e5;
 var DEFAULT_SUMMARY_PROMPT = `You have been working on the task described above but have not yet completed it. Write a continuation summary that will allow you (or another instance of yourself) to resume work efficiently in a future context window where the conversation history will be replaced with this summary. Your summary should be structured, concise, and actionable. Include:
 1. Task Overview
@@ -3237,7 +3237,7 @@ Any promises made to the user
 Be concise but complete\u2014err on the side of including information that would prevent duplicate work or repeated mistakes. Write in a way that enables immediate resumption of the task.
 Wrap your summary in <summary></summary> tags.`;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs
 var _BetaToolRunner_instances;
 var _BetaToolRunner_consumed;
 var _BetaToolRunner_mutated;
@@ -3589,7 +3589,7 @@ async function generateToolResponse(params, lastMessage = params.messages.at(-1)
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs
 var JSONLDecoder = class _JSONLDecoder {
   constructor(iterator, controller) {
     this.iterator = iterator;
@@ -3621,7 +3621,7 @@ var JSONLDecoder = class _JSONLDecoder {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs
 var Batches = class extends APIResource {
   /**
    * Send a batch of Message creation requests.
@@ -3813,7 +3813,7 @@ var Batches = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs
 var DEPRECATED_MODELS = {
   "claude-1.3": "November 6th, 2024",
   "claude-1.3-100k": "November 6th, 2024",
@@ -3947,7 +3947,7 @@ Messages.Batches = Batches;
 Messages.BetaToolRunner = BetaToolRunner;
 Messages.ToolError = ToolError;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs
 var Events = class extends APIResource {
   /**
    * List Events
@@ -4032,7 +4032,7 @@ var Events = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs
 var Resources = class extends APIResource {
   /**
    * Get Session Resource
@@ -4156,7 +4156,7 @@ var Resources = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs
 var Sessions = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -4297,7 +4297,7 @@ var Sessions = class extends APIResource {
 Sessions.Events = Events;
 Sessions.Resources = Resources;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs
 var Versions2 = class extends APIResource {
   /**
    * Create Skill Version
@@ -4388,7 +4388,7 @@ var Versions2 = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs
 var Skills = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -4474,7 +4474,7 @@ var Skills = class extends APIResource {
 };
 Skills.Versions = Versions2;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs
 var Credentials = class extends APIResource {
   /**
    * Create Credential
@@ -4621,7 +4621,7 @@ var Credentials = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs
 var Vaults = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -4759,7 +4759,7 @@ var Vaults = class extends APIResource {
 };
 Vaults.Credentials = Credentials;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs
 var Beta = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -4786,7 +4786,7 @@ Beta.Files = Files;
 Beta.Skills = Skills;
 Beta.UserProfiles = UserProfiles;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs
 var Completions = class extends APIResource {
   create(params, options) {
     const { betas, ...body } = params;
@@ -4803,7 +4803,7 @@ var Completions = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs
 function getOutputFormat2(params) {
   return params?.output_config?.format;
 }
@@ -4864,7 +4864,7 @@ function parseOutputFormat(params, content) {
   }
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs
 var _MessageStream_instances;
 var _MessageStream_currentMessageSnapshot;
 var _MessageStream_params;
@@ -5454,7 +5454,7 @@ var MessageStream = class _MessageStream {
 function checkNever2(x) {
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs
 var Batches2 = class extends APIResource {
   /**
    * Send a batch of Message creation requests.
@@ -5595,7 +5595,7 @@ var Batches2 = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs
 var Messages2 = class extends APIResource {
   constructor() {
     super(...arguments);
@@ -5712,7 +5712,7 @@ var DEPRECATED_MODELS2 = {
 var MODELS_TO_WARN_WITH_THINKING_ENABLED2 = ["claude-mythos-preview", "claude-opus-4-6"];
 Messages2.Batches = Batches2;
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs
 var Models2 = class extends APIResource {
   /**
    * Get a specific model.
@@ -5749,7 +5749,7 @@ var Models2 = class extends APIResource {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs
 var readEnv = (env) => {
   if (typeof globalThis.process !== "undefined") {
     return globalThis.process.env?.[env]?.trim() || void 0;
@@ -5760,7 +5760,7 @@ var readEnv = (env) => {
   return void 0;
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.91.1_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs
 var _BaseAnthropic_instances;
 var _a;
 var _BaseAnthropic_encoder;

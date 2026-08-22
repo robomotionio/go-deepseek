@@ -138,6 +138,18 @@ export function modeOf(options) {
   return options && typeof options.mode === 'number' ? options.mode : 0;
 }
 
+// The write flag, as `fs.writeFile(path, data, { flag })` gives it. Empty means
+// "the default for this call" and the host decides which — 'w' for a write, 'a'
+// for an append — because only the host knows which one it is being asked for.
+//
+// Worth passing through rather than ignoring: 'wx' is an exclusive create, and
+// exclusive create is how portable JavaScript takes a lock. Dropping it grants
+// the lock to every caller at once, silently.
+export function flagOf(options) {
+  if (typeof options === 'string') return '';
+  return options && typeof options.flag === 'string' ? options.flag : '';
+}
+
 export function toMs(t) {
   if (t instanceof Date) return t.getTime();
   // A number is seconds or milliseconds depending on who wrote the call, and

@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -6,7 +6,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -69,7 +69,7 @@ var arrayBufferToBase64 = Binary.toBase64;
 var hexToArrayBuffer = Binary.fromHex;
 var arrayBufferToHex = Binary.toHex;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -108,7 +108,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -188,7 +188,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -413,7 +413,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -591,7 +591,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -830,7 +830,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError = class extends TypeError {
   name = "ValidationError";
@@ -1384,7 +1384,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -1661,7 +1661,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -1840,7 +1840,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -1926,7 +1926,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2024,18 +2024,41 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/credentials/credentials/lib/index.js
+// .harness/packages/credentials/credentials/lib/index.js
 var REF_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
+var KEY_SEGMENT_PATTERN = /^[a-z][a-z0-9-]*$/;
 function credentialRef(value) {
-  if (!REF_PATTERN.test(value)) throw new TypeError(`credential ref "${value}" must match ${String(REF_PATTERN)}`);
+  if (!isCredentialRefName(value)) throw new TypeError(`credential ref "${value}" must match ${String(REF_PATTERN)}`);
   return value;
+}
+function isCredentialRefName(value) {
+  return REF_PATTERN.test(value);
+}
+function isCredentialKeySegment(value) {
+  return KEY_SEGMENT_PATTERN.test(value);
+}
+function credentialKey(scope, id) {
+  for (const segment of [scope, id]) if (!KEY_SEGMENT_PATTERN.test(segment)) throw new TypeError(`credential key segment "${segment}" must match ${String(KEY_SEGMENT_PATTERN)}`);
+  return `${scope}/${id}`;
+}
+function parseCredentialKey(value) {
+  const segments = value.split("/");
+  const [scope, id] = segments;
+  if (segments.length !== 2 || scope === void 0 || id === void 0) throw new TypeError(`credential key "${value}" must be "<scope>/<id>"`);
+  return credentialKey(scope, id);
+}
+function credentialKeyScope(key) {
+  return key.slice(0, key.indexOf("/"));
+}
+function credentialKeyId(key) {
+  return key.slice(key.indexOf("/") + 1);
 }
 var CredentialProvider = class extends Service {
   constructor(ctx) {
     super(ctx, "credentials");
   }
   /**
-  * Fan `credentials/updated` out with contained listener failures: every
+  * Fan `credentials/reference-updated` out with contained listener failures: every
   * listener runs, and a sync throw or async rejection is logged without
   * changing the committed operation's outcome — except `INVARIANT`-coded
   * failures, which rethrow after every listener ran (the rethrow reaches the
@@ -2046,30 +2069,48 @@ var CredentialProvider = class extends Service {
   * @param ref - the reference whose stored value changed.
   */
   notifyUpdated(ref) {
+    this.fanOut("credentials/reference-updated", ref);
+  }
+  /**
+  * Fan `credentials/record-updated` out on exactly the terms
+  * {@link notifyUpdated} documents, for the record half of the seam.
+  * @param key - the record whose stored value changed.
+  */
+  notifyRecordUpdated(key) {
+    this.fanOut("credentials/record-updated", key);
+  }
+  /** The contained dispatch both notifications run through; see {@link notifyUpdated}. */
+  fanOut(event, subject) {
     let invariantFailure;
-    const args = ["credentials/updated", ref];
+    const args = [event, subject];
     for (const listener of this.ctx.events.dispatch("emit", args)) try {
-      const returned = listener(ref);
+      const returned = listener(subject);
       if (returned != null && typeof returned.then === "function") Promise.resolve(returned).then(void 0, (error) => {
-        this.warnListenerFailure(ref, error);
+        this.warnListenerFailure(event, subject, error);
       });
     } catch (error) {
       if (error?.code === "INVARIANT") {
         invariantFailure ??= error;
         continue;
       }
-      this.warnListenerFailure(ref, error);
+      this.warnListenerFailure(event, subject, error);
     }
     if (invariantFailure !== void 0) throw invariantFailure;
   }
   /** Contained-listener diagnostic shared by the sync and async failure paths. */
-  warnListenerFailure(ref, error) {
-    this.ctx.logger.warn('credentials: a credentials/updated listener for "%s" failed', ref);
+  warnListenerFailure(event, subject, error) {
+    this.ctx.logger.warn('credentials: a %s listener for "%s" failed', event, subject);
     this.ctx.logger.warn(error);
   }
 };
 export {
   CredentialProvider,
+  credentialKey,
+  credentialKeyId,
+  credentialKeyScope,
   credentialRef,
-  CredentialProvider as default
+  CredentialProvider as default,
+  isCredentialKeySegment,
+  isCredentialRefName,
+  parseCredentialKey
 };

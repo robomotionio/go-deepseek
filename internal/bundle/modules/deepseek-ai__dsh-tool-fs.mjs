@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -23,7 +23,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -132,7 +132,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -171,7 +171,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -251,7 +251,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -883,7 +883,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -1108,7 +1108,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -1286,7 +1286,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -1525,7 +1525,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError2 = class extends TypeError {
   name = "ValidationError";
@@ -2079,7 +2079,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -2356,7 +2356,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -2535,7 +2535,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -2621,7 +2621,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2719,7 +2719,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/store.ts
+// .harness/packages/core/scope/src/store.ts
 var NamedEntries = class {
   constructor(duplicateError) {
     this.duplicateError = duplicateError;
@@ -2918,7 +2918,7 @@ var ScopedLayers = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/index.ts
+// .harness/packages/core/scope/src/index.ts
 var kScope = /* @__PURE__ */ Symbol("dsh.scope");
 var carrierKeys = /* @__PURE__ */ new WeakMap();
 var scopeParents = /* @__PURE__ */ new WeakMap();
@@ -2947,7 +2947,7 @@ function scopeTarget(base, key) {
   return carrier;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function MessageId(id) {
   return id;
 }
@@ -2955,7 +2955,7 @@ function CallId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/call-config.ts
+// .harness/packages/llm/llm/src/call-config.ts
 function deepFreeze(value) {
   const seen = /* @__PURE__ */ new WeakSet();
   const pending = [{ kind: "visit", node: value }];
@@ -2982,7 +2982,7 @@ function deepFreeze(value) {
   return value;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/message.ts
+// .harness/packages/llm/llm/src/message.ts
 function freezeMessage(message) {
   return deepFreeze(structuredClone(message));
 }
@@ -2999,10 +2999,10 @@ function createUserMessage(input) {
   });
 }
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var MAX_TIMER_DELAY_MS = 2147483647;
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -3026,8 +3026,8 @@ var EXCEEDS_MODEL_CONTEXT = new RegExp(
   "i"
 );
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -3058,17 +3058,17 @@ var RetryPolicySchema = src_default.union([
   alwaysPolicySchema
 ]);
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 
-// ../../source/deepseek-harness/packages/llm/llm/src/never.ts
+// .harness/packages/llm/llm/src/never.ts
 function assertNever(value, context) {
   const rendered = JSON.stringify(value) ?? String(value);
   throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/json.ts
+// .harness/packages/core/session/src/json.ts
 function hasIntrinsicConstructor(prototype, name2) {
   const descriptor = Object.getOwnPropertyDescriptor(prototype, "constructor");
   const constructor = descriptor?.value;
@@ -3193,7 +3193,7 @@ function isJsonValue(value) {
   return walkJsonValue(value, false) === true;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/json-schema.ts
+// .harness/packages/core/tools/src/json-schema.ts
 var JsonSchemaError = class extends HarnessError {
   /** Individual schema violations in walk order. */
   violations;
@@ -3631,7 +3631,7 @@ function validateJsonSchemaValue(schema, value, path = "value") {
   return checkValue(schema, value, path);
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/schema.ts
+// .harness/packages/core/tools/src/schema.ts
 var ANNOTATION_KEYS = ["description", "title", "default", "examples"];
 function authorError(message) {
   throw new JsonSchemaError([message]);
@@ -3905,7 +3905,7 @@ function defineTool(options) {
   return tool;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/code-mode.ts
+// .harness/packages/core/tools/src/code-mode.ts
 var RUN_CODE_NAME = "run_code";
 var SDK_SECTION_ORDER = 150;
 var TYPESCRIPT_FLAVOR = {
@@ -4301,7 +4301,7 @@ ${result.logs.join("\n")}` : "";
   return definition;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/ts-types.ts
+// .harness/packages/core/tools/src/ts-types.ts
 var IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 function renderKey(name2) {
   return IDENTIFIER.test(name2) ? name2 : JSON.stringify(name2);
@@ -4507,7 +4507,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/py-types.ts
+// .harness/packages/core/tools/src/py-types.ts
 var IDENTIFIER2 = /^[\p{XID_Start}_]\p{XID_Continue}*$/u;
 function isBareIdentifier(name2) {
   return IDENTIFIER2.test(name2) && name2.normalize("NFKC") === name2;
@@ -4806,7 +4806,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/index.ts
+// .harness/packages/core/tools/src/index.ts
 var COLLAPSE_SECTION_ORDER = 99;
 var CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly \u2014 a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
 var SDK_RENDERERS = {
@@ -5960,7 +5960,7 @@ function toolAbortedBeforeDispatchResult(prior) {
   };
 }
 
-// ../../source/deepseek-harness/packages/fs/fs/src/types.ts
+// .harness/packages/fs/fs/src/types.ts
 var FsError = class extends HarnessError {
   code;
   constructor(message, code, options) {
@@ -5969,7 +5969,7 @@ var FsError = class extends HarnessError {
   }
 };
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/escalation.ts
+// .harness/packages/sandbox/sandbox/src/escalation.ts
 var WIDER_MODES = {
   "read-only": ["workspace-write", "danger-full-access"],
   "workspace-write": ["danger-full-access"]
@@ -6026,7 +6026,7 @@ async function approveEscalation(request, approval) {
   }
 }
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/roots.ts
+// .harness/packages/sandbox/sandbox/src/roots.ts
 import { realpathSync } from "node:fs";
 function canonicalPath(path) {
   try {
@@ -6036,11 +6036,11 @@ function canonicalPath(path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/fs/tool-fs/lib/index.js
+// .harness/packages/fs/tool-fs/lib/index.js
 import { structuredPatch } from "diff";
 import { basename, extname } from "node:path";
 
-// ../../source/deepseek-harness/packages/attachment/attachment/src/error.ts
+// .harness/packages/attachment/attachment/src/error.ts
 var IMAGE_ADMISSION_ERROR_CODES = [
   "TOO_MANY_IMAGES",
   "IMAGES_TOO_LARGE",
@@ -6049,7 +6049,8 @@ var IMAGE_ADMISSION_ERROR_CODES = [
   "INVALID_IMAGE",
   "IMAGE_TYPE_MISMATCH",
   "IMAGE_TOO_LARGE",
-  "IMAGE_TOO_MANY_PIXELS"
+  "IMAGE_TOO_MANY_PIXELS",
+  "IMAGE_DIMENSION_TOO_LARGE"
 ];
 var IMAGE_ADMISSION_ERROR_CODE_SET = new Set(IMAGE_ADMISSION_ERROR_CODES);
 var AttachmentError = class extends Error {
@@ -6067,12 +6068,12 @@ var AttachmentError = class extends Error {
   }
 };
 
-// ../../source/deepseek-harness/packages/attachment/attachment/src/brand.ts
+// .harness/packages/attachment/attachment/src/brand.ts
 function AttachmentId(value) {
   return value;
 }
 
-// ../../source/deepseek-harness/packages/fs/tool-fs/lib/index.js
+// .harness/packages/fs/tool-fs/lib/index.js
 var READ_MAX_LINE_LENGTH = 2e3;
 var READ_MAX_BYTES = 50 * 1024;
 function newAccumulator() {
@@ -6718,6 +6719,54 @@ var IMAGE_EXTENSIONS = {
   ".webp": "image/webp",
   ".gif": "image/gif"
 };
+var IMAGE_VALUE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: true,
+  properties: {
+    attachmentId: {
+      type: "string",
+      required: true
+    },
+    mediaType: {
+      type: "string",
+      enum: [
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "image/gif"
+      ],
+      required: true
+    },
+    bytes: {
+      type: "integer",
+      required: true
+    },
+    width: {
+      type: "integer",
+      required: true
+    },
+    height: {
+      type: "integer",
+      required: true
+    },
+    name: { type: "string" },
+    originalDimensions: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        width: {
+          type: "integer",
+          required: true
+        },
+        height: {
+          type: "integer",
+          required: true
+        }
+      }
+    }
+  }
+};
 function imageMediaTypeForPath(filePath) {
   return IMAGE_EXTENSIONS[extname(filePath).toLowerCase()];
 }
@@ -6737,14 +6786,22 @@ function imageRefFromValue(image) {
     bytes: image.bytes,
     width: image.width,
     height: image.height,
-    ...image.name === void 0 ? {} : { name: image.name }
+    ...image.name === void 0 ? {} : { name: image.name },
+    ...image.originalDimensions === void 0 ? {} : { originalDimensions: { ...image.originalDimensions } }
   };
 }
 function formatImageReadOutput(displayPath, image) {
+  let scaled = "";
+  if (image.originalDimensions !== void 0) {
+    const x = (image.originalDimensions.width / image.width).toFixed(2);
+    const y = (image.originalDimensions.height / image.height).toFixed(2);
+    const advice = x === y ? `multiply coordinates by ${x}` : `multiply x coordinates by ${x} and y coordinates by ${y}`;
+    scaled = ` (downscaled from ${image.originalDimensions.width}x${image.originalDimensions.height} px; ${advice} to locate features in the original file)`;
+  }
   return `<path>${displayPath}</path>
 <type>image</type>
 <content>
-${image.mediaType} image, ${image.width}x${image.height} px, ${image.bytes} bytes
+${image.mediaType} image, ${image.width}x${image.height} px, ${image.bytes} bytes${scaled}
 </content>`;
 }
 function imageReadContent(value) {
@@ -6759,7 +6816,7 @@ function imageReadContent(value) {
 function applyReadImageTool(ctx) {
   ctx.tools.register(defineTool({
     name: "read_image",
-    description: "Read a PNG/JPEG/WebP/GIF file and return the image itself. Requires the current model to accept image input.",
+    description: "Read a PNG/JPEG/WebP/GIF file and return the image itself. Harness validates and downscales large supported images before the next model request, so use this tool directly instead of installing image libraries or creating thumbnails merely to inspect an image. Independent files may be read concurrently in small batches. Requires the current model to accept image input.",
     parameters: { file_path: {
       type: "string",
       required: true,
@@ -6774,40 +6831,7 @@ function applyReadImageTool(ctx) {
             type: "string",
             required: true
           },
-          image: {
-            type: "object",
-            additionalProperties: false,
-            required: true,
-            properties: {
-              attachmentId: {
-                type: "string",
-                required: true
-              },
-              mediaType: {
-                type: "string",
-                enum: [
-                  "image/png",
-                  "image/jpeg",
-                  "image/webp",
-                  "image/gif"
-                ],
-                required: true
-              },
-              bytes: {
-                type: "integer",
-                required: true
-              },
-              width: {
-                type: "integer",
-                required: true
-              },
-              height: {
-                type: "integer",
-                required: true
-              },
-              name: { type: "string" }
-            }
-          }
+          image: IMAGE_VALUE_SCHEMA
         }
       },
       render: (_args, value) => imageReadContent(value)
@@ -6832,7 +6856,12 @@ function applyReadImageTool(ctx) {
           name: basename(target.displayPath)
         });
       } catch (error) {
-        if (!(error instanceof AttachmentError) || error.code !== "IMAGE_TYPE_MISMATCH") throw error;
+        if (!(error instanceof AttachmentError)) throw error;
+        if (error.code === "IMAGE_DIMENSION_TOO_LARGE") throw new Error(`cannot read "${target.displayPath}": at least one image side exceeds the ${attachments.imageLimits.maxImageDimension}px limit; downscale the image and read the smaller copy`, { cause: error });
+        if (error.code === "IMAGE_TOO_MANY_PIXELS") throw new Error(`cannot read "${target.displayPath}": the image exceeds the ${attachments.imageLimits.maxImagePixels}-pixel decoded-size limit; downscale the image and read the smaller copy`, { cause: error });
+        if (error.code === "IMAGE_TOO_LARGE") throw new Error(`cannot read "${target.displayPath}": the image cannot be stored within the deployment's byte limits; downscale the image and read the smaller copy`, { cause: error });
+        if (error.code === "ATTACHMENT_WRITE_FAILED" && /16-bit PNG/iu.test(error.message)) throw new Error(`cannot read "${target.displayPath}": the 16-bit PNG could not be converted to the normalized 8-bit sRGB form; convert it to an 8-bit PNG/JPEG/WebP and retry`, { cause: error });
+        if (error.code !== "IMAGE_TYPE_MISMATCH") throw error;
         const extension = extname(target.displayPath).toLowerCase();
         throw new Error(`cannot read "${target.displayPath}": the ${extension} extension declares ${mediaType}, but the bytes use a different image format; rename the file to match its actual format if it is PNG/JPEG/WebP/GIF, or convert it to one of those formats`, { cause: error });
       }
@@ -6848,7 +6877,8 @@ function applyReadImageTool(ctx) {
           bytes: ref.bytes,
           width: ref.width,
           height: ref.height,
-          ...ref.name === void 0 ? {} : { name: ref.name }
+          ...ref.name === void 0 ? {} : { name: ref.name },
+          ...ref.originalDimensions === void 0 ? {} : { originalDimensions: { ...ref.originalDimensions } }
         }
       };
     },

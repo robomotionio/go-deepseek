@@ -76,15 +76,25 @@ func (c *Compat) fsReadFile(path string) ([]byte, error) {
 	return b, nil
 }
 
-func (c *Compat) fsWriteFile(path string, data []byte, mode int) error {
-	return c.write(path, data, false, mode)
+func (c *Compat) fsWriteFile(path string, data []byte, mode int, flag string) error {
+	return c.write(path, data, "w", flag, mode)
 }
 
-func (c *Compat) fsAppendFile(path string, data []byte, mode int) error {
-	return c.write(path, data, true, mode)
+func (c *Compat) fsAppendFile(path string, data []byte, mode int, flag string) error {
+	return c.write(path, data, "a", flag, mode)
 }
 
-func (c *Compat) write(path string, data []byte, appendTo bool, mode int) error {
+// write honours the caller's `flag`, which matters more than it looks like it
+// does: `wx` is an EXCLUSIVE create, and exclusive create is how portable
+// JavaScript builds a mutual-exclusion lock — take the lock by creating the
+// file, discover somebody else holds it by catching EEXIST.
+//
+// This shim used to drop the flag and always truncate. Nothing failed: the
+// write succeeded, so the lock was granted to everybody who asked for it, and
+// `@deepseek-ai/dsh-atomic-write` — which `llm-deepseek` publishes its durable
+// upload index through — serialised nothing at all. A lock that always succeeds
+// is worse than no lock, because the code above it stops defending itself.
+func (c *Compat) write(path string, data []byte, defaultFlag, flag string, mode int) error {
 	p, err := c.resolvePath(path)
 	if err != nil {
 		return err
@@ -93,9 +103,15 @@ func (c *Compat) write(path string, data []byte, appendTo bool, mode int) error 
 	if mode > 0 {
 		perm = os.FileMode(mode)
 	}
-	flags := os.O_WRONLY | os.O_CREATE | os.O_TRUNC
-	if appendTo {
-		flags = os.O_WRONLY | os.O_CREATE | os.O_APPEND
+	if strings.TrimSpace(flag) == "" {
+		flag = defaultFlag
+	}
+	flags, ok := writeFlags(flag)
+	if !ok {
+		// Node throws ERR_INVALID_ARG_VALUE rather than guessing, and guessing
+		// here would mean silently truncating a file the caller asked to create
+		// exclusively — the exact failure this function exists to stop.
+		return fmt.Errorf("EINVAL: invalid flag %q, open '%s'", flag, path)
 	}
 	f, err := os.OpenFile(p, flags, perm)
 	if err != nil {
@@ -106,6 +122,33 @@ func (c *Compat) write(path string, data []byte, appendTo bool, mode int) error 
 		return fsError(err, "write", path)
 	}
 	return nil
+}
+
+// writeFlags maps the flag strings that make sense for a whole-file write.
+// Read-only modes are refused rather than mapped: `fs.writeFile(p, d, {flag:
+// 'r'})` is a mistake, and Node reports it as one.
+func writeFlags(flag string) (int, bool) {
+	switch flag {
+	case "w":
+		return os.O_WRONLY | os.O_CREATE | os.O_TRUNC, true
+	case "w+":
+		return os.O_RDWR | os.O_CREATE | os.O_TRUNC, true
+	case "wx", "xw":
+		return os.O_WRONLY | os.O_CREATE | os.O_EXCL, true
+	case "wx+", "xw+":
+		return os.O_RDWR | os.O_CREATE | os.O_EXCL, true
+	case "a":
+		return os.O_WRONLY | os.O_CREATE | os.O_APPEND, true
+	case "a+":
+		return os.O_RDWR | os.O_CREATE | os.O_APPEND, true
+	case "ax", "xa":
+		return os.O_WRONLY | os.O_CREATE | os.O_APPEND | os.O_EXCL, true
+	case "ax+", "xa+":
+		return os.O_RDWR | os.O_CREATE | os.O_APPEND | os.O_EXCL, true
+	case "r+":
+		return os.O_RDWR, true
+	}
+	return 0, false
 }
 
 func (c *Compat) fsReaddir(path string, withTypes bool) (any, error) {

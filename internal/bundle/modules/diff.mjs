@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/base.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/base.js
 var Diff = class {
   diff(oldStr, newStr, options = {}) {
     let callback;
@@ -200,7 +200,7 @@ var Diff = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/character.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/character.js
 var CharacterDiff = class extends Diff {
 };
 var characterDiff = new CharacterDiff();
@@ -208,7 +208,7 @@ function diffChars(oldStr, newStr, options) {
   return characterDiff.diff(oldStr, newStr, options);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/string.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/string.js
 function longestCommonPrefix(str1, str2) {
   let i;
   for (i = 0; i < str1.length && i < str2.length; i++) {
@@ -342,7 +342,7 @@ function leadingAndTrailingWs(string, segmenter) {
   return [head, tail];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/word.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/word.js
 var extendedWordChars = "a-zA-Z0-9_\\u{AD}\\u{C0}-\\u{D6}\\u{D8}-\\u{F6}\\u{F8}-\\u{2C6}\\u{2C8}-\\u{2D7}\\u{2DE}-\\u{2FF}\\u{1E00}-\\u{1EFF}";
 var tokenizeIncludingWhitespace = new RegExp(`[${extendedWordChars}]+|\\s+|[^${extendedWordChars}]`, "ug");
 var WordDiff = class extends Diff {
@@ -485,7 +485,7 @@ function diffWordsWithSpace(oldStr, newStr, options) {
   return wordsWithSpaceDiff.diff(oldStr, newStr, options);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/params.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/params.js
 function generateOptions(options, defaults) {
   if (typeof options === "function") {
     defaults.callback = options;
@@ -499,7 +499,7 @@ function generateOptions(options, defaults) {
   return defaults;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/line.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/line.js
 var LineDiff = class extends Diff {
   constructor() {
     super(...arguments);
@@ -551,7 +551,7 @@ function tokenize(value, options) {
   return retLines;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/sentence.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/sentence.js
 function isSentenceEndPunct(char) {
   return char == "." || char == "!" || char == "?";
 }
@@ -583,7 +583,7 @@ function diffSentences(oldStr, newStr, options) {
   return sentenceDiff.diff(oldStr, newStr, options);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/css.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/css.js
 var CssDiff = class extends Diff {
   tokenize(value) {
     return value.split(/([{}:;,]|\s+)/);
@@ -594,7 +594,7 @@ function diffCss(oldStr, newStr, options) {
   return cssDiff.diff(oldStr, newStr, options);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/json.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/json.js
 var JsonDiff = class extends Diff {
   constructor() {
     super(...arguments);
@@ -666,7 +666,7 @@ function canonicalize(obj, stack, replacementStack, replacer, key) {
   return canonicalizedObj;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/array.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/diff/array.js
 var ArrayDiff = class extends Diff {
   tokenize(value) {
     return value.slice();
@@ -683,7 +683,7 @@ function diffArrays(oldArr, newArr, options) {
   return arrayDiff.diff(oldArr, newArr, options);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/line-endings.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/line-endings.js
 function unixToWin(patch) {
   if (Array.isArray(patch)) {
     return patch.map((p) => unixToWin(p));
@@ -715,7 +715,7 @@ function isWin(patch) {
   })));
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/parse.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/parse.js
 function parsePatch(uniDiff) {
   const diffstr = uniDiff.split(/\n/), list = [];
   let i = 0;
@@ -1051,7 +1051,7 @@ function parsePatch(uniDiff) {
   return list;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/distance-iterator.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/util/distance-iterator.js
 function distance_iterator_default(start, minLine, maxLine) {
   let wantForward = true, backwardExhausted = false, forwardExhausted = false, localOffset = 1;
   return function iterator() {
@@ -1080,7 +1080,7 @@ function distance_iterator_default(start, minLine, maxLine) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/apply.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/apply.js
 function applyPatch(source, patch, options = {}) {
   let patches;
   if (typeof patch === "string") {
@@ -1252,7 +1252,7 @@ function applyPatches(uniDiff, options) {
   processIndex();
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/reverse.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/reverse.js
 function swapPrefix(fileName) {
   if (fileName === void 0 || fileName === "/dev/null") {
     return fileName;
@@ -1298,7 +1298,7 @@ function reversePatch(structuredPatch2) {
   return reversed;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/create.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/patch/create.js
 function needsQuoting(s) {
   for (let i = 0; i < s.length; i++) {
     if (s[i] < " " || s[i] > "~" || s[i] === '"' || s[i] === "\\") {
@@ -1570,7 +1570,7 @@ function splitLines(text) {
   return result;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/convert/dmp.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/convert/dmp.js
 function convertChangesToDMP(changes) {
   const ret = [];
   let change, operation;
@@ -1588,7 +1588,7 @@ function convertChangesToDMP(changes) {
   return ret;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/convert/xml.js
+// .harness/node_modules/.pnpm/diff@9.0.0/node_modules/diff/libesm/convert/xml.js
 function convertChangesToXML(changes) {
   const ret = [];
   for (let i = 0; i < changes.length; i++) {

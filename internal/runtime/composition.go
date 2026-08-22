@@ -42,6 +42,17 @@ func Compose(cfg Config) []Entry {
 		// not listed here is not resolvable, so the configured one is always in
 		// it.
 		"models": []map[string]any{{"id": model, "contextWindow": 128000}},
+		// Pinned, because upstream moved its default from 2 to 5 in 0.1.1-rc.2
+		// and a default is the wrong place for that decision to be made for us.
+		// Retries are latency an operator cannot see: a provider that is down
+		// answers on the fifth attempt after five backoffs rather than on the
+		// second, and what surfaces meanwhile is a node that appears to hang.
+		// A robot runs on a schedule, so failing sooner and reporting honestly
+		// beats waiting longer and occasionally succeeding. Two is what every
+		// flow built against v0.2.0 was tuned on; raising it is a decision to
+		// take deliberately, per deployment, not one to inherit from an
+		// upstream bump.
+		"retryPolicy": map[string]any{"mode": "normal", "maxRetries": 2},
 	}
 	if cfg.BaseURL != "" {
 		llmConfig["baseURL"] = cfg.BaseURL
