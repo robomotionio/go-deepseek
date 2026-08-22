@@ -95,12 +95,13 @@ type Compat struct {
 	rt   *goant.Runtime
 	opts Options
 
-	mu      sync.Mutex
-	files   map[int64]*os.File
-	bodies  map[int64]*bodyReader
-	nextID  int64
-	closed  bool
-	cancels map[int64]context.CancelFunc
+	mu       sync.Mutex
+	files    map[int64]*os.File
+	bodies   map[int64]*bodyReader
+	watchers map[int64]*watcher
+	nextID   int64
+	closed   bool
+	cancels  map[int64]context.CancelFunc
 
 	// exitCode is what a script asked to exit with. There is no os.Exit here:
 	// the Runtime is one part of a larger program, and a plugin calling
@@ -185,6 +186,7 @@ func (c *Compat) Close() error {
 		b.close()
 	}
 	clear(c.bodies)
+	c.closeWatchers()
 	return nil
 }
 

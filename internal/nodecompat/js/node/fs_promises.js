@@ -7,6 +7,7 @@
 // difference anyone can measure, and it is what makes the sync face — which the
 // same code uses constantly — possible at all.
 
+import { watch as fsWatch, __holdWatchPoll } from 'node:fs';
 import {
   host, constants, asFsError, makeStats, Dirent,
   decode, encodeData, pathOf, fdOf, modeOf, toMs,
@@ -141,8 +142,51 @@ export const lchmod = chmod;
 export const statfs = settle(() => ({ type: 0, bsize: 4096, blocks: 0, bfree: 0, bavail: 0, files: 0, ffree: 0 }));
 export const glob = () => { throw Object.assign(new Error('fs.glob is not supported'), { code: 'ERR_NOT_IMPLEMENTED' }); };
 
-export function watch() {
-  throw Object.assign(new Error('fs.watch is not supported in this runtime'), { code: 'ERR_NOT_IMPLEMENTED' });
+// The promise face of fs.watch is an async iterator rather than an emitter. It
+// is built on the emitter one so that both faces share a single poll: events
+// queue as they are delivered, and each `for await` step takes one.
+export async function* watch(filename, options = {}) {
+  if (typeof options === 'string') options = { encoding: options };
+  const watcher = fsWatch(filename, options);
+  // An iterating consumer is waiting on this, so the poll must keep running —
+  // see __holdWatchPoll. Released in the finally below, on every exit.
+  const release = __holdWatchPoll();
+
+  const queue = [];
+  let waiting = null;
+  let ended = false;
+  let failure;
+
+  const push = (value) => {
+    if (waiting) { const resume = waiting; waiting = null; resume(value); }
+    else queue.push(value);
+  };
+  watcher.on('change', (eventType, name) => push({ eventType, filename: name }));
+  watcher.on('error', (error) => { failure = error; ended = true; push(undefined); });
+  watcher.on('close', () => { ended = true; push(undefined); });
+
+  if (options.signal) {
+    if (options.signal.aborted) { watcher.close(); return; }
+    options.signal.addEventListener('abort', () => watcher.close(), { once: true });
+  }
+
+  try {
+    for (;;) {
+      const next = queue.length > 0
+        ? queue.shift()
+        : (ended ? undefined : await new Promise((resume) => { waiting = resume; }));
+      if (next === undefined) {
+        if (failure) throw failure;
+        return;
+      }
+      yield next;
+    }
+  } finally {
+    // Reached on return, on throw, and on the consumer simply breaking out of
+    // its loop — which is the case that would otherwise leak the watcher.
+    release();
+    watcher.close();
+  }
 }
 
 const __ns = {

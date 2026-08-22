@@ -862,26 +862,29 @@ examples lie.
   its runner needs `node:vm`, which this runtime refuses by name. Example 11 is
   the reachable half of that claim: the agent extends its own capabilities, with
   knowledge rather than with code.
-- **No filesystem-backed skills.** `@deepseek-ai/dsh-skill-filesystem` is
-  bundled and mounted, but its discovery cannot complete here: it watches its
-  roots with chokidar, and `fs.watch` is deliberately unimplemented in this
-  runtime. Incomplete discovery has a quiet consequence — `tool-skill`
-  withholds the whole `<available_skills>` catalog until every provider
-  reports complete, so a registered skill stays loadable by exact name while
-  nothing tells the model the name. 11 and 12 therefore point the provider at
-  no roots (`skills.filesystem.includeDefaultRoots: false` on the spine's
-  entry) and keep their durable copy in a file the host owns, which is the
-  better place for it anyway. Chasing this surfaced a real compat bug, since
-  fixed: `os.homedir()` answered the host's home rather than the composed
-  `HOME`, aiming every skill root the provider derives from it outside the
-  fence — where the fenced filesystem refuses with EACCES, which is not
+- **Filesystem-backed skills now work.** They did not for a while, and the
+  reason is worth keeping: `@deepseek-ai/dsh-skill-filesystem` watches its roots
+  with chokidar, chokidar needs `fs.watch`, and `fs.watch` was deliberately
+  unimplemented here. Incomplete discovery has a quiet consequence —
+  `tool-skill` withholds the whole `<available_skills>` catalog until every
+  provider reports complete, so a registered skill stayed loadable by exact name
+  while nothing told the model the name. `fs.watch`, `fs.watchFile` and the
+  `fs/promises.watch` async iterator are implemented now (see
+  `internal/nodecompat/watch.go`), and `TestSkillDiscoveryCompletes` in
+  `sdk/skills_test.go` asserts the catalogue completes. 11 and 12 still point
+  the provider at no roots and keep their durable copy in a file the host owns,
+  which is the better place for it anyway. Chasing this surfaced a real compat
+  bug, since fixed: `os.homedir()` answered the host's home rather than the
+  composed `HOME`, aiming every skill root the provider derives from it outside
+  the fence — where the fenced filesystem refuses with EACCES, which is not
   "absent" and poisoned discovery a second way.
 
 ## Ground rules these follow
 
-- **Standard library only.** No new module dependencies; `go.mod` is untouched.
-  The examples live in the module, so `go build ./...` and `go vet ./...` cover
-  them.
+- **Standard library only.** No new module dependencies in the examples
+  themselves. They live in the module, so `go build ./...` and `go vet ./...`
+  cover them. (The module has one dependency the examples do not use:
+  `fsnotify`, which backs `fs.watch`.)
 - **No shared helper package.** A little duplication is the price of each
   example standing alone and being copy-pasteable.
 - **Every claim is checked, not asserted.** 03 verifies its edit by reading the

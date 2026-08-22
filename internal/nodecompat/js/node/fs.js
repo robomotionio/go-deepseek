@@ -2,6 +2,8 @@
 // on the same bindings; both import their shared parts from ./_fsutil.js.
 
 import { Readable, Writable } from 'node:stream';
+import { EventEmitter } from 'node:events';
+import { Buffer } from 'node:buffer';
 import * as promisesAPI from 'node:fs/promises';
 import {
   host, constants, asFsError, guard, makeStats, Dirent,
@@ -217,14 +219,226 @@ export const fchmodSync = (fd, mode) => { throw Object.assign(new Error('fs.fchm
 export const statfsSync = () => ({ type: 0, bsize: 4096, blocks: 0, bfree: 0, bavail: 0, files: 0, ffree: 0 });
 export const globSync = () => { throw Object.assign(new Error('fs.globSync is not supported'), { code: 'ERR_NOT_IMPLEMENTED' }); };
 
-export function watch() {
-  // Deliberate. A watcher is a long-lived host resource with no owner in this
-  // design, and everything here that watches files does so to notice edits a
-  // person made — which an embedded, non-interactive run does not have.
-  throw Object.assign(new Error('fs.watch is not supported in this runtime'), { code: 'ERR_NOT_IMPLEMENTED' });
+// --- watching ----------------------------------------------------------------
+//
+// Two different mechanisms, because Node has two and they are not
+// interchangeable. fs.watch is event-driven: the host tells us when something
+// happened. fs.watchFile is a stat poll, and its listener is handed the two
+// Stats rather than an event name — chokidar's polling mode is built on it, and
+// so is anything that has to see a file on a network mount.
+//
+// The event-driven half is a LONG POLL over the host binding: ask for the next
+// batch, get a promise, emit what arrives, ask again. Nothing is pushed at us,
+// which is what lets a closed watcher end cleanly — the pending read resolves
+// with null and the loop below simply stops.
+
+// How often the shared timer collects. Fifty milliseconds is well inside the
+// stability thresholds every watcher consumer already applies to debounce an
+// editor's save, and it is the only latency the poll adds.
+const WATCH_POLL_INTERVAL_MS = 50;
+
+// Every live watcher, by the handle the host names it. One timer serves all of
+// them: chokidar opens a watch per directory, and a timer each would be a
+// hundred timers on a tree of any size.
+const liveWatchers = new Map();
+let pollTimer = null;
+
+// How many consumers are AWAITING an event right now. The emitter face never
+// counts: a watcher with a listener attached is not, by itself, a reason for a
+// run to continue, and treating it as one is what parked the loop. The promise
+// face does count, because `for await (const event of watch(dir))` is a
+// consumer that has said it will wait — and Node keeps the loop alive for it.
+let pollHolds = 0;
+
+function startPolling() {
+  if (pollTimer !== null) return;
+  pollTimer = setInterval(collect, WATCH_POLL_INTERVAL_MS);
+  // The unref is the whole design, not a nicety. A watcher must never be the
+  // reason a run does not finish: unref'd, this timer fires while the loop is
+  // alive for other reasons and holds it open for none.
+  if (pollHolds === 0 && pollTimer && typeof pollTimer.unref === 'function') pollTimer.unref();
 }
-export const watchFile = watch;
-export const unwatchFile = () => {};
+
+// Hold the loop open while an awaiting consumer exists, and release it when
+// that consumer is done. Exported for node:fs/promises, which is the only
+// caller; it is deliberately absent from the module's default namespace,
+// because Node's fs has no such function and code written against Node must
+// not find one here.
+export function __holdWatchPoll() {
+  pollHolds += 1;
+  if (pollHolds === 1 && pollTimer && typeof pollTimer.ref === 'function') pollTimer.ref();
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    pollHolds -= 1;
+    if (pollHolds === 0 && pollTimer && typeof pollTimer.unref === 'function') pollTimer.unref();
+  };
+}
+
+function stopPolling() {
+  if (pollTimer === null || liveWatchers.size > 0) return;
+  clearInterval(pollTimer);
+  pollTimer = null;
+}
+
+function collect() {
+  let reports;
+  try {
+    reports = host.watch.poll();
+  } catch (error) {
+    // The host itself failed, which is every watcher's problem.
+    for (const watcher of [...liveWatchers.values()]) watcher._fail(asFsError(error));
+    return;
+  }
+  if (!reports || reports.length === 0) return;
+  for (const report of reports) {
+    const watcher = liveWatchers.get(report.id);
+    if (!watcher) continue;
+    if (report.events) watcher._deliver(report.events);
+    if (report.error) { watcher._fail(asFsError(new Error(report.error))); continue; }
+    if (report.ended) watcher._finish();
+  }
+}
+
+export class FSWatcher extends EventEmitter {
+  constructor(filename, options = {}) {
+    super();
+    this._ended = false;
+    this._encoding = options.encoding === undefined ? 'utf8' : options.encoding;
+    this._id = guard((path, recursive) => host.watch.start(path, recursive))(
+      pathOf(filename), Boolean(options.recursive));
+    liveWatchers.set(this._id, this);
+    startPolling();
+    if (options.signal) {
+      if (options.signal.aborted) this.close();
+      else options.signal.addEventListener('abort', () => this.close(), { once: true });
+    }
+  }
+
+  _deliver(events) {
+    for (const event of events) {
+      if (this._ended) return;
+      this.emit('change', event.eventType, this._name(event.filename));
+    }
+  }
+
+  _name(filename) {
+    return this._encoding === 'buffer' ? Buffer.from(filename, 'utf8') : filename;
+  }
+
+  _fail(error) {
+    if (this._ended) return;
+    this._ended = true;
+    this._forget();
+    this.emit('error', error);
+  }
+
+  _finish() {
+    if (this._ended) return;
+    this._ended = true;
+    this._forget();
+    this.emit('close');
+  }
+
+  _forget() {
+    liveWatchers.delete(this._id);
+    stopPolling();
+  }
+
+  close() {
+    if (this._ended) return;
+    this._ended = true;
+    this._forget();
+    try { host.watch.close(this._id); } catch { /* already gone */ }
+    this.emit('close');
+  }
+
+  // A watcher here never holds the loop open on its own — see startPolling —
+  // so ref/unref are the no-ops that keep callers from having to branch.
+  ref() { return this; }
+  unref() { return this; }
+}
+
+export function watch(filename, options, listener) {
+  if (typeof options === 'function') { listener = options; options = {}; }
+  if (typeof options === 'string') options = { encoding: options };
+  const watcher = new FSWatcher(filename, options || {});
+  if (typeof listener === 'function') watcher.on('change', listener);
+  return watcher;
+}
+
+// --- the stat poll -----------------------------------------------------------
+
+const DEFAULT_WATCH_FILE_INTERVAL_MS = 5007;
+
+// One poller per path, however many listeners it has. Node's own StatWatcher
+// works this way and callers depend on it: watchFile twice and unwatchFile once
+// leaves the file watched.
+const statWatchers = new Map();
+
+// The Stats a path that is not there produces. Node hands the listener a
+// zeroed Stats rather than undefined, so "it appeared" and "it vanished" are
+// both ordinary comparisons instead of null checks.
+const ABSENT_STAT = {
+  size: 0, mode: 0, mtimeMs: 0, atimeMs: 0, ctimeMs: 0, birthtimeMs: 0,
+  isFile: false, isDirectory: false, isSymlink: false,
+  uid: 0, gid: 0, ino: 0, dev: 0, nlink: 0,
+};
+
+function rawStat(path) {
+  try { return host.fs.stat(path, true); } catch { return ABSENT_STAT; }
+}
+
+// What counts as a change. Node compares the whole Stats; these five are the
+// fields that can actually differ for the same path, and comparing only them
+// keeps a poll from reporting a change because atime moved when we read it.
+function statChanged(a, b) {
+  return a.mtimeMs !== b.mtimeMs || a.size !== b.size || a.ino !== b.ino
+    || a.mode !== b.mode || a.dev !== b.dev;
+}
+
+export function watchFile(filename, options, listener) {
+  if (typeof options === 'function') { listener = options; options = {}; }
+  options = options || {};
+  const path = pathOf(filename);
+  const interval = Number(options.interval) > 0
+    ? Number(options.interval) : DEFAULT_WATCH_FILE_INTERVAL_MS;
+  const bigint = Boolean(options.bigint);
+
+  let state = statWatchers.get(path);
+  if (!state) {
+    state = { listeners: new Set(), previous: rawStat(path), timer: null, bigint };
+    state.timer = setInterval(() => {
+      const current = rawStat(path);
+      if (!statChanged(current, state.previous)) return;
+      const before = state.previous;
+      state.previous = current;
+      const curr = makeStats(current, { bigint: state.bigint });
+      const prev = makeStats(before, { bigint: state.bigint });
+      for (const fn of [...state.listeners]) fn(curr, prev);
+    }, interval);
+    // A stat poll must not be the reason a program cannot exit.
+    if (typeof state.timer === 'object' && state.timer && typeof state.timer.unref === 'function') {
+      state.timer.unref();
+    }
+    statWatchers.set(path, state);
+  }
+  if (typeof listener === 'function') state.listeners.add(listener);
+  return { unref() { return this; }, ref() { return this; } };
+}
+
+export function unwatchFile(filename, listener) {
+  const path = pathOf(filename);
+  const state = statWatchers.get(path);
+  if (!state) return;
+  if (typeof listener === 'function') state.listeners.delete(listener);
+  else state.listeners.clear();
+  if (state.listeners.size === 0) {
+    clearInterval(state.timer);
+    statWatchers.delete(path);
+  }
+}
 
 export const promises = promisesAPI;
 
@@ -240,7 +454,7 @@ const __ns = {
   readFile, writeFile, appendFile, stat, lstat, mkdir, rm, rmdir, unlink,
   rename, copyFile, readdir, realpath, readlink, symlink, link, chmod, utimes,
   access, truncate, mkdtemp, open, close,
-  createReadStream, createWriteStream, watch, watchFile, unwatchFile,
+  createReadStream, createWriteStream, watch, watchFile, unwatchFile, FSWatcher,
 };
 export default __ns;
 
