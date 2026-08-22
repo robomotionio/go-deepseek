@@ -766,9 +766,10 @@ needs node, pnpm and git; using it needs none of them.
 
 ```bash
 make update                                   # fetch upstream, build, regenerate, test
-make update HARNESS_REF=dsh-v0.1.0-rc.8       # move to another revision
+make update HARNESS_REF=dsh-v0.1.1-rc.3       # move to another revision
 make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
 make show                                     # what the committed bundle was built from
+make upstream-check                           # how far upstream has moved since the pin
 ```
 
 `make verify` is the test that matters afterwards: every bundled module must
@@ -776,9 +777,26 @@ still evaluate on the engine. A new upstream revision reaching for a Node API
 this runtime does not have fails there, naming the module, rather than later
 during a plugin mount.
 
+### The pin
+
+`UPSTREAM.lock.json` records which upstream revision this repository ships, the
+33 bundled packages at their versions, and what is deliberately refused. The
+generated manifest records the same revision, but it is generated: it changes
+whenever the bundler runs and proves only that it ran. The lockfile is written
+by hand, so a diff in it is somebody deciding to move the pin, with the reason
+in the commit.
+
+`make upstream-check` reads it, fetches upstream, and reports the commits since
+the pin that touch a path the bundle actually carries — with anything reading as
+security work raised to the top, because that ordering is the whole point. It is
+run weekly by `.github/workflows/upstream-drift.yml`, which keeps one issue
+updated for as long as the pin lags, and by `make verify`, which prints the
+report without failing on it: drift is not fixable by editing this repository,
+and a gate you cannot satisfy is a gate people learn to skip.
+
 ## Status
 
-The harness is a developer preview at `0.1.0-rc.7` whose session format is still
+The harness is a developer preview at `0.1.1-rc.2` whose session format is still
 version zero, and upstream says breaking changes will happen. The bundle is
 pinned by tag, and `sdk.HarnessVersion()` reports which one you have.
 

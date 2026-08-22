@@ -621,3 +621,51 @@ func min(a, b int) int {
 	}
 	return b
 }
+
+// The retry budget is pinned, not inherited.
+//
+// Upstream moved its default from 2 to 5 in 0.1.1-rc.2. Retries are latency an
+// operator cannot see — a provider that is down answers on the fifth attempt
+// after five backoffs rather than the second, and what surfaces meanwhile is a
+// node that appears to hang. A robot runs on a schedule, so this is a decision
+// to take per deployment rather than to inherit from an upstream bump.
+//
+// Asserted because nothing else would notice it going away: the composition
+// boots either way, and the difference only shows up as a slower failure under
+// a condition tests do not reproduce.
+func TestComposePinsTheRetryBudget(t *testing.T) {
+	entries := sdk.Compose(sdk.Config{CWD: t.TempDir(), APIKey: "x"})
+
+	var found bool
+	for _, entry := range entries {
+		if entry.ID != "llm-deepseek" {
+			continue
+		}
+		found = true
+		policy, ok := entry.Config["retryPolicy"].(map[string]any)
+		if !ok {
+			t.Fatalf("llm-deepseek has no pinned retryPolicy: %#v", entry.Config)
+		}
+		if policy["mode"] != "normal" {
+			t.Errorf("retry mode is %v, want normal", policy["mode"])
+		}
+		if policy["maxRetries"] != 2 {
+			t.Errorf("maxRetries is %v, want 2 — upstream's default is 5, and inheriting it "+
+				"makes a failing provider hang about two and a half times longer", policy["maxRetries"])
+		}
+	}
+	if !found {
+		t.Fatal("the default composition has no llm-deepseek entry")
+	}
+
+	// And it stays scoped to the model adapter rather than leaking onto every
+	// entry, which is how a config key that looks harmless spreads.
+	for _, entry := range entries {
+		if entry.ID == "llm-deepseek" {
+			continue
+		}
+		if _, present := entry.Config["retryPolicy"]; present {
+			t.Errorf("entry %q also carries retryPolicy; it belongs to the provider", entry.ID)
+		}
+	}
+}

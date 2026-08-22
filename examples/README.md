@@ -88,7 +88,7 @@ There is no service to start, no runtime to install and no subprocess. The
 harness is in the binary, on a pure-Go JavaScript engine.
 
 ```
-DeepSeek Harness 0.1.0-rc.7 (99f6f02fecdb), embedded
+DeepSeek Harness 0.1.1-rc.2 (b150a551b8d4), embedded
 
 A pure-Go JavaScript engine lets you embed and run JavaScript inside Go
 applications without CGO or external dependencies, making it trivially

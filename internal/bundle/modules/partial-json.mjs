@@ -7,9 +7,9 @@ var __commonJS = (cb, mod) => function __require() {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/options.js
+// .harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/options.js
 var require_options = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/options.js"(exports) {
+  ".harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/options.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Allow = exports.ALL = exports.COLLECTION = exports.ATOM = exports.SPECIAL = exports.INF = exports._INFINITY = exports.INFINITY = exports.NAN = exports.BOOL = exports.NULL = exports.OBJ = exports.ARR = exports.NUM = exports.STR = void 0;
@@ -32,9 +32,9 @@ var require_options = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/index.js
+// .harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/index.js
 var require_index = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/index.js"(exports) {
+  ".harness/node_modules/.pnpm/partial-json@0.1.7/node_modules/partial-json/dist/index.js"(exports) {
     var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);

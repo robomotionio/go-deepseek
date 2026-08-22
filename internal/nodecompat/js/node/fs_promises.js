@@ -10,7 +10,7 @@
 import { watch as fsWatch, __holdWatchPoll } from 'node:fs';
 import {
   host, constants, asFsError, makeStats, Dirent,
-  decode, encodeData, pathOf, fdOf, modeOf, toMs,
+  decode, encodeData, pathOf, fdOf, modeOf, flagOf, toMs,
 } from './_fsutil.js';
 
 export { constants };
@@ -34,8 +34,8 @@ export const readFile = settle((path, options) => {
   }
   return decode(host.fs.readFile(pathOf(path)), options);
 });
-export const writeFile = settle((path, data, options) => host.fs.writeFile(pathOf(path), encodeData(data, options), modeOf(options)));
-export const appendFile = settle((path, data, options) => host.fs.appendFile(pathOf(path), encodeData(data, options), modeOf(options)));
+export const writeFile = settle((path, data, options) => host.fs.writeFile(pathOf(path), encodeData(data, options), modeOf(options), flagOf(options)));
+export const appendFile = settle((path, data, options) => host.fs.appendFile(pathOf(path), encodeData(data, options), modeOf(options), flagOf(options)));
 export const stat = settle((path, options) => makeStats(host.fs.stat(pathOf(path), true), options));
 export const lstat = settle((path, options) => makeStats(host.fs.stat(pathOf(path), false), options));
 export const mkdir = settle((path, options = {}) => host.fs.mkdir(pathOf(path), Boolean(options.recursive), modeOf(options)));

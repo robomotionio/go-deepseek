@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/packages/util/launch-environment/src/index.ts
+// .harness/packages/util/launch-environment/src/index.ts
 var SOURCE_ORDER = ["process", "project-env", "user-env"];
 function lookupKey(name2) {
   return process.platform === "win32" ? name2.toUpperCase() : name2;
@@ -32,7 +32,7 @@ function launchEnvironmentOf(ctx) {
   return ctx.get(DSH_LAUNCH_ENVIRONMENT_KEY) ?? createLaunchEnvironmentSnapshot([{ source: "process", values: process.env }]);
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -57,7 +57,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -166,7 +166,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -205,7 +205,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -285,7 +285,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -510,7 +510,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -688,7 +688,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -927,7 +927,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError = class extends TypeError {
   name = "ValidationError";
@@ -1232,8 +1232,8 @@ var Fiber = class {
     let inFlight;
     let removeWrapper = () => false;
     const waitForSetup = () => {
-      setupBarrier ??= new Promise((resolve2, reject) => {
-        resolveSetup = resolve2;
+      setupBarrier ??= new Promise((resolve3, reject) => {
+        resolveSetup = resolve3;
         rejectSetup = reject;
       });
       return setupBarrier;
@@ -1481,7 +1481,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -1758,7 +1758,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -1787,14 +1787,14 @@ function Inject(name2, config) {
   };
 }
 ((Inject2) => {
-  function resolve2(inject2, result = /* @__PURE__ */ Object.create(null)) {
+  function resolve3(inject2, result = /* @__PURE__ */ Object.create(null)) {
     if (!inject2) return result;
     if (Array.isArray(inject2)) {
       for (const name2 of inject2) {
         result[name2] = null;
       }
     } else if (Reflect.has(inject2, symbols.checkProto)) {
-      Object.assign(result, resolve2(Object.getPrototypeOf(inject2)));
+      Object.assign(result, resolve3(Object.getPrototypeOf(inject2)));
       for (const name2 of Object.keys(inject2)) {
         result[name2] = inject2[name2] ?? null;
       }
@@ -1805,7 +1805,7 @@ function Inject(name2, config) {
     }
     return result;
   }
-  Inject2.resolve = resolve2;
+  Inject2.resolve = resolve3;
 })(Inject || (Inject = {}));
 var RegistryService = class {
   constructor(ctx) {
@@ -1937,7 +1937,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -2023,7 +2023,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2121,7 +2121,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function CallId(id) {
   return id;
 }
@@ -2129,7 +2129,7 @@ function ReasoningEffortId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -2362,8 +2362,8 @@ for (const key of ["default", "link", "comment", "description", "max", "min", "s
   });
 }
 var resolvers = {};
-Schema.extend = function extend(type, resolve2) {
-  resolvers[type] = resolve2;
+Schema.extend = function extend(type, resolve3) {
+  resolvers[type] = resolve3;
 };
 Schema.resolve = function resolve(data, schema, options = {}, strict = false) {
   if (!schema) return [data];
@@ -2761,7 +2761,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var TimeoutReason = class extends Error {
   /**
    * @param code Capability-owned timeout code (e.g. `BASH_TIMEOUT`).
@@ -2828,7 +2828,7 @@ function timeoutOf(x, code) {
   return code === void 0 || reason.code === code ? reason : void 0;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -2861,8 +2861,8 @@ function isQuotaExceededError(detail) {
   return /\binsufficient[\s_-]+(?:quota|balance|credits?)\b/i.test(detail) || /\b(?:quota|usage[\s_-]+limit)[\s_-]+(?:exceeded|exhausted|reached)\b/i.test(detail) || /\bexceed(?:ed|s)?[\s_-]+(?:(?:your|the)[\s_-]+)?(?:current[\s_-]+)?quota\b/i.test(detail) || /\b(?:balance|credits?)[\s_-]+(?:exhausted|depleted)\b/i.test(detail) || /\bout[\s_-]+of[\s_-]+(?:credits?|budget)\b/i.test(detail);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -2898,7 +2898,12 @@ var NORMAL_POLICY_KEYS = /* @__PURE__ */ new Set([
   "retryableCodes",
   "backoff"
 ]);
-var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set(["mode", "backoff"]);
+var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set([
+  "mode",
+  "maxRetries",
+  "retryableCodes",
+  "backoff"
+]);
 var BACKOFF_KEYS = /* @__PURE__ */ new Set(["initialDelayMs", "maxDelayMs", "jitterRatio"]);
 function validateKeys(value, allowed, path) {
   for (const key of Object.keys(value)) {
@@ -2968,7 +2973,7 @@ function resolveRetryPolicy(config, path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/api-key.ts
+// .harness/packages/llm/llm/src/api-key.ts
 var LEGAL_API_KEY = /^[\x21-\x7E]+$/;
 function normalizeApiKey(raw) {
   const value = raw.trim();
@@ -2977,7 +2982,75 @@ function normalizeApiKey(raw) {
   return { ok: true, value };
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/content.ts
+var OFFLOADED_IMAGE_TEXT = "[image omitted to keep the request within its image limit; older images are omitted first. If this image is still needed, read its file again when a path is available; otherwise ask the user to attach it again.]";
+function requestImageHandleText(version2) {
+  return `Image ${version2.attachment.attachmentId}; request image ${version2.width}x${version2.height}px.`;
+}
+function contentHasImage(content) {
+  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
+}
+function base64Length(bytes) {
+  return Math.ceil(bytes / 3) * 4;
+}
+function collectImageLengths(blocks, lengths, policy) {
+  for (const block of blocks) {
+    if (block.type === "image") {
+      const bytes = policy.byteLength === void 0 ? block.attachment.bytes : policy.byteLength(block.attachment);
+      lengths.push(policy.representation === "base64" ? base64Length(bytes) : bytes);
+    } else if (block.type === "tool-result") {
+      collectImageLengths(block.content, lengths, policy);
+    }
+  }
+}
+function replaceOldestImages(blocks, remaining) {
+  let next;
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === "image" && remaining.count > 0) {
+      remaining.count -= 1;
+      next ??= blocks.slice(0, index);
+      next.push({ type: "text", text: OFFLOADED_IMAGE_TEXT });
+      continue;
+    }
+    if (block.type === "tool-result") {
+      const content = replaceOldestImages(block.content, remaining);
+      if (content !== block.content) {
+        next ??= blocks.slice(0, index);
+        next.push({ ...block, content });
+        continue;
+      }
+    }
+    next?.push(block);
+  }
+  return next ?? blocks;
+}
+function offloadRequestImagesWithPolicy(messages, policy) {
+  const lengths = [];
+  for (const message of messages) collectImageLengths(message.content, lengths, policy);
+  const total = lengths.reduce((sum, bytes) => sum + bytes, 0);
+  const excessCount = policy.maxImages === void 0 ? 0 : Math.max(0, lengths.length - policy.maxImages);
+  const excessBytes = policy.maxBytes === void 0 ? 0 : Math.max(0, total - policy.maxBytes);
+  if (excessCount === 0 && excessBytes === 0) return messages;
+  const countQuantum = policy.countQuantum ?? 1;
+  const byteQuantum = policy.byteQuantum ?? 1;
+  const removeCount = excessCount === 0 ? 0 : Math.ceil(excessCount / countQuantum) * countQuantum;
+  const removeBytes = excessBytes === 0 ? 0 : Math.ceil(excessBytes / byteQuantum) * byteQuantum;
+  let count = 0;
+  let removedBytes = 0;
+  for (const imageBytes of lengths) {
+    const byteTargetMet = removeBytes === 0 || (byteQuantum === 1 ? removedBytes >= removeBytes : removedBytes > removeBytes);
+    if (count >= removeCount && byteTargetMet) break;
+    removedBytes += imageBytes;
+    count += 1;
+  }
+  const remaining = { count };
+  return messages.map((message) => {
+    const content = replaceOldestImages(message.content, remaining);
+    return content === message.content ? message : { ...message, content };
+  });
+}
+
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 var APP_IDENTITY = {
@@ -2992,12 +3065,7 @@ function attributionHeaders(identity = APP_IDENTITY) {
   return { "user-agent": userAgent(identity) };
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/content.ts
-function contentHasImage(content) {
-  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
-}
-
-// ../../source/deepseek-harness/packages/llm/llm/src/index.ts
+// .harness/packages/llm/llm/src/index.ts
 var LlmError = class extends HarnessError {
   /** Serializable facts retained beside this live Error. */
   failure;
@@ -3076,9 +3144,24 @@ var LlmAdapter = class {
   resolveModel(provider, model, _signal) {
     return Promise.resolve({ provider, id: model, name: model });
   }
+  /**
+   * Bind exact model metadata and the eventual request dispatch to one adapter generation.
+   * Dynamic adapters override this so settings changes between preparation and
+   * dispatch cannot combine one generation's capabilities with another's endpoint.
+   * @param provider - registered provider route.
+   * @param model - exact model id.
+   * @param signal - cancellation for model resolution.
+   * @returns model metadata and a one-generation stream entry point.
+   */
+  async prepareCall(provider, model, signal) {
+    return {
+      model: await this.resolveModel(provider, model, signal),
+      stream: (options) => this.stream(options)
+    };
+  }
 };
 
-// ../../source/deepseek-harness/packages/settings/settings/src/redact.ts
+// .harness/packages/settings/settings/src/redact.ts
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -3128,7 +3211,7 @@ function redactSecrets(schema, value) {
   return { value: stripped, secrets };
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/index.ts
+// .harness/packages/settings/settings/src/index.ts
 var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
 function settingsNamespace(value) {
   if (!NAMESPACE_PATTERN.test(value)) {
@@ -3632,23 +3715,47 @@ function installSettingsSection(ctx, ns, schema, entry, hooks) {
   });
 }
 
-// ../../source/deepseek-harness/packages/llm/llm-pi-ai/lib/index.js
+// .harness/packages/llm/llm-pi-ai/lib/index.js
 import { createModels, createProvider, getSupportedThinkingLevels, isContextOverflow } from "@earendil-works/pi-ai";
-import { builtinProviders, getBuiltinModels, getBuiltinProviders } from "@earendil-works/pi-ai/providers/all";
 
-// ../../source/deepseek-harness/packages/credentials/credentials/src/index.ts
+// .harness/packages/credentials/credentials/src/index.ts
 var REF_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
+var KEY_SEGMENT_PATTERN = /^[a-z][a-z0-9-]*$/;
 function credentialRef(value) {
-  if (!REF_PATTERN.test(value)) {
+  if (!isCredentialRefName(value)) {
     throw new TypeError(`credential ref "${value}" must match ${String(REF_PATTERN)}`);
   }
   return value;
 }
+function isCredentialRefName(value) {
+  return REF_PATTERN.test(value);
+}
+function isCredentialKeySegment(value) {
+  return KEY_SEGMENT_PATTERN.test(value);
+}
+function credentialKey(scope, id) {
+  for (const segment of [scope, id]) {
+    if (!KEY_SEGMENT_PATTERN.test(segment)) {
+      throw new TypeError(`credential key segment "${segment}" must match ${String(KEY_SEGMENT_PATTERN)}`);
+    }
+  }
+  return `${scope}/${id}`;
+}
+function credentialKeyScope(key) {
+  return key.slice(0, key.indexOf("/"));
+}
+function credentialKeyId(key) {
+  return key.slice(key.indexOf("/") + 1);
+}
 
-// ../../source/deepseek-harness/packages/llm/llm-pi-ai/lib/index.js
+// .harness/packages/llm/llm-pi-ai/lib/index.js
+import { builtinProviders, getBuiltinModels, getBuiltinProviders } from "@earendil-works/pi-ai/providers/all";
 import { anthropicMessagesApi } from "@earendil-works/pi-ai/api/anthropic-messages.lazy";
 import { openAICompletionsApi } from "@earendil-works/pi-ai/api/openai-completions.lazy";
 import { openAIResponsesApi } from "@earendil-works/pi-ai/api/openai-responses.lazy";
+import { homedir } from "node:os";
+import { access } from "node:fs/promises";
+import { resolve as resolve2 } from "node:path";
 function parseArguments(raw) {
   try {
     const parsed = JSON.parse(raw);
@@ -3852,13 +3959,476 @@ function toPiAssistant(message, onDegrade) {
     return foreignAssistant(message);
   }
 }
+var NO_COST = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0
+};
+var MODALITIES = Object.keys({
+  text: true,
+  image: true
+});
+function declaredInput(configured) {
+  return configured === void 0 || configured.length === 0 ? void 0 : [...configured];
+}
+var THINKING_LEVELS = Object.keys({
+  off: true,
+  minimal: true,
+  low: true,
+  medium: true,
+  high: true,
+  xhigh: true,
+  max: true
+});
+var SUPPORTED_THINKING_FORMATS = Object.keys({
+  "openai": true,
+  "deepseek": true,
+  "openrouter": true,
+  "together": true,
+  "zai": true,
+  "qwen": true,
+  "chat-template": true,
+  "qwen-chat-template": true,
+  "string-thinking": true,
+  "ant-ling": true
+});
+var MAX_TOKENS_FIELDS = Object.keys({
+  max_completion_tokens: true,
+  max_tokens: true
+});
+var CACHE_CONTROL_FORMATS = Object.keys({ anthropic: true });
+var CHAT_TEMPLATE_VARS = Object.keys({
+  "thinking.enabled": true,
+  "thinking.effort": true
+});
+var providerIndex;
+function catalogProviders() {
+  providerIndex ??= new Map(builtinProviders().map((provider) => [provider.id, provider]));
+  return providerIndex;
+}
+function catalogProvider(provider) {
+  return catalogProviders().get(provider);
+}
+function catalogProviderIds() {
+  return getBuiltinProviders();
+}
+function catalogModels(provider) {
+  if (!catalogProviders().has(provider)) return /* @__PURE__ */ new Map();
+  const models = getBuiltinModels(provider);
+  return new Map(models.map((model) => [model.id, model]));
+}
+var COMPLETIONS_COMPAT_GATE = {
+  supportsStore: "offer",
+  supportsDeveloperRole: "offer",
+  supportsReasoningEffort: "offer",
+  supportsUsageInStreaming: "offer",
+  maxTokensField: "offer",
+  requiresToolResultName: "offer",
+  requiresAssistantAfterToolResult: "offer",
+  requiresThinkingAsText: "offer",
+  requiresReasoningContentOnAssistantMessages: "offer",
+  thinkingFormat: "offer",
+  chatTemplateKwargs: "offer",
+  supportsStrictMode: "offer",
+  cacheControlFormat: "offer",
+  supportsLongCacheRetention: "offer",
+  openRouterRouting: "withhold",
+  vercelGatewayRouting: "withhold",
+  zaiToolStream: "withhold",
+  supportsOpenAIGrammarTools: "withhold",
+  sendSessionAffinityHeaders: "withhold",
+  deferredToolsMode: "withhold",
+  sessionAffinityFormat: "withhold"
+};
+var RESPONSES_COMPAT_GATE = {
+  supportsDeveloperRole: "offer",
+  supportsStrictMode: "offer",
+  supportsLongCacheRetention: "offer",
+  sessionAffinityFormat: "withhold",
+  supportsOpenAIGrammarTools: "withhold",
+  supportsToolSearch: "withhold",
+  supportsExplicitPromptCacheMode: "withhold"
+};
+var COMPAT_GATES = {
+  "openai-completions": COMPLETIONS_COMPAT_GATE,
+  "openai-responses": RESPONSES_COMPAT_GATE,
+  "azure-openai-responses": RESPONSES_COMPAT_GATE,
+  "openai-codex-responses": RESPONSES_COMPAT_GATE,
+  "anthropic-messages": {
+    supportsEagerToolInputStreaming: "offer",
+    supportsLongCacheRetention: "offer",
+    supportsCacheControlOnTools: "offer",
+    supportsTemperature: "offer",
+    forceAdaptiveThinking: "offer",
+    allowEmptySignature: "offer",
+    supportsStrictTools: "offer",
+    sendSessionAffinityHeaders: "withhold",
+    supportsToolReferences: "withhold"
+  },
+  "bedrock-converse-stream": { supportsStrictMode: "offer" }
+};
+function compatGate(api) {
+  return COMPAT_GATES[api];
+}
+function configuredCompatEntries(compat) {
+  return Object.entries(compat ?? {}).flatMap(([field, value]) => {
+    return typeof value === "object" && value !== null && !Array.isArray(value) && Object.keys(value).length === 0 ? [] : [[field, value]];
+  });
+}
+function compatProtocols(field) {
+  return Object.entries(COMPAT_GATES).flatMap(([api, gate]) => gate[field] === "offer" ? [api] : []);
+}
+function offeredCompatFields(api) {
+  return Object.entries(compatGate(api) ?? {}).flatMap(([field, disposition]) => disposition === "offer" ? [field] : []);
+}
+function allOfferedCompatFields() {
+  const fields = /* @__PURE__ */ new Set();
+  for (const api of Object.keys(COMPAT_GATES)) for (const field of offeredCompatFields(api)) fields.add(field);
+  return [...fields];
+}
+function assertOfferedCompatFields(provider, site, compat) {
+  for (const [field, value] of Object.entries(compat ?? {})) {
+    if (compatProtocols(field).length === 0) {
+      if (Object.values(COMPAT_GATES).some((gate) => gate[field] !== void 0)) invalid(provider, `${site} sets compat "${field}", which is not configurable here: pi-ai's installed catalog sets it for the vendors that need it, so name that provider as the route instead`);
+      invalid(provider, `${site} sets compat "${field}", which no wire protocol declares; the configurable switches are ${allOfferedCompatFields().join(", ")}`);
+    }
+    if (value == null) invalid(provider, `${site} sets compat "${field}" with no value; give it one, or remove the key to leave the field to the next layer \u2014 the installed catalog entry, then pi-ai's own detection`);
+  }
+}
+function invalid(provider, detail) {
+  throw new Error(`llm-pi-ai: provider "${provider}" ${detail}`);
+}
+function sharedCatalogApi(defaults) {
+  const apis = /* @__PURE__ */ new Set();
+  for (const model of defaults.values()) apis.add(model.api);
+  return apis.size === 1 ? [...apis][0] : void 0;
+}
+function resolveModelReasoning(provider, entry, base) {
+  const efforts = entry.reasoningEfforts;
+  if (efforts === void 0) return { reasoning: base?.reasoning ?? false };
+  if (efforts === false) return { reasoning: false };
+  if (efforts === null || Object.keys(efforts).length === 0) invalid(provider, `model "${entry.id}" has an empty reasoningEfforts; declare the offered levels, set false for a non-reasoning model, or omit the field to keep the installed catalog's capability`);
+  const declared = THINKING_LEVELS.flatMap((level) => {
+    const wire = efforts[level];
+    return wire === void 0 ? [] : [[level, wire]];
+  });
+  for (const [level, wire] of declared) if (wire === null) {
+    if (level !== "off") invalid(provider, `model "${entry.id}" reasoningEfforts.${level} needs the wire value dispatch should send; only "off" may leave it empty`);
+  } else if (wire.length === 0) invalid(provider, `model "${entry.id}" reasoningEfforts.${level} must not be an empty string`);
+  if (!declared.some(([level]) => level !== "off")) invalid(provider, `model "${entry.id}" reasoningEfforts offers no level beyond "off"; declare a thinking level, or set reasoningEfforts to false for a non-reasoning model`);
+  const map = {};
+  for (const level of THINKING_LEVELS) {
+    const wire = efforts[level];
+    if (wire === void 0) map[level] = null;
+    else if (wire !== null) map[level] = wire;
+  }
+  return {
+    reasoning: true,
+    thinkingLevelMap: map
+  };
+}
+function resolveModelCompat(provider, entry, route, base, api) {
+  const gate = compatGate(api);
+  const configured = {};
+  for (const [field, value] of configuredCompatEntries(route)) {
+    if (gate?.[field] !== "offer") continue;
+    configured[field] = value;
+  }
+  for (const [field, value] of configuredCompatEntries(entry.compat)) {
+    if (gate?.[field] !== "offer") {
+      const offered = offeredCompatFields(api);
+      invalid(provider, `model "${entry.id}" sets compat "${field}", but its api is "${api}", which does not take it; that switch exists on ${compatProtocols(field).join(", ")}, and "${api}" offers ${offered.length === 0 ? "no configurable compat" : offered.join(", ")}`);
+    }
+    configured[field] = value;
+  }
+  if (Object.keys(configured).length === 0) return {};
+  return { compat: {
+    ...base?.api === api ? base.compat : void 0,
+    ...configured
+  } };
+}
+function resolveRouteModels(request) {
+  const { provider } = request;
+  const defaults = catalogModels(provider);
+  const providerBaseUrl = catalogProvider(provider)?.baseUrl;
+  const configured = request.models ?? [];
+  const overrides = request.modelOverrides ?? {};
+  for (const [id, override] of Object.entries(overrides)) {
+    if (id.length === 0) invalid(provider, "has a modelOverrides entry with an empty model id");
+    if (defaults.size === 0) invalid(provider, `sets modelOverrides for "${id}", but the installed catalog does not describe this route; a declared route spells every model out in its models list`);
+    if (configured.length > 0) invalid(provider, `sets modelOverrides for "${id}" beside a models list; models already replaces the served catalog, so declare the fields on its entries`);
+    if (!defaults.has(id)) invalid(provider, `modelOverrides names "${id}", which the installed catalog does not describe`);
+    if ("id" in override) invalid(provider, `modelOverrides entry "${id}" sets "id", which is the dict key`);
+  }
+  const entries = configured.length > 0 ? configured : [...defaults.values()].map((model) => ({
+    id: model.id,
+    ...overrides[model.id]
+  }));
+  if (entries.length === 0) invalid(provider, "resolves no models; the installed catalog does not describe this route, so its models must be listed in configuration");
+  const routeApi = sharedCatalogApi(defaults);
+  assertOfferedCompatFields(provider, "route", request.compat);
+  for (const entry of entries) assertOfferedCompatFields(provider, `model "${entry.id}"`, entry.compat);
+  const seen = /* @__PURE__ */ new Set();
+  const configuredMaxTokens = /* @__PURE__ */ new Map();
+  const models = entries.map((entry) => {
+    if (entry.id.length === 0) invalid(provider, "has a model with an empty id");
+    if (seen.has(entry.id)) invalid(provider, `lists model "${entry.id}" more than once`);
+    seen.add(entry.id);
+    const base = defaults.get(entry.id);
+    const api = request.api ?? base?.api ?? routeApi;
+    if (api === void 0) invalid(provider, `model "${entry.id}" needs an api; the installed catalog does not describe it, so set the route's api to the wire protocol its endpoint speaks`);
+    const baseUrl = request.baseURL ?? base?.baseUrl ?? providerBaseUrl;
+    if (baseUrl === void 0) invalid(provider, `model "${entry.id}" needs a baseURL; the installed catalog does not describe this route`);
+    const contextWindow = entry.contextWindow ?? base?.contextWindow ?? request.defaultContextWindow;
+    if (!Number.isInteger(contextWindow) || contextWindow <= 0) invalid(provider, `model "${entry.id}" contextWindow must be a positive integer`);
+    const maxTokens = entry.maxTokens ?? base?.maxTokens ?? request.defaultMaxTokens;
+    if (!Number.isInteger(maxTokens) || maxTokens <= 0) invalid(provider, `model "${entry.id}" maxTokens must be a positive integer`);
+    if (entry.maxTokens !== void 0) configuredMaxTokens.set(entry.id, entry.maxTokens);
+    return {
+      ...base,
+      id: entry.id,
+      name: entry.name ?? base?.name ?? entry.id,
+      api,
+      provider,
+      baseUrl,
+      input: declaredInput(entry.input) ?? base?.input ?? [...request.defaultInput],
+      cost: base?.cost ?? NO_COST,
+      contextWindow,
+      maxTokens,
+      ...resolveModelReasoning(provider, entry, base),
+      ...resolveModelCompat(provider, entry, request.compat, base, api)
+    };
+  });
+  for (const [field] of configuredCompatEntries(request.compat)) {
+    const takers = compatProtocols(field);
+    if (models.some((model) => takers.includes(model.api))) continue;
+    invalid(provider, `sets compat "${field}", but no model on the route speaks a protocol that takes it; it exists on ${takers.join(", ")}`);
+  }
+  return {
+    models,
+    configuredMaxTokens
+  };
+}
+var PROTOCOLS = {
+  "openai-completions": openAICompletionsApi,
+  "openai-responses": openAIResponsesApi,
+  "anthropic-messages": anthropicMessagesApi
+};
+function supportedProtocols() {
+  return Object.keys(PROTOCOLS);
+}
+function harnessApiKeyAuth(name2) {
+  return {
+    name: name2,
+    resolve: ({ credential }) => Promise.resolve({
+      auth: credential?.key === void 0 ? {} : { apiKey: credential.key },
+      source: name2
+    })
+  };
+}
+function routeAuth(spec, catalog) {
+  if (catalog === void 0) return { apiKey: harnessApiKeyAuth(spec.displayName) };
+  if (catalog.auth.apiKey !== void 0 || !spec.namesCredential) return catalog.auth;
+  return {
+    ...catalog.auth,
+    apiKey: harnessApiKeyAuth(spec.displayName)
+  };
+}
+function reuseCatalogProvider(base, spec) {
+  const baseUrl = spec.baseURL ?? base.baseUrl;
+  return {
+    id: spec.provider,
+    name: spec.displayName,
+    ...baseUrl === void 0 ? {} : { baseUrl },
+    auth: routeAuth(spec, base),
+    getModels: () => spec.models,
+    stream: (model, context, options) => base.stream(model, context, options),
+    streamSimple: (model, context, options) => base.streamSimple(model, context, options)
+  };
+}
+function buildProvider(spec) {
+  const catalog = catalogProvider(spec.provider);
+  if (catalog !== void 0 && spec.api === void 0) return reuseCatalogProvider(catalog, spec);
+  const factory = spec.api === void 0 ? void 0 : PROTOCOLS[spec.api];
+  if (factory === void 0) throw new Error(`llm-pi-ai: provider "${spec.provider}" names api "${spec.api}", which this build cannot serve; supported protocols are ${supportedProtocols().join(", ")}`);
+  return createProvider({
+    id: spec.provider,
+    name: spec.displayName,
+    ...spec.baseURL === void 0 ? {} : { baseUrl: spec.baseURL },
+    auth: routeAuth(spec, catalog),
+    models: spec.models,
+    api: factory()
+  });
+}
+var DEFAULT_STREAM_IDLE_TIMEOUT_MS = 3e5;
+var DEFAULT_MAX_REQUEST_IMAGE_BYTES = 20 * 1024 * 1024;
+var DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET = 2048 * 2048;
+var DEFAULT_REQUEST_IMAGE_MAX_BYTES = 1024 * 1024;
+var DEFAULT_CONTEXT_WINDOW = 262144;
+var DEFAULT_MAX_TOKENS = 32768;
+var DEFAULT_INPUT = ["text"];
+var thinkingBudgets = src_default.object({
+  minimal: src_default.number(),
+  low: src_default.number(),
+  medium: src_default.number(),
+  high: src_default.number()
+});
+var chatTemplateKwarg = src_default.union([
+  src_default.string(),
+  src_default.number(),
+  src_default.boolean(),
+  src_default.const(null),
+  src_default.object({
+    $var: src_default.union(CHAT_TEMPLATE_VARS).required(),
+    omitWhenOff: src_default.boolean()
+  })
+]);
+var compatProfile = src_default.object({
+  supportsStore: src_default.boolean(),
+  supportsDeveloperRole: src_default.boolean(),
+  supportsReasoningEffort: src_default.boolean(),
+  supportsUsageInStreaming: src_default.boolean(),
+  maxTokensField: src_default.union(MAX_TOKENS_FIELDS),
+  requiresToolResultName: src_default.boolean(),
+  requiresAssistantAfterToolResult: src_default.boolean(),
+  requiresThinkingAsText: src_default.boolean(),
+  requiresReasoningContentOnAssistantMessages: src_default.boolean(),
+  thinkingFormat: src_default.union(SUPPORTED_THINKING_FORMATS),
+  chatTemplateKwargs: src_default.dict(chatTemplateKwarg),
+  supportsStrictMode: src_default.boolean(),
+  cacheControlFormat: src_default.union(CACHE_CONTROL_FORMATS),
+  supportsLongCacheRetention: src_default.boolean(),
+  supportsEagerToolInputStreaming: src_default.boolean(),
+  supportsCacheControlOnTools: src_default.boolean(),
+  supportsTemperature: src_default.boolean(),
+  forceAdaptiveThinking: src_default.boolean(),
+  allowEmptySignature: src_default.boolean(),
+  supportsStrictTools: src_default.boolean()
+});
+var reasoningEfforts = src_default.dict(src_default.union([src_default.string(), src_default.const(null)]), src_default.union(THINKING_LEVELS));
+var modelFields = {
+  name: src_default.string(),
+  contextWindow: src_default.number().step(1).min(1),
+  maxTokens: src_default.number().step(1).min(1),
+  input: src_default.array(src_default.union(MODALITIES)),
+  reasoningEfforts: src_default.union([src_default.const(false), reasoningEfforts]),
+  compat: compatProfile
+};
+var modelProfile = src_default.object({
+  id: src_default.string().required(),
+  ...modelFields
+});
+var modelOverride = src_default.object(modelFields);
+var profile = src_default.object({
+  apiKeyEnv: src_default.string().role("credential-ref"),
+  displayName: src_default.string(),
+  api: src_default.union(supportedProtocols()),
+  baseURL: src_default.string(),
+  models: src_default.array(modelProfile),
+  modelOverrides: src_default.dict(modelOverride),
+  compat: compatProfile,
+  defaultContextWindow: src_default.number().step(1).min(1).default(DEFAULT_CONTEXT_WINDOW),
+  defaultMaxTokens: src_default.number().step(1).min(1).default(DEFAULT_MAX_TOKENS),
+  defaultInput: src_default.array(src_default.union(MODALITIES)).default([...DEFAULT_INPUT]),
+  headers: src_default.dict(src_default.string()),
+  reasoning: src_default.union(THINKING_LEVELS),
+  thinkingBudgets,
+  cacheRetention: src_default.union([
+    "none",
+    "short",
+    "long"
+  ]),
+  transport: src_default.union([
+    "sse",
+    "websocket",
+    "websocket-cached",
+    "auto"
+  ]),
+  timeoutMs: src_default.natural(),
+  websocketConnectTimeoutMs: src_default.natural(),
+  streamIdleTimeoutMs: src_default.number().min(Number.MIN_VALUE).max(MAX_TIMER_DELAY_MS).default(DEFAULT_STREAM_IDLE_TIMEOUT_MS),
+  maxRequestImageBytes: src_default.number().step(1).min(1).default(DEFAULT_MAX_REQUEST_IMAGE_BYTES),
+  requestImagePixelBudget: src_default.number().step(1).min(1).default(DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET),
+  requestImageMaxBytes: src_default.number().step(1).min(1).default(DEFAULT_REQUEST_IMAGE_MAX_BYTES),
+  retryPolicy: RetryPolicySchema
+});
+var Config = src_default.object({ providers: src_default.dict(profile).default({}) });
+function assertServiceable(config) {
+  resolveProfiles(config.providers);
+}
+function rejectRemovedFields(provider, source) {
+  const legacy = source;
+  if ("provider" in legacy) throw new Error(`llm-pi-ai: provider "${provider}" sets "provider", which moved to the providers dict key`);
+  if ("maxRetries" in legacy || "maxRetryDelayMs" in legacy) throw new Error(`llm-pi-ai: provider "${provider}" sets maxRetries or maxRetryDelayMs, which were removed; compose agent recovery with dsh-llm-retry`);
+}
+function resolveProfiles(providers) {
+  if (Array.isArray(providers)) throw new Error("llm-pi-ai: providers is now a dict keyed by provider route, not an array of profiles");
+  const entries = Object.entries(providers ?? {});
+  const resolved = /* @__PURE__ */ new Map();
+  for (const [provider, source] of entries) {
+    rejectRemovedFields(provider, source);
+    if (provider.length === 0) throw new Error("llm-pi-ai: provider names must be non-empty");
+    if (source.baseURL !== void 0 && source.baseURL.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" has an empty baseURL`);
+    if (source.displayName !== void 0 && source.displayName.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" has an empty displayName`);
+    const streamIdleTimeoutMs = source.streamIdleTimeoutMs ?? 3e5;
+    if (!Number.isFinite(streamIdleTimeoutMs) || streamIdleTimeoutMs <= 0 || streamIdleTimeoutMs > MAX_TIMER_DELAY_MS) throw new Error(`llm-pi-ai: provider "${provider}" streamIdleTimeoutMs must be a positive finite number no greater than ${MAX_TIMER_DELAY_MS}`);
+    const maxRequestImageBytes = source.maxRequestImageBytes ?? 20971520;
+    if (!Number.isInteger(maxRequestImageBytes) || maxRequestImageBytes <= 0) throw new Error(`llm-pi-ai: provider "${provider}" maxRequestImageBytes must be a positive integer`);
+    const requestImagePixelBudget = source.requestImagePixelBudget ?? 4194304;
+    if (!Number.isSafeInteger(requestImagePixelBudget) || requestImagePixelBudget <= 0) throw new Error(`llm-pi-ai: provider "${provider}" requestImagePixelBudget must be a positive safe integer`);
+    const requestImageMaxBytes = source.requestImageMaxBytes ?? 1048576;
+    if (!Number.isSafeInteger(requestImageMaxBytes) || requestImageMaxBytes <= 0) throw new Error(`llm-pi-ai: provider "${provider}" requestImageMaxBytes must be a positive safe integer`);
+    const defaultInput = [...source.defaultInput ?? DEFAULT_INPUT];
+    if (defaultInput.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" defaultInput must name at least one modality`);
+    const displayName = source.displayName ?? provider;
+    const catalog = resolveRouteModels({
+      provider,
+      ...source.api === void 0 ? {} : { api: source.api },
+      ...source.baseURL === void 0 ? {} : { baseURL: source.baseURL },
+      ...source.models === void 0 ? {} : { models: source.models },
+      ...source.modelOverrides === void 0 ? {} : { modelOverrides: source.modelOverrides },
+      ...source.compat === void 0 ? {} : { compat: source.compat },
+      defaultInput,
+      defaultContextWindow: source.defaultContextWindow ?? 262144,
+      defaultMaxTokens: source.defaultMaxTokens ?? 32768
+    });
+    const { apiKeyEnv, retryPolicy, models: _models, displayName: _displayName, ...rest } = source;
+    resolved.set(provider, {
+      ...rest,
+      provider,
+      displayName,
+      ...apiKeyEnv === void 0 ? {} : { apiKeyEnv: credentialRef(apiKeyEnv) },
+      streamIdleTimeoutMs,
+      maxRequestImageBytes,
+      requestImagePixelBudget,
+      requestImageMaxBytes,
+      retryPolicy: resolveRetryPolicy(retryPolicy, `llm-pi-ai: provider "${provider}" retryPolicy`),
+      ...rest.headers === void 0 ? {} : { headers: { ...rest.headers } },
+      ...rest.thinkingBudgets === void 0 ? {} : { thinkingBudgets: { ...rest.thinkingBudgets } },
+      configuredMaxTokens: catalog.configuredMaxTokens,
+      piProvider: buildProvider({
+        provider,
+        displayName,
+        ...source.api === void 0 ? {} : { api: source.api },
+        ...source.baseURL === void 0 ? {} : { baseURL: source.baseURL },
+        models: catalog.models,
+        namesCredential: apiKeyEnv !== void 0
+      })
+    });
+  }
+  return resolved;
+}
 function flattenText(message) {
   return message.content.filter((block) => block.type === "text").map((block) => block.text).join("");
 }
 function toolResultText(blocks) {
   return blocks.map((block) => block.type === "text" ? block.text : block.type === "tool-result" ? toolResultText(block.content) : "").join("");
 }
-async function userContent(blocks, attachments) {
+function assertSupportedImageRoles(messages) {
+  for (const message of messages) if (message.role !== "user" && contentHasImage(message.content)) throw new LlmError(`pi-ai cannot represent an image in an in-history ${message.role} message`, "UNSUPPORTED_CONTENT");
+}
+async function userContent(blocks, requestImages) {
   const content = [];
   for (const block of blocks) switch (block.type) {
     case "text":
@@ -3868,17 +4438,21 @@ async function userContent(blocks, attachments) {
       });
       break;
     case "image": {
-      const stored = await attachments.readImage(block.attachment);
+      const version2 = requestImages.get(block.attachment.attachmentId);
+      content.push({
+        type: "text",
+        text: requestImageHandleText(version2)
+      });
       content.push({
         type: "image",
-        data: Buffer.from(stored.data).toString("base64"),
-        mimeType: stored.ref.mediaType
+        data: Buffer.from(version2.data).toString("base64"),
+        mimeType: version2.mediaType
       });
       break;
     }
     case "tool-result":
       {
-        const nested = await userContent(block.content, attachments);
+        const nested = await userContent(block.content, requestImages);
         if (typeof nested === "string") {
           if (nested.length > 0) content.push({
             type: "text",
@@ -3892,6 +4466,19 @@ async function userContent(blocks, attachments) {
   }
   if (content.every((block) => block.type === "text")) return content.map((block) => block.text).join("");
   return content;
+}
+function collectImageRefs(blocks, refs) {
+  for (const block of blocks) if (block.type === "image") refs.set(block.attachment.attachmentId, block.attachment);
+  else if (block.type === "tool-result") collectImageRefs(block.content, refs);
+}
+async function prepareRequestImages(messages, attachments, policy, signal) {
+  const refs = /* @__PURE__ */ new Map();
+  for (const message of messages) collectImageRefs(message.content, refs);
+  const orderedRefs = [...refs.values()];
+  const prepared = await Promise.all(orderedRefs.map((ref) => attachments.readImageRequest(ref, policy, signal)));
+  const versions = /* @__PURE__ */ new Map();
+  for (const [index, ref] of orderedRefs.entries()) versions.set(ref.attachmentId, prepared[index]);
+  return versions;
 }
 function toolsOf(options) {
   return options.tools?.map((tool) => ({
@@ -3948,15 +4535,31 @@ function textOnlyContext(options, onReplayDegrade) {
   }
   return piContext(options, messages);
 }
-function toPiContext(options, attachments, onReplayDegrade) {
-  return attachments === void 0 ? textOnlyContext(options, onReplayDegrade) : toPiContextWithImages(options, attachments, onReplayDegrade);
+function toPiContext(options, attachments, onReplayDegrade, maxRequestImageBytes, requestImagePolicy) {
+  return attachments === void 0 ? textOnlyContext(options, onReplayDegrade) : toPiContextWithImages(options, attachments, onReplayDegrade, maxRequestImageBytes, requestImagePolicy);
 }
-async function toPiContextWithImages(options, attachments, onReplayDegrade) {
+async function toPiContextWithImages(options, attachments, onReplayDegrade, maxRequestImageBytes, requestImagePolicy = {
+  maxPixels: DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET,
+  maxBytes: DEFAULT_REQUEST_IMAGE_MAX_BYTES
+}) {
+  assertSupportedImageRoles(options.messages);
+  const requestMessages = offloadRequestImagesWithPolicy(options.messages, {
+    representation: "base64",
+    ...maxRequestImageBytes === void 0 ? {} : { maxBytes: maxRequestImageBytes },
+    byteQuantum: 1,
+    byteLength: (ref) => Math.min(ref.bytes, requestImagePolicy.maxBytes)
+  });
+  const requestImages = await prepareRequestImages(requestMessages, attachments, requestImagePolicy, options.signal);
+  const exactMessages = offloadRequestImagesWithPolicy(requestMessages, {
+    representation: "base64",
+    ...maxRequestImageBytes === void 0 ? {} : { maxBytes: maxRequestImageBytes },
+    byteQuantum: 1,
+    byteLength: (ref) => requestImages.get(ref.attachmentId).bytes
+  });
   const toolNames = /* @__PURE__ */ new Map();
   const messages = [];
-  for (const message of options.messages) {
+  for (const message of exactMessages) {
     if (message.role === "system") {
-      if (contentHasImage(message.content)) throw new LlmError("pi-ai cannot represent an image in an in-history system message", "UNSUPPORTED_CONTENT");
       messages.push({
         role: "user",
         content: flattenText(message),
@@ -3970,7 +4573,7 @@ async function toPiContextWithImages(options, attachments, onReplayDegrade) {
       messages.push(assistant);
       continue;
     }
-    const content = await userContent(message.content.filter((block) => block.type !== "tool-result"), attachments);
+    const content = await userContent(message.content.filter((block) => block.type !== "tool-result"), requestImages);
     const results = message.content.filter((block) => block.type === "tool-result");
     if (content.length > 0 || results.length === 0) messages.push({
       role: "user",
@@ -3978,7 +4581,7 @@ async function toPiContextWithImages(options, attachments, onReplayDegrade) {
       timestamp: 0
     });
     for (const result of results) {
-      const resultContent = await userContent(result.content, attachments);
+      const resultContent = await userContent(result.content, requestImages);
       messages.push({
         role: "toolResult",
         toolCallId: result.toolCallId,
@@ -4006,6 +4609,7 @@ function classifyPiAiError(message) {
   if (/\b(?:401|403)\b/.test(message)) return "AUTH";
   if (isQuotaExceededError(message)) return QUOTA_EXCEEDED_CODE;
   if (/\b429\b|rate.?limit/i.test(message)) return "RATE_LIMIT";
+  if (/\b413\b|failed to buffer the request body:\s*length limit exceeded|payload too large|request body too large/i.test(message)) return "INVALID_REQUEST";
   if (/\b400\b|invalid.?request/i.test(message)) return "INVALID_REQUEST";
   if (/\b5\d\d\b/.test(message)) return "SERVER";
   if (/\btime(?:d)?\s*out\b|timeout/i.test(message)) return "TIMEOUT";
@@ -4286,7 +4890,7 @@ var PiAiAdapter = class extends LlmAdapter {
   current() {
     const profiles = this.config.profiles();
     if (this.snapshot?.profiles === profiles) return this.snapshot;
-    const models = createModels();
+    const models = createModels(this.config.auth);
     for (const profile2 of profiles.values()) models.setProvider(profile2.piProvider);
     this.snapshot = {
       profiles,
@@ -4331,22 +4935,35 @@ var PiAiAdapter = class extends LlmAdapter {
   resolveModel(provider, model, _signal) {
     return Promise.resolve().then(() => {
       const snapshot = this.current();
-      const profile2 = this.profileOf(snapshot, provider);
-      const resolvedModel = this.modelOf(snapshot, provider, model);
-      const defaultLevel = describableReasoningLevel(resolvedModel, profile2.reasoning);
-      const configuredMaxTokens = profile2.configuredMaxTokens.get(model);
-      return {
-        provider,
-        id: model,
-        name: resolvedModel.name,
-        inputModalities: [...resolvedModel.input],
-        context: { contextWindow: resolvedModel.contextWindow },
-        ...configuredMaxTokens === void 0 ? {} : { defaultMaxTokens: configuredMaxTokens },
-        ...reasoningInfo(resolvedModel, defaultLevel)
-      };
+      return this.modelInfo(snapshot, provider, model);
     });
   }
-  async *stream(options) {
+  modelInfo(snapshot, provider, model) {
+    const profile2 = this.profileOf(snapshot, provider);
+    const resolvedModel = this.modelOf(snapshot, provider, model);
+    const defaultLevel = describableReasoningLevel(resolvedModel, profile2.reasoning);
+    const configuredMaxTokens = profile2.configuredMaxTokens.get(model);
+    return {
+      provider,
+      id: model,
+      name: resolvedModel.name,
+      inputModalities: [...resolvedModel.input],
+      context: { contextWindow: resolvedModel.contextWindow },
+      ...configuredMaxTokens === void 0 ? {} : { defaultMaxTokens: configuredMaxTokens },
+      ...reasoningInfo(resolvedModel, defaultLevel)
+    };
+  }
+  prepareCall(provider, model, _signal) {
+    const snapshot = this.current();
+    return Promise.resolve({
+      model: this.modelInfo(snapshot, provider, model),
+      stream: (options) => this.streamWithSnapshot(options, snapshot)
+    });
+  }
+  stream(options) {
+    return this.streamWithSnapshot(options, this.current());
+  }
+  async *streamWithSnapshot(options, snapshot) {
     const env_1 = {
       stack: [],
       error: void 0,
@@ -4354,7 +4971,6 @@ var PiAiAdapter = class extends LlmAdapter {
     };
     try {
       if (options.stop !== void 0) throw new LlmError("llm-pi-ai does not support GenerateOptions.stop", "UNSUPPORTED_OPTION");
-      const snapshot = this.current();
       const profile2 = this.profileOf(snapshot, options.provider);
       const model = this.modelOf(snapshot, options.provider, options.model);
       const reasoning = resolveReasoningLevel(model, options.reasoningEffort ?? profile2.reasoning);
@@ -4375,7 +4991,13 @@ var PiAiAdapter = class extends LlmAdapter {
             reason
           });
         };
-        const context = attachments === void 0 ? toPiContext(options, void 0, onReplayDegrade) : await toPiContext(options, attachments, onReplayDegrade);
+        const context = attachments === void 0 ? toPiContext(options, void 0, onReplayDegrade) : await toPiContext({
+          ...options,
+          signal: watchdog.signal
+        }, attachments, onReplayDegrade, profile2.maxRequestImageBytes, {
+          maxPixels: profile2.requestImagePixelBudget,
+          maxBytes: profile2.requestImageMaxBytes
+        });
         const iterator = toStreamChunks(snapshot.models.streamSimple(model, context, {
           ...profileOptions(profile2, reasoning, apiKey),
           ...options.temperature === void 0 ? {} : { temperature: options.temperature },
@@ -4420,325 +5042,87 @@ var PiAiAdapter = class extends LlmAdapter {
     }
   }
 };
-var NO_COST = {
-  input: 0,
-  output: 0,
-  cacheRead: 0,
-  cacheWrite: 0
-};
-var MODALITIES = Object.keys({
-  text: true,
-  image: true
-});
-function declaredInput(configured) {
-  return configured === void 0 || configured.length === 0 ? void 0 : [...configured];
+var RECORD_SCOPE = "llm-pi-ai";
+function recordKeyFor(providerId) {
+  return credentialKey(RECORD_SCOPE, providerId);
 }
-var THINKING_LEVELS = Object.keys({
-  off: true,
-  minimal: true,
-  low: true,
-  medium: true,
-  high: true,
-  xhigh: true,
-  max: true
-});
-var SUPPORTED_THINKING_FORMATS = Object.keys({
-  "openai": true,
-  "deepseek": true,
-  "openrouter": true,
-  "together": true,
-  "zai": true,
-  "qwen": true,
-  "string-thinking": true,
-  "ant-ling": true
-});
-var providerIndex;
-function catalogProviders() {
-  providerIndex ??= new Map(builtinProviders().map((provider) => [provider.id, provider]));
-  return providerIndex;
+function toPiCredential(record) {
+  if (record === void 0) return void 0;
+  if (record.kind === "api-key") return {
+    type: "api_key",
+    ...record.key === void 0 ? {} : { key: record.key },
+    ...record.env === void 0 ? {} : { env: { ...record.env } }
+  };
+  return record.payload;
 }
-function catalogProvider(provider) {
-  return catalogProviders().get(provider);
-}
-function catalogProviderIds() {
-  return getBuiltinProviders();
-}
-function catalogProviderTakesApiKey(provider) {
-  return catalogProvider(provider)?.auth.apiKey !== void 0;
-}
-function catalogModels(provider) {
-  if (!catalogProviders().has(provider)) return /* @__PURE__ */ new Map();
-  const models = getBuiltinModels(provider);
-  return new Map(models.map((model) => [model.id, model]));
-}
-function invalid(provider, detail) {
-  throw new Error(`llm-pi-ai: provider "${provider}" ${detail}`);
-}
-function sharedCatalogApi(defaults) {
-  const apis = /* @__PURE__ */ new Set();
-  for (const model of defaults.values()) apis.add(model.api);
-  return apis.size === 1 ? [...apis][0] : void 0;
-}
-function resolveModelReasoning(provider, entry, base) {
-  const efforts = entry.reasoningEfforts;
-  if (efforts === void 0) return { reasoning: base?.reasoning ?? false };
-  if (efforts === false) return { reasoning: false };
-  if (efforts === null || Object.keys(efforts).length === 0) invalid(provider, `model "${entry.id}" has an empty reasoningEfforts; declare the offered levels, set false for a non-reasoning model, or omit the field to keep the installed catalog's capability`);
-  const declared = THINKING_LEVELS.flatMap((level) => {
-    const wire = efforts[level];
-    return wire === void 0 ? [] : [[level, wire]];
-  });
-  for (const [level, wire] of declared) if (wire === null) {
-    if (level !== "off") invalid(provider, `model "${entry.id}" reasoningEfforts.${level} needs the wire value dispatch should send; only "off" may leave it empty`);
-  } else if (wire.length === 0) invalid(provider, `model "${entry.id}" reasoningEfforts.${level} must not be an empty string`);
-  if (!declared.some(([level]) => level !== "off")) invalid(provider, `model "${entry.id}" reasoningEfforts offers no level beyond "off"; declare a thinking level, or set reasoningEfforts to false for a non-reasoning model`);
-  const map = {};
-  for (const level of THINKING_LEVELS) {
-    const wire = efforts[level];
-    if (wire === void 0) map[level] = null;
-    else if (wire !== null) map[level] = wire;
-  }
+function toRecord(credential) {
+  if (credential.type === "api_key") return {
+    kind: "api-key",
+    ...credential.key === void 0 ? {} : { key: credential.key },
+    ...credential.env === void 0 ? {} : { env: { ...credential.env } }
+  };
   return {
-    reasoning: true,
-    thinkingLevelMap: map
+    kind: "grant",
+    payload: credential
   };
 }
-function resolveModelCompat(provider, entry, route, base, api) {
-  const thinkingFormat = entry.compat?.thinkingFormat ?? route?.thinkingFormat;
-  const supportsReasoningEffort = entry.compat?.supportsReasoningEffort ?? route?.supportsReasoningEffort;
-  if (thinkingFormat === void 0 && supportsReasoningEffort === void 0) return {};
-  if (api !== "openai-completions") {
-    if (entry.compat?.thinkingFormat !== void 0 || entry.compat?.supportsReasoningEffort !== void 0) invalid(provider, `model "${entry.id}" sets compat reasoning switches, but its api is "${api}"; thinkingFormat and supportsReasoningEffort exist only on openai-completions`);
-    return {};
-  }
-  return { compat: {
-    ...base?.api === api ? base.compat : void 0,
-    ...thinkingFormat === void 0 ? {} : { thinkingFormat },
-    ...supportsReasoningEffort === void 0 ? {} : { supportsReasoningEffort }
-  } };
+function writableStore(ctx) {
+  const credentials = ctx.get("credentials");
+  if (credentials === void 0) throw new LlmError("llm-pi-ai: this composition mounts no credentials service, so there is nowhere to store the credential a sign-in produces; mount one (dsh-credentials-local) to sign in", "NO_CREDENTIAL_STORE");
+  return credentials;
 }
-function resolveRouteModels(request) {
-  const { provider } = request;
-  const defaults = catalogModels(provider);
-  const providerBaseUrl = catalogProvider(provider)?.baseUrl;
-  const configured = request.models ?? [];
-  const overrides = request.modelOverrides ?? {};
-  for (const [id, override] of Object.entries(overrides)) {
-    if (id.length === 0) invalid(provider, "has a modelOverrides entry with an empty model id");
-    if (defaults.size === 0) invalid(provider, `sets modelOverrides for "${id}", but the installed catalog does not describe this route; a declared route spells every model out in its models list`);
-    if (configured.length > 0) invalid(provider, `sets modelOverrides for "${id}" beside a models list; models already replaces the served catalog, so declare the fields on its entries`);
-    if (!defaults.has(id)) invalid(provider, `modelOverrides names "${id}", which the installed catalog does not describe`);
-    if ("id" in override) invalid(provider, `modelOverrides entry "${id}" sets "id", which is the dict key`);
-  }
-  const entries = configured.length > 0 ? configured : [...defaults.values()].map((model) => ({
-    id: model.id,
-    ...overrides[model.id]
-  }));
-  if (entries.length === 0) invalid(provider, "resolves no models; the installed catalog does not describe this route, so its models must be listed in configuration");
-  const routeApi = sharedCatalogApi(defaults);
-  const routeCompatDefined = request.compat?.thinkingFormat !== void 0 || request.compat?.supportsReasoningEffort !== void 0;
-  const seen = /* @__PURE__ */ new Set();
-  const configuredMaxTokens = /* @__PURE__ */ new Map();
-  const models = entries.map((entry) => {
-    if (entry.id.length === 0) invalid(provider, "has a model with an empty id");
-    if (seen.has(entry.id)) invalid(provider, `lists model "${entry.id}" more than once`);
-    seen.add(entry.id);
-    const base = defaults.get(entry.id);
-    const api = request.api ?? base?.api ?? routeApi;
-    if (api === void 0) invalid(provider, `model "${entry.id}" needs an api; the installed catalog does not describe it, so set the route's api to the wire protocol its endpoint speaks`);
-    const baseUrl = request.baseURL ?? base?.baseUrl ?? providerBaseUrl;
-    if (baseUrl === void 0) invalid(provider, `model "${entry.id}" needs a baseURL; the installed catalog does not describe this route`);
-    const contextWindow = entry.contextWindow ?? base?.contextWindow ?? request.defaultContextWindow;
-    if (!Number.isInteger(contextWindow) || contextWindow <= 0) invalid(provider, `model "${entry.id}" contextWindow must be a positive integer`);
-    const maxTokens = entry.maxTokens ?? base?.maxTokens ?? request.defaultMaxTokens;
-    if (!Number.isInteger(maxTokens) || maxTokens <= 0) invalid(provider, `model "${entry.id}" maxTokens must be a positive integer`);
-    if (entry.maxTokens !== void 0) configuredMaxTokens.set(entry.id, entry.maxTokens);
-    return {
-      ...base,
-      id: entry.id,
-      name: entry.name ?? base?.name ?? entry.id,
-      api,
-      provider,
-      baseUrl,
-      input: declaredInput(entry.input) ?? base?.input ?? [...request.defaultInput],
-      cost: base?.cost ?? NO_COST,
-      contextWindow,
-      maxTokens,
-      ...resolveModelReasoning(provider, entry, base),
-      ...resolveModelCompat(provider, entry, request.compat, base, api)
-    };
-  });
-  if (routeCompatDefined && !models.some((model) => model.api === "openai-completions")) invalid(provider, "sets compat reasoning switches, but no model on the route speaks openai-completions; thinkingFormat and supportsReasoningEffort exist only on that protocol");
+function credentialStoreFrom(ctx) {
   return {
-    models,
-    configuredMaxTokens
+    async read(providerId) {
+      const credentials = ctx.get("credentials");
+      if (credentials === void 0) return void 0;
+      if (!isCredentialKeySegment(providerId)) return void 0;
+      return toPiCredential(await credentials.readRecord(recordKeyFor(providerId)));
+    },
+    async list() {
+      const stored = await ctx.get("credentials")?.listRecords() ?? [];
+      const mine = [];
+      for (const entry of stored) {
+        if (credentialKeyScope(entry.key) !== "llm-pi-ai") continue;
+        mine.push({
+          providerId: credentialKeyId(entry.key),
+          type: entry.kind === "api-key" ? "api_key" : "oauth"
+        });
+      }
+      return mine;
+    },
+    async modify(providerId, mutate) {
+      if (!isCredentialKeySegment(providerId)) throw new LlmError(`llm-pi-ai: provider id "${providerId}" cannot address a stored credential record (a record id is a lowercase hyphenated identifier); authenticate this route through apiKeyEnv instead of a stored credential`, "UNSTORABLE_PROVIDER_ID");
+      return toPiCredential(await writableStore(ctx).modifyRecord(recordKeyFor(providerId), async (current) => {
+        const next = await mutate(toPiCredential(current));
+        return next === void 0 ? void 0 : toRecord(next);
+      }));
+    },
+    async delete(providerId) {
+      if (!isCredentialKeySegment(providerId)) return;
+      await writableStore(ctx).deleteRecord(recordKeyFor(providerId));
+    }
   };
 }
-var PROTOCOLS = {
-  "openai-completions": openAICompletionsApi,
-  "openai-responses": openAIResponsesApi,
-  "anthropic-messages": anthropicMessagesApi
-};
-function supportedProtocols() {
-  return Object.keys(PROTOCOLS);
-}
-function harnessApiKeyAuth(name2) {
+function authContextFrom(ctx) {
   return {
-    name: name2,
-    resolve: ({ credential }) => Promise.resolve({
-      auth: credential?.key === void 0 ? {} : { apiKey: credential.key },
-      source: name2
-    })
+    async env(name2) {
+      if (isCredentialRefName(name2)) {
+        const hit = await ctx.get("credentials")?.resolve(credentialRef(name2));
+        if (hit !== void 0) return hit.value;
+      }
+      return launchEnvironmentOf(ctx).get(name2)?.value;
+    },
+    async fileExists(path) {
+      const expanded = path.startsWith("~/") || path === "~" ? resolve2(homedir(), path.slice(1).replace(/^\//, "")) : path;
+      try {
+        await access(expanded);
+        return true;
+      } catch {
+        return false;
+      }
+    }
   };
-}
-function routeAuth(spec, catalog) {
-  if (catalog === void 0) return { apiKey: harnessApiKeyAuth(spec.displayName) };
-  if (catalog.auth.apiKey !== void 0 || !spec.namesCredential) return catalog.auth;
-  return {
-    ...catalog.auth,
-    apiKey: harnessApiKeyAuth(spec.displayName)
-  };
-}
-function reuseCatalogProvider(base, spec) {
-  const baseUrl = spec.baseURL ?? base.baseUrl;
-  return {
-    id: spec.provider,
-    name: spec.displayName,
-    ...baseUrl === void 0 ? {} : { baseUrl },
-    auth: routeAuth(spec, base),
-    getModels: () => spec.models,
-    stream: (model, context, options) => base.stream(model, context, options),
-    streamSimple: (model, context, options) => base.streamSimple(model, context, options)
-  };
-}
-function buildProvider(spec) {
-  const catalog = catalogProvider(spec.provider);
-  if (catalog !== void 0 && spec.api === void 0) return reuseCatalogProvider(catalog, spec);
-  const factory = spec.api === void 0 ? void 0 : PROTOCOLS[spec.api];
-  if (factory === void 0) throw new Error(`llm-pi-ai: provider "${spec.provider}" names api "${spec.api}", which this build cannot serve; supported protocols are ${supportedProtocols().join(", ")}`);
-  return createProvider({
-    id: spec.provider,
-    name: spec.displayName,
-    ...spec.baseURL === void 0 ? {} : { baseUrl: spec.baseURL },
-    auth: routeAuth(spec, catalog),
-    models: spec.models,
-    api: factory()
-  });
-}
-var DEFAULT_STREAM_IDLE_TIMEOUT_MS = 3e5;
-var DEFAULT_CONTEXT_WINDOW = 262144;
-var DEFAULT_MAX_TOKENS = 32768;
-var DEFAULT_INPUT = ["text"];
-var thinkingBudgets = src_default.object({
-  minimal: src_default.number(),
-  low: src_default.number(),
-  medium: src_default.number(),
-  high: src_default.number()
-});
-var compatProfile = src_default.object({
-  thinkingFormat: src_default.union(SUPPORTED_THINKING_FORMATS),
-  supportsReasoningEffort: src_default.boolean()
-});
-var reasoningEfforts = src_default.dict(src_default.union([src_default.string(), src_default.const(null)]), src_default.union(THINKING_LEVELS));
-var modelFields = {
-  name: src_default.string(),
-  contextWindow: src_default.number().step(1).min(1),
-  maxTokens: src_default.number().step(1).min(1),
-  input: src_default.array(src_default.union(MODALITIES)),
-  reasoningEfforts: src_default.union([src_default.const(false), reasoningEfforts]),
-  compat: compatProfile
-};
-var modelProfile = src_default.object({
-  id: src_default.string().required(),
-  ...modelFields
-});
-var modelOverride = src_default.object(modelFields);
-var profile = src_default.object({
-  apiKeyEnv: src_default.string().role("credential-ref"),
-  displayName: src_default.string(),
-  api: src_default.union(supportedProtocols()),
-  baseURL: src_default.string(),
-  models: src_default.array(modelProfile),
-  modelOverrides: src_default.dict(modelOverride),
-  compat: compatProfile,
-  defaultContextWindow: src_default.number().step(1).min(1).default(DEFAULT_CONTEXT_WINDOW),
-  defaultMaxTokens: src_default.number().step(1).min(1).default(DEFAULT_MAX_TOKENS),
-  defaultInput: src_default.array(src_default.union(MODALITIES)).default([...DEFAULT_INPUT]),
-  headers: src_default.dict(src_default.string()),
-  reasoning: src_default.union(THINKING_LEVELS),
-  thinkingBudgets,
-  cacheRetention: src_default.union([
-    "none",
-    "short",
-    "long"
-  ]),
-  transport: src_default.union([
-    "sse",
-    "websocket",
-    "websocket-cached",
-    "auto"
-  ]),
-  timeoutMs: src_default.natural(),
-  websocketConnectTimeoutMs: src_default.natural(),
-  streamIdleTimeoutMs: src_default.number().min(Number.MIN_VALUE).max(MAX_TIMER_DELAY_MS).default(DEFAULT_STREAM_IDLE_TIMEOUT_MS),
-  retryPolicy: RetryPolicySchema
-});
-var Config = src_default.object({ providers: src_default.dict(profile).default({}) });
-function assertServiceable(config) {
-  resolveProfiles(config.providers);
-}
-function rejectRemovedFields(provider, source) {
-  const legacy = source;
-  if ("provider" in legacy) throw new Error(`llm-pi-ai: provider "${provider}" sets "provider", which moved to the providers dict key`);
-  if ("maxRetries" in legacy || "maxRetryDelayMs" in legacy) throw new Error(`llm-pi-ai: provider "${provider}" sets maxRetries or maxRetryDelayMs, which were removed; compose agent recovery with dsh-llm-retry`);
-}
-function resolveProfiles(providers) {
-  if (Array.isArray(providers)) throw new Error("llm-pi-ai: providers is now a dict keyed by provider route, not an array of profiles");
-  const entries = Object.entries(providers ?? {});
-  const resolved = /* @__PURE__ */ new Map();
-  for (const [provider, source] of entries) {
-    rejectRemovedFields(provider, source);
-    if (provider.length === 0) throw new Error("llm-pi-ai: provider names must be non-empty");
-    if (source.baseURL !== void 0 && source.baseURL.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" has an empty baseURL`);
-    if (source.displayName !== void 0 && source.displayName.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" has an empty displayName`);
-    const streamIdleTimeoutMs = source.streamIdleTimeoutMs ?? 3e5;
-    if (!Number.isFinite(streamIdleTimeoutMs) || streamIdleTimeoutMs <= 0 || streamIdleTimeoutMs > MAX_TIMER_DELAY_MS) throw new Error(`llm-pi-ai: provider "${provider}" streamIdleTimeoutMs must be a positive finite number no greater than ${MAX_TIMER_DELAY_MS}`);
-    const defaultInput = [...source.defaultInput ?? DEFAULT_INPUT];
-    if (defaultInput.length === 0) throw new Error(`llm-pi-ai: provider "${provider}" defaultInput must name at least one modality`);
-    const displayName = source.displayName ?? provider;
-    const catalog = resolveRouteModels({
-      provider,
-      ...source.api === void 0 ? {} : { api: source.api },
-      ...source.baseURL === void 0 ? {} : { baseURL: source.baseURL },
-      ...source.models === void 0 ? {} : { models: source.models },
-      ...source.modelOverrides === void 0 ? {} : { modelOverrides: source.modelOverrides },
-      ...source.compat === void 0 ? {} : { compat: source.compat },
-      defaultInput,
-      defaultContextWindow: source.defaultContextWindow ?? 262144,
-      defaultMaxTokens: source.defaultMaxTokens ?? 32768
-    });
-    const { apiKeyEnv, retryPolicy, models: _models, displayName: _displayName, ...rest } = source;
-    resolved.set(provider, {
-      ...rest,
-      provider,
-      displayName,
-      ...apiKeyEnv === void 0 ? {} : { apiKeyEnv: credentialRef(apiKeyEnv) },
-      streamIdleTimeoutMs,
-      retryPolicy: resolveRetryPolicy(retryPolicy, `llm-pi-ai: provider "${provider}" retryPolicy`),
-      ...rest.headers === void 0 ? {} : { headers: { ...rest.headers } },
-      ...rest.thinkingBudgets === void 0 ? {} : { thinkingBudgets: { ...rest.thinkingBudgets } },
-      configuredMaxTokens: catalog.configuredMaxTokens,
-      piProvider: buildProvider({
-        provider,
-        displayName,
-        ...source.api === void 0 ? {} : { api: source.api },
-        ...source.baseURL === void 0 ? {} : { baseURL: source.baseURL },
-        models: catalog.models,
-        namesCredential: apiKeyEnv !== void 0
-      })
-    });
-  }
-  return resolved;
 }
 var LISTABLE_PROTOCOLS = /* @__PURE__ */ new Set(["openai-completions", "openai-responses"]);
 var MAX_RESPONSE_BYTES = 4 * 1024 * 1024;
@@ -4854,6 +5238,104 @@ async function discoverModels(request, storedApiKey) {
   }
   return readListing(body);
 }
+function loginMethods(provider) {
+  const methods = [];
+  const oauth = provider?.auth.oauth;
+  if (oauth !== void 0) methods.push({
+    id: "oauth",
+    label: oauth.loginLabel ?? oauth.name
+  });
+  const apiKey = provider?.auth.apiKey;
+  if (apiKey?.login !== void 0) methods.push({
+    id: "api-key",
+    label: apiKey.name
+  });
+  return methods;
+}
+function relay(event, session) {
+  switch (event.type) {
+    case "info": {
+      const link = event.links?.[0];
+      session.notify({
+        message: event.message,
+        ...link === void 0 ? {} : { url: link.url }
+      });
+      return;
+    }
+    case "auth_url":
+      session.notify({
+        message: event.instructions ?? "Open this page to continue signing in.",
+        url: event.url
+      });
+      return;
+    case "device_code":
+      session.notify({
+        message: "Enter this code on the verification page to finish signing in.",
+        url: event.verificationUri,
+        code: event.userCode
+      });
+      return;
+    case "progress":
+      session.notify({ message: event.message });
+      return;
+    default:
+      session.notify({ message: "Signing in\u2026" });
+  }
+}
+function restate(prompt) {
+  const signal = prompt.signal === void 0 ? {} : { signal: prompt.signal };
+  switch (prompt.type) {
+    case "select":
+      return {
+        ...signal,
+        kind: "select",
+        message: prompt.message,
+        options: prompt.options
+      };
+    case "secret":
+      return {
+        ...signal,
+        kind: "secret",
+        message: prompt.message,
+        ...prompt.placeholder === void 0 ? {} : { placeholder: prompt.placeholder }
+      };
+    default:
+      return {
+        ...signal,
+        kind: "text",
+        message: prompt.message,
+        ...prompt.placeholder === void 0 ? {} : { placeholder: prompt.placeholder }
+      };
+  }
+}
+function registerPiAiFlows(ctx, auth) {
+  for (const providerId of catalogProviderIds()) {
+    const provider = catalogProvider(providerId);
+    const [first, ...rest] = loginMethods(provider);
+    if (provider === void 0 || first === void 0) continue;
+    if (!isCredentialKeySegment(providerId)) {
+      ctx.logger.warn('llm-pi-ai: catalog provider "%s" cannot address a credential record; its sign-in is not offered', providerId);
+      continue;
+    }
+    ctx.authorization.registerFlow({
+      key: recordKeyFor(providerId),
+      label: provider.name,
+      methods: [first, ...rest],
+      async run(session) {
+        const models = createModels(auth);
+        models.setProvider(provider);
+        const type = session.method === "oauth" ? "oauth" : "api_key";
+        await models.login(providerId, type, {
+          signal: session.signal,
+          notify: (event) => {
+            relay(event, session);
+          },
+          prompt: (prompt) => session.prompt(restate(prompt))
+        });
+      }
+    });
+  }
+}
 var name = "llm-pi-ai";
 var inject = ["llm"];
 var NS = settingsNamespace("llm-pi-ai");
@@ -4876,7 +5358,7 @@ function directoryEntries(profiles) {
       declared: !catalog.has(provider)
     });
   };
-  for (const provider of catalog) if (catalogProviderTakesApiKey(provider)) declare(provider, provider);
+  for (const provider of catalog) declare(provider, provider);
   for (const [provider, profile2] of profiles) declare(provider, profile2.displayName);
   return [...entries.values()];
 }
@@ -4901,13 +5383,21 @@ function apply(ctx, config) {
     if (hit !== void 0 && hit.length > 0) return assertUsableApiKey(hit, "llm-pi-ai", ref);
     throw new LlmError(`llm-pi-ai: no credential for provider route "${provider}"; its profile resolves ${ref}, which is not set \u2014 store ${ref} through the credentials service (the web Models page writes it) or export it, and remove apiKeyEnv only if this provider should authenticate from pi-ai's own environment discovery`, "MISSING_CREDENTIAL");
   };
+  const auth = {
+    credentials: credentialStoreFrom(ctx),
+    authContext: authContextFrom(ctx)
+  };
   const adapter = new PiAiAdapter({
     profiles,
     resolveApiKey,
+    auth,
     resolveAttachments: () => ctx.get("attachments"),
     onReplayDegrade: ({ provider, model, reason }) => {
       ctx.logger.warn(`llm-pi-ai: unusable replay state on assistant history for route "${provider}/${model}"; sending that message as provider-neutral content (${reason})`);
     }
+  });
+  ctx.inject(["authorization"], (authorized) => {
+    registerPiAiFlows(authorized, auth);
   });
   let directory;
   let directoryFacts;
@@ -4969,5 +5459,6 @@ export {
   apply,
   inject,
   name,
+  recordKeyFor,
   supportedProtocols
 };

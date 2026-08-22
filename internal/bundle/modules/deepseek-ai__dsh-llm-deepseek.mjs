@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -23,7 +23,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -132,7 +132,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -171,7 +171,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -251,7 +251,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -883,7 +883,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default = Schema;
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -1108,7 +1108,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -1286,7 +1286,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -1525,7 +1525,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError2 = class extends TypeError {
   name = "ValidationError";
@@ -2079,7 +2079,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -2356,7 +2356,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -2535,7 +2535,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -2621,7 +2621,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2719,7 +2719,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function CallId(id) {
   return id;
 }
@@ -2730,7 +2730,7 @@ function ReasoningEffortId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var TimeoutReason = class extends Error {
   /**
    * @param code Capability-owned timeout code (e.g. `BASH_TIMEOUT`).
@@ -2750,6 +2750,26 @@ function assertTimerDelay(timeoutMs, name2) {
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMER_DELAY_MS) {
     throw new Error(`${name2} must be a positive finite number no greater than ${MAX_TIMER_DELAY_MS}`);
   }
+}
+function deadline(upstream, timeoutMs, code) {
+  if (timeoutMs <= 0) {
+    return { signal: upstream ?? new AbortController().signal, [Symbol.dispose]() {
+    } };
+  }
+  assertTimerDelay(timeoutMs, "deadline timeoutMs");
+  const timer = new AbortController();
+  const id = setTimeout(() => {
+    timer.abort(new TimeoutReason(code, timeoutMs));
+  }, timeoutMs);
+  return {
+    // AbortSignal.any adopts the reason of whichever source aborts FIRST, so a
+    // race resolves to a single cause: timeoutOf() reads TimeoutReason only
+    // when the timeout won, and upstream-wins leaves an ordinary abort reason.
+    signal: upstream !== void 0 ? AbortSignal.any([upstream, timer.signal]) : timer.signal,
+    [Symbol.dispose]() {
+      clearTimeout(id);
+    }
+  };
 }
 function idleWatchdog(upstream, timeoutMs, code) {
   assertTimerDelay(timeoutMs, "idleWatchdog timeoutMs");
@@ -2797,7 +2817,7 @@ function timeoutOf(x, code) {
   return code === void 0 || reason.code === code ? reason : void 0;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -2830,8 +2850,8 @@ function isQuotaExceededError(detail) {
   return /\binsufficient[\s_-]+(?:quota|balance|credits?)\b/i.test(detail) || /\b(?:quota|usage[\s_-]+limit)[\s_-]+(?:exceeded|exhausted|reached)\b/i.test(detail) || /\bexceed(?:ed|s)?[\s_-]+(?:(?:your|the)[\s_-]+)?(?:current[\s_-]+)?quota\b/i.test(detail) || /\b(?:balance|credits?)[\s_-]+(?:exhausted|depleted)\b/i.test(detail) || /\bout[\s_-]+of[\s_-]+(?:credits?|budget)\b/i.test(detail);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -2867,7 +2887,12 @@ var NORMAL_POLICY_KEYS = /* @__PURE__ */ new Set([
   "retryableCodes",
   "backoff"
 ]);
-var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set(["mode", "backoff"]);
+var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set([
+  "mode",
+  "maxRetries",
+  "retryableCodes",
+  "backoff"
+]);
 var BACKOFF_KEYS = /* @__PURE__ */ new Set(["initialDelayMs", "maxDelayMs", "jitterRatio"]);
 function validateKeys(value, allowed, path) {
   for (const key of Object.keys(value)) {
@@ -2937,7 +2962,7 @@ function resolveRetryPolicy(config, path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/api-key.ts
+// .harness/packages/llm/llm/src/api-key.ts
 var LEGAL_API_KEY = /^[\x21-\x7E]+$/;
 function normalizeApiKey(raw) {
   const value = raw.trim();
@@ -2946,7 +2971,75 @@ function normalizeApiKey(raw) {
   return { ok: true, value };
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/content.ts
+var OFFLOADED_IMAGE_TEXT = "[image omitted to keep the request within its image limit; older images are omitted first. If this image is still needed, read its file again when a path is available; otherwise ask the user to attach it again.]";
+function requestImageHandleText(version2) {
+  return `Image ${version2.attachment.attachmentId}; request image ${version2.width}x${version2.height}px.`;
+}
+function contentHasImage(content) {
+  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
+}
+function base64Length(bytes) {
+  return Math.ceil(bytes / 3) * 4;
+}
+function collectImageLengths(blocks, lengths, policy) {
+  for (const block of blocks) {
+    if (block.type === "image") {
+      const bytes = policy.byteLength === void 0 ? block.attachment.bytes : policy.byteLength(block.attachment);
+      lengths.push(policy.representation === "base64" ? base64Length(bytes) : bytes);
+    } else if (block.type === "tool-result") {
+      collectImageLengths(block.content, lengths, policy);
+    }
+  }
+}
+function replaceOldestImages(blocks, remaining) {
+  let next;
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === "image" && remaining.count > 0) {
+      remaining.count -= 1;
+      next ??= blocks.slice(0, index);
+      next.push({ type: "text", text: OFFLOADED_IMAGE_TEXT });
+      continue;
+    }
+    if (block.type === "tool-result") {
+      const content = replaceOldestImages(block.content, remaining);
+      if (content !== block.content) {
+        next ??= blocks.slice(0, index);
+        next.push({ ...block, content });
+        continue;
+      }
+    }
+    next?.push(block);
+  }
+  return next ?? blocks;
+}
+function offloadRequestImagesWithPolicy(messages, policy) {
+  const lengths = [];
+  for (const message of messages) collectImageLengths(message.content, lengths, policy);
+  const total = lengths.reduce((sum, bytes) => sum + bytes, 0);
+  const excessCount = policy.maxImages === void 0 ? 0 : Math.max(0, lengths.length - policy.maxImages);
+  const excessBytes = policy.maxBytes === void 0 ? 0 : Math.max(0, total - policy.maxBytes);
+  if (excessCount === 0 && excessBytes === 0) return messages;
+  const countQuantum = policy.countQuantum ?? 1;
+  const byteQuantum = policy.byteQuantum ?? 1;
+  const removeCount = excessCount === 0 ? 0 : Math.ceil(excessCount / countQuantum) * countQuantum;
+  const removeBytes = excessBytes === 0 ? 0 : Math.ceil(excessBytes / byteQuantum) * byteQuantum;
+  let count = 0;
+  let removedBytes = 0;
+  for (const imageBytes of lengths) {
+    const byteTargetMet = removeBytes === 0 || (byteQuantum === 1 ? removedBytes >= removeBytes : removedBytes > removeBytes);
+    if (count >= removeCount && byteTargetMet) break;
+    removedBytes += imageBytes;
+    count += 1;
+  }
+  const remaining = { count };
+  return messages.map((message) => {
+    const content = replaceOldestImages(message.content, remaining);
+    return content === message.content ? message : { ...message, content };
+  });
+}
+
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 var APP_IDENTITY = {
@@ -2961,12 +3054,7 @@ function attributionHeaders(identity = APP_IDENTITY) {
   return { "user-agent": userAgent(identity) };
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/content.ts
-function contentHasImage(content) {
-  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
-}
-
-// ../../source/deepseek-harness/packages/llm/llm/src/index.ts
+// .harness/packages/llm/llm/src/index.ts
 var LlmError = class extends HarnessError {
   /** Serializable facts retained beside this live Error. */
   failure;
@@ -3045,18 +3133,36 @@ var LlmAdapter = class {
   resolveModel(provider, model, _signal) {
     return Promise.resolve({ provider, id: model, name: model });
   }
+  /**
+   * Bind exact model metadata and the eventual request dispatch to one adapter generation.
+   * Dynamic adapters override this so settings changes between preparation and
+   * dispatch cannot combine one generation's capabilities with another's endpoint.
+   * @param provider - registered provider route.
+   * @param model - exact model id.
+   * @param signal - cancellation for model resolution.
+   * @returns model metadata and a one-generation stream entry point.
+   */
+  async prepareCall(provider, model, signal) {
+    return {
+      model: await this.resolveModel(provider, model, signal),
+      stream: (options) => this.stream(options)
+    };
+  }
 };
 
-// ../../source/deepseek-harness/packages/credentials/credentials/src/index.ts
+// .harness/packages/credentials/credentials/src/index.ts
 var REF_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
 function credentialRef(value) {
-  if (!REF_PATTERN.test(value)) {
+  if (!isCredentialRefName(value)) {
     throw new TypeError(`credential ref "${value}" must match ${String(REF_PATTERN)}`);
   }
   return value;
 }
+function isCredentialRefName(value) {
+  return REF_PATTERN.test(value);
+}
 
-// ../../source/deepseek-harness/packages/util/launch-environment/src/index.ts
+// .harness/packages/util/launch-environment/src/index.ts
 var SOURCE_ORDER = ["process", "project-env", "user-env"];
 function lookupKey(name2) {
   return process.platform === "win32" ? name2.toUpperCase() : name2;
@@ -3090,7 +3196,7 @@ function launchEnvironmentOf(ctx) {
   return ctx.get(DSH_LAUNCH_ENVIRONMENT_KEY) ?? createLaunchEnvironmentSnapshot([{ source: "process", values: process.env }]);
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/redact.ts
+// .harness/packages/settings/settings/src/redact.ts
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -3140,7 +3246,7 @@ function redactSecrets(schema, value) {
   return { value: stripped, secrets };
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/index.ts
+// .harness/packages/settings/settings/src/index.ts
 var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
 function settingsNamespace(value) {
   if (!NAMESPACE_PATTERN.test(value)) {
@@ -3644,12 +3750,12 @@ function installSettingsSection(ctx, ns, schema, entry, hooks) {
   });
 }
 
-// ../../source/deepseek-harness/packages/identity/anonymous-user-id/src/index.ts
+// .harness/packages/identity/anonymous-user-id/src/index.ts
 import { randomUUID } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname as dirname2, join as join2 } from "node:path";
 
-// ../../source/deepseek-harness/packages/util/home-paths/src/index.ts
+// .harness/packages/util/home-paths/src/index.ts
 import { homedir } from "node:os";
 import { basename, dirname, join, resolve as resolve2 } from "node:path";
 var DSH_HOME_DIR_NAME = ".dsh";
@@ -3669,7 +3775,7 @@ function resolveDshHome(configured, env = process.env) {
   return resolve2(expandHomePath(selected));
 }
 
-// ../../source/deepseek-harness/packages/identity/anonymous-user-id/src/index.ts
+// .harness/packages/identity/anonymous-user-id/src/index.ts
 var ANONYMOUS_USER_ID_FILE_NAME = ".anonymous-user-id";
 var UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 var memo = /* @__PURE__ */ new Map();
@@ -3712,8 +3818,90 @@ function getOrCreateAnonymousUserId(options = {}) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm-deepseek/lib/index.js
+// .harness/packages/llm/llm-deepseek/lib/index.js
+import { createHash } from "node:crypto";
+import { mkdir as mkdir2, readFile } from "node:fs/promises";
+import { dirname as dirname4, join as join3 } from "node:path";
+
+// .harness/packages/util/atomic-write/src/index.ts
+import { randomBytes } from "node:crypto";
+import { lstat, mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { dirname as dirname3 } from "node:path";
+async function writeFileAtomic(filename2, content, options) {
+  await mkdir(dirname3(filename2), {
+    recursive: true,
+    ...options.dirMode === void 0 ? {} : { mode: options.dirMode }
+  });
+  const temp = `${filename2}.${randomBytes(6).toString("hex")}.tmp`;
+  try {
+    await writeFile(temp, content, { mode: options.mode, flag: "wx" });
+    await rename(temp, filename2);
+  } catch (error) {
+    await rm(temp, { force: true });
+    throw error;
+  }
+}
+async function isLockContention(error, lockPath) {
+  const code = error?.code;
+  if (code === "EEXIST") return true;
+  if (code !== "EPERM") return false;
+  try {
+    await lstat(lockPath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+var LOCK_RETRY_INITIAL_MS = 20;
+var LOCK_RETRY_MAX_MS = 200;
+var DEFAULT_LOCK_WAIT_MS = 2e3;
+async function withFileLock(filename2, operation, options) {
+  const lockPath = `${filename2}.lock`;
+  const deadline2 = Date.now() + (options?.waitMs ?? DEFAULT_LOCK_WAIT_MS);
+  let delay = LOCK_RETRY_INITIAL_MS;
+  for (; ; ) {
+    try {
+      await writeFile(lockPath, `${process.pid}
+`, { mode: 384, flag: "wx" });
+      break;
+    } catch (error) {
+      if (!await isLockContention(error, lockPath)) throw error;
+    }
+    if (Date.now() >= deadline2) {
+      throw new Error(`atomic-write: timed out waiting for the writer lock at ${lockPath}`);
+    }
+    await new Promise((resolve3) => setTimeout(resolve3, delay));
+    delay = Math.min(delay * 2, LOCK_RETRY_MAX_MS);
+  }
+  try {
+    return await operation();
+  } finally {
+    await rm(lockPath, { force: true });
+  }
+}
+
+// .harness/packages/attachment/attachment/src/error.ts
+var IMAGE_ADMISSION_ERROR_CODES = [
+  "TOO_MANY_IMAGES",
+  "IMAGES_TOO_LARGE",
+  "UNSUPPORTED_IMAGE_TYPE",
+  "INVALID_IMAGE_BASE64",
+  "INVALID_IMAGE",
+  "IMAGE_TYPE_MISMATCH",
+  "IMAGE_TOO_LARGE",
+  "IMAGE_TOO_MANY_PIXELS",
+  "IMAGE_DIMENSION_TOO_LARGE"
+];
+var IMAGE_ADMISSION_ERROR_CODE_SET = new Set(IMAGE_ADMISSION_ERROR_CODES);
+
+// .harness/packages/attachment/attachment/src/brand.ts
+function ImageVariantId(value) {
+  return value;
+}
+
+// .harness/packages/llm/llm-deepseek/lib/index.js
 import { EventSourceParserStream } from "eventsource-parser/stream";
+var TOOL_RESULT_IMAGE_TEXT = "Attached image(s) from tool result:";
 function reasoningEffort(effort) {
   if (effort === "off" || effort === "low" || effort === "high" || effort === "max") return effort;
   throw new LlmError(`DeepSeek does not support reasoning effort "${effort}"`, "UNSUPPORTED_REASONING_EFFORT");
@@ -3735,6 +3923,59 @@ function flattenText(blocks) {
 function assertTextOnly(blocks) {
   if (contentHasImage(blocks)) throw new LlmError("The DeepSeek chat-completions adapter does not support image content.", "UNSUPPORTED_CONTENT");
 }
+function assertSupportedImageRoles(messages) {
+  for (const message of messages) if (message.role !== "user" && contentHasImage(message.content)) throw new LlmError(`The DeepSeek chat-completions adapter cannot represent image content in a ${message.role} message.`, "UNSUPPORTED_CONTENT");
+}
+function imageHandle(version2, precededByContent) {
+  return {
+    type: "text",
+    text: `${precededByContent ? "\n" : ""}${requestImageHandleText(version2)}`
+  };
+}
+async function imageParts(block, images, location, precededByContent) {
+  const version2 = images.requestImages.get(block.attachment.attachmentId);
+  if (version2 === void 0) throw new LlmError(`DeepSeek request image ${block.attachment.attachmentId} was not prepared.`, "INVALID_REQUEST");
+  const image = images.representation.kind === "file" ? {
+    type: "file",
+    file_id: await images.representation.resolveFileId(version2, block, location)
+  } : {
+    type: "image_url",
+    image_url: { url: `data:${version2.mediaType};base64,${Buffer.from(version2.data).toString("base64")}` }
+  };
+  return [imageHandle(version2, precededByContent), image];
+}
+async function contentParts(blocks, images, message, nextImage) {
+  const parts = [];
+  for (const block of blocks) switch (block.type) {
+    case "text":
+      if (block.text.length > 0) parts.push({
+        type: "text",
+        text: block.text
+      });
+      break;
+    case "image":
+      nextImage.value += 1;
+      parts.push(...await imageParts(block, images, {
+        message,
+        image: nextImage.value
+      }, parts.length > 0));
+      break;
+    case "tool-result":
+      parts.push(...await contentParts(block.content, images, message, nextImage));
+      break;
+    default:
+      break;
+  }
+  return parts;
+}
+function userContent(parts) {
+  const text = [];
+  for (const part of parts) {
+    if (part.type !== "text") return [...parts];
+    text.push(part.text);
+  }
+  return text.join("");
+}
 function serializeAssistant(message) {
   const text = flattenText(message.content);
   const reasoning = message.content.filter((block) => block.type === "reasoning").map((block) => block.text).join("");
@@ -3749,7 +3990,7 @@ function serializeAssistant(message) {
   return {
     role: "assistant",
     content: text,
-    ...toolCalls.length > 0 && reasoning.length > 0 ? { reasoning_content: reasoning } : {},
+    ...reasoning.length > 0 ? { reasoning_content: reasoning } : {},
     ...toolCalls.length > 0 ? { tool_calls: toolCalls } : {}
   };
 }
@@ -3782,13 +4023,62 @@ function serializeMessages(messages) {
   }
   return wire;
 }
-function serializeRequest(options, defaults = {}) {
-  const messages = [];
-  if (options.system !== void 0) messages.push({
-    role: "system",
-    content: options.system
-  });
-  messages.push(...serializeMessages(options.messages));
+async function serializeMessagesWithImages(messages, images) {
+  assertSupportedImageRoles(messages);
+  const wire = [];
+  let pendingToolImages = [];
+  const flushToolImages = () => {
+    if (pendingToolImages.length === 0) return;
+    wire.push({
+      role: "user",
+      content: [{
+        type: "text",
+        text: TOOL_RESULT_IMAGE_TEXT
+      }, ...pendingToolImages]
+    });
+    pendingToolImages = [];
+  };
+  for (const [messageIndex, message] of messages.entries()) {
+    const nextImage = { value: 0 };
+    if (message.role === "system") {
+      flushToolImages();
+      wire.push({
+        role: "system",
+        content: flattenText(message.content)
+      });
+      continue;
+    }
+    if (message.role === "assistant") {
+      flushToolImages();
+      wire.push(serializeAssistant(message));
+      continue;
+    }
+    const regular = message.content.filter((block) => block.type !== "tool-result");
+    const toolResults = message.content.filter((block) => block.type === "tool-result");
+    const content = userContent(await contentParts(regular, images, messageIndex + 1, nextImage));
+    if (content.length > 0 || toolResults.length === 0) {
+      flushToolImages();
+      wire.push({
+        role: "user",
+        content
+      });
+    }
+    for (const result of toolResults) {
+      const parts = await contentParts(result.content, images, messageIndex + 1, nextImage);
+      const imageParts2 = parts.filter((part) => part.type !== "text");
+      const text = parts.filter((part) => part.type === "text").map((part) => part.text).join("");
+      wire.push({
+        role: "tool",
+        tool_call_id: result.toolCallId,
+        content: text || "(no output)"
+      });
+      pendingToolImages.push(...imageParts2);
+    }
+  }
+  flushToolImages();
+  return wire;
+}
+function requestWithMessages(options, messages, defaults) {
   const tools = options.tools?.map((tool) => ({
     type: "function",
     function: {
@@ -3811,6 +4101,584 @@ function serializeRequest(options, defaults = {}) {
     ...options.stop !== void 0 ? { stop: options.stop } : {}
   };
 }
+function serializeRequest(options, defaults = {}) {
+  const messages = [];
+  if (options.system !== void 0) messages.push({
+    role: "system",
+    content: options.system
+  });
+  messages.push(...serializeMessages(options.messages));
+  return requestWithMessages(options, messages, defaults);
+}
+async function serializeRequestWithImages(options, images, defaults = {}) {
+  assertSupportedImageRoles(options.messages);
+  const requestMessages = offloadRequestImagesWithPolicy(options.messages, {
+    representation: images.representation.kind === "file" ? "raw" : "base64",
+    byteLength: (ref) => {
+      const version2 = images.requestImages.get(ref.attachmentId);
+      if (version2 === void 0) throw new LlmError(`DeepSeek request image ${ref.attachmentId} was not prepared.`, "INVALID_REQUEST");
+      return version2.bytes;
+    },
+    maxBytes: images.maxRequestImageBytes,
+    ...images.maxImagesPerRequest === void 0 ? {} : { maxImages: images.maxImagesPerRequest },
+    ...images.byteQuantum === void 0 ? {} : { byteQuantum: images.byteQuantum },
+    ...images.countQuantum === void 0 ? {} : { countQuantum: images.countQuantum }
+  });
+  const messages = [];
+  if (options.system !== void 0) messages.push({
+    role: "system",
+    content: options.system
+  });
+  messages.push(...await serializeMessagesWithImages(requestMessages, images));
+  return requestWithMessages(options, messages, defaults);
+}
+function DeepSeekFileId(id) {
+  return id;
+}
+function DeepSeekFileScope(scope) {
+  return scope;
+}
+var MIN_FILE_EXPIRY_SECONDS = 3600;
+var MAX_FILE_EXPIRY_SECONDS = 2592e3;
+var MAX_FILE_UPLOAD_BYTES = 128 * 1024 * 1024;
+var MAX_STORED_FILE_COUNT = 1e4;
+var MAX_STORED_FILE_BYTES = 25 * 1024 * 1024 * 1024;
+var DeepSeekFilesError = class extends LlmError {
+  /** Parsed provider detail used only for error classification. */
+  detail;
+  /**
+  * @param message - user-readable provider failure.
+  * @param status - HTTP status returned by the Files API.
+  * @param detail - provider error fields joined for classification.
+  */
+  constructor(message, status, detail) {
+    super(message, status === 401 || status === 403 ? "AUTH" : status === 429 ? "RATE_LIMIT" : status >= 500 ? "SERVER" : "FILES_API", { status });
+    this.name = "DeepSeekFilesError";
+    this.detail = detail;
+  }
+};
+function isFilesQuotaError(error) {
+  return error instanceof DeepSeekFilesError && /(?:quota|storage|stored files|file count|too many files)/iu.test(error.detail);
+}
+function invalidResponse(operation) {
+  return new LlmError(`DeepSeek Files API returned an invalid ${operation} response.`, "INVALID_RESPONSE");
+}
+function parseFileObject(value, operation) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw invalidResponse(operation);
+  const wire = value;
+  if (typeof wire.id !== "string" || wire.id.length === 0 || wire.object !== "file" || !Number.isSafeInteger(wire.bytes) || wire.bytes < 0 || !Number.isSafeInteger(wire.created_at) || wire.created_at < 0 || typeof wire.filename !== "string" || wire.filename.length === 0 || wire.purpose !== "user_data" || wire.expires_at !== void 0 && (!Number.isSafeInteger(wire.expires_at) || wire.expires_at < 0)) throw invalidResponse(operation);
+  return {
+    id: DeepSeekFileId(wire.id),
+    bytes: wire.bytes,
+    createdAt: wire.created_at,
+    filename: wire.filename,
+    purpose: "user_data",
+    ...wire.expires_at === void 0 ? {} : { expiresAt: wire.expires_at }
+  };
+}
+function providerErrorDetail(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return { detail: "" };
+  const error = value.error;
+  if (error === null || typeof error !== "object" || Array.isArray(error)) return { detail: "" };
+  const fields = error;
+  const message = typeof fields.message === "string" ? fields.message : void 0;
+  return {
+    ...message === void 0 ? {} : { message },
+    detail: [
+      fields.code,
+      fields.type,
+      fields.message
+    ].filter((field) => typeof field === "string").join(" ")
+  };
+}
+var DeepSeekFilesClient = class {
+  baseURL;
+  apiKey;
+  fetchImpl;
+  /**
+  * @param options - endpoint, API-key snapshot, and optional test transport.
+  */
+  constructor(options) {
+    this.baseURL = options.baseURL.replace(/\/+$/u, "");
+    this.apiKey = options.apiKey;
+    this.fetchImpl = options.fetch ?? globalThis.fetch;
+  }
+  async request(path, init, signal) {
+    let response;
+    try {
+      const headers = new Headers(attributionHeaders());
+      headers.set("authorization", `Bearer ${this.apiKey}`);
+      response = await this.fetchImpl(`${this.baseURL}${path}`, {
+        ...init,
+        headers,
+        ...signal === void 0 ? {} : { signal }
+      });
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      throw new LlmError(`DeepSeek Files API request to ${this.baseURL} failed`, "TRANSPORT", { cause: error });
+    }
+    if (response.ok) return response;
+    let parsed;
+    try {
+      parsed = await response.json();
+    } catch {
+    }
+    const { message, detail } = providerErrorDetail(parsed);
+    throw new DeepSeekFilesError(message ?? `DeepSeek Files API error (HTTP ${response.status})`, response.status, detail);
+  }
+  /**
+  * Upload one image with an explicit expiry.
+  * @param input - deterministic request-version bytes, media type, filename, lifetime, and cancellation.
+  * @returns the validated provider file object, including `expires_at`.
+  */
+  async upload(input) {
+    if (input.data.byteLength > 134217728) throw new LlmError("DeepSeek Files API upload exceeds 128 MiB.", "INVALID_REQUEST");
+    if (!Number.isSafeInteger(input.expiresAfterSeconds) || input.expiresAfterSeconds < 3600 || input.expiresAfterSeconds > 2592e3) throw new LlmError("DeepSeek file expiry must be between 3600 and 2592000 seconds.", "INVALID_REQUEST");
+    const form = new FormData();
+    form.set("purpose", "user_data");
+    form.set("expires_after[anchor]", "created_at");
+    form.set("expires_after[seconds]", String(input.expiresAfterSeconds));
+    form.set("file", new Blob([Uint8Array.from(input.data).buffer], { type: input.mediaType }), input.filename);
+    const file = parseFileObject(await (await this.request("/files", {
+      method: "POST",
+      body: form
+    }, input.signal)).json(), "upload");
+    if (file.expiresAt === void 0) throw invalidResponse("upload");
+    return {
+      ...file,
+      expiresAt: file.expiresAt
+    };
+  }
+  /**
+  * List one ascending or descending page of user-data files.
+  * @param options - pagination, ordering, and cancellation.
+  * @returns the validated page.
+  */
+  async list(options = {}) {
+    const query = new URLSearchParams({ purpose: "user_data" });
+    if (options.after !== void 0) query.set("after", options.after);
+    if (options.limit !== void 0) query.set("limit", String(options.limit));
+    if (options.order !== void 0) query.set("order", options.order);
+    const value = await (await this.request(`/files?${query.toString()}`, { method: "GET" }, options.signal)).json();
+    if (value === null || typeof value !== "object" || Array.isArray(value)) throw invalidResponse("list");
+    const wire = value;
+    if (wire.object !== "list" || !Array.isArray(wire.data) || typeof wire.has_more !== "boolean" || wire.first_id !== void 0 && typeof wire.first_id !== "string" || wire.last_id !== void 0 && typeof wire.last_id !== "string") throw invalidResponse("list");
+    return {
+      data: wire.data.map((item) => parseFileObject(item, "list")),
+      ...typeof wire.first_id === "string" ? { firstId: DeepSeekFileId(wire.first_id) } : {},
+      ...typeof wire.last_id === "string" ? { lastId: DeepSeekFileId(wire.last_id) } : {},
+      hasMore: wire.has_more
+    };
+  }
+  /**
+  * Retrieve one file object.
+  * @param fileId - provider file identifier.
+  * @param signal - request cancellation.
+  * @returns the validated file object.
+  */
+  async retrieve(fileId, signal) {
+    return parseFileObject(await (await this.request(`/files/${encodeURIComponent(fileId)}`, { method: "GET" }, signal)).json(), "retrieve");
+  }
+  /**
+  * Delete one provider file.
+  * @param fileId - provider file identifier.
+  * @param signal - request cancellation.
+  */
+  async delete(fileId, signal) {
+    const value = await (await this.request(`/files/${encodeURIComponent(fileId)}`, { method: "DELETE" }, signal)).json();
+    if (value === null || typeof value !== "object" || Array.isArray(value)) throw invalidResponse("delete");
+    const wire = value;
+    if (wire.id !== fileId || wire.object !== "file" || wire.deleted !== true) throw invalidResponse("delete");
+  }
+};
+var InvalidUploadIndexError = class extends Error {
+};
+function deepSeekFileScope(baseURL, apiKey) {
+  return DeepSeekFileScope(createHash("sha256").update(baseURL.replace(/\/+$/u, "")).update("\0").update(apiKey).digest("hex"));
+}
+function absent(error) {
+  return error?.code === "ENOENT";
+}
+function parseRecord(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new InvalidUploadIndexError("llm-deepseek: upload index contains a non-object record");
+  const record = value;
+  if (typeof record.scope !== "string" || !/^[0-9a-f]{64}$/u.test(record.scope) || typeof record.attachmentId !== "string" || !/^sha256:[0-9a-f]{64}$/u.test(record.attachmentId) || typeof record.variantId !== "string" || !/^sha256:[0-9a-f]{64}$/u.test(record.variantId) || typeof record.fileId !== "string" || record.fileId.length === 0 || !Number.isSafeInteger(record.bytes) || record.bytes < 0 || !Number.isSafeInteger(record.createdAt) || record.createdAt < 0 || !Number.isSafeInteger(record.expiresAt) || record.expiresAt < 0) throw new InvalidUploadIndexError("llm-deepseek: upload index contains an invalid record");
+  return {
+    scope: DeepSeekFileScope(record.scope),
+    attachmentId: record.attachmentId,
+    variantId: ImageVariantId(record.variantId),
+    fileId: DeepSeekFileId(record.fileId),
+    bytes: record.bytes,
+    createdAt: record.createdAt,
+    expiresAt: record.expiresAt
+  };
+}
+function parseIndex(text) {
+  let value;
+  try {
+    value = JSON.parse(text);
+  } catch (error) {
+    throw new InvalidUploadIndexError("llm-deepseek: upload index is not valid JSON", { cause: error });
+  }
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new InvalidUploadIndexError("llm-deepseek: upload index is not an object");
+  const index = value;
+  if (index.formatVersion !== 3 || !Array.isArray(index.records)) throw new InvalidUploadIndexError("llm-deepseek: unsupported upload index format");
+  const records = index.records.map(parseRecord);
+  const keys = /* @__PURE__ */ new Set();
+  for (const record of records) {
+    const key = `${record.scope}\0${record.variantId}`;
+    if (keys.has(key)) throw new InvalidUploadIndexError("llm-deepseek: upload index contains duplicate mappings");
+    keys.add(key);
+  }
+  return {
+    formatVersion: 3,
+    records
+  };
+}
+function reusable(record, now, refreshMarginMs) {
+  return record.expiresAt - now > refreshMarginMs;
+}
+var DeepSeekUploadIndex = class {
+  /** Absolute owner-private JSON index path. */
+  path;
+  /**
+  * @param path - explicit test path; omission uses `DSH_HOME/llm-deepseek/files-v3.json`.
+  */
+  constructor(path = join3(resolveDshHome(), "llm-deepseek", "files-v3.json")) {
+    this.path = path;
+  }
+  async load() {
+    try {
+      return parseIndex(await readFile(this.path, "utf8"));
+    } catch (error) {
+      if (absent(error) || error instanceof InvalidUploadIndexError) return {
+        formatVersion: 3,
+        records: []
+      };
+      throw error;
+    }
+  }
+  async save(index) {
+    await writeFileAtomic(this.path, `${JSON.stringify(index, void 0, 2)}
+`, {
+      mode: 384,
+      dirMode: 448
+    });
+  }
+  /**
+  * Read one reusable mapping.
+  * @param scope - endpoint/API-key namespace.
+  * @param variantId - complete request-image transformation identity.
+  * @param now - current Unix time in milliseconds.
+  * @param refreshMarginMs - remaining lifetime below which a mapping is not reused.
+  * @returns the mapping when it has enough lifetime remaining.
+  */
+  async get(scope, variantId, now, refreshMarginMs) {
+    const record = (await this.load()).records.find((candidate) => candidate.scope === scope && candidate.variantId === variantId);
+    return record !== void 0 && reusable(record, now, refreshMarginMs) ? record : void 0;
+  }
+  /**
+  * Publish a completed upload unless another process already published a reusable mapping.
+  * @param candidate - completed remote upload.
+  * @param now - current Unix time in milliseconds.
+  * @param refreshMarginMs - minimum reusable remaining lifetime.
+  * @returns the winning record and whether the candidate entered the index.
+  */
+  async commit(candidate, now, refreshMarginMs) {
+    await mkdir2(dirname4(this.path), {
+      recursive: true,
+      mode: 448
+    });
+    return withFileLock(this.path, async () => {
+      const index = await this.load();
+      const existing = index.records.find((record) => record.scope === candidate.scope && record.variantId === candidate.variantId && reusable(record, now, refreshMarginMs));
+      if (existing !== void 0) return {
+        record: existing,
+        accepted: false
+      };
+      const records = index.records.filter((record) => reusable(record, now, refreshMarginMs) && !(record.scope === candidate.scope && record.variantId === candidate.variantId));
+      records.push(candidate);
+      await this.save({
+        formatVersion: 3,
+        records
+      });
+      return {
+        record: candidate,
+        accepted: true
+      };
+    });
+  }
+  /**
+  * Remove one exact mapping without deleting a concurrently installed successor.
+  * @param scope - endpoint/API-key namespace.
+  * @param variantId - complete request-image transformation identity.
+  * @param fileId - exact remote generation being invalidated.
+  */
+  async remove(scope, variantId, fileId) {
+    await mkdir2(dirname4(this.path), {
+      recursive: true,
+      mode: 448
+    });
+    await withFileLock(this.path, async () => {
+      const index = await this.load();
+      const records = index.records.filter((record) => !(record.scope === scope && record.variantId === variantId && record.fileId === fileId));
+      if (records.length !== index.records.length) await this.save({
+        formatVersion: 3,
+        records
+      });
+    });
+  }
+  /**
+  * Remove every local mapping for one remote namespace.
+  * @param scope - endpoint/API-key namespace.
+  */
+  async clear(scope) {
+    await mkdir2(dirname4(this.path), {
+      recursive: true,
+      mode: 448
+    });
+    await withFileLock(this.path, async () => {
+      const index = await this.load();
+      const records = index.records.filter((record) => record.scope !== scope);
+      if (records.length !== index.records.length) await this.save({
+        formatVersion: 3,
+        records
+      });
+    });
+  }
+};
+var MAX_CHAT_IMAGE_BYTES = 32 * 1024 * 1024;
+var OWNED_FILE_PREFIX = "dsh-";
+function abortReason(signal) {
+  const reason = signal.reason;
+  return reason instanceof Error ? reason : new Error("DeepSeek file upload cancelled with a non-Error reason.", { cause: reason });
+}
+function uploadFailure(error) {
+  return error instanceof Error ? error : new Error("DeepSeek file upload failed with a non-Error reason.", { cause: error });
+}
+function waitForUpload(operation, signal) {
+  signal?.throwIfAborted();
+  operation.waiters += 1;
+  let released = false;
+  const release = (cancelledReason) => {
+    if (released) return;
+    released = true;
+    operation.waiters -= 1;
+    if (cancelledReason !== void 0 && operation.waiters === 0 && !operation.settled) operation.controller.abort(cancelledReason);
+  };
+  if (signal === void 0) return operation.promise.finally(() => {
+    release();
+  });
+  return new Promise((resolve3, reject) => {
+    const abort = () => {
+      const reason = abortReason(signal);
+      release(reason);
+      reject(reason);
+    };
+    signal.addEventListener("abort", abort, { once: true });
+    operation.promise.then((value) => {
+      signal.removeEventListener("abort", abort);
+      release();
+      resolve3(value);
+    }, (error) => {
+      signal.removeEventListener("abort", abort);
+      release();
+      reject(uploadFailure(error));
+    });
+  });
+}
+function extension(mediaType) {
+  switch (mediaType) {
+    case "image/png":
+      return "png";
+    case "image/jpeg":
+      return "jpeg";
+    case "image/webp":
+      return "webp";
+    case "image/gif":
+      return "gif";
+  }
+}
+function filename(version2) {
+  return `${OWNED_FILE_PREFIX}${String(version2.attachment.attachmentId).slice(7, 23)}-${String(version2.variantId).slice(7, 15)}.${extension(version2.mediaType)}`;
+}
+var DeepSeekFileStore = class {
+  index;
+  now;
+  fetchImpl;
+  inflight = /* @__PURE__ */ new Map();
+  /**
+  * @param options - testable index, clock, and transport boundaries.
+  */
+  constructor(options = {}) {
+    this.index = options.index ?? new DeepSeekUploadIndex();
+    this.now = options.now ?? Date.now;
+    this.fetchImpl = options.fetch;
+  }
+  client(connection) {
+    return new DeepSeekFilesClient({
+      baseURL: connection.baseURL,
+      apiKey: connection.apiKey,
+      ...this.fetchImpl === void 0 ? {} : { fetch: this.fetchImpl }
+    });
+  }
+  /**
+  * Resolve or upload one deterministic request image. Concurrent calls share one upload while retaining independent waits.
+  * @param version - deterministic model-request bytes and complete transformation identity.
+  * @param connection - endpoint and API-key snapshot.
+  * @param policy - expiry and quota-recovery policy.
+  * @param signal - cancellation of this wait; shared transport stops when no waiter remains.
+  * @returns a reusable file id and whether this call published a new upload.
+  */
+  ensureUploaded(version2, connection, policy, signal) {
+    signal?.throwIfAborted();
+    const key = `${deepSeekFileScope(connection.baseURL, connection.apiKey)}\0${version2.variantId}`;
+    let active = this.inflight.get(key);
+    if (active?.controller.signal.aborted) {
+      this.inflight.delete(key);
+      active = void 0;
+    }
+    if (active !== void 0) return waitForUpload(active, signal);
+    const controller = new AbortController();
+    const shared = {
+      controller,
+      settled: false,
+      waiters: 0,
+      promise: void 0
+    };
+    shared.promise = this.ensureUploadedOnce(version2, connection, policy, controller.signal).then((value) => {
+      shared.settled = true;
+      return value;
+    }, (error) => {
+      shared.settled = true;
+      throw uploadFailure(error);
+    });
+    this.inflight.set(key, shared);
+    shared.promise.finally(() => {
+      if (this.inflight.get(key) === shared) this.inflight.delete(key);
+    }).catch(() => {
+    });
+    return waitForUpload(shared, signal);
+  }
+  async ensureUploadedOnce(version2, connection, policy, signal) {
+    if (version2.bytes > 33554432) throw new LlmError("DeepSeek chat image exceeds the 32 MiB per-image limit.", "INVALID_REQUEST");
+    const scope = deepSeekFileScope(connection.baseURL, connection.apiKey);
+    const now = this.now();
+    const marginMs = policy.refreshMarginSeconds * 1e3;
+    const cached = await this.index.get(scope, version2.variantId, now, marginMs);
+    if (cached !== void 0) return {
+      record: cached,
+      uploaded: false
+    };
+    const client = this.client(connection);
+    const upload = async () => {
+      const remote = await client.upload({
+        data: version2.data,
+        mediaType: version2.mediaType,
+        filename: filename(version2),
+        expiresAfterSeconds: policy.expiresAfterSeconds,
+        signal
+      });
+      if (remote.bytes !== version2.data.byteLength) throw new LlmError("DeepSeek Files API upload response does not match the submitted image.", "INVALID_RESPONSE");
+      return {
+        scope,
+        attachmentId: version2.attachment.attachmentId,
+        variantId: version2.variantId,
+        fileId: remote.id,
+        bytes: remote.bytes,
+        createdAt: remote.createdAt * 1e3,
+        expiresAt: remote.expiresAt * 1e3
+      };
+    };
+    let candidate;
+    try {
+      candidate = await upload();
+    } catch (error) {
+      if (!isFilesQuotaError(error)) throw error;
+      if (await this.reclaimOldestOwned(connection, policy.quotaCleanupBatch, signal) === 0) throw error;
+      candidate = await upload();
+    }
+    const committed = await this.index.commit(candidate, this.now(), marginMs);
+    if (!committed.accepted) try {
+      await client.delete(candidate.fileId, signal);
+    } catch {
+    }
+    return {
+      record: committed.record,
+      uploaded: committed.accepted
+    };
+  }
+  /**
+  * Invalidate one exact local mapping after the chat endpoint rejects its remote id.
+  * @param version - request-image version whose remote generation failed.
+  * @param fileId - exact rejected file id.
+  * @param connection - endpoint and API-key snapshot.
+  */
+  async invalidate(version2, fileId, connection) {
+    await this.index.remove(deepSeekFileScope(connection.baseURL, connection.apiKey), version2.variantId, fileId);
+  }
+  /**
+  * Delete the indexed remote file for one attachment and remove its local mapping.
+  * @param version - exact request-image version to release.
+  * @param connection - endpoint and API-key snapshot.
+  * @param policy - expiry policy used to locate a reusable mapping.
+  * @param signal - request cancellation.
+  * @returns whether an indexed file existed and was deleted.
+  */
+  async release(version2, connection, policy, signal) {
+    const scope = deepSeekFileScope(connection.baseURL, connection.apiKey);
+    const record = await this.index.get(scope, version2.variantId, this.now(), policy.refreshMarginSeconds * 1e3);
+    if (record === void 0) return false;
+    await this.client(connection).delete(record.fileId, signal);
+    await this.index.remove(scope, version2.variantId, record.fileId);
+    return true;
+  }
+  /**
+  * Delete the oldest provider files whose names identify harness ownership.
+  * @param connection - endpoint and API-key snapshot.
+  * @param count - positive maximum number of files to delete.
+  * @param signal - request cancellation.
+  * @returns number of successfully deleted files.
+  */
+  async reclaimOldestOwned(connection, count, signal) {
+    const client = this.client(connection);
+    let after;
+    const owned = [];
+    while (owned.length < count) {
+      const page = await client.list({
+        ...after === void 0 ? {} : { after },
+        limit: 1e3,
+        order: "asc",
+        ...signal === void 0 ? {} : { signal }
+      });
+      for (const file of page.data) {
+        if (!file.filename.startsWith(OWNED_FILE_PREFIX)) continue;
+        owned.push(file.id);
+        if (owned.length === count) break;
+      }
+      if (!page.hasMore || page.lastId === void 0 || page.lastId === after) break;
+      after = page.lastId;
+    }
+    for (const fileId of owned) await client.delete(fileId, signal);
+    return owned.length;
+  }
+  /**
+  * Delete every remote harness-owned file in the active API-key namespace and clear its index.
+  * @param connection - endpoint and API-key snapshot.
+  * @param signal - request cancellation.
+  * @returns number of deleted files.
+  */
+  async releaseAll(connection, signal) {
+    let total = 0;
+    for (; ; ) {
+      const deleted = await this.reclaimOldestOwned(connection, 1e3, signal);
+      total += deleted;
+      if (deleted < 1e3) break;
+    }
+    await this.index.clear(deepSeekFileScope(connection.baseURL, connection.apiKey));
+    return total;
+  }
+};
 async function* parseSse(stream, onComment) {
   const events = stream.pipeThrough(new TextDecoderStream()).pipeThrough(new EventSourceParserStream({ onComment }));
   for await (const { data } of events) {
@@ -4041,7 +4909,21 @@ var __disposeResources = /* @__PURE__ */ (function(SuppressedError2) {
 var DEFAULT_STREAM_IDLE_TIMEOUT_MS = 3e5;
 var DEFAULT_CONTEXT_WINDOW = 1e6;
 var DEFAULT_MAX_TOKENS = 256e3;
+var DEFAULT_MAX_REQUEST_FILES_BYTES = 128 * 1024 * 1024;
+var DEFAULT_MAX_INLINE_REQUEST_IMAGE_BYTES = 20 * 1024 * 1024;
+var DEFAULT_MAX_IMAGES_PER_REQUEST = 600;
+var DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET = 64e4;
+var DEFAULT_LOW_DETAIL_IMAGE_PIXEL_BUDGET = 512 * 512;
+var DEFAULT_REQUEST_IMAGE_MAX_BYTES = 1024 * 1024;
+var DEFAULT_IMAGE_OFFLOAD_BYTE_QUANTUM = 64 * 1024 * 1024;
+var DEFAULT_INLINE_IMAGE_OFFLOAD_BYTE_QUANTUM = 10 * 1024 * 1024;
+var DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM = 20;
+var DEFAULT_FILE_EXPIRY_SECONDS = 10080 * 60;
+var DEFAULT_FILE_REFRESH_MARGIN_SECONDS = 3600;
+var DEFAULT_FILE_QUOTA_CLEANUP_BATCH = 100;
+var DEFAULT_FILES_API_TIMEOUT_MS = 6e4;
 var STREAM_IDLE_TIMEOUT_CODE = "LLM_STREAM_IDLE_TIMEOUT";
+var FILES_API_TIMEOUT_CODE = "DEEPSEEK_FILES_API_TIMEOUT";
 var OFF_REASONING_EFFORT = ReasoningEffortId("off");
 var LOW_REASONING_EFFORT = ReasoningEffortId("low");
 var HIGH_REASONING_EFFORT = ReasoningEffortId("high");
@@ -4068,13 +4950,76 @@ var OFF_ONLY_REASONING_EFFORTS = [{
   id: OFF_REASONING_EFFORT,
   name: "Off"
 }];
+var FileResolutionFailure = class extends Error {
+  constructor(cause) {
+    super("DeepSeek Files API could not resolve a request image.", { cause });
+    this.name = "FileResolutionFailure";
+  }
+};
+function collectImageRefs(content, refs) {
+  for (const block of content) if (block.type === "image") refs.set(block.attachment.attachmentId, block.attachment);
+  else if (block.type === "tool-result") collectImageRefs(block.content, refs);
+}
+function resolveRequestImagePolicy(model) {
+  let maxPixels;
+  if (model.imagePixelBudget !== void 0) maxPixels = model.imagePixelBudget;
+  else if (model.imageDetail === "low") maxPixels = DEFAULT_LOW_DETAIL_IMAGE_PIXEL_BUDGET;
+  else maxPixels = DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET;
+  return {
+    maxPixels,
+    maxBytes: model.imageMaxBytes === void 0 ? DEFAULT_REQUEST_IMAGE_MAX_BYTES : model.imageMaxBytes
+  };
+}
+async function prepareRequestImages(options, attachments, model, signal) {
+  const refs = /* @__PURE__ */ new Map();
+  for (const message of options.messages) collectImageRefs(message.content, refs);
+  const policy = resolveRequestImagePolicy(model);
+  const orderedRefs = [...refs.values()];
+  const projected = await Promise.all(orderedRefs.map((ref) => attachments.readImageRequest(ref, policy, signal)));
+  return new Map(orderedRefs.map((ref, index) => [ref.attachmentId, projected[index]]));
+}
+function providerRejectedNormalizedImage(detail) {
+  return /(?:unsupported|invalid|cannot read|failed to (?:decode|process)).{0,40}image/iu.test(detail) || /image.{0,40}(?:unsupported|invalid|cannot be decoded)/iu.test(detail);
+}
+function providerRejectedFileId(detail) {
+  const file = /\bfile(?:[_ -]?(?:id|api|not[_ -]?found|deleted|expired))?/iu.test(detail);
+  const missing = /(?:expired|not[_ -]?found|deleted|do(?:es)? not exist|not created under (?:this|your) account)/iu.test(detail);
+  const invalidId = /(?:invalid.{0,20}file[_ -]?(?:id|api)|file[_ -]?(?:id|api).{0,20}invalid)/iu.test(detail);
+  return file && (missing || invalidId);
+}
+function detailNamesFileId(detail, fileId) {
+  let index = detail.indexOf(fileId);
+  while (index >= 0) {
+    const before = detail[index - 1];
+    const after = detail[index + fileId.length];
+    if ((before === void 0 || !/[\p{L}\p{N}_-]/u.test(before)) && (after === void 0 || !/[\p{L}\p{N}_-]/u.test(after))) return true;
+    index = detail.indexOf(fileId, index + 1);
+  }
+  return false;
+}
+function staleMappings(files, detail) {
+  const unique = [...new Map(files.map((file) => [`${file.version.variantId}\0${file.fileId}`, file])).values()];
+  const exact = unique.filter((file) => detailNamesFileId(detail, file.fileId));
+  return exact.length > 0 ? exact : unique;
+}
+function normalizedImageFacts(file) {
+  const version2 = file.version;
+  const name2 = version2.attachment.name ?? version2.attachment.attachmentId;
+  const colour = version2.hasAlpha ? "sRGBA" : "sRGB";
+  return `"${name2}" at message ${file.location.message}, image ${file.location.image} (${version2.mediaType}, 8-bit ${colour}, ${version2.width}x${version2.height})`;
+}
+function normalizedImageDiagnostic(files, providerMessage, providerDetail) {
+  const target = files.find((file) => detailNamesFileId(providerDetail, file.fileId)) ?? (files.length === 1 ? files[0] : void 0);
+  if (target !== void 0) return `DeepSeek rejected normalized image ${normalizedImageFacts(target)}: ${providerMessage}. The provider rejected bytes already normalized by the harness; PNG, JPEG, WebP, and GIF remain supported input formats.`;
+  return `DeepSeek rejected a normalized request image: ${providerMessage}. Candidate images: ${[...new Map(files.map((file) => [`${file.version.variantId}\0${file.location.message}\0${file.location.image}`, file])).values()].map(normalizedImageFacts).join("; ")}. The provider rejected bytes already normalized by the harness; PNG, JPEG, WebP, and GIF remain supported input formats.`;
+}
 function modelInfo(provider, model) {
   return {
     provider,
     id: model.id,
     name: model.name ?? model.id,
     ...model.description === void 0 ? {} : { description: model.description },
-    inputModalities: ["text"]
+    inputModalities: model.inputModalities ?? ["text"]
   };
 }
 function providerRetryAfterMs(value) {
@@ -4092,6 +5037,7 @@ function requestId(headers) {
 }
 function httpErrorCode(status, error) {
   if (status === 401 || status === 403) return "AUTH";
+  if (status === 413) return "INVALID_REQUEST";
   const detail = [
     error?.code,
     error?.type,
@@ -4108,9 +5054,11 @@ function httpErrorCode(status, error) {
 }
 var DeepSeekAdapter = class extends LlmAdapter {
   config;
+  files;
   constructor(config) {
     super();
     this.config = config;
+    this.files = config.resolveFiles?.() ?? new DeepSeekFileStore();
   }
   providerInfo(provider) {
     return {
@@ -4125,10 +5073,12 @@ var DeepSeekAdapter = class extends LlmAdapter {
     return Promise.resolve(this.config.options().models.map((model) => modelInfo(provider, model)));
   }
   resolveModel(provider, model, _signal) {
-    const connection = this.config.options();
+    return Promise.resolve(this.modelInfoFor(this.config.options(), provider, model));
+  }
+  modelInfoFor(connection, provider, model) {
     const configured = connection.models.find((entry) => entry.id === model);
     const contextWindow = configured?.contextWindow ?? connection.defaultContextWindow;
-    return Promise.resolve({
+    return {
       ...configured === void 0 ? {
         provider,
         id: model,
@@ -4144,21 +5094,37 @@ var DeepSeekAdapter = class extends LlmAdapter {
         efforts: REASONING_EFFORTS,
         defaultEffort: connection.defaults.reasoningEffort === "off" ? OFF_REASONING_EFFORT : connection.defaults.reasoningEffort === "low" ? LOW_REASONING_EFFORT : connection.defaults.reasoningEffort === "max" ? MAX_REASONING_EFFORT : HIGH_REASONING_EFFORT
       } }
+    };
+  }
+  prepareCall(provider, model, _signal) {
+    const connection = this.config.options();
+    return Promise.resolve({
+      model: this.modelInfoFor(connection, provider, model),
+      stream: (options) => this.streamWithConnection(options, connection)
     });
   }
-  async *stream(options) {
+  stream(options) {
+    return this.streamWithConnection(options, this.config.options());
+  }
+  async *streamWithConnection(options, connection) {
     const env_1 = {
       stack: [],
       error: void 0,
       hasError: false
     };
     try {
-      const connection = this.config.options();
+      const hasImages = options.messages.some((message) => contentHasImage(message.content));
+      let attachments;
+      if (hasImages) {
+        if (connection.models.find((entry) => entry.id === options.model)?.inputModalities?.includes("image") !== true) throw new LlmError(`DeepSeek model "${options.model}" does not accept image input.`, "UNSUPPORTED_CONTENT");
+        attachments = this.config.resolveAttachments?.();
+        if (attachments === void 0) throw new LlmError("DeepSeek image conversion requires the durable attachment service.", "UNSUPPORTED_CONTENT");
+      }
       const apiKey = await this.config.resolveApiKey(connection);
       const userId = this.config.resolveUserId();
       const consumer = new AbortController();
       const watchdog = __addDisposableResource(env_1, idleWatchdog(options.signal === void 0 ? consumer.signal : AbortSignal.any([options.signal, consumer.signal]), connection.streamIdleTimeoutMs, STREAM_IDLE_TIMEOUT_CODE), false);
-      const iterator = this.request(options, watchdog.signal, connection, apiKey, userId, () => {
+      const iterator = this.request(options, watchdog.signal, connection, apiKey, userId, attachments, () => {
         watchdog.pulse();
       })[Symbol.asyncIterator]();
       let exhausted = false;
@@ -4190,9 +5156,7 @@ var DeepSeekAdapter = class extends LlmAdapter {
       __disposeResources(env_1);
     }
   }
-  async *request(options, signal, connection, apiKey, userId, onComment) {
-    const body = serializeRequest(options, connection.defaults);
-    const payload = JSON.stringify(body);
+  async *request(options, signal, connection, apiKey, userId, attachments, onActivity) {
     const headers = {
       "authorization": `Bearer ${apiKey}`,
       "content-type": "application/json",
@@ -4202,36 +5166,132 @@ var DeepSeekAdapter = class extends LlmAdapter {
       ...options.sessionId !== void 0 ? { "x-deepseek-harness-session-id": String(options.sessionId) } : {},
       ...options.purpose === "compaction" ? { "x-deepseek-harness-compact": "1" } : {}
     };
-    let response;
-    try {
-      response = await fetch(`${connection.baseURL}/chat/completions`, {
-        method: "POST",
-        headers,
-        body: payload,
-        signal
-      });
-    } catch (error) {
-      if (signal.aborted) throw error;
-      throw new LlmError(`DeepSeek API request to ${connection.baseURL} failed`, "TRANSPORT", { cause: error });
-    }
-    if (!response.ok) {
-      let message = `DeepSeek API error (HTTP ${response.status})`;
-      let providerError;
-      try {
-        providerError = (await response.json()).error;
-        if (providerError?.message) message = providerError.message;
-      } catch {
+    const fileConnection = {
+      baseURL: connection.baseURL,
+      apiKey
+    };
+    const model = connection.models.find((entry) => entry.id === options.model);
+    const policy = model === void 0 ? void 0 : resolveRequestImagePolicy(model);
+    const requestMessages = policy === void 0 ? options.messages : offloadRequestImagesWithPolicy(options.messages, {
+      representation: "raw",
+      maxBytes: connection.maxRequestFilesBytes,
+      maxImages: connection.maxImagesPerRequest,
+      byteQuantum: connection.imageOffloadByteQuantum,
+      countQuantum: connection.imageOffloadCountQuantum,
+      byteLength: (ref) => Math.min(ref.bytes, policy.maxBytes)
+    });
+    const requestOptions = requestMessages === options.messages ? options : {
+      ...options,
+      messages: [...requestMessages]
+    };
+    const requestImages = attachments === void 0 || model === void 0 ? /* @__PURE__ */ new Map() : await prepareRequestImages(requestOptions, attachments, model, signal);
+    let representation = "file";
+    let fileAttempt = 0;
+    while (true) {
+      const usedFiles = [];
+      let body;
+      if (attachments === void 0) body = serializeRequest(requestOptions, connection.defaults);
+      else if (representation === "base64") body = await serializeRequestWithImages(requestOptions, {
+        representation: { kind: "base64" },
+        requestImages,
+        maxRequestImageBytes: connection.maxInlineRequestImageBytes,
+        maxImagesPerRequest: connection.maxImagesPerRequest,
+        byteQuantum: connection.inlineImageOffloadByteQuantum,
+        countQuantum: connection.imageOffloadCountQuantum
+      }, connection.defaults);
+      else try {
+        body = await serializeRequestWithImages(requestOptions, {
+          representation: {
+            kind: "file",
+            resolveFileId: async (version2, _block, location) => {
+              const env_2 = {
+                stack: [],
+                error: void 0,
+                hasError: false
+              };
+              try {
+                const filesDeadline = __addDisposableResource(env_2, deadline(signal, connection.filesApiTimeoutMs, FILES_API_TIMEOUT_CODE), false);
+                let resolved;
+                try {
+                  resolved = await this.files.ensureUploaded(version2, fileConnection, connection.filePolicy, filesDeadline.signal);
+                } catch (error) {
+                  if (signal.aborted) throw error;
+                  throw new FileResolutionFailure(error);
+                }
+                onActivity();
+                usedFiles.push({
+                  version: version2,
+                  fileId: resolved.record.fileId,
+                  location
+                });
+                return resolved.record.fileId;
+              } catch (e_2) {
+                env_2.error = e_2;
+                env_2.hasError = true;
+              } finally {
+                __disposeResources(env_2);
+              }
+            }
+          },
+          requestImages,
+          maxRequestImageBytes: connection.maxRequestFilesBytes,
+          maxImagesPerRequest: connection.maxImagesPerRequest,
+          byteQuantum: connection.imageOffloadByteQuantum,
+          countQuantum: connection.imageOffloadCountQuantum
+        }, connection.defaults);
+      } catch (error) {
+        if (!(error instanceof FileResolutionFailure)) throw error;
+        representation = "base64";
+        continue;
       }
-      const delay = providerRetryAfterMs(response.headers.get("retry-after"));
-      const id = requestId(response.headers);
-      throw new LlmError(message, httpErrorCode(response.status, providerError), {
-        status: response.status,
-        ...delay === void 0 ? {} : { providerRetryAfterMs: delay },
-        ...id === void 0 ? {} : { requestId: id }
-      });
+      const payload = JSON.stringify(body);
+      let response;
+      try {
+        response = await fetch(`${connection.baseURL}/chat/completions`, {
+          method: "POST",
+          headers,
+          body: payload,
+          signal
+        });
+      } catch (error) {
+        if (signal.aborted) throw error;
+        throw new LlmError(`DeepSeek API request to ${connection.baseURL} failed`, "TRANSPORT", { cause: error });
+      }
+      if (!response.ok) {
+        let message = `DeepSeek API error (HTTP ${response.status})`;
+        let providerError;
+        const rawResponse = await response.text();
+        try {
+          providerError = JSON.parse(rawResponse).error;
+          if (providerError?.message) message = providerError.message;
+        } catch {
+        }
+        const detail = [
+          providerError?.code,
+          providerError?.type,
+          providerError?.message
+        ].filter((field) => typeof field === "string").join(" ");
+        if (usedFiles.length > 0 && providerRejectedFileId(detail)) {
+          await Promise.all(staleMappings(usedFiles, detail).map((file) => this.files.invalidate(file.version, file.fileId, fileConnection)));
+          if (fileAttempt === 0) {
+            fileAttempt += 1;
+            continue;
+          }
+        }
+        if (response.status === 400 && usedFiles.length > 0 && providerRejectedNormalizedImage(detail)) message = normalizedImageDiagnostic(usedFiles, message, detail);
+        const delay = providerRetryAfterMs(response.headers.get("retry-after"));
+        const id = requestId(response.headers);
+        throw new LlmError(message, httpErrorCode(response.status, providerError), {
+          cause: new Error(rawResponse.length > 0 ? rawResponse : `DeepSeek HTTP ${response.status}`),
+          status: response.status,
+          ...delay === void 0 ? {} : { providerRetryAfterMs: delay },
+          ...id === void 0 ? {} : { requestId: id }
+        });
+      }
+      if (!response.body) throw new LlmError("DeepSeek API returned no response body", "EMPTY_RESPONSE");
+      yield* translate(parseSse(response.body, onActivity));
+      return;
     }
-    if (!response.body) throw new LlmError("DeepSeek API returned no response body", "EMPTY_RESPONSE");
-    yield* translate(parseSse(response.body, onComment));
   }
 };
 var name = "llm-deepseek";
@@ -4239,21 +5299,37 @@ var inject = ["llm"];
 var NS = settingsNamespace("llm-deepseek");
 var DEFAULT_API_KEY_ENV = "DEEPSEEK_API_KEY";
 var PROVIDER = "deepseek-official";
-var DEFAULT_MODELS = [{
-  id: "deepseek-v4-flash",
-  name: "DeepSeek-V4-Flash",
-  contextWindow: DEFAULT_CONTEXT_WINDOW
-}, {
-  id: "deepseek-v4-pro",
-  name: "DeepSeek-V4-Pro",
-  contextWindow: DEFAULT_CONTEXT_WINDOW
-}];
+var DEFAULT_MODELS = [
+  {
+    id: "deepseek-v4-flash",
+    name: "DeepSeek-V4-Flash",
+    contextWindow: DEFAULT_CONTEXT_WINDOW
+  },
+  {
+    id: "deepseek-v4-pro",
+    name: "DeepSeek-V4-Pro",
+    contextWindow: DEFAULT_CONTEXT_WINDOW
+  },
+  {
+    id: "deepseek-v4-flash-vision-exp",
+    name: "DeepSeek-V4-Flash-Vision-Exp",
+    contextWindow: DEFAULT_CONTEXT_WINDOW,
+    inputModalities: ["text", "image"],
+    imagePixelBudget: DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET,
+    imageMaxBytes: DEFAULT_REQUEST_IMAGE_MAX_BYTES
+  }
+];
+var MODEL_MODALITIES = ["text", "image"];
 var catalogModel = src_default.object({
   id: src_default.string().required(),
   name: src_default.string(),
   description: src_default.string(),
   contextWindow: src_default.number().step(1).min(1),
-  maxTokens: src_default.number().step(1).min(1)
+  maxTokens: src_default.number().step(1).min(1),
+  inputModalities: src_default.array(src_default.union(MODEL_MODALITIES)).min(1).default(["text"]),
+  imagePixelBudget: src_default.number().step(1).min(1),
+  imageMaxBytes: src_default.number().step(1).min(1),
+  imageDetail: src_default.union(["auto", "low"])
 });
 var Config = src_default.object({
   apiKeyEnv: src_default.string().role("credential-ref").default(DEFAULT_API_KEY_ENV),
@@ -4269,6 +5345,16 @@ var Config = src_default.object({
   defaultContextWindow: src_default.number().step(1).min(1).default(DEFAULT_CONTEXT_WINDOW),
   models: src_default.array(catalogModel).default(DEFAULT_MODELS),
   streamIdleTimeoutMs: src_default.number().min(Number.MIN_VALUE).max(MAX_TIMER_DELAY_MS).default(DEFAULT_STREAM_IDLE_TIMEOUT_MS),
+  maxRequestFilesBytes: src_default.number().step(1).min(1).default(DEFAULT_MAX_REQUEST_FILES_BYTES),
+  maxInlineRequestImageBytes: src_default.number().step(1).min(1).default(DEFAULT_MAX_INLINE_REQUEST_IMAGE_BYTES),
+  maxImagesPerRequest: src_default.number().step(1).min(1).default(600),
+  imageOffloadByteQuantum: src_default.number().step(1).min(1).default(DEFAULT_IMAGE_OFFLOAD_BYTE_QUANTUM),
+  inlineImageOffloadByteQuantum: src_default.number().step(1).min(1).default(DEFAULT_INLINE_IMAGE_OFFLOAD_BYTE_QUANTUM),
+  imageOffloadCountQuantum: src_default.number().step(1).min(1).default(20),
+  filesApiTimeoutMs: src_default.number().min(Number.MIN_VALUE).max(MAX_TIMER_DELAY_MS).default(DEFAULT_FILES_API_TIMEOUT_MS),
+  fileExpiresAfterSeconds: src_default.number().step(1).min(3600).max(2592e3).default(DEFAULT_FILE_EXPIRY_SECONDS),
+  fileRefreshMarginSeconds: src_default.number().step(1).min(0).default(DEFAULT_FILE_REFRESH_MARGIN_SECONDS),
+  fileQuotaCleanupBatch: src_default.number().step(1).min(1).max(1e3).default(100),
   retryPolicy: RetryPolicySchema
 });
 var PUBLIC_BASE_URL = "https://api.deepseek.com";
@@ -4280,6 +5366,14 @@ function resolveModels(models) {
     if (model.name !== void 0 && model.name.length === 0) throw new Error(`llm-deepseek: catalog model "${model.id}" has an empty name`);
     if (model.contextWindow !== void 0 && (!Number.isInteger(model.contextWindow) || model.contextWindow <= 0)) throw new Error(`llm-deepseek: catalog model "${model.id}" contextWindow must be a positive integer`);
     if (model.maxTokens !== void 0 && (!Number.isInteger(model.maxTokens) || model.maxTokens <= 0)) throw new Error(`llm-deepseek: catalog model "${model.id}" maxTokens must be a positive integer`);
+    const inputModalities = model.inputModalities ?? ["text"];
+    if (inputModalities.length === 0) throw new Error(`llm-deepseek: catalog model "${model.id}" inputModalities must not be empty`);
+    if (inputModalities.some((modality) => !MODEL_MODALITIES.includes(modality))) throw new Error(`llm-deepseek: catalog model "${model.id}" inputModalities must contain only "text" and "image"`);
+    if (new Set(inputModalities).size !== inputModalities.length) throw new Error(`llm-deepseek: catalog model "${model.id}" inputModalities must not contain duplicates`);
+    const hasImage = inputModalities.includes("image");
+    if (!hasImage && (model.imagePixelBudget !== void 0 || model.imageMaxBytes !== void 0 || model.imageDetail !== void 0)) throw new Error(`llm-deepseek: text-only catalog model "${model.id}" cannot declare image request limits`);
+    if (model.imagePixelBudget !== void 0 && (!Number.isSafeInteger(model.imagePixelBudget) || model.imagePixelBudget <= 0)) throw new Error(`llm-deepseek: catalog model "${model.id}" imagePixelBudget must be a positive safe integer`);
+    if (model.imageMaxBytes !== void 0 && (!Number.isSafeInteger(model.imageMaxBytes) || model.imageMaxBytes <= 0)) throw new Error(`llm-deepseek: catalog model "${model.id}" imageMaxBytes must be a positive safe integer`);
     if (seen.has(model.id)) throw new Error(`llm-deepseek: duplicate catalog model "${model.id}"`);
     seen.add(model.id);
     return {
@@ -4287,7 +5381,13 @@ function resolveModels(models) {
       ...model.name === void 0 ? {} : { name: model.name },
       ...model.description === void 0 ? {} : { description: model.description },
       ...model.contextWindow === void 0 ? {} : { contextWindow: model.contextWindow },
-      ...model.maxTokens === void 0 ? {} : { maxTokens: model.maxTokens }
+      ...model.maxTokens === void 0 ? {} : { maxTokens: model.maxTokens },
+      inputModalities: [...inputModalities],
+      ...hasImage ? {
+        imagePixelBudget: model.imagePixelBudget ?? (model.imageDetail === "low" ? 262144 : 64e4),
+        imageMaxBytes: model.imageMaxBytes ?? 1048576,
+        ...model.imageDetail === void 0 ? {} : { imageDetail: model.imageDetail }
+      } : {}
     };
   });
 }
@@ -4297,6 +5397,29 @@ function resolveAdapterOptions(config, environment) {
   if (config.maxTokens !== void 0 && (!Number.isSafeInteger(config.maxTokens) || config.maxTokens <= 0)) throw new Error("llm-deepseek: maxTokens must be a positive safe integer");
   const streamIdleTimeoutMs = config.streamIdleTimeoutMs ?? 3e5;
   if (!Number.isFinite(streamIdleTimeoutMs) || streamIdleTimeoutMs <= 0 || streamIdleTimeoutMs > MAX_TIMER_DELAY_MS) throw new Error(`llm-deepseek: streamIdleTimeoutMs must be a positive finite number no greater than ${MAX_TIMER_DELAY_MS}`);
+  const maxRequestFilesBytes = config.maxRequestFilesBytes ?? 134217728;
+  if (!Number.isSafeInteger(maxRequestFilesBytes) || maxRequestFilesBytes <= 0) throw new Error("llm-deepseek: maxRequestFilesBytes must be a positive safe integer");
+  const maxInlineRequestImageBytes = config.maxInlineRequestImageBytes ?? 20971520;
+  if (!Number.isSafeInteger(maxInlineRequestImageBytes) || maxInlineRequestImageBytes <= 0) throw new Error("llm-deepseek: maxInlineRequestImageBytes must be a positive safe integer");
+  const maxImagesPerRequest = config.maxImagesPerRequest ?? 600;
+  if (!Number.isSafeInteger(maxImagesPerRequest) || maxImagesPerRequest <= 0) throw new Error("llm-deepseek: maxImagesPerRequest must be a positive safe integer");
+  const imageOffloadByteQuantum = config.imageOffloadByteQuantum ?? 67108864;
+  if (!Number.isSafeInteger(imageOffloadByteQuantum) || imageOffloadByteQuantum <= 0) throw new Error("llm-deepseek: imageOffloadByteQuantum must be a positive safe integer");
+  if (imageOffloadByteQuantum > maxRequestFilesBytes) throw new Error("llm-deepseek: imageOffloadByteQuantum must not exceed maxRequestFilesBytes");
+  const inlineImageOffloadByteQuantum = config.inlineImageOffloadByteQuantum ?? 10485760;
+  if (!Number.isSafeInteger(inlineImageOffloadByteQuantum) || inlineImageOffloadByteQuantum <= 0) throw new Error("llm-deepseek: inlineImageOffloadByteQuantum must be a positive safe integer");
+  if (inlineImageOffloadByteQuantum > maxInlineRequestImageBytes) throw new Error("llm-deepseek: inlineImageOffloadByteQuantum must not exceed maxInlineRequestImageBytes");
+  const imageOffloadCountQuantum = config.imageOffloadCountQuantum ?? 20;
+  if (!Number.isSafeInteger(imageOffloadCountQuantum) || imageOffloadCountQuantum <= 0) throw new Error("llm-deepseek: imageOffloadCountQuantum must be a positive safe integer");
+  if (imageOffloadCountQuantum > maxImagesPerRequest) throw new Error("llm-deepseek: imageOffloadCountQuantum must not exceed maxImagesPerRequest");
+  const filesApiTimeoutMs = config.filesApiTimeoutMs ?? 6e4;
+  if (!Number.isFinite(filesApiTimeoutMs) || filesApiTimeoutMs <= 0 || filesApiTimeoutMs > MAX_TIMER_DELAY_MS) throw new Error(`llm-deepseek: filesApiTimeoutMs must be a positive finite number no greater than ${MAX_TIMER_DELAY_MS}`);
+  const fileExpiresAfterSeconds = config.fileExpiresAfterSeconds ?? 604800;
+  if (!Number.isSafeInteger(fileExpiresAfterSeconds) || fileExpiresAfterSeconds < 3600 || fileExpiresAfterSeconds > 2592e3) throw new Error("llm-deepseek: fileExpiresAfterSeconds must be an integer from 3600 through 2592000");
+  const fileRefreshMarginSeconds = config.fileRefreshMarginSeconds ?? 3600;
+  if (!Number.isSafeInteger(fileRefreshMarginSeconds) || fileRefreshMarginSeconds < 0 || fileRefreshMarginSeconds >= fileExpiresAfterSeconds) throw new Error("llm-deepseek: fileRefreshMarginSeconds must be a non-negative integer below fileExpiresAfterSeconds");
+  const fileQuotaCleanupBatch = config.fileQuotaCleanupBatch ?? 100;
+  if (!Number.isSafeInteger(fileQuotaCleanupBatch) || fileQuotaCleanupBatch < 1 || fileQuotaCleanupBatch > 1e3) throw new Error("llm-deepseek: fileQuotaCleanupBatch must be an integer from 1 through 1000");
   return {
     apiKeyEnv: credentialRef(config.apiKeyEnv ?? DEFAULT_API_KEY_ENV),
     baseURL: config.baseURL ?? environment?.get(BASE_URL_ENV)?.value ?? "https://api.deepseek.com",
@@ -4308,6 +5431,18 @@ function resolveAdapterOptions(config, environment) {
     defaultContextWindow: config.defaultContextWindow ?? 1e6,
     models: resolveModels(config.models),
     streamIdleTimeoutMs,
+    maxRequestFilesBytes,
+    maxInlineRequestImageBytes,
+    maxImagesPerRequest,
+    imageOffloadByteQuantum,
+    inlineImageOffloadByteQuantum,
+    imageOffloadCountQuantum,
+    filesApiTimeoutMs,
+    filePolicy: {
+      expiresAfterSeconds: fileExpiresAfterSeconds,
+      refreshMarginSeconds: fileRefreshMarginSeconds,
+      quotaCleanupBatch: fileQuotaCleanupBatch
+    },
     retryPolicy: resolveRetryPolicy(config.retryPolicy, "llm-deepseek: retryPolicy")
   };
 }
@@ -4349,7 +5484,8 @@ function apply(ctx, config) {
   const adapter = new DeepSeekAdapter({
     options,
     resolveApiKey,
-    resolveUserId
+    resolveUserId,
+    resolveAttachments: () => ctx.get("attachments")
   });
   ctx.llm.registerConfigurableProviders([{
     provider: PROVIDER,
@@ -4375,11 +5511,35 @@ function apply(ctx, config) {
 export {
   Config,
   DEFAULT_CONTEXT_WINDOW,
+  DEFAULT_FILES_API_TIMEOUT_MS,
+  DEFAULT_FILE_EXPIRY_SECONDS,
+  DEFAULT_FILE_QUOTA_CLEANUP_BATCH,
+  DEFAULT_FILE_REFRESH_MARGIN_SECONDS,
+  DEFAULT_IMAGE_OFFLOAD_BYTE_QUANTUM,
+  DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM,
+  DEFAULT_INLINE_IMAGE_OFFLOAD_BYTE_QUANTUM,
+  DEFAULT_LOW_DETAIL_IMAGE_PIXEL_BUDGET,
+  DEFAULT_MAX_IMAGES_PER_REQUEST,
+  DEFAULT_MAX_INLINE_REQUEST_IMAGE_BYTES,
+  DEFAULT_MAX_REQUEST_FILES_BYTES,
   DEFAULT_MAX_TOKENS,
+  DEFAULT_REQUEST_IMAGE_MAX_BYTES,
+  DEFAULT_REQUEST_IMAGE_PIXEL_BUDGET,
   DEFAULT_STREAM_IDLE_TIMEOUT_MS,
   DeepSeekAdapter,
+  DeepSeekFileId,
+  DeepSeekFileStore,
+  DeepSeekFilesClient,
+  DeepSeekUploadIndex,
+  MAX_CHAT_IMAGE_BYTES,
+  MAX_FILE_EXPIRY_SECONDS,
+  MAX_FILE_UPLOAD_BYTES,
+  MAX_STORED_FILE_BYTES,
+  MAX_STORED_FILE_COUNT,
+  MIN_FILE_EXPIRY_SECONDS,
   PUBLIC_BASE_URL,
   apply,
+  deepSeekFileScope,
   inject,
   name,
   resolveAdapterOptions

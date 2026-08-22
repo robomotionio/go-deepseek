@@ -92,7 +92,7 @@ var __callDispose = (stack, error, hasError) => {
   return next();
 };
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/misc.ts
+// .harness/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
 }
@@ -117,7 +117,7 @@ function defineProperty(object, key, value) {
   return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/types.ts
+// .harness/vendor/cosmokit/src/types.ts
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -226,7 +226,7 @@ function deepEqual(a, b, strict) {
   }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
 }
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/string.ts
+// .harness/vendor/cosmokit/src/string.ts
 function tokenize(source, delimiters, delimiter) {
   const output = [];
   let state = 0 /* DELIM */;
@@ -265,7 +265,7 @@ function paramCase(source) {
 }
 var hyphenate = paramCase;
 
-// ../../source/deepseek-harness/vendor/cosmokit/src/time.ts
+// .harness/vendor/cosmokit/src/time.ts
 var Time;
 ((Time2) => {
   Time2.millisecond = 1;
@@ -345,7 +345,7 @@ var Time;
   Time2.template = template;
 })(Time || (Time = {}));
 
-// ../../source/deepseek-harness/vendor/cordis/src/utils.ts
+// .harness/vendor/cordis/src/utils.ts
 var DisposableList = class {
   sn = 0;
   map = /* @__PURE__ */ new Map();
@@ -570,7 +570,7 @@ function buildOuterStack(offset = 0) {
   return () => outerError.stack.split("\n").slice(3 + offset);
 }
 
-// ../../source/deepseek-harness/vendor/cordis/src/events.ts
+// .harness/vendor/cordis/src/events.ts
 function isBailed(value) {
   return value !== null && value !== false && value !== void 0;
 }
@@ -748,7 +748,7 @@ var EventsService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/logger.ts
+// .harness/vendor/cordis/src/logger.ts
 var defaultFormatters = {
   s: (value) => String(value),
   d: (value) => Math.trunc(Number(value)),
@@ -987,7 +987,7 @@ var LoggerService = class _LoggerService {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/fiber.ts
+// .harness/vendor/cordis/src/fiber.ts
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 var ValidationError = class extends TypeError {
   name = "ValidationError";
@@ -1541,7 +1541,7 @@ var Fiber = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/reflect.ts
+// .harness/vendor/cordis/src/reflect.ts
 function enhanceError(error) {
   const lines = error.stack.split("\n");
   lines.splice(0, 2, `Error: ${error.message}`);
@@ -1818,7 +1818,7 @@ var ReflectService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/registry.ts
+// .harness/vendor/cordis/src/registry.ts
 function isApplicable(object) {
   return object && typeof object === "object" && typeof object.apply === "function";
 }
@@ -1997,7 +1997,7 @@ var RegistryService = class {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/context.ts
+// .harness/vendor/cordis/src/context.ts
 var Context = class _Context {
   /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
   static effect = symbols.effect;
@@ -2083,7 +2083,7 @@ var Context = class _Context {
   }
 };
 
-// ../../source/deepseek-harness/vendor/cordis/src/service.ts
+// .harness/vendor/cordis/src/service.ts
 var Service = class _Service {
   /**
    * Register this instance as `name` in the current context.
@@ -2181,7 +2181,7 @@ var Service = class _Service {
   }
 };
 
-// ../../source/deepseek-harness/vendor/timer/src/index.ts
+// .harness/vendor/timer/src/index.ts
 var TimerService = class extends Service {
   constructor(ctx) {
     super(ctx, "timer");
@@ -2305,7 +2305,7 @@ var TimerService = class extends Service {
 };
 var src_default = TimerService;
 
-// ../../source/deepseek-harness/vendor/schemastery/src/index.ts
+// .harness/vendor/schemastery/src/index.ts
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -2937,7 +2937,7 @@ defineMethod("intersect", ["list"], ({ list }) => {
 defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
 var src_default2 = Schema;
 
-// ../../source/deepseek-harness/packages/llm/llm/src/brand.ts
+// .harness/packages/llm/llm/src/brand.ts
 function MessageId(id) {
   return id;
 }
@@ -2945,7 +2945,7 @@ function CallId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/call-config.ts
+// .harness/packages/llm/llm/src/call-config.ts
 var AGENT_LOOP_REQUESTS = /* @__PURE__ */ new WeakSet();
 function callConfigEquals(a, b) {
   if (a.provider !== b.provider || a.model !== b.model || a.reasoningEffort !== b.reasoningEffort || a.temperature !== b.temperature || a.maxTokens !== b.maxTokens) return false;
@@ -2985,7 +2985,7 @@ function deepFreeze(value) {
   return value;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/message.ts
+// .harness/packages/llm/llm/src/message.ts
 var CONTEXT_SUMMARY_MAX_CHARS = 120;
 function boundContextSummary(summary) {
   return summary.length <= CONTEXT_SUMMARY_MAX_CHARS ? summary : `${summary.slice(0, CONTEXT_SUMMARY_MAX_CHARS - 1)}\u2026`;
@@ -3027,7 +3027,7 @@ function createToolResultMessage(input) {
   });
 }
 
-// ../../source/deepseek-harness/packages/util/timeout/src/index.ts
+// .harness/packages/util/timeout/src/index.ts
 var TimeoutReason = class extends Error {
   /**
    * @param code Capability-owned timeout code (e.g. `BASH_TIMEOUT`).
@@ -3074,7 +3074,7 @@ function timeoutOf(x, code) {
   return code === void 0 || reason.code === code ? reason : void 0;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/error.ts
+// .harness/packages/llm/llm/src/error.ts
 var HarnessError = class extends Error {
   /** Stable machine-routable failure class (e.g. `RATE_LIMIT`); route on this, never by parsing `message`. */
   code;
@@ -3126,8 +3126,8 @@ function errorChain(value) {
   return render(value);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 2;
+// .harness/packages/llm/llm/src/retry-policy.ts
+var DEFAULT_MAX_RETRIES = 5;
 var DEFAULT_INITIAL_DELAY_MS = 500;
 var DEFAULT_MAX_DELAY_MS = 1e4;
 var DEFAULT_JITTER_RATIO = 0.1;
@@ -3163,7 +3163,12 @@ var NORMAL_POLICY_KEYS = /* @__PURE__ */ new Set([
   "retryableCodes",
   "backoff"
 ]);
-var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set(["mode", "backoff"]);
+var ALWAYS_POLICY_KEYS = /* @__PURE__ */ new Set([
+  "mode",
+  "maxRetries",
+  "retryableCodes",
+  "backoff"
+]);
 var BACKOFF_KEYS = /* @__PURE__ */ new Set(["initialDelayMs", "maxDelayMs", "jitterRatio"]);
 function validateKeys(value, allowed, path) {
   for (const key of Object.keys(value)) {
@@ -3233,7 +3238,7 @@ function resolveRetryPolicy(config, path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/adapter-failure.ts
+// .harness/packages/llm/llm/src/adapter-failure.ts
 function normalizeLlmFailure(value) {
   const error = value instanceof Error ? value : new HarnessError(thrownMessage(value), "UNKNOWN", { cause: value });
   const carried = ownFailureSnapshot(error);
@@ -3300,17 +3305,53 @@ function harnessErrorCode(error) {
   return error instanceof HarnessError ? error.code : "UNKNOWN";
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/attribution.ts
+// .harness/packages/llm/llm/src/content.ts
+function textOnlyImageText(ref) {
+  const digest = String(ref.attachmentId).slice("sha256:".length, "sha256:".length + 8);
+  return `[image omitted because this model accepts text only; attachment sha256:${digest}]`;
+}
+function contentHasImage(content) {
+  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
+}
+function replaceImagesForTextModel(blocks) {
+  let next;
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === "image") {
+      next ??= blocks.slice(0, index);
+      next.push({ type: "text", text: textOnlyImageText(block.attachment) });
+      continue;
+    }
+    if (block.type === "tool-result") {
+      const content = replaceImagesForTextModel(block.content);
+      if (content !== block.content) {
+        next ??= blocks.slice(0, index);
+        next.push({ ...block, content });
+        continue;
+      }
+    }
+    next?.push(block);
+  }
+  return next ?? blocks;
+}
+function projectImagesForTextModel(messages) {
+  if (!messages.some((message) => contentHasImage(message.content))) return messages;
+  return messages.map((message) => {
+    const content = replaceImagesForTextModel(message.content);
+    return content === message.content ? message : { ...message, content };
+  });
+}
+
+// .harness/packages/llm/llm/src/attribution.ts
 import { createRequire } from "node:module";
 var { version } = createRequire(import.meta.url)("../package.json");
 
-// ../../source/deepseek-harness/packages/llm/llm/src/never.ts
+// .harness/packages/llm/llm/src/never.ts
 function assertNever(value, context) {
   const rendered = JSON.stringify(value) ?? String(value);
   throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
 }
 
-// ../../source/deepseek-harness/packages/llm/llm/src/assembler.ts
+// .harness/packages/llm/llm/src/assembler.ts
 var BlockAssembler = class {
   partials = /* @__PURE__ */ new Map();
   order = [];
@@ -3427,6 +3468,21 @@ var BlockAssembler = class {
   blocks() {
     return this.assembled().blocks;
   }
+  /**
+   * Assemble the prefix an interrupted stream can safely finalize: closed and
+   * open text/reasoning blocks with non-whitespace content, in stream order.
+   * Tool calls are omitted because interruption precedes dispatch; retaining
+   * one would require a fabricated result. Open unknown blocks are also omitted.
+   * @returns the kept blocks; empty when nothing streamed before the interruption.
+   */
+  interruptedBlocks() {
+    return this.order.map((index) => {
+      const partial = this.mustGet(index);
+      const type = partial.block?.type ?? partial.blockType;
+      if (type !== "text" && type !== "reasoning") return void 0;
+      return this.assemble(partial, index);
+    }).filter((block) => (block?.type === "text" || block?.type === "reasoning") && block.text.trim() !== "");
+  }
   /** Usage from the `usage` chunk; undefined until one arrives. */
   get usage() {
     return this._usage;
@@ -3453,7 +3509,7 @@ var BlockAssembler = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/llm/llm/src/index.ts
+// .harness/packages/llm/llm/src/index.ts
 var LlmError = class extends HarnessError {
   /** Serializable facts retained beside this live Error. */
   failure;
@@ -3764,8 +3820,12 @@ var LlmRuntime = class extends Service {
     return this.resolveModelInfoFor(this.registration(provider), model, signal);
   }
   async resolveModelInfoFor(registration, model, signal) {
+    const resolved = await registration.adapter.resolveModel(registration.provider.id, model, signal);
+    return this.normalizeModelInfo(registration, model, resolved);
+  }
+  /** Validate and detach one adapter-returned exact model result. */
+  normalizeModelInfo(registration, model, resolved) {
     const provider = registration.provider.id;
-    const resolved = await registration.adapter.resolveModel(provider, model, signal);
     if (typeof resolved.provider !== "string" || resolved.provider !== provider || typeof resolved.id !== "string" || resolved.id !== model || typeof resolved.name !== "string" || resolved.name.length === 0 || resolved.description !== void 0 && typeof resolved.description !== "string") {
       throw new LlmError(
         `adapter returned invalid exact model metadata for provider "${provider}" model "${model}"`,
@@ -3848,6 +3908,10 @@ var LlmRuntime = class extends Service {
   }
   async resolveCallFor(registration, config, signal) {
     const info = await this.resolveModelInfoFor(registration, config.model, signal);
+    return this.resolveCallWithInfo(config, info);
+  }
+  /** Validate request controls against one already-bound exact model result. */
+  resolveCallWithInfo(config, info) {
     const defaulted = config.maxTokens === void 0 && info.defaultMaxTokens !== void 0 ? { ...config, maxTokens: info.defaultMaxTokens } : config;
     const reasoning = info.reasoning;
     const requested = defaulted.reasoningEffort;
@@ -3873,7 +3937,8 @@ var LlmRuntime = class extends Service {
     }
     return {
       config: resolvedConfig,
-      ...info.context === void 0 ? {} : { context: info.context }
+      ...info.context === void 0 ? {} : { context: info.context },
+      modelInfo: info
     };
   }
   /**
@@ -3886,7 +3951,9 @@ var LlmRuntime = class extends Service {
    */
   async prepareCall(config, signal) {
     const registration = this.registration(config.provider);
-    const resolved = await this.resolveCallFor(registration, config, signal);
+    const adapterCall = await registration.adapter.prepareCall(config.provider, config.model, signal);
+    const modelInfo = this.normalizeModelInfo(registration, config.model, adapterCall.model);
+    const resolved = this.resolveCallWithInfo(config, modelInfo);
     const resolvedConfig = deepFreeze(structuredClone(resolved.config));
     const context = resolved.context === void 0 ? void 0 : deepFreeze(structuredClone(resolved.context));
     const adapterDefaults = deepFreeze({
@@ -3899,6 +3966,7 @@ var LlmRuntime = class extends Service {
       retryPolicy: registration.retryPolicy,
       adapterDefaults,
       ...context === void 0 ? {} : { context },
+      ...modelInfo.inputModalities === void 0 ? {} : { inputModalities: Object.freeze([...modelInfo.inputModalities]) },
       stream: (options) => {
         if (dispatched) {
           throw new LlmError("a prepared LLM call can only be dispatched once", "INVALID_PREPARED_CALL");
@@ -3910,7 +3978,12 @@ var LlmRuntime = class extends Service {
           );
         }
         dispatched = true;
-        return this.streamWithRegistration(options, { registration, config: resolvedConfig });
+        return this.streamWithRegistration(options, {
+          registration,
+          config: resolvedConfig,
+          modelInfo,
+          dispatch: (options2) => adapterCall.stream(options2)
+        });
       }
     });
   }
@@ -3943,7 +4016,20 @@ var LlmRuntime = class extends Service {
     let iterator;
     try {
       const registration = prepared?.registration ?? this.registration(options.provider);
-      const resolvedConfig = prepared === void 0 ? (await this.resolveCallFor(registration, options, options.signal)).config : prepared.config;
+      const adapter = registration.adapter;
+      let modelInfo;
+      let resolvedConfig;
+      let dispatch;
+      if (prepared === void 0) {
+        const adapterCall = await adapter.prepareCall(options.provider, options.model, options.signal);
+        modelInfo = this.normalizeModelInfo(registration, options.model, adapterCall.model);
+        resolvedConfig = this.resolveCallWithInfo(options, modelInfo).config;
+        dispatch = (options2) => adapterCall.stream(options2);
+      } else {
+        modelInfo = prepared.modelInfo;
+        resolvedConfig = prepared.config;
+        dispatch = prepared.dispatch;
+      }
       if (prepared !== void 0 && !callConfigEquals(options, resolvedConfig)) {
         throw new LlmError(
           "prepared LLM call config changed before adapter dispatch",
@@ -3951,8 +4037,8 @@ var LlmRuntime = class extends Service {
         );
       }
       const resolvedOptions = callConfigEquals(options, resolvedConfig) ? options : Object.isFrozen(options) ? deepFreeze({ ...options, ...resolvedConfig }) : { ...options, ...resolvedConfig };
-      const adapter = registration.adapter;
-      const stream = adapter.stream(this.forAdapter(resolvedOptions, adapter));
+      const projectedOptions = modelInfo.inputModalities !== void 0 && !modelInfo.inputModalities.includes("image") && resolvedOptions.messages.some((message) => contentHasImage(message.content)) ? Object.isFrozen(resolvedOptions) ? deepFreeze({ ...resolvedOptions, messages: projectImagesForTextModel(resolvedOptions.messages) }) : { ...resolvedOptions, messages: projectImagesForTextModel(resolvedOptions.messages) } : resolvedOptions;
+      const stream = dispatch(this.forAdapter(projectedOptions, adapter));
       iterator = stream[Symbol.asyncIterator]();
     } catch (error) {
       yield adapterFailureChunk(error, options.signal);
@@ -4015,10 +4101,10 @@ function adapterFailureChunk(error, signal) {
 }
 var src_default3 = LlmRuntime;
 
-// ../../source/deepseek-harness/packages/core/session/src/index.ts
+// .harness/packages/core/session/src/index.ts
 import { isAbsolute } from "node:path";
 
-// ../../source/deepseek-harness/packages/core/scope/src/store.ts
+// .harness/packages/core/scope/src/store.ts
 var NamedEntries = class {
   constructor(duplicateError) {
     this.duplicateError = duplicateError;
@@ -4217,7 +4303,7 @@ var ScopedLayers = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/scope/src/index.ts
+// .harness/packages/core/scope/src/index.ts
 var kScope = /* @__PURE__ */ Symbol("dsh.scope");
 var carrierKeys = /* @__PURE__ */ new WeakMap();
 var scopeParents = /* @__PURE__ */ new WeakMap();
@@ -4287,13 +4373,13 @@ function carrierKeyOf(value) {
   return carrierKeys.get(value);
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/types.ts
+// .harness/packages/core/session/src/types.ts
 function SessionId(id) {
   return id;
 }
 var SESSION_FORMAT_VERSION = 0;
 
-// ../../source/deepseek-harness/packages/core/session/src/json.ts
+// .harness/packages/core/session/src/json.ts
 function hasIntrinsicConstructor(prototype, name15) {
   const descriptor = Object.getOwnPropertyDescriptor(prototype, "constructor");
   const constructor = descriptor?.value;
@@ -4418,7 +4504,7 @@ function isJsonValue(value) {
   return walkJsonValue(value, false) === true;
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/surface.ts
+// .harness/packages/core/session/src/surface.ts
 var SURFACE_EVENT_TYPES = /* @__PURE__ */ new Set([
   "user/message",
   "assistant/message",
@@ -4678,7 +4764,7 @@ var SurfaceManager = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/session/src/request-header.ts
+// .harness/packages/core/session/src/request-header.ts
 function canonicalHeader(header) {
   const adapterDefaults = header.adapterDefaults;
   return {
@@ -4705,7 +4791,7 @@ function foldRequestHeader(events, from2) {
   return state;
 }
 
-// ../../source/deepseek-harness/packages/core/session/src/preparation.ts
+// .harness/packages/core/session/src/preparation.ts
 var SessionPreparation = class _SessionPreparation {
   constructor(session, options) {
     this.options = options;
@@ -4732,10 +4818,10 @@ var SessionPreparation = class _SessionPreparation {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/session/src/repair.ts
+// .harness/packages/core/session/src/repair.ts
 var TOOL_NOT_STARTED = "TOOL_NOT_STARTED";
 
-// ../../source/deepseek-harness/packages/core/session/src/index.ts
+// .harness/packages/core/session/src/index.ts
 function validateSessionHeader(id, input) {
   if (input === null || typeof input !== "object" || Array.isArray(input)) {
     throw new Error("session header is not a plain JSON record");
@@ -5547,10 +5633,10 @@ var SessionStore = class extends Service {
 };
 var src_default4 = SessionStore;
 
-// ../../source/deepseek-harness/packages/session/session-title/src/index.ts
+// .harness/packages/session/session-title/src/index.ts
 import { z as zod } from "zod";
 
-// ../../source/deepseek-harness/packages/session/session-title/src/normalize.ts
+// .harness/packages/session/session-title/src/normalize.ts
 var OSC_SEQUENCE = /(?:\u001B\]|\u009D)(?:(?!\u0007|\u001B\\)[\s\S])*(?:\u0007|\u001B\\|$)/gu;
 var CSI_SEQUENCE = /(?:\u001B\[|\u009B)[0-?]*[ -/]*[@-~]/gu;
 var ESC_SEQUENCE = /\u001B[@-_]/gu;
@@ -5586,7 +5672,7 @@ function fallbackSessionTitle(input, maxWords, maxBytes) {
   return truncateTitleUtf8(words.join(" "), maxBytes).trimEnd();
 }
 
-// ../../source/deepseek-harness/packages/session/session-title/src/index.ts
+// .harness/packages/session/session-title/src/index.ts
 var SessionTitleInvalidError = class extends Error {
   name = "SessionTitleInvalidError";
 };
@@ -5675,12 +5761,13 @@ var SessionTitleService = class extends Service {
       this.work.clear();
     }, "sessionTitle lifecycle");
     ctx.inject(["sessionProjections"], (projectionCtx) => {
+      const titleSchema = zod.union([zod.string().min(1), zod.null()]);
       projectionCtx.sessionProjections.register({
         key: "title",
-        schema: zod.union([zod.string().min(1), zod.null()]),
+        stateSchema: titleSchema,
         init: () => null,
         apply: (state, event) => event.type === "session/title" ? event.data.title : state,
-        view: (state) => state,
+        wire: { viewSchema: titleSchema, view: (state) => state },
         stateVersion: 1
       });
     });
@@ -6093,7 +6180,7 @@ var SessionTitleService = class extends Service {
 };
 var src_default5 = SessionTitleService;
 
-// ../../source/deepseek-harness/packages/core/system-prompt/src/index.ts
+// .harness/packages/core/system-prompt/src/index.ts
 var PERSONA_SECTION = "deployment:persona";
 var PERSONA_ORDER = 0;
 var VARIABLE_NAME = /^[a-z][a-z0-9_]*$/;
@@ -6386,7 +6473,7 @@ var SystemPrompt = class extends Service {
 };
 var src_default6 = SystemPrompt;
 
-// ../../source/deepseek-harness/packages/core/tools/src/json-schema.ts
+// .harness/packages/core/tools/src/json-schema.ts
 var JsonSchemaError = class extends HarnessError {
   /** Individual schema violations in walk order. */
   violations;
@@ -6824,7 +6911,7 @@ function validateJsonSchemaValue(schema, value, path = "value") {
   return checkValue(schema, value, path);
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/schema.ts
+// .harness/packages/core/tools/src/schema.ts
 var ANNOTATION_KEYS = ["description", "title", "default", "examples"];
 function authorError(message) {
   throw new JsonSchemaError([message]);
@@ -7098,7 +7185,7 @@ function defineTool(options) {
   return tool;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/code-mode.ts
+// .harness/packages/core/tools/src/code-mode.ts
 var RUN_CODE_NAME = "run_code";
 var SDK_SECTION_ORDER = 150;
 var TYPESCRIPT_FLAVOR = {
@@ -7494,7 +7581,7 @@ ${result.logs.join("\n")}` : "";
   return definition;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/ts-types.ts
+// .harness/packages/core/tools/src/ts-types.ts
 var IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 function renderKey(name15) {
   return IDENTIFIER.test(name15) ? name15 : JSON.stringify(name15);
@@ -7700,7 +7787,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/py-types.ts
+// .harness/packages/core/tools/src/py-types.ts
 var IDENTIFIER2 = /^[\p{XID_Start}_]\p{XID_Continue}*$/u;
 function isBareIdentifier(name15) {
   return IDENTIFIER2.test(name15) && name15.normalize("NFKC") === name15;
@@ -7999,7 +8086,7 @@ ${declaration}
 \`\`\``;
 }
 
-// ../../source/deepseek-harness/packages/core/tools/src/index.ts
+// .harness/packages/core/tools/src/index.ts
 var COLLAPSE_SECTION_ORDER = 99;
 var CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly \u2014 a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
 var SDK_RENDERERS = {
@@ -9154,7 +9241,7 @@ function toolAbortedBeforeDispatchResult(prior) {
 }
 var src_default7 = ToolRuntime;
 
-// ../../source/deepseek-harness/packages/skill/skill/src/index.ts
+// .harness/packages/skill/skill/src/index.ts
 var SKILL_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 var DEFAULT_COLLECT_CACHE_ENTRIES = 128;
 var MAX_COLLECT_ATTEMPTS = 2;
@@ -9698,7 +9785,7 @@ function errorMessage3(error) {
 }
 var src_default8 = SkillRegistry;
 
-// ../../source/deepseek-harness/packages/skill/skill-filesystem/src/index.ts
+// .harness/packages/skill/skill-filesystem/src/index.ts
 var src_exports = {};
 __export(src_exports, {
   Config: () => Config,
@@ -9714,7 +9801,7 @@ import { homedir as homedir2 } from "node:os";
 import chokidar from "chokidar";
 import { parse as parseYaml } from "yaml";
 
-// ../../source/deepseek-harness/packages/util/home-paths/src/index.ts
+// .harness/packages/util/home-paths/src/index.ts
 import { opendir, realpath } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, join, resolve as resolve2 } from "node:path";
@@ -9758,7 +9845,7 @@ function dshHomeDisplay(resolvedHome) {
   return resolvedHome === resolve2(defaultDshHome()) ? DEFAULT_DSH_HOME_DISPLAY : `$${DSH_HOME_ENV}`;
 }
 
-// ../../source/deepseek-harness/packages/skill/skill-filesystem/src/index.ts
+// .harness/packages/skill/skill-filesystem/src/index.ts
 var PROJECT_DSH_RANK = 100;
 var PROJECT_AGENTS_RANK = 200;
 var CUSTOM_RANK = 300;
@@ -10555,11 +10642,11 @@ function errorMessage4(error) {
   return String(error);
 }
 
-// ../../source/deepseek-harness/packages/core/agent/src/index.ts
+// .harness/packages/core/agent/src/index.ts
 import { AsyncLocalStorage } from "node:async_hooks";
 import { isPromise } from "node:util/types";
 
-// ../../source/deepseek-harness/packages/core/agent/src/inbox.ts
+// .harness/packages/core/agent/src/inbox.ts
 var Inbox = class {
   constructor(session, notifications) {
     this.session = session;
@@ -10726,7 +10813,7 @@ var Inbox = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/agent/src/dispatch.ts
+// .harness/packages/core/agent/src/dispatch.ts
 function agentCarrier(agent) {
   return scopeTarget(agent, agent);
 }
@@ -10770,7 +10857,7 @@ function assembleContextFor(agent, signal) {
   return { agent, scope: agent, ...signal === void 0 ? {} : { signal } };
 }
 
-// ../../source/deepseek-harness/packages/core/agent/src/index.ts
+// .harness/packages/core/agent/src/index.ts
 var NO_FACTORY_MESSAGE = "no agent factory registered (load an agent-loop plugin)";
 var NO_INITIATOR_MESSAGE = "no initiating agent is active";
 var DISPOSED_INITIATOR_MESSAGE = "agent initiator scope is disposed";
@@ -11164,11 +11251,11 @@ var AgentRegistry = class extends Service {
 };
 var src_default9 = AgentRegistry;
 
-// ../../source/deepseek-harness/packages/goal/goal/src/index.ts
+// .harness/packages/goal/goal/src/index.ts
 import { randomUUID } from "node:crypto";
 import { z as zod2 } from "zod";
 
-// ../../source/deepseek-harness/packages/typert/protocol/src/index.ts
+// .harness/packages/typert/protocol/src/index.ts
 var TYPERT_REMOTE_SEGMENT_PATTERN = /^[A-Za-z0-9_$.-]+$/;
 function isTypertRemoteSegment(value) {
   return value !== "." && value !== ".." && TYPERT_REMOTE_SEGMENT_PATTERN.test(value);
@@ -11243,7 +11330,7 @@ function validateName(subject, value) {
   }
 }
 
-// ../../source/deepseek-harness/packages/goal/goal/src/runtime.ts
+// .harness/packages/goal/goal/src/runtime.ts
 var GOAL_CHANGE_VERSION = 1;
 function GoalId(id) {
   return id;
@@ -11260,7 +11347,7 @@ var GoalError = class extends HarnessError {
   }
 };
 
-// ../../source/deepseek-harness/packages/goal/goal/src/fold.ts
+// .harness/packages/goal/goal/src/fold.ts
 var SNAPSHOT_OPERATIONS = /* @__PURE__ */ new Set([
   "create",
   "edit",
@@ -11495,7 +11582,7 @@ function applyGoalEvent(state, event) {
   }
 }
 
-// ../../source/deepseek-harness/packages/goal/goal/src/index.ts
+// .harness/packages/goal/goal/src/index.ts
 var goalProjectionSchema = zod2.union([
   zod2.object({
     goal: zod2.object({
@@ -11574,10 +11661,10 @@ var GoalService = class extends (_a = TypertRemoteService, _edit_dec = [Remote("
     ctx.inject(["sessionProjections"], (projectionCtx) => {
       projectionCtx.sessionProjections.register({
         key: "goal",
-        schema: goalProjectionSchema,
+        stateSchema: goalProjectionSchema,
         init: () => null,
         apply: applyGoalProjection,
-        view: (state) => state,
+        wire: { viewSchema: goalProjectionSchema, view: (state) => state },
         stateVersion: 4
       });
     });
@@ -11877,7 +11964,7 @@ __publicField(GoalService, "Config", src_default2.object({
 }));
 var src_default10 = GoalService;
 
-// ../../source/deepseek-harness/packages/goal/goal-round-driver/src/index.ts
+// .harness/packages/goal/goal-round-driver/src/index.ts
 var src_exports2 = {};
 __export(src_exports2, {
   apply: () => apply2,
@@ -11887,7 +11974,7 @@ __export(src_exports2, {
 });
 import { isDeepStrictEqual } from "node:util";
 
-// ../../source/deepseek-harness/packages/goal/goal-round-driver/src/prompt.ts
+// .harness/packages/goal/goal-round-driver/src/prompt.ts
 function renderGoalRoundPrompt(goal, round) {
   return [{
     type: "text",
@@ -11900,7 +11987,7 @@ Continue working toward the objective in this same session. Treat the current wo
   }];
 }
 
-// ../../source/deepseek-harness/packages/goal/goal-round-driver/src/index.ts
+// .harness/packages/goal/goal-round-driver/src/index.ts
 var name2 = "goal-round-driver";
 var inject2 = ["agents", "goals", "sessions"];
 function isGoalRoundSource(source) {
@@ -12231,7 +12318,7 @@ function apply2(ctx) {
   }, "goal-round-driver lifecycle");
 }
 
-// ../../source/deepseek-harness/packages/goal/tool-goal/src/index.ts
+// .harness/packages/goal/tool-goal/src/index.ts
 var src_exports3 = {};
 __export(src_exports3, {
   Config: () => Config2,
@@ -12240,7 +12327,7 @@ __export(src_exports3, {
   name: () => name3
 });
 
-// ../../source/deepseek-harness/packages/goal/tool-goal/src/authority.ts
+// .harness/packages/goal/tool-goal/src/authority.ts
 function reject(message, code = "GOAL_TOOL_AUTHORITY_REQUIRED") {
   throw new HarnessError(message, code);
 }
@@ -12290,7 +12377,7 @@ function completionAuthority(ctx, execution) {
   return reject("complete and blocked require a direct human turn or the current goal round");
 }
 
-// ../../source/deepseek-harness/packages/goal/tool-goal/src/wrapup.ts
+// .harness/packages/goal/tool-goal/src/wrapup.ts
 var GROUNDING = "Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. ";
 function renderWrapupContext(objective, blockedReason) {
   const heading = `Objective: ${JSON.stringify(objective)}
@@ -12300,7 +12387,7 @@ The goal is marked blocked and this autonomous run is ending. Write the closing 
   return [{ type: "text", text }];
 }
 
-// ../../source/deepseek-harness/packages/goal/tool-goal/src/index.ts
+// .harness/packages/goal/tool-goal/src/index.ts
 var name3 = "tool-goal";
 var inject3 = ["agents", "goals", "tools", "systemPrompt"];
 var Config2 = src_default2.object({
@@ -12531,12 +12618,12 @@ function apply3(ctx, config) {
   }));
 }
 
-// ../../source/deepseek-harness/packages/jobs/jobs/src/brand.ts
+// .harness/packages/jobs/jobs/src/brand.ts
 function JobId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/jobs/jobs/src/index.ts
+// .harness/packages/jobs/jobs/src/index.ts
 var JobRegistry = class _JobRegistry extends Service {
   constructor(ctx) {
     if (new.target === _JobRegistry) {
@@ -12546,7 +12633,7 @@ var JobRegistry = class _JobRegistry extends Service {
   }
 };
 
-// ../../source/deepseek-harness/packages/jobs/jobs-local/src/index.ts
+// .harness/packages/jobs/jobs-local/src/index.ts
 var TASK_WAIT_TIMEOUT = "TASK_WAIT_TIMEOUT";
 var DEFAULT_MAX_CONCURRENT_TASKS_PER_OWNER = 10;
 function isTerminal(status) {
@@ -12943,7 +13030,7 @@ var LocalJobRegistry = class extends JobRegistry {
 };
 var src_default11 = LocalJobRegistry;
 
-// ../../source/deepseek-harness/packages/runtime-diagnostics/invariants/src/index.ts
+// .harness/packages/runtime-diagnostics/invariants/src/index.ts
 var InvariantError = class extends Error {
   /** Stable machine-readable invariant failure code. */
   code = "INVARIANT";
@@ -13064,7 +13151,7 @@ var InvariantRegistry = class extends Service {
 };
 var src_default12 = InvariantRegistry;
 
-// ../../source/deepseek-harness/packages/core/session/src/invariant.ts
+// .harness/packages/core/session/src/invariant.ts
 var invariant_exports = {};
 __export(invariant_exports, {
   apply: () => apply4,
@@ -13241,7 +13328,7 @@ var install = Object.assign((ctx, fail) => {
 }, { inject: ["sessions"] });
 var apply4 = (ctx) => Promise.resolve(ctx.invariants.register(PACKAGE_NAME, install));
 
-// ../../source/deepseek-harness/packages/core/agent/src/invariant.ts
+// .harness/packages/core/agent/src/invariant.ts
 var invariant_exports2 = {};
 __export(invariant_exports2, {
   apply: () => apply5,
@@ -13263,7 +13350,7 @@ var install2 = (ctx, fail) => {
 };
 var apply5 = (ctx) => Promise.resolve(ctx.invariants.register(PACKAGE_NAME2, install2));
 
-// ../../source/deepseek-harness/packages/core/scope/src/invariant.ts
+// .harness/packages/core/scope/src/invariant.ts
 var invariant_exports3 = {};
 __export(invariant_exports3, {
   apply: () => apply6,
@@ -13271,7 +13358,7 @@ __export(invariant_exports3, {
   name: () => name6
 });
 
-// ../../source/deepseek-harness/packages/core/scope/src/scoped-events.generated.ts
+// .harness/packages/core/scope/src/scoped-events.generated.ts
 var scopedSubjectResolvers = Object.freeze({
   "agent/created": (args) => args[0]["agent"],
   "agent/disposed": (args) => args[0]["agent"],
@@ -13304,7 +13391,7 @@ function scopedSubjectResolverFor(event) {
   return scopedSubjectResolvers[event];
 }
 
-// ../../source/deepseek-harness/packages/core/scope/src/invariant.ts
+// .harness/packages/core/scope/src/invariant.ts
 var PACKAGE_NAME3 = "@deepseek-ai/dsh-scope";
 var name6 = "scope-invariant";
 var inject6 = ["invariants"];
@@ -13326,7 +13413,7 @@ var install3 = (ctx, fail) => {
 };
 var apply6 = (ctx) => Promise.resolve(ctx.invariants.register(PACKAGE_NAME3, install3));
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/invariant.ts
+// .harness/packages/core/agent-loop/src/invariant.ts
 var invariant_exports4 = {};
 __export(invariant_exports4, {
   apply: () => apply7,
@@ -13367,7 +13454,7 @@ var install4 = Object.assign((ctx, fail) => {
 }, { inject: ["sessions"] });
 var apply7 = (ctx) => Promise.resolve(ctx.invariants.register(PACKAGE_NAME4, install4));
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/src/index.ts
+// .harness/packages/shell/tool-bash/src/index.ts
 var src_exports4 = {};
 __export(src_exports4, {
   Config: () => Config3,
@@ -13377,7 +13464,7 @@ __export(src_exports4, {
 });
 import { isAbsolute as isAbsolute3, resolve as resolvePath } from "node:path";
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/escalation.ts
+// .harness/packages/sandbox/sandbox/src/escalation.ts
 var WIDER_MODES = {
   "read-only": ["workspace-write", "danger-full-access"],
   "workspace-write": ["danger-full-access"]
@@ -13434,7 +13521,7 @@ async function approveEscalation(request, approval) {
   }
 }
 
-// ../../source/deepseek-harness/packages/sandbox/sandbox/src/roots.ts
+// .harness/packages/sandbox/sandbox/src/roots.ts
 import { realpathSync } from "node:fs";
 function canonicalPath(path) {
   try {
@@ -13444,7 +13531,7 @@ function canonicalPath(path) {
   }
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/redact.ts
+// .harness/packages/settings/settings/src/redact.ts
 function isRecord2(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -13494,7 +13581,7 @@ function redactSecrets(schema, value) {
   return { value: stripped, secrets };
 }
 
-// ../../source/deepseek-harness/packages/settings/settings/src/index.ts
+// .harness/packages/settings/settings/src/index.ts
 var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
 function settingsNamespace(value) {
   if (!NAMESPACE_PATTERN.test(value)) {
@@ -13998,10 +14085,10 @@ function installSettingsSection(ctx, ns, schema, entry, hooks) {
   });
 }
 
-// ../../source/deepseek-harness/packages/subprocess/subprocess/src/types.ts
+// .harness/packages/subprocess/subprocess/src/types.ts
 var DSH_ENV_PREFIX = "DSH_";
 
-// ../../source/deepseek-harness/packages/shell/shell/src/render.ts
+// .harness/packages/shell/shell/src/render.ts
 function parseExitStatus(text) {
   const signal = /\n\[killed by signal: ([^\]\n]+)\]$/.exec(text);
   if (signal?.[1] !== void 0) return { body: text.slice(0, signal.index), signal: signal[1] };
@@ -14010,10 +14097,10 @@ function parseExitStatus(text) {
   return { body: text, exitCode: 0 };
 }
 
-// ../../source/deepseek-harness/packages/shell/shell/src/index.ts
+// .harness/packages/shell/shell/src/index.ts
 var SHELL_SETTINGS_NAMESPACE = settingsNamespace("shell");
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/src/background.ts
+// .harness/packages/shell/tool-bash/src/background.ts
 function processOutcome(proc) {
   if (proc.status === "killed") {
     return { status: "killed", detail: proc.signal !== null ? `signal: ${proc.signal}` : "killed before exit" };
@@ -14021,7 +14108,7 @@ function processOutcome(proc) {
   return { status: "completed", detail: `exit code: ${proc.exitCode ?? 0}` };
 }
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/src/render.ts
+// .harness/packages/shell/tool-bash/src/render.ts
 function streamText(output) {
   if (!output.truncated) return output.text;
   return `${output.text}
@@ -14072,7 +14159,7 @@ function renderProcessRead(read, sandbox, escalationModes = []) {
   return `${read.delta}${read.delta.length > 0 && !read.delta.endsWith("\n") ? "\n" : ""}${notices.join("\n")}`;
 }
 
-// ../../source/deepseek-harness/packages/shell/tool-bash/src/index.ts
+// .harness/packages/shell/tool-bash/src/index.ts
 var name8 = "tool-bash";
 var inject8 = ["tools", "shell", "systemPrompt", "shellEnv"];
 var Config3 = src_default2.object({
@@ -14335,7 +14422,7 @@ function apply8(ctx, config = {}) {
   }));
 }
 
-// ../../source/deepseek-harness/packages/shell/shell-env/src/index.ts
+// .harness/packages/shell/shell-env/src/index.ts
 var src_exports5 = {};
 __export(src_exports5, {
   Config: () => Config4,
@@ -14470,7 +14557,7 @@ function apply9(ctx, config = {}) {
   });
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/index.ts
+// .harness/packages/context/agent-instructions/src/index.ts
 var src_exports6 = {};
 __export(src_exports6, {
   Config: () => Config5,
@@ -14482,7 +14569,7 @@ __export(src_exports6, {
 });
 import { isDeepStrictEqual as isDeepStrictEqual2 } from "node:util";
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/config.ts
+// .harness/packages/context/agent-instructions/src/config.ts
 import { relative as relative2 } from "node:path";
 var DEFAULT_PROJECT_ROOT_MARKERS = [".git"];
 var DEFAULT_INSTRUCTION_FILE_CANDIDATES = ["AGENTS.md", "CLAUDE.md"];
@@ -14532,12 +14619,12 @@ function resolveInstructionFileCandidates(candidates, fallback) {
   return (candidates ?? [...fallback]).filter((candidate) => !RESERVED_PATH_SEGMENTS.has(candidate) && !/[\\/]/.test(candidate));
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/files.ts
+// .harness/packages/context/agent-instructions/src/files.ts
 import { createReadStream } from "node:fs";
 import { stat as stat2 } from "node:fs/promises";
 import { dirname as dirname4, isAbsolute as isAbsolute4, join as join3, relative as relative3, resolve as resolve4 } from "node:path";
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/digest.ts
+// .harness/packages/context/agent-instructions/src/digest.ts
 import { createHash } from "node:crypto";
 function instructionContentSha1(content) {
   return createHash("sha1").update(content).digest("hex");
@@ -14546,7 +14633,7 @@ function trimmedInstructionDigest(content) {
   return instructionContentSha1(content.trim());
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/render.ts
+// .harness/packages/context/agent-instructions/src/render.ts
 import { basename as basename2, dirname as dirname3 } from "node:path";
 var SYSTEM_REMINDER_OPEN = "<system-reminder>";
 var SYSTEM_REMINDER_CLOSE = "</system-reminder>";
@@ -14737,7 +14824,7 @@ function renderWorkspaceContext(files, options) {
   return renderWorkspaceInstructionSet(files, options).rendered;
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/files.ts
+// .harness/packages/context/agent-instructions/src/files.ts
 function signalOptions(signal) {
   return signal === void 0 ? void 0 : { signal };
 }
@@ -15012,7 +15099,7 @@ function userGlobalDisplayPath(dshHome) {
   return `${dshHomeDisplay(dshHome)}/AGENTS.md`;
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/state.ts
+// .harness/packages/context/agent-instructions/src/state.ts
 var name10 = "agent-instructions";
 function workspaceContextHook(text, changes) {
   return createUserMessage({
@@ -15261,7 +15348,7 @@ async function reconcileInstructionContext(agent, resolved, versionCache, fileSy
   };
 }
 
-// ../../source/deepseek-harness/packages/context/agent-instructions/src/index.ts
+// .harness/packages/context/agent-instructions/src/index.ts
 function visibleBaselineSource(agent, authorityMessages) {
   for (const message of authorityMessages.toReversed()) {
     if (message.source.kind === "agent-instructions" && message.source.baseline === true) {
@@ -15522,7 +15609,7 @@ function apply10(ctx, config) {
   });
 }
 
-// ../../source/deepseek-harness/packages/skill/tool-skill/src/index.ts
+// .harness/packages/skill/tool-skill/src/index.ts
 var src_exports7 = {};
 __export(src_exports7, {
   Config: () => Config6,
@@ -15795,7 +15882,7 @@ function invokedSkillNames(messages) {
   return names;
 }
 
-// ../../source/deepseek-harness/packages/jobs/tool-jobs/src/index.ts
+// .harness/packages/jobs/tool-jobs/src/index.ts
 var src_exports8 = {};
 __export(src_exports8, {
   Config: () => Config7,
@@ -15805,7 +15892,7 @@ __export(src_exports8, {
   statusLine: () => statusLine
 });
 
-// ../../source/deepseek-harness/packages/util/output-retention/src/index.ts
+// .harness/packages/util/output-retention/src/index.ts
 function assertBudget(value, name15) {
   if (!Number.isInteger(value) || value < 0) {
     throw new Error(`${name15} must be a non-negative integer`);
@@ -15937,7 +16024,7 @@ function concat(chunks) {
   return out;
 }
 
-// ../../source/deepseek-harness/packages/jobs/tool-jobs/src/index.ts
+// .harness/packages/jobs/tool-jobs/src/index.ts
 var name12 = "tool-jobs";
 var inject11 = ["tools", "jobs", "systemPrompt"];
 var Config7 = src_default2.object({
@@ -16211,10 +16298,10 @@ ${statusLine(value.job)}`;
   }));
 }
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/index.ts
+// .harness/packages/core/agent-loop/src/index.ts
 import { randomUUID as randomUUID2 } from "node:crypto";
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/runtime-context.ts
+// .harness/packages/core/agent-loop/src/runtime-context.ts
 var SOURCE = "@deepseek-ai/dsh-system-prompt";
 var CLEARED = "Current runtime context: none. Earlier runtime-context snapshots no longer apply.";
 function isOwned(message) {
@@ -16270,7 +16357,7 @@ var RuntimeContextProjection = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/tool-calls.ts
+// .harness/packages/core/agent-loop/src/tool-calls.ts
 async function executeToolCalls(ctx, turn, step, toolCalls, signal, acceptContext) {
   const agent = ctx.agents.requireInitiator();
   const { session } = agent;
@@ -16441,7 +16528,7 @@ function appendToolResult(session, turn, step, block, result, callSeq) {
   }, { surfaceOp: "append", sourceEventSeqs: [callSeq] });
 }
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/agent.ts
+// .harness/packages/core/agent-loop/src/agent.ts
 function requestProposal(header) {
   if (header.adapterDefaults === void 0) return header.config;
   const proposal = { ...header.config };
@@ -16705,14 +16792,33 @@ var ReactLoopAgent = class {
       );
       const assembler = new BlockAssembler();
       const chunkSeqs = [];
-      const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request);
-      signal.throwIfAborted();
-      for await (const chunk of stream) {
+      try {
+        const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request);
         signal.throwIfAborted();
-        chunkSeqs.push(this.session.append("assistant/chunk", { turn, step, chunk }).seq);
-        assembler.push(chunk);
+        for await (const chunk of stream) {
+          signal.throwIfAborted();
+          chunkSeqs.push(this.session.append("assistant/chunk", { turn, step, chunk }).seq);
+          assembler.push(chunk);
+        }
+        signal.throwIfAborted();
+      } catch (error) {
+        if (signal.aborted) {
+          const content = assembler.interruptedBlocks();
+          if (content.length > 0) {
+            this.session.append("assistant/message", {
+              turn,
+              step,
+              message: createAssistantMessage({
+                content,
+                source: { provider: request.provider, model: request.model }
+              }),
+              interrupted: true,
+              ...assembler.usage === void 0 ? {} : { usage: assembler.usage }
+            }, { surfaceOp: "append", sourceEventSeqs: chunkSeqs });
+          }
+        }
+        throw error;
       }
-      signal.throwIfAborted();
       const finish = assembler.finish;
       if (finish.kind === "error" || finish.kind === "aborted") {
         const action = await this.dispatch.waterfall(
@@ -16838,10 +16944,10 @@ var ReactLoopAgent = class {
   }
 };
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/constants.ts
+// .harness/packages/core/agent-loop/src/constants.ts
 var DEFAULT_MAX_PARALLEL_TOOL_CALLS = 10;
 
-// ../../source/deepseek-harness/packages/core/agent-loop/src/index.ts
+// .harness/packages/core/agent-loop/src/index.ts
 var INACTIVE_STATES = /* @__PURE__ */ new Set([
   5 /* UNLOADING */,
   4 /* DISPOSED */,
@@ -17327,7 +17433,7 @@ var AgentLoop = class extends Service {
 };
 var src_default13 = AgentLoop;
 
-// ../../source/deepseek-harness/packages/llm/llm-retry/src/index.ts
+// .harness/packages/llm/llm-retry/src/index.ts
 var src_exports9 = {};
 __export(src_exports9, {
   Config: () => Config8,
@@ -17338,12 +17444,12 @@ __export(src_exports9, {
 });
 import { randomUUID as randomUUID3 } from "node:crypto";
 
-// ../../source/deepseek-harness/packages/llm/llm-retry/src/brand.ts
+// .harness/packages/llm/llm-retry/src/brand.ts
 function RetryId(id) {
   return id;
 }
 
-// ../../source/deepseek-harness/packages/llm/llm-retry/src/index.ts
+// .harness/packages/llm/llm-retry/src/index.ts
 var name13 = "llm-retry";
 var inject12 = ["agents"];
 var Config8 = src_default2.object({});
@@ -17483,7 +17589,7 @@ function apply13(ctx, config = {}, internals = {}) {
   }, "llm-retry: abort and drain active recovery");
 }
 
-// ../../source/deepseek-harness/packages/examples/agent-spine-demo/lib/index.js
+// .harness/packages/examples/agent-spine-demo/lib/index.js
 var name14 = "agent-spine-demo";
 var EXAMPLE_SESSION_TITLE_CONFIG = {
   fallbackMaxWords: 5,

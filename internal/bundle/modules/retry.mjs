@@ -7,9 +7,9 @@ var __commonJS = (cb, mod) => function __require() {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry_operation.js
+// .harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry_operation.js
 var require_retry_operation = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry_operation.js"(exports, module) {
+  ".harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry_operation.js"(exports, module) {
     function RetryOperation(timeouts, options) {
       if (typeof options === "boolean") {
         options = { forever: options };
@@ -142,9 +142,9 @@ var require_retry_operation = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry.js
+// .harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry.js
 var require_retry = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry.js"(exports) {
+  ".harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/lib/retry.js"(exports) {
     var RetryOperation = require_retry_operation();
     exports.operation = function(options) {
       var timeouts = exports.timeouts(options);
@@ -228,9 +228,9 @@ var require_retry = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/index.js
+// .harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/index.js
 var require_index = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/index.js"(exports, module) {
+  ".harness/node_modules/.pnpm/retry@0.13.1/node_modules/retry/index.js"(exports, module) {
     module.exports = require_retry();
   }
 });

@@ -13,7 +13,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/formatting.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/formatting.js
 function contentToParts(content) {
   if (content == null) {
     return [];
@@ -141,18 +141,18 @@ function formatToolDefinition(tool) {
   return formatted;
 }
 var init_formatting = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/formatting.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/formatting.js"() {
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkvalidationerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkvalidationerror.js
 import * as z from "zod/v4/core";
 function formatZodError(err) {
   return z.prettifyError(err);
 }
 var SDKValidationError;
 var init_sdkvalidationerror = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkvalidationerror.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkvalidationerror.js"() {
     SDKValidationError = class extends Error {
       /**
        * The raw value that failed validation.
@@ -200,7 +200,7 @@ ${formatZodError(this.cause)}`;
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/fp.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/fp.js
 function OK(value) {
   return { ok: true, value };
 }
@@ -215,11 +215,11 @@ async function unwrapAsync(pr) {
   return r.value;
 }
 var init_fp = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/fp.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/fp.js"() {
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/schemas.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/schemas.js
 import * as z2 from "zod/v4";
 function safeParse(rawValue, fn, errorMessage) {
   try {
@@ -229,13 +229,13 @@ function safeParse(rawValue, fn, errorMessage) {
   }
 }
 var init_schemas = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/schemas.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/schemas.js"() {
     init_sdkvalidationerror();
     init_fp();
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/primitives.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/primitives.js
 function remap(inp, mappings) {
   let out = {};
   if (!Object.keys(mappings).length) {
@@ -261,11 +261,11 @@ function compactMap(values) {
   return out;
 }
 var init_primitives = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/primitives.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/primitives.js"() {
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/unrecognized.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/unrecognized.js
 function unrecognized(value) {
   globalCount++;
   return value;
@@ -291,13 +291,13 @@ function startCountingUnrecognized() {
 }
 var globalCount, refCount;
 var init_unrecognized = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/unrecognized.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/unrecognized.js"() {
     globalCount = 0;
     refCount = 0;
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/enums.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/enums.js
 import * as z3 from "zod/v4";
 function inboundSchema(enumObj) {
   const options = Object.values(enumObj);
@@ -320,12 +320,12 @@ function outboundSchemaInt(_) {
   return z3.int();
 }
 var init_enums = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/enums.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/enums.js"() {
     init_unrecognized();
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/discriminatedUnion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/discriminatedUnion.js
 import * as z4 from "zod/v4";
 function isUnknown(value) {
   return typeof value === "object" && value !== null && UNKNOWN in value;
@@ -364,16 +364,16 @@ function discriminatedUnion(inputPropertyName, options, opts = {}) {
 }
 var UNKNOWN;
 var init_discriminatedUnion = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/discriminatedUnion.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/discriminatedUnion.js"() {
     init_unrecognized();
     UNKNOWN = /* @__PURE__ */ Symbol("UNKNOWN");
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/rfcdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/rfcdate.js
 var dateRE, RFCDate;
 var init_rfcdate = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/rfcdate.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/rfcdate.js"() {
     dateRE = /^\d{4}-\d{2}-\d{2}$/;
     RFCDate = class _RFCDate {
       serialized;
@@ -416,7 +416,7 @@ var init_rfcdate = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/smartUnion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/smartUnion.js
 import * as z5 from "zod/v4";
 function smartUnion(options) {
   return z5.unknown().transform((input, ctx) => {
@@ -494,18 +494,18 @@ function countFieldsRecursive(parsed) {
   return fieldCount;
 }
 var init_smartUnion = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/smartUnion.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/smartUnion.js"() {
     init_discriminatedUnion();
     init_rfcdate();
     init_unrecognized();
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiochunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiochunk.js
 import * as z6 from "zod/v4";
 var AudioChunk$inboundSchema, AudioChunk$outboundSchema;
 var init_audiochunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiochunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiochunk.js"() {
     init_primitives();
     AudioChunk$inboundSchema = z6.object({
       type: z6.literal("input_audio"),
@@ -526,11 +526,11 @@ var init_audiochunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenturlchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenturlchunk.js
 import * as z7 from "zod/v4";
 var DocumentURLChunk$inboundSchema, DocumentURLChunk$outboundSchema;
 var init_documenturlchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenturlchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenturlchunk.js"() {
     init_primitives();
     DocumentURLChunk$inboundSchema = z7.object({
       type: z7.literal("document_url").default("document_url"),
@@ -555,11 +555,11 @@ var init_documenturlchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filechunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filechunk.js
 import * as z8 from "zod/v4";
 var FileChunk$inboundSchema, FileChunk$outboundSchema;
 var init_filechunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filechunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filechunk.js"() {
     init_primitives();
     FileChunk$inboundSchema = z8.object({
       type: z8.literal("file").default("file"),
@@ -580,10 +580,10 @@ var init_filechunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagedetail.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagedetail.js
 var ImageDetail, ImageDetail$inboundSchema, ImageDetail$outboundSchema;
 var init_imagedetail = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagedetail.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagedetail.js"() {
     init_enums();
     ImageDetail = {
       Low: "low",
@@ -595,11 +595,11 @@ var init_imagedetail = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurl.js
 import * as z9 from "zod/v4";
 var ImageURL$inboundSchema, ImageURL$outboundSchema;
 var init_imageurl = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurl.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurl.js"() {
     init_imagedetail();
     ImageURL$inboundSchema = z9.object({
       url: z9.string(),
@@ -612,11 +612,11 @@ var init_imageurl = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurlchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurlchunk.js
 import * as z10 from "zod/v4";
 var ImageUrlUnion$inboundSchema, ImageUrlUnion$outboundSchema, ImageURLChunk$inboundSchema, ImageURLChunk$outboundSchema;
 var init_imageurlchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurlchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imageurlchunk.js"() {
     init_primitives();
     init_smartUnion();
     init_imageurl();
@@ -641,11 +641,11 @@ var init_imageurlchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/referencechunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/referencechunk.js
 import * as z11 from "zod/v4";
 var ReferenceId$inboundSchema, ReferenceId$outboundSchema, ReferenceChunk$inboundSchema, ReferenceChunk$outboundSchema;
 var init_referencechunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/referencechunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/referencechunk.js"() {
     init_primitives();
     init_smartUnion();
     ReferenceId$inboundSchema = smartUnion([z11.int(), z11.string()]);
@@ -669,11 +669,11 @@ var init_referencechunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textchunk.js
 import * as z12 from "zod/v4";
 var TextChunk$inboundSchema, TextChunk$outboundSchema;
 var init_textchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textchunk.js"() {
     TextChunk$inboundSchema = z12.object({
       type: z12.literal("text").default("text"),
       text: z12.string()
@@ -685,10 +685,10 @@ var init_textchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/builtinconnectors.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/builtinconnectors.js
 var BuiltInConnectors, BuiltInConnectors$inboundSchema, BuiltInConnectors$outboundSchema;
 var init_builtinconnectors = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/builtinconnectors.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/builtinconnectors.js"() {
     init_enums();
     BuiltInConnectors = {
       WebSearch: "web_search",
@@ -702,11 +702,11 @@ var init_builtinconnectors = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolreferencechunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolreferencechunk.js
 import * as z13 from "zod/v4";
 var ToolReferenceChunkTool$inboundSchema, ToolReferenceChunkTool$outboundSchema, ToolReferenceChunk$inboundSchema, ToolReferenceChunk$outboundSchema;
 var init_toolreferencechunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolreferencechunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolreferencechunk.js"() {
     init_smartUnion();
     init_builtinconnectors();
     ToolReferenceChunkTool$inboundSchema = smartUnion([BuiltInConnectors$inboundSchema, z13.string()]);
@@ -730,11 +730,11 @@ var init_toolreferencechunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/thinkchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/thinkchunk.js
 import * as z14 from "zod/v4";
 var Thinking$inboundSchema, Thinking$outboundSchema, ThinkChunk$inboundSchema, ThinkChunk$outboundSchema;
 var init_thinkchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/thinkchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/thinkchunk.js"() {
     init_smartUnion();
     init_referencechunk();
     init_textchunk();
@@ -772,11 +772,11 @@ var init_thinkchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/contentchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/contentchunk.js
 import * as z15 from "zod/v4";
 var ContentChunk$inboundSchema, ContentChunk$outboundSchema;
 var init_contentchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/contentchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/contentchunk.js"() {
     init_discriminatedUnion();
     init_audiochunk();
     init_documenturlchunk();
@@ -806,11 +806,11 @@ var init_contentchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncall.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncall.js
 import * as z16 from "zod/v4";
 var Arguments$inboundSchema, Arguments$outboundSchema, FunctionCall$inboundSchema, FunctionCall$outboundSchema;
 var init_functioncall = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncall.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncall.js"() {
     init_smartUnion();
     Arguments$inboundSchema = smartUnion([z16.record(z16.string(), z16.any()), z16.string()]);
     Arguments$outboundSchema = smartUnion([z16.record(z16.string(), z16.any()), z16.string()]);
@@ -825,11 +825,11 @@ var init_functioncall = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcall.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcall.js
 import * as z17 from "zod/v4";
 var ToolCall$inboundSchema, ToolCall$outboundSchema;
 var init_toolcall = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcall.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcall.js"() {
     init_functioncall();
     ToolCall$inboundSchema = z17.object({
       id: z17.string().default("null"),
@@ -846,11 +846,11 @@ var init_toolcall = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deltamessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deltamessage.js
 import * as z18 from "zod/v4";
 var DeltaMessageContent$inboundSchema, DeltaMessage$inboundSchema;
 var init_deltamessage = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deltamessage.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deltamessage.js"() {
     init_primitives();
     init_smartUnion();
     init_contentchunk();
@@ -872,11 +872,11 @@ var init_deltamessage = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionresponsestreamchoice.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionresponsestreamchoice.js
 import * as z19 from "zod/v4";
 var CompletionResponseStreamChoiceFinishReason, CompletionResponseStreamChoiceFinishReason$inboundSchema, CompletionResponseStreamChoice$inboundSchema;
 var init_completionresponsestreamchoice = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionresponsestreamchoice.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionresponsestreamchoice.js"() {
     init_primitives();
     init_enums();
     init_deltamessage();
@@ -899,11 +899,11 @@ var init_completionresponsestreamchoice = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfo.js
 import * as z20 from "zod/v4";
 var UsageInfo$inboundSchema, UsageInfo$outboundSchema;
 var init_usageinfo = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfo.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfo.js"() {
     init_primitives();
     UsageInfo$inboundSchema = z20.object({
       prompt_tokens: z20.int().default(0),
@@ -936,14 +936,14 @@ var init_usageinfo = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionchunk.js
 import * as z21 from "zod/v4";
 function completionChunkFromJSON(jsonString) {
   return safeParse(jsonString, (x) => CompletionChunk$inboundSchema.parse(JSON.parse(x)), `Failed to parse 'CompletionChunk' from JSON`);
 }
 var CompletionChunk$inboundSchema;
 var init_completionchunk = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionchunk.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionchunk.js"() {
     init_schemas();
     init_completionresponsestreamchoice();
     init_usageinfo();
@@ -958,7 +958,7 @@ var init_completionchunk = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/streaming.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/streaming.js
 function normalizeCompletionChunkPayload(payload) {
   const parsed = JSON.parse(payload);
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
@@ -1074,13 +1074,13 @@ function accumulateChunksToResponseDict(chunks) {
   return result;
 }
 var init_streaming = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/streaming.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/streaming.js"() {
     init_completionchunk();
     init_usageinfo();
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/otel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/otel.js
 var otel_exports = {};
 __export(otel_exports, {
   MISTRAL_SDK_OTEL_TRACER_NAME: () => MISTRAL_SDK_OTEL_TRACER_NAME,
@@ -1577,7 +1577,7 @@ async function traceAsync(name, fn) {
 }
 var OTEL_SERVICE_NAME, MISTRAL_SDK_OTEL_TRACER_NAME, MISTRAL_AGENT_TRACE_PUBLIC_ATTRIBUTE, registeredTracerProvider, getDebugTracing, MISTRAL_SDK_DEBUG_TRACING, DEBUG_HINT, MistralAIAttributes, TracingErrors;
 var init_otel = __esm({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/otel.js"() {
+  ".harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/observability/otel.js"() {
     init_formatting();
     init_streaming();
     OTEL_SERVICE_NAME = "mistralai_sdk";
@@ -1609,7 +1609,7 @@ var init_otel = __esm({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/url.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/url.js
 var hasOwn = Object.prototype.hasOwnProperty;
 function pathToFunc(pathPattern, options) {
   const paramRE = /\{([a-zA-Z0-9_][a-zA-Z0-9_-]*?)\}/g;
@@ -1627,7 +1627,7 @@ function pathToFunc(pathPattern, options) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/config.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/config.js
 var ServerEu = "eu";
 var ServerList = {
   [ServerEu]: "https://api.mistral.ai"
@@ -1650,7 +1650,7 @@ var SDK_METADATA = {
   userAgent: "speakeasy-sdk/typescript 2.2.6 2.884.13 1.0.0 @mistralai/mistralai"
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/files.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/files.js
 var files_exports = {};
 __export(files_exports, {
   bytesToBlob: () => bytesToBlob,
@@ -1722,7 +1722,7 @@ function bytesToBlob(content, contentType) {
   return new Blob([content], { type: contentType });
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/http.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/http.js
 var DEFAULT_FETCHER = (input, init) => {
   if (init == null) {
     return fetch(input);
@@ -1888,7 +1888,7 @@ function isAbortError(err) {
   return isNative || isLegacyNative || isGenericErr;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/custom_user_agent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/custom_user_agent.js
 var CustomUserAgentHook = class {
   beforeRequest(_, request) {
     const version = SDK_METADATA.sdkVersion;
@@ -1901,7 +1901,7 @@ var CustomUserAgentHook = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/deprecation_warning.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/deprecation_warning.js
 var HEADER_MODEL_DEPRECATION_TIMESTAMP = "x-model-deprecation-timestamp";
 var DeprecationWarningHook = class {
   afterSuccess(_, response) {
@@ -1916,7 +1916,7 @@ var DeprecationWarningHook = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/tracing.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/tracing.js
 var observabilityModule;
 async function getObservabilityModule() {
   if (observabilityModule !== void 0) {
@@ -2014,7 +2014,7 @@ var TracingHook = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/registration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/registration.js
 function initHooks(hooks) {
   const customUserAgentHook = new CustomUserAgentHook();
   hooks.registerBeforeRequestHook(customUserAgentHook);
@@ -2027,7 +2027,7 @@ function initHooks(hooks) {
   hooks.registerSDKInitHook(tracingHook);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/hooks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/hooks/hooks.js
 var SDKHooks = class {
   sdkInitHooks = [];
   beforeCreateRequestHooks = [];
@@ -2106,7 +2106,7 @@ var SDKHooks = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/httpclienterrors.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/httpclienterrors.js
 var HTTPClientError = class extends Error {
   /** The underlying cause of the error. */
   cause;
@@ -2138,10 +2138,10 @@ var ConnectionError = class extends HTTPClientError {
   name = "ConnectionError";
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/sdks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/sdks.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/base64.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/base64.js
 import * as z22 from "zod/v4";
 function bytesToBase64(u8arr) {
   return btoa(String.fromCodePoint(...u8arr));
@@ -2158,7 +2158,7 @@ function stringToBase64(str) {
 var zodOutbound = z22.custom((x) => x instanceof Uint8Array).or(z22.string().transform(stringToBytes));
 var zodInbound = z22.custom((x) => x instanceof Uint8Array).or(z22.string().transform(bytesFromBase64));
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/is-plain-object.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/is-plain-object.js
 function isPlainObject(value) {
   if (typeof value !== "object" || value === null) {
     return false;
@@ -2167,7 +2167,7 @@ function isPlainObject(value) {
   return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in value) && !(Symbol.iterator in value);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/encodings.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/encodings.js
 var EncodingError = class extends Error {
   constructor(message) {
     super(message);
@@ -2414,10 +2414,10 @@ async function normalizeBlob(value) {
   return new Blob([await value.arrayBuffer()], { type: value.type });
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/env.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/env.js
 import * as z23 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/dlv.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/dlv.js
 function dlv(obj, key, def, p, undef) {
   key = Array.isArray(key) ? key : key.split(".");
   for (p = 0; p < key.length; p++) {
@@ -2427,7 +2427,7 @@ function dlv(obj, key, def, p, undef) {
   return obj === undef ? def : obj;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/env.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/env.js
 var envSchema = z23.object({
   MISTRAL_API_KEY: z23.string().optional(),
   MISTRAL_DEBUG: z23.coerce.boolean().optional()
@@ -2453,7 +2453,7 @@ function env() {
   return envMemo;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/retries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/retries.js
 var defaultBackoff = {
   initialInterval: 500,
   maxInterval: 6e4,
@@ -2585,7 +2585,7 @@ async function delay(delay2) {
   return new Promise((resolve) => setTimeout(resolve, delay2));
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/sdks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/sdks.js
 var gt = typeof globalThis === "undefined" ? null : globalThis;
 var webWorkerLike = typeof gt === "object" && gt != null && "importScripts" in gt && typeof gt["importScripts"] === "function";
 var isBrowserLike = webWorkerLike || typeof navigator !== "undefined" && "serviceWorker" in navigator || typeof window === "object" && typeof window.document !== "undefined";
@@ -2817,10 +2817,10 @@ async function logResponse(logger, res, req) {
   logger.groupEnd();
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/responsevalidationerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/responsevalidationerror.js
 import * as z24 from "zod/v4/core";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/mistralerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/mistralerror.js
 var MistralError = class extends Error {
   /** HTTP status code */
   statusCode;
@@ -2843,7 +2843,7 @@ var MistralError = class extends Error {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/responsevalidationerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/responsevalidationerror.js
 init_sdkvalidationerror();
 var ResponseValidationError = class extends MistralError {
   /**
@@ -2876,7 +2876,7 @@ ${formatZodError(this.cause)}`;
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/sdkerror.js
 var SDKError = class extends MistralError {
   constructor(message, httpMeta) {
     if (message) {
@@ -2902,7 +2902,7 @@ var SDKError = class extends MistralError {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/matchers.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/matchers.js
 init_fp();
 var DEFAULT_CONTENT_TYPES = {
   jsonl: "application/jsonl",
@@ -3055,11 +3055,11 @@ function safeParseResponse(rawValue, fn, errorMessage, httpMeta) {
   }
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsComplete.js
 init_primitives();
 init_schemas();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/security.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/security.js
 var SecurityErrorCode;
 (function(SecurityErrorCode2) {
   SecurityErrorCode2["Incomplete"] = "incomplete";
@@ -3197,15 +3197,15 @@ async function extractSecurity(sec) {
   return typeof sec === "function" ? sec() : sec;
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedattributesresponse.js
 init_primitives();
 import * as z26 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpayloadresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpayloadresponse.js
 init_primitives();
 import * as z25 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encodedpayloadoptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encodedpayloadoptions.js
 init_enums();
 var EncodedPayloadOptions = {
   Offloaded: "offloaded",
@@ -3216,7 +3216,7 @@ var EncodedPayloadOptions = {
 var EncodedPayloadOptions$inboundSchema = inboundSchema(EncodedPayloadOptions);
 var EncodedPayloadOptions$outboundSchema = outboundSchema(EncodedPayloadOptions);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpayloadresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpayloadresponse.js
 var JSONPayloadResponse$inboundSchema = z25.object({
   type: z25.literal("json").default("json"),
   value: z25.any(),
@@ -3227,7 +3227,7 @@ var JSONPayloadResponse$inboundSchema = z25.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedattributesresponse.js
 var ActivityTaskCompletedAttributesResponse$inboundSchema = z26.object({
   task_id: z26.string(),
   activity_name: z26.string(),
@@ -3239,7 +3239,7 @@ var ActivityTaskCompletedAttributesResponse$inboundSchema = z26.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskcompletedresponse.js
 init_primitives();
 import * as z27 from "zod/v4";
 var ActivityTaskCompletedResponse$inboundSchema = z27.object({
@@ -3265,17 +3265,17 @@ var ActivityTaskCompletedResponse$inboundSchema = z27.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedattributes.js
 init_primitives();
 import * as z29 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/failure.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/failure.js
 import * as z28 from "zod/v4";
 var Failure$inboundSchema = z28.object({
   message: z28.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedattributes.js
 var ActivityTaskFailedAttributes$inboundSchema = z29.object({
   task_id: z29.string(),
   activity_name: z29.string(),
@@ -3288,7 +3288,7 @@ var ActivityTaskFailedAttributes$inboundSchema = z29.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskfailedresponse.js
 init_primitives();
 import * as z30 from "zod/v4";
 var ActivityTaskFailedResponse$inboundSchema = z30.object({
@@ -3314,7 +3314,7 @@ var ActivityTaskFailedResponse$inboundSchema = z30.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskretryingattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskretryingattributes.js
 init_primitives();
 import * as z31 from "zod/v4";
 var ActivityTaskRetryingAttributes$inboundSchema = z31.object({
@@ -3329,7 +3329,7 @@ var ActivityTaskRetryingAttributes$inboundSchema = z31.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskretryingresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskretryingresponse.js
 init_primitives();
 import * as z32 from "zod/v4";
 var ActivityTaskRetryingResponse$inboundSchema = z32.object({
@@ -3355,7 +3355,7 @@ var ActivityTaskRetryingResponse$inboundSchema = z32.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskstartedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskstartedattributesresponse.js
 init_primitives();
 import * as z33 from "zod/v4";
 var ActivityTaskStartedAttributesResponse$inboundSchema = z33.object({
@@ -3369,7 +3369,7 @@ var ActivityTaskStartedAttributesResponse$inboundSchema = z33.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskstartedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/activitytaskstartedresponse.js
 init_primitives();
 import * as z34 from "zod/v4";
 var ActivityTaskStartedResponse$inboundSchema = z34.object({
@@ -3395,16 +3395,16 @@ var ActivityTaskStartedResponse$inboundSchema = z34.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agent.js
 init_primitives();
 import * as z56 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/codeinterpretertool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/codeinterpretertool.js
 init_primitives();
 import * as z36 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolconfiguration.js
 init_primitives();
 import * as z35 from "zod/v4";
 var ToolConfiguration$inboundSchema = z35.object({
@@ -3426,7 +3426,7 @@ var ToolConfiguration$outboundSchema = z35.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/codeinterpretertool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/codeinterpretertool.js
 var CodeInterpreterTool$inboundSchema = z36.object({
   tool_configuration: z36.nullable(ToolConfiguration$inboundSchema).optional(),
   type: z36.literal("code_interpreter")
@@ -3444,17 +3444,17 @@ var CodeInterpreterTool$outboundSchema = z36.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargs.js
 init_primitives();
 import * as z41 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargsstop.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargsstop.js
 import * as z37 from "zod/v4";
 init_smartUnion();
 var CompletionArgsStop$inboundSchema = smartUnion([z37.string(), z37.array(z37.string())]);
 var CompletionArgsStop$outboundSchema = smartUnion([z37.string(), z37.array(z37.string())]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/prediction.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/prediction.js
 import * as z38 from "zod/v4";
 var Prediction$inboundSchema = z38.object({
   type: z38.literal("content").default("content"),
@@ -3465,7 +3465,7 @@ var Prediction$outboundSchema = z38.object({
   content: z38.string().default("")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/reasoningeffort.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/reasoningeffort.js
 init_enums();
 var ReasoningEffort = {
   None: "none",
@@ -3478,11 +3478,11 @@ var ReasoningEffort = {
 var ReasoningEffort$inboundSchema = inboundSchema(ReasoningEffort);
 var ReasoningEffort$outboundSchema = outboundSchema(ReasoningEffort);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformat.js
 init_primitives();
 import * as z40 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonschema.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonschema.js
 init_primitives();
 import * as z39 from "zod/v4";
 var JsonSchema$inboundSchema = z39.object({
@@ -3506,7 +3506,7 @@ var JsonSchema$outboundSchema = z39.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformats.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformats.js
 init_enums();
 var ResponseFormats = {
   Text: "text",
@@ -3516,7 +3516,7 @@ var ResponseFormats = {
 var ResponseFormats$inboundSchema = inboundSchema(ResponseFormats);
 var ResponseFormats$outboundSchema = outboundSchema(ResponseFormats);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseformat.js
 var ResponseFormat$inboundSchema = z40.object({
   type: ResponseFormats$inboundSchema.optional(),
   json_schema: z40.nullable(JsonSchema$inboundSchema).optional()
@@ -3534,7 +3534,7 @@ var ResponseFormat$outboundSchema = z40.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoiceenum.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoiceenum.js
 init_enums();
 var ToolChoiceEnum = {
   Auto: "auto",
@@ -3545,7 +3545,7 @@ var ToolChoiceEnum = {
 var ToolChoiceEnum$inboundSchema = inboundSchema(ToolChoiceEnum);
 var ToolChoiceEnum$outboundSchema = outboundSchema(ToolChoiceEnum);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionargs.js
 var CompletionArgs$inboundSchema = z41.object({
   stop: z41.nullable(CompletionArgsStop$inboundSchema).optional(),
   presence_penalty: z41.nullable(z41.number()).optional(),
@@ -3595,12 +3595,12 @@ var CompletionArgs$outboundSchema = z41.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customconnector.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customconnector.js
 init_primitives();
 import * as z44 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/apikeyauth.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/apikeyauth.js
 import * as z42 from "zod/v4";
 var APIKeyAuth$inboundSchema = z42.object({
   type: z42.literal("api-key"),
@@ -3611,7 +3611,7 @@ var APIKeyAuth$outboundSchema = z42.object({
   value: z42.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/oauth2tokenauth.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/oauth2tokenauth.js
 import * as z43 from "zod/v4";
 var OAuth2TokenAuth$inboundSchema = z43.object({
   type: z43.literal("oauth2-token"),
@@ -3622,7 +3622,7 @@ var OAuth2TokenAuth$outboundSchema = z43.object({
   value: z43.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customconnector.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customconnector.js
 var Authorization$inboundSchema = discriminatedUnion("type", {
   ["api-key"]: APIKeyAuth$inboundSchema,
   ["oauth2-token"]: OAuth2TokenAuth$inboundSchema
@@ -3654,7 +3654,7 @@ var CustomConnector$outboundSchema = z44.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documentlibrarytool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documentlibrarytool.js
 init_primitives();
 import * as z45 from "zod/v4";
 var DocumentLibraryTool$inboundSchema = z45.object({
@@ -3678,10 +3678,10 @@ var DocumentLibraryTool$outboundSchema = z45.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functiontool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functiontool.js
 import * as z47 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/function.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/function.js
 import * as z46 from "zod/v4";
 var FunctionT$inboundSchema = z46.object({
   name: z46.string(),
@@ -3696,7 +3696,7 @@ var FunctionT$outboundSchema = z46.object({
   parameters: z46.record(z46.string(), z46.any())
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functiontool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functiontool.js
 var FunctionTool$inboundSchema = z47.object({
   type: z47.literal("function"),
   function: FunctionT$inboundSchema
@@ -3706,15 +3706,15 @@ var FunctionTool$outboundSchema = z47.object({
   function: FunctionT$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/guardrailconfig.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/guardrailconfig.js
 init_primitives();
 import * as z52 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1config.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1config.js
 init_primitives();
 import * as z49 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmaction.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmaction.js
 init_enums();
 var ModerationLLMAction = {
   None: "none",
@@ -3723,7 +3723,7 @@ var ModerationLLMAction = {
 var ModerationLLMAction$inboundSchema = inboundSchema(ModerationLLMAction);
 var ModerationLLMAction$outboundSchema = outboundSchema(ModerationLLMAction);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1categorythresholds.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1categorythresholds.js
 init_primitives();
 import * as z48 from "zod/v4";
 var ModerationLlmv1CategoryThresholds$inboundSchema = z48.object({
@@ -3761,7 +3761,7 @@ var ModerationLlmv1CategoryThresholds$outboundSchema = z48.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1config.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv1config.js
 var ModerationLlmv1Config$inboundSchema = z49.object({
   model_name: z49.string().default("mistral-moderation-2411"),
   custom_category_thresholds: z49.nullable(ModerationLlmv1CategoryThresholds$inboundSchema).optional(),
@@ -3787,11 +3787,11 @@ var ModerationLlmv1Config$outboundSchema = z49.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2config.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2config.js
 init_primitives();
 import * as z51 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2categorythresholds.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2categorythresholds.js
 init_primitives();
 import * as z50 from "zod/v4";
 var ModerationLlmv2CategoryThresholds$inboundSchema = z50.object({
@@ -3831,7 +3831,7 @@ var ModerationLlmv2CategoryThresholds$outboundSchema = z50.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2config.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationllmv2config.js
 var ModerationLlmv2Config$inboundSchema = z51.object({
   model_name: z51.string().default("mistral-moderation-2603"),
   custom_category_thresholds: z51.nullable(ModerationLlmv2CategoryThresholds$inboundSchema).optional(),
@@ -3857,7 +3857,7 @@ var ModerationLlmv2Config$outboundSchema = z51.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/guardrailconfig.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/guardrailconfig.js
 var GuardrailConfig$inboundSchema = z52.object({
   block_on_error: z52.boolean().default(false),
   moderation_llm_v1: z52.nullable(ModerationLlmv1Config$inboundSchema).optional(),
@@ -3881,7 +3881,7 @@ var GuardrailConfig$outboundSchema = z52.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagegenerationtool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagegenerationtool.js
 init_primitives();
 import * as z53 from "zod/v4";
 var ImageGenerationTool$inboundSchema = z53.object({
@@ -3901,7 +3901,7 @@ var ImageGenerationTool$outboundSchema = z53.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/websearchpremiumtool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/websearchpremiumtool.js
 init_primitives();
 import * as z54 from "zod/v4";
 var WebSearchPremiumTool$inboundSchema = z54.object({
@@ -3921,7 +3921,7 @@ var WebSearchPremiumTool$outboundSchema = z54.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/websearchtool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/websearchtool.js
 init_primitives();
 import * as z55 from "zod/v4";
 var WebSearchTool$inboundSchema = z55.object({
@@ -3941,7 +3941,7 @@ var WebSearchTool$outboundSchema = z55.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agent.js
 var AgentTool$inboundSchema = discriminatedUnion("type", {
   code_interpreter: CodeInterpreterTool$inboundSchema,
   connector: CustomConnector$inboundSchema,
@@ -3988,7 +3988,7 @@ var Agent$inboundSchema = z56.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentaliasresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentaliasresponse.js
 init_primitives();
 import * as z57 from "zod/v4";
 var AgentAliasResponse$inboundSchema = z57.object({
@@ -4003,7 +4003,7 @@ var AgentAliasResponse$inboundSchema = z57.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentconversation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentconversation.js
 init_primitives();
 import * as z58 from "zod/v4";
 init_smartUnion();
@@ -4027,7 +4027,7 @@ var AgentConversation$inboundSchema = z58.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffdoneevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffdoneevent.js
 init_primitives();
 import * as z59 from "zod/v4";
 var AgentHandoffDoneEvent$inboundSchema = z59.object({
@@ -4046,7 +4046,7 @@ var AgentHandoffDoneEvent$inboundSchema = z59.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffentry.js
 init_primitives();
 import * as z60 from "zod/v4";
 var AgentHandoffEntry$inboundSchema = z60.object({
@@ -4090,7 +4090,7 @@ var AgentHandoffEntry$outboundSchema = z60.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffstartedevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agenthandoffstartedevent.js
 init_primitives();
 import * as z61 from "zod/v4";
 var AgentHandoffStartedEvent$inboundSchema = z61.object({
@@ -4109,12 +4109,12 @@ var AgentHandoffStartedEvent$inboundSchema = z61.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionrequest.js
 init_primitives();
 init_smartUnion();
 import * as z70 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/assistantmessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/assistantmessage.js
 init_primitives();
 import * as z62 from "zod/v4";
 init_smartUnion();
@@ -4143,18 +4143,18 @@ var AssistantMessage$outboundSchema = z62.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mistralpromptmode.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mistralpromptmode.js
 init_enums();
 var MistralPromptMode = {
   Reasoning: "reasoning"
 };
 var MistralPromptMode$outboundSchema = outboundSchema(MistralPromptMode);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessage.js
 init_smartUnion();
 import * as z64 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessagecontentchunks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessagecontentchunks.js
 init_textchunk();
 init_thinkchunk();
 import * as z63 from "zod/v4";
@@ -4163,7 +4163,7 @@ var SystemMessageContentChunks$outboundSchema = z63.union([
   ThinkChunk$outboundSchema.and(z63.object({ type: z63.literal("thinking") }))
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/systemmessage.js
 var SystemMessageContent$outboundSchema = smartUnion([
   z64.string(),
   z64.array(SystemMessageContentChunks$outboundSchema)
@@ -4176,29 +4176,29 @@ var SystemMessage$outboundSchema = z64.object({
   ])
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tool.js
 import * as z65 from "zod/v4";
 var Tool$outboundSchema = z65.object({
   type: z65.literal("function"),
   function: FunctionT$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoice.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoice.js
 import * as z67 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functionname.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functionname.js
 import * as z66 from "zod/v4";
 var FunctionName$outboundSchema = z66.object({
   name: z66.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoice.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolchoice.js
 var ToolChoice$outboundSchema = z67.object({
   type: z67.string().optional(),
   function: FunctionName$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolmessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolmessage.js
 init_primitives();
 init_smartUnion();
 init_contentchunk();
@@ -4215,7 +4215,7 @@ var ToolMessage$outboundSchema = z68.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usermessage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usermessage.js
 init_smartUnion();
 init_contentchunk();
 import * as z69 from "zod/v4";
@@ -4225,7 +4225,7 @@ var UserMessage$outboundSchema = z69.object({
   content: z69.nullable(smartUnion([z69.string(), z69.array(ContentChunk$outboundSchema)]))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionrequest.js
 var AgentsCompletionRequestStop$outboundSchema = smartUnion([z70.string(), z70.array(z70.string())]);
 var AgentsCompletionRequestMessage$outboundSchema = z70.union([
   AssistantMessage$outboundSchema.and(z70.object({ role: z70.literal("assistant") })),
@@ -4295,7 +4295,7 @@ var AgentsCompletionRequest$outboundSchema = z70.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/agentscompletionstreamrequest.js
 init_primitives();
 init_smartUnion();
 import * as z71 from "zod/v4";
@@ -4368,7 +4368,7 @@ var AgentsCompletionStreamRequest$outboundSchema = z71.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/annotations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/annotations.js
 import * as z72 from "zod/v4";
 init_enums();
 var Audience = {
@@ -4381,7 +4381,7 @@ var Annotations$inboundSchema = z72.object({
   priority: z72.nullable(z72.number()).optional()
 }).catchall(z72.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/apiendpoint.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/apiendpoint.js
 init_enums();
 var ApiEndpoint = {
   RootV1ChatCompletions: "/v1/chat/completions",
@@ -4397,7 +4397,7 @@ var ApiEndpoint = {
 };
 var ApiEndpoint$outboundSchema = outboundSchema(ApiEndpoint);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/archivemodelresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/archivemodelresponse.js
 import * as z73 from "zod/v4";
 var ArchiveModelResponse$inboundSchema = z73.object({
   id: z73.string(),
@@ -4405,7 +4405,7 @@ var ArchiveModelResponse$inboundSchema = z73.object({
   archived: z73.boolean().default(true)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiocontent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiocontent.js
 init_primitives();
 import * as z74 from "zod/v4";
 var AudioContent$inboundSchema = z74.object({
@@ -4420,11 +4420,11 @@ var AudioContent$inboundSchema = z74.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequest.js
 init_primitives();
 import * as z78 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/blobs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/blobs.js
 import * as z75 from "zod/v4";
 var blobLikeSchema = z75.custom(isBlobLike2, {
   message: "expected a Blob, File or Blob-like object",
@@ -4447,7 +4447,7 @@ function isBlobLike2(val) {
   return "stream" in val && typeof val.stream === "function";
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/file.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/file.js
 import * as z76 from "zod/v4";
 var FileT$outboundSchema = z76.object({
   fileName: z76.string(),
@@ -4459,7 +4459,7 @@ var FileT$outboundSchema = z76.object({
   ])
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/timestampgranularity.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/timestampgranularity.js
 import * as z77 from "zod/v4";
 var TimestampGranularity = {
   Segment: "segment",
@@ -4467,7 +4467,7 @@ var TimestampGranularity = {
 };
 var TimestampGranularity$outboundSchema = z77.enum(TimestampGranularity);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequest.js
 var AudioTranscriptionRequest$outboundSchema = z78.object({
   model: z78.string(),
   file: FileT$outboundSchema.or(blobLikeSchema).optional(),
@@ -4488,7 +4488,7 @@ var AudioTranscriptionRequest$outboundSchema = z78.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequeststream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/audiotranscriptionrequeststream.js
 init_primitives();
 import * as z79 from "zod/v4";
 var AudioTranscriptionRequestStream$outboundSchema = z79.object({
@@ -4511,7 +4511,7 @@ var AudioTranscriptionRequestStream$outboundSchema = z79.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authdata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authdata.js
 init_primitives();
 import * as z80 from "zod/v4";
 var AuthData$outboundSchema = z80.object({
@@ -4524,11 +4524,11 @@ var AuthData$outboundSchema = z80.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authenticationconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authenticationconfiguration.js
 init_primitives();
 import * as z82 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/consumertype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/consumertype.js
 init_enums();
 var ConsumerType = {
   User: "user",
@@ -4538,11 +4538,11 @@ var ConsumerType = {
 };
 var ConsumerType$inboundSchema = inboundSchema(ConsumerType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsstatus.js
 init_primitives();
 import * as z81 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authstatus.js
 init_enums();
 var AuthStatus = {
   Valid: "valid",
@@ -4551,7 +4551,7 @@ var AuthStatus = {
 };
 var AuthStatus$inboundSchema = inboundSchema(AuthStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/httpstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/httpstatus.js
 init_enums();
 var HTTPStatus = {
   OneHundred: 100,
@@ -4619,7 +4619,7 @@ var HTTPStatus = {
 };
 var HTTPStatus$inboundSchema = inboundSchemaInt(HTTPStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsstatus.js
 var CredentialsStatus$inboundSchema = z81.object({
   status_type: AuthStatus$inboundSchema,
   last_checked_at: z81.nullable(z81.iso.datetime({ offset: true }).transform((v) => new Date(v))).optional(),
@@ -4634,7 +4634,7 @@ var CredentialsStatus$inboundSchema = z81.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/outboundauthenticationtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/outboundauthenticationtype.js
 init_enums();
 var OutboundAuthenticationType = {
   Oauth2: "oauth2",
@@ -4646,7 +4646,7 @@ var OutboundAuthenticationType = {
 var OutboundAuthenticationType$inboundSchema = inboundSchema(OutboundAuthenticationType);
 var OutboundAuthenticationType$outboundSchema = outboundSchema(OutboundAuthenticationType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authenticationconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authenticationconfiguration.js
 var AuthenticationConfiguration$inboundSchema = z82.object({
   name: z82.string(),
   authentication_type: OutboundAuthenticationType$inboundSchema,
@@ -4660,7 +4660,7 @@ var AuthenticationConfiguration$inboundSchema = z82.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authurlresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/authurlresponse.js
 init_primitives();
 import * as z83 from "zod/v4";
 var AuthUrlResponse$inboundSchema = z83.object({
@@ -4672,7 +4672,7 @@ var AuthUrlResponse$inboundSchema = z83.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basefielddefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basefielddefinition.js
 init_primitives();
 import * as z84 from "zod/v4";
 init_enums();
@@ -4721,11 +4721,11 @@ var BaseFieldDefinition$inboundSchema = z84.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basemodelcard.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basemodelcard.js
 init_primitives();
 import * as z86 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modelcapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modelcapabilities.js
 init_primitives();
 import * as z85 from "zod/v4";
 var ModelCapabilities$inboundSchema = z85.object({
@@ -4754,7 +4754,7 @@ var ModelCapabilities$inboundSchema = z85.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basemodelcard.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basemodelcard.js
 var BaseModelCard$inboundSchema = z86.object({
   id: z86.string(),
   object: z86.string().default("model"),
@@ -4778,7 +4778,7 @@ var BaseModelCard$inboundSchema = z86.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basetaskstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/basetaskstatus.js
 init_enums();
 var BaseTaskStatus = {
   Running: "RUNNING",
@@ -4792,14 +4792,14 @@ var BaseTaskStatus = {
 };
 var BaseTaskStatus$inboundSchema = inboundSchema(BaseTaskStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batcherror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batcherror.js
 import * as z87 from "zod/v4";
 var BatchError$inboundSchema = z87.object({
   message: z87.string(),
   count: z87.int().default(1)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionbody.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionbody.js
 init_primitives();
 import * as z88 from "zod/v4";
 var BatchExecutionBody$outboundSchema = z88.object({
@@ -4810,26 +4810,26 @@ var BatchExecutionBody$outboundSchema = z88.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresponse.js
 import * as z90 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresult.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresult.js
 import * as z89 from "zod/v4";
 var BatchExecutionResult$inboundSchema = z89.object({
   status: z89.string(),
   error: z89.nullable(z89.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchexecutionresponse.js
 var BatchExecutionResponse$inboundSchema = z90.object({
   results: z90.record(z90.string(), BatchExecutionResult$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjob.js
 init_primitives();
 import * as z91 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjobstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjobstatus.js
 init_enums();
 var BatchJobStatus = {
   Queued: "QUEUED",
@@ -4843,7 +4843,7 @@ var BatchJobStatus = {
 var BatchJobStatus$inboundSchema = inboundSchema(BatchJobStatus);
 var BatchJobStatus$outboundSchema = outboundSchema(BatchJobStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchjob.js
 var BatchJob$inboundSchema = z91.object({
   id: z91.string(),
   object: z91.literal("batch").default("batch"),
@@ -4880,7 +4880,7 @@ var BatchJob$inboundSchema = z91.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/batchrequest.js
 init_primitives();
 import * as z92 from "zod/v4";
 var BatchRequest$outboundSchema = z92.object({
@@ -4892,7 +4892,7 @@ var BatchRequest$outboundSchema = z92.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/blobresourcecontents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/blobresourcecontents.js
 init_primitives();
 import * as z93 from "zod/v4";
 var BlobResourceContents$inboundSchema = z93.object({
@@ -4906,15 +4906,15 @@ var BlobResourceContents$inboundSchema = z93.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/campaign.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/campaign.js
 init_primitives();
 import * as z101 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filterpayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filterpayload.js
 import * as z96 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filtercondition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filtercondition.js
 import * as z94 from "zod/v4";
 init_enums();
 var Op = {
@@ -4951,7 +4951,7 @@ var FilterCondition$outboundSchema = z94.object({
   value: z94.any()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filtergroup.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filtergroup.js
 init_primitives();
 import * as z95 from "zod/v4";
 init_smartUnion();
@@ -5002,7 +5002,7 @@ var And$outboundSchema = smartUnion([
   z95.lazy(() => FilterGroup$outboundSchema)
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filterpayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filterpayload.js
 var Filters$inboundSchema = smartUnion([
   FilterCondition$inboundSchema,
   FilterGroup$inboundSchema
@@ -5015,15 +5015,15 @@ var FilterPayload$outboundSchema = z96.object({
   filters: z96.nullable(smartUnion([FilterCondition$outboundSchema, FilterGroup$outboundSchema]))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judge.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judge.js
 init_primitives();
 import * as z100 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutput.js
 import * as z98 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutputoption.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutputoption.js
 import * as z97 from "zod/v4";
 var JudgeClassificationOutputOption$inboundSchema = z97.object({
   value: z97.string(),
@@ -5034,7 +5034,7 @@ var JudgeClassificationOutputOption$outboundSchema = z97.object({
   description: z97.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeclassificationoutput.js
 var JudgeClassificationOutput$inboundSchema = z98.object({
   type: z98.literal("CLASSIFICATION"),
   options: z98.array(JudgeClassificationOutputOption$inboundSchema)
@@ -5044,7 +5044,7 @@ var JudgeClassificationOutput$outboundSchema = z98.object({
   options: z98.array(JudgeClassificationOutputOption$outboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeregressionoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeregressionoutput.js
 init_primitives();
 import * as z99 from "zod/v4";
 var JudgeRegressionOutput$inboundSchema = z99.object({
@@ -5072,7 +5072,7 @@ var JudgeRegressionOutput$outboundSchema = z99.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judge.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judge.js
 var JudgeOutputUnion$inboundSchema = discriminatedUnion("type", {
   CLASSIFICATION: JudgeClassificationOutput$inboundSchema,
   REGRESSION: JudgeRegressionOutput$inboundSchema
@@ -5110,7 +5110,7 @@ var Judge$inboundSchema = z100.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/campaign.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/campaign.js
 var Campaign$inboundSchema = z101.object({
   id: z101.string(),
   created_at: z101.iso.datetime({ offset: true }).transform((v) => new Date(v)),
@@ -5135,14 +5135,14 @@ var Campaign$inboundSchema = z101.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatclassificationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatclassificationrequest.js
 import * as z104 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputs.js
 init_smartUnion();
 import * as z103 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/instructrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/instructrequest.js
 import * as z102 from "zod/v4";
 var InstructRequestMessage$outboundSchema = z102.union([
   AssistantMessage$outboundSchema.and(z102.object({ role: z102.literal("assistant") })),
@@ -5159,19 +5159,19 @@ var InstructRequest$outboundSchema = z102.object({
   ]))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputs.js
 var Inputs$outboundSchema = smartUnion([
   InstructRequest$outboundSchema,
   z103.array(InstructRequest$outboundSchema)
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatclassificationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatclassificationrequest.js
 var ChatClassificationRequest$outboundSchema = z104.object({
   model: z104.string(),
   input: Inputs$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionchoice.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionchoice.js
 init_primitives();
 import * as z105 from "zod/v4";
 init_enums();
@@ -5195,12 +5195,12 @@ var ChatCompletionChoice$inboundSchema = z105.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionevent.js
 init_primitives();
 import * as z107 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chattranscriptionevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chattranscriptionevent.js
 init_primitives();
 import * as z106 from "zod/v4";
 var ChatTranscriptionEvent$inboundSchema = z106.object({
@@ -5214,7 +5214,7 @@ var ChatTranscriptionEvent$inboundSchema = z106.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionevent.js
 var ChatCompletionEventExtraFields$inboundSchema = smartUnion([
   z107.boolean(),
   z107.int(),
@@ -5260,7 +5260,7 @@ var ChatCompletionEvent$inboundSchema = z107.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletioneventpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletioneventpreview.js
 init_primitives();
 import * as z108 from "zod/v4";
 init_smartUnion();
@@ -5299,7 +5299,7 @@ var ChatCompletionEventPreview$inboundSchema = z108.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionrequest.js
 init_primitives();
 init_smartUnion();
 import * as z109 from "zod/v4";
@@ -5376,7 +5376,7 @@ var ChatCompletionRequest$outboundSchema = z109.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionresponse.js
 import * as z110 from "zod/v4";
 init_usageinfo();
 var ChatCompletionResponse$inboundSchema = z110.object({
@@ -5388,7 +5388,7 @@ var ChatCompletionResponse$inboundSchema = z110.object({
   choices: z110.array(ChatCompletionChoice$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatcompletionstreamrequest.js
 init_primitives();
 init_smartUnion();
 import * as z111 from "zod/v4";
@@ -5465,7 +5465,7 @@ var ChatCompletionStreamRequest$outboundSchema = z111.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatmoderationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/chatmoderationrequest.js
 init_primitives();
 init_smartUnion();
 import * as z112 from "zod/v4";
@@ -5517,11 +5517,11 @@ var ChatModerationRequest$outboundSchema = z112.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/checkpoint.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/checkpoint.js
 init_primitives();
 import * as z114 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/metric.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/metric.js
 init_primitives();
 import * as z113 from "zod/v4";
 var Metric$inboundSchema = z113.object({
@@ -5536,7 +5536,7 @@ var Metric$inboundSchema = z113.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/checkpoint.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/checkpoint.js
 var Checkpoint$inboundSchema = z114.object({
   metrics: Metric$inboundSchema,
   step_number: z114.int(),
@@ -5548,7 +5548,7 @@ var Checkpoint$inboundSchema = z114.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationrequest.js
 init_primitives();
 init_smartUnion();
 import * as z115 from "zod/v4";
@@ -5563,31 +5563,31 @@ var ClassificationRequest$outboundSchema = z115.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationresponse.js
 import * as z117 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationtargetresult.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationtargetresult.js
 import * as z116 from "zod/v4";
 var ClassificationTargetResult$inboundSchema = z116.object({
   scores: z116.record(z116.string(), z116.number())
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classificationresponse.js
 var ClassificationResponse$inboundSchema = z117.object({
   id: z117.string(),
   model: z117.string(),
   results: z117.array(z117.record(z117.string(), ClassificationTargetResult$inboundSchema))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetunedmodel.js
 init_primitives();
 import * as z120 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertargetresult.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertargetresult.js
 init_primitives();
 import * as z118 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ftclassifierlossfunction.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ftclassifierlossfunction.js
 init_enums();
 var FTClassifierLossFunction = {
   SingleClass: "single_class",
@@ -5596,7 +5596,7 @@ var FTClassifierLossFunction = {
 var FTClassifierLossFunction$inboundSchema = inboundSchema(FTClassifierLossFunction);
 var FTClassifierLossFunction$outboundSchema = outboundSchema(FTClassifierLossFunction);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertargetresult.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertargetresult.js
 var ClassifierTargetResult$inboundSchema = z118.object({
   name: z118.string(),
   labels: z118.array(z118.string()),
@@ -5608,7 +5608,7 @@ var ClassifierTargetResult$inboundSchema = z118.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/finetunedmodelcapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/finetunedmodelcapabilities.js
 init_primitives();
 import * as z119 from "zod/v4";
 var FineTunedModelCapabilities$inboundSchema = z119.object({
@@ -5626,7 +5626,7 @@ var FineTunedModelCapabilities$inboundSchema = z119.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetunedmodel.js
 var ClassifierFineTunedModel$inboundSchema = z120.object({
   id: z120.string(),
   object: z120.literal("model").default("model"),
@@ -5655,12 +5655,12 @@ var ClassifierFineTunedModel$inboundSchema = z120.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjob.js
 init_primitives();
 import * as z124 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertrainingparameters.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertrainingparameters.js
 init_primitives();
 import * as z121 from "zod/v4";
 var ClassifierTrainingParameters$inboundSchema = z121.object({
@@ -5696,7 +5696,7 @@ var ClassifierTrainingParameters$outboundSchema = z121.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jobmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jobmetadata.js
 init_primitives();
 import * as z122 from "zod/v4";
 var JobMetadata$inboundSchema = z122.object({
@@ -5718,7 +5718,7 @@ var JobMetadata$inboundSchema = z122.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/wandbintegrationresult.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/wandbintegrationresult.js
 init_primitives();
 import * as z123 from "zod/v4";
 var WandbIntegrationResult$inboundSchema = z123.object({
@@ -5733,7 +5733,7 @@ var WandbIntegrationResult$inboundSchema = z123.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjob.js
 var ClassifierFineTuningJobStatus = {
   Queued: "QUEUED",
   Started: "STARTED",
@@ -5777,12 +5777,12 @@ var ClassifierFineTuningJob$inboundSchema = z124.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjobdetails.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjobdetails.js
 init_primitives();
 import * as z126 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/event.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/event.js
 init_primitives();
 import * as z125 from "zod/v4";
 var Event$inboundSchema = z125.object({
@@ -5795,7 +5795,7 @@ var Event$inboundSchema = z125.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjobdetails.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifierfinetuningjobdetails.js
 var ClassifierFineTuningJobDetailsStatus = {
   Queued: "QUEUED",
   Started: "STARTED",
@@ -5843,7 +5843,7 @@ var ClassifierFineTuningJobDetails$inboundSchema = z126.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertarget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/classifiertarget.js
 init_primitives();
 import * as z127 from "zod/v4";
 var ClassifierTarget$outboundSchema = z127.object({
@@ -5857,61 +5857,61 @@ var ClassifierTarget$outboundSchema = z127.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clientcapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clientcapabilities.js
 import * as z135 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttaskscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttaskscapability.js
 import * as z131 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttasksrequestscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttasksrequestscapability.js
 import * as z130 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskselicitationcapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskselicitationcapability.js
 import * as z128 from "zod/v4";
 var TasksElicitationCapability$inboundSchema = z128.object({
   create: z128.nullable(z128.record(z128.string(), z128.any())).optional()
 }).catchall(z128.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskssamplingcapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskssamplingcapability.js
 import * as z129 from "zod/v4";
 var TasksSamplingCapability$inboundSchema = z129.object({
   createMessage: z129.nullable(z129.record(z129.string(), z129.any())).optional()
 }).catchall(z129.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttasksrequestscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttasksrequestscapability.js
 var ClientTasksRequestsCapability$inboundSchema = z130.object({
   sampling: z130.nullable(TasksSamplingCapability$inboundSchema).optional(),
   elicitation: z130.nullable(TasksElicitationCapability$inboundSchema).optional()
 }).catchall(z130.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttaskscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clienttaskscapability.js
 var ClientTasksCapability$inboundSchema = z131.object({
   list: z131.nullable(z131.record(z131.string(), z131.any())).optional(),
   cancel: z131.nullable(z131.record(z131.string(), z131.any())).optional(),
   requests: z131.nullable(ClientTasksRequestsCapability$inboundSchema).optional()
 }).catchall(z131.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/elicitationcapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/elicitationcapability.js
 import * as z132 from "zod/v4";
 var ElicitationCapability$inboundSchema = z132.object({
   form: z132.nullable(z132.record(z132.string(), z132.any())).optional(),
   url: z132.nullable(z132.record(z132.string(), z132.any())).optional()
 }).catchall(z132.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/rootscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/rootscapability.js
 import * as z133 from "zod/v4";
 var RootsCapability$inboundSchema = z133.object({
   listChanged: z133.nullable(z133.boolean()).optional()
 }).catchall(z133.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/samplingcapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/samplingcapability.js
 import * as z134 from "zod/v4";
 var SamplingCapability$inboundSchema = z134.object({
   context: z134.nullable(z134.record(z134.string(), z134.any())).optional(),
   tools: z134.nullable(z134.record(z134.string(), z134.any())).optional()
 }).catchall(z134.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clientcapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/clientcapabilities.js
 var ClientCapabilities$inboundSchema = z135.object({
   experimental: z135.nullable(z135.record(z135.string(), z135.record(z135.string(), z135.any()))).optional(),
   sampling: z135.nullable(SamplingCapability$inboundSchema).optional(),
@@ -5920,7 +5920,7 @@ var ClientCapabilities$inboundSchema = z135.object({
   tasks: z135.nullable(ClientTasksCapability$inboundSchema).optional()
 }).catchall(z135.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionevent.js
 import * as z136 from "zod/v4";
 init_completionchunk();
 var CompletionEvent$inboundSchema = z136.object({
@@ -5938,7 +5938,7 @@ var CompletionEvent$inboundSchema = z136.object({
   }).pipe(CompletionChunk$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetunedmodel.js
 init_primitives();
 import * as z137 from "zod/v4";
 var CompletionFineTunedModel$inboundSchema = z137.object({
@@ -5967,12 +5967,12 @@ var CompletionFineTunedModel$inboundSchema = z137.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjob.js
 init_primitives();
 import * as z140 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completiontrainingparameters.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completiontrainingparameters.js
 init_primitives();
 import * as z138 from "zod/v4";
 var CompletionTrainingParameters$inboundSchema = z138.object({
@@ -6012,7 +6012,7 @@ var CompletionTrainingParameters$outboundSchema = z138.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/githubrepository.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/githubrepository.js
 init_primitives();
 import * as z139 from "zod/v4";
 var GithubRepository$inboundSchema = z139.object({
@@ -6028,7 +6028,7 @@ var GithubRepository$inboundSchema = z139.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjob.js
 var CompletionFineTuningJobStatus = {
   Queued: "QUEUED",
   Started: "STARTED",
@@ -6073,7 +6073,7 @@ var CompletionFineTuningJob$inboundSchema = z140.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjobdetails.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completionfinetuningjobdetails.js
 init_primitives();
 import * as z141 from "zod/v4";
 init_enums();
@@ -6123,7 +6123,7 @@ var CompletionFineTuningJobDetails$inboundSchema = z141.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completiontokensdetails.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/completiontokensdetails.js
 init_primitives();
 import * as z142 from "zod/v4";
 var CompletionTokensDetails$inboundSchema = z142.object({
@@ -6134,7 +6134,7 @@ var CompletionTokensDetails$inboundSchema = z142.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionconfigtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionconfigtype.js
 init_enums();
 var ConnectionConfigType = {
   Mcp: "mcp",
@@ -6143,11 +6143,11 @@ var ConnectionConfigType = {
 };
 var ConnectionConfigType$inboundSchema = inboundSchema(ConnectionConfigType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectioncredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectioncredentials.js
 init_primitives();
 import * as z144 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/oauth2token.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/oauth2token.js
 init_primitives();
 import * as z143 from "zod/v4";
 var OAuth2Token$outboundSchema = z143.object({
@@ -6167,7 +6167,7 @@ var OAuth2Token$outboundSchema = z143.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectioncredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectioncredentials.js
 var ConnectionCredentials$outboundSchema = z144.object({
   oauth: z144.nullable(OAuth2Token$outboundSchema).optional(),
   headers: z144.nullable(z144.record(z144.string(), z144.string())).optional(),
@@ -6180,21 +6180,21 @@ var ConnectionCredentials$outboundSchema = z144.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionpreference.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionpreference.js
 init_primitives();
 import * as z148 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionconfiguration.js
 init_primitives();
 import * as z147 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logicalexpression.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logicalexpression.js
 import * as z146 from "zod/v4";
 init_enums();
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolproperties.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolproperties.js
 init_primitives();
 import * as z145 from "zod/v4";
 var ToolProperties$inboundSchema = z145.object({
@@ -6212,7 +6212,7 @@ var ToolProperties$outboundSchema = z145.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logicalexpression.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logicalexpression.js
 var LogicalExpressionType = {
   And: "and",
   Or: "or"
@@ -6246,7 +6246,7 @@ var Expression$outboundSchema = smartUnion([
   z146.array(z146.string())
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionconfiguration.js
 var RequiresConfirmation$inboundSchema = smartUnion([
   LogicalExpression$inboundSchema,
   ToolProperties$inboundSchema,
@@ -6306,7 +6306,7 @@ var ToolExecutionConfiguration$outboundSchema = z147.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionpreference.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectionpreference.js
 var ConnectionPreference$inboundSchema = z148.object({
   name: z148.string(),
   tool_configuration: ToolExecutionConfiguration$inboundSchema,
@@ -6320,11 +6320,11 @@ var ConnectionPreference$inboundSchema = z148.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connector.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connector.js
 init_primitives();
 import * as z182 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorlocale.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorlocale.js
 init_primitives();
 import * as z149 from "zod/v4";
 var ConnectorLocale$inboundSchema = z149.object({
@@ -6337,7 +6337,7 @@ var ConnectorLocale$inboundSchema = z149.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorprotocol.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorprotocol.js
 init_enums();
 var ConnectorProtocol = {
   Mcp: "mcp",
@@ -6346,11 +6346,11 @@ var ConnectorProtocol = {
 };
 var ConnectorProtocol$inboundSchema = inboundSchema(ConnectorProtocol);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortool.js
 init_primitives();
 import * as z152 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoollocale.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoollocale.js
 init_primitives();
 import * as z150 from "zod/v4";
 var ConnectorToolLocale$inboundSchema = z150.object({
@@ -6363,13 +6363,13 @@ var ConnectorToolLocale$inboundSchema = z150.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionconfig.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionconfig.js
 import * as z151 from "zod/v4";
 var ExecutionConfig$inboundSchema = z151.object({
   type: z151.string()
 }).catchall(z151.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcevisibility.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcevisibility.js
 init_enums();
 var ResourceVisibility = {
   SharedGlobal: "shared_global",
@@ -6380,7 +6380,7 @@ var ResourceVisibility = {
 var ResourceVisibility$inboundSchema = inboundSchema(ResourceVisibility);
 var ResourceVisibility$outboundSchema = outboundSchema(ResourceVisibility);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortool.js
 var ConnectorTool$inboundSchema = z152.object({
   id: z152.string(),
   name: z152.string(),
@@ -6402,16 +6402,16 @@ var ConnectorTool$inboundSchema = z152.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercard.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercard.js
 init_primitives();
 import * as z178 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpprompt.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpprompt.js
 init_primitives();
 import * as z155 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservericon.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservericon.js
 import * as z153 from "zod/v4";
 var MCPServerIcon$inboundSchema = z153.object({
   src: z153.string(),
@@ -6419,7 +6419,7 @@ var MCPServerIcon$inboundSchema = z153.object({
   sizes: z153.nullable(z153.array(z153.string())).optional()
 }).catchall(z153.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/promptargument.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/promptargument.js
 import * as z154 from "zod/v4";
 var PromptArgument$inboundSchema = z154.object({
   name: z154.string(),
@@ -6427,7 +6427,7 @@ var PromptArgument$inboundSchema = z154.object({
   required: z154.nullable(z154.boolean()).optional()
 }).catchall(z154.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpprompt.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpprompt.js
 var MCPPrompt$inboundSchema = z155.object({
   name: z155.string(),
   title: z155.nullable(z155.string()).optional(),
@@ -6441,7 +6441,7 @@ var MCPPrompt$inboundSchema = z155.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpresource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpresource.js
 init_primitives();
 import * as z156 from "zod/v4";
 var MCPResource$inboundSchema = z156.object({
@@ -6460,15 +6460,15 @@ var MCPResource$inboundSchema = z156.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardmeta.js
 init_primitives();
 import * as z159 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinemeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinemeta.js
 init_primitives();
 import * as z158 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/serverlocale.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/serverlocale.js
 init_primitives();
 import * as z157 from "zod/v4";
 var ServerLocale$inboundSchema = z157.object({
@@ -6485,7 +6485,7 @@ var ServerLocale$inboundSchema = z157.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinemeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinemeta.js
 var TurbineMeta$inboundSchema = z158.object({
   system_prompt_name: z158.nullable(z158.string()).optional(),
   locale: z158.nullable(ServerLocale$inboundSchema).optional()
@@ -6495,7 +6495,7 @@ var TurbineMeta$inboundSchema = z158.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardmeta.js
 var MCPServerCardMeta$inboundSchema = z159.object({
   "ai.mistral/turbine": z159.nullable(TurbineMeta$inboundSchema).optional()
 }).catchall(z159.any()).transform((v) => {
@@ -6504,15 +6504,15 @@ var MCPServerCardMeta$inboundSchema = z159.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardtool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardtool.js
 init_primitives();
 import * as z166 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptoolmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptoolmeta.js
 init_primitives();
 import * as z163 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpuitoolmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpuitoolmeta.js
 import * as z160 from "zod/v4";
 init_enums();
 var Visibility = {
@@ -6525,11 +6525,11 @@ var MCPUIToolMeta$inboundSchema = z160.object({
   visibility: z160.nullable(z160.array(Visibility$inboundSchema)).optional()
 }).catchall(z160.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoolmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoolmeta.js
 init_primitives();
 import * as z162 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tooltype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tooltype.js
 init_enums();
 var ToolType = {
   Rag: "rag",
@@ -6539,7 +6539,7 @@ var ToolType = {
 };
 var ToolType$inboundSchema = inboundSchema(ToolType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoollocale.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoollocale.js
 init_primitives();
 import * as z161 from "zod/v4";
 var TurbineToolLocale$inboundSchema = z161.object({
@@ -6556,7 +6556,7 @@ var TurbineToolLocale$inboundSchema = z161.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoolmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/turbinetoolmeta.js
 var TurbineToolMeta$inboundSchema = z162.object({
   locale: z162.nullable(TurbineToolLocale$inboundSchema).optional(),
   tool_type: z162.nullable(ToolType$inboundSchema).optional(),
@@ -6569,7 +6569,7 @@ var TurbineToolMeta$inboundSchema = z162.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptoolmeta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptoolmeta.js
 var MCPToolMeta$inboundSchema = z163.object({
   ui: z163.nullable(MCPUIToolMeta$inboundSchema).optional(),
   "ai.mistral/turbine": z163.nullable(TurbineToolMeta$inboundSchema).optional()
@@ -6579,7 +6579,7 @@ var MCPToolMeta$inboundSchema = z163.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolannotations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolannotations.js
 import * as z164 from "zod/v4";
 var ToolAnnotations$inboundSchema = z164.object({
   title: z164.nullable(z164.string()).optional(),
@@ -6589,7 +6589,7 @@ var ToolAnnotations$inboundSchema = z164.object({
   openWorldHint: z164.nullable(z164.boolean()).optional()
 }).catchall(z164.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecution.js
 import * as z165 from "zod/v4";
 init_enums();
 var TaskSupport = {
@@ -6602,7 +6602,7 @@ var ToolExecution$inboundSchema = z165.object({
   taskSupport: z165.nullable(TaskSupport$inboundSchema).optional()
 }).catchall(z165.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardtool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercardtool.js
 var MCPServerCardTool$inboundSchema = z166.object({
   name: z166.string(),
   title: z166.nullable(z166.string()).optional(),
@@ -6619,18 +6619,18 @@ var MCPServerCardTool$inboundSchema = z166.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremote.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremote.js
 import * as z169 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverauthenticationrequirement.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverauthenticationrequirement.js
 import * as z167 from "zod/v4";
 var MCPServerAuthenticationRequirement$inboundSchema = z167.object({
   required: z167.boolean(),
   schemes: z167.array(z167.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremoteheader.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremoteheader.js
 import * as z168 from "zod/v4";
 var MCPServerRemoteHeader$inboundSchema = z168.object({
   name: z168.string(),
@@ -6641,7 +6641,7 @@ var MCPServerRemoteHeader$inboundSchema = z168.object({
   choices: z168.nullable(z168.array(z168.string())).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremote.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverremote.js
 var MCPServerRemoteType = {
   StreamableHttp: "streamable-http",
   Sse: "sse"
@@ -6655,7 +6655,7 @@ var MCPServerRemote$inboundSchema = z169.object({
   authentication: z169.nullable(MCPServerAuthenticationRequirement$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverrepository.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpserverrepository.js
 import * as z170 from "zod/v4";
 var MCPServerRepository$inboundSchema = z170.object({
   url: z170.string(),
@@ -6663,53 +6663,53 @@ var MCPServerRepository$inboundSchema = z170.object({
   subfolder: z170.nullable(z170.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servercapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servercapabilities.js
 import * as z177 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/promptscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/promptscapability.js
 import * as z171 from "zod/v4";
 var PromptsCapability$inboundSchema = z171.object({
   listChanged: z171.nullable(z171.boolean()).optional()
 }).catchall(z171.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcescapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcescapability.js
 import * as z172 from "zod/v4";
 var ResourcesCapability$inboundSchema = z172.object({
   subscribe: z172.nullable(z172.boolean()).optional(),
   listChanged: z172.nullable(z172.boolean()).optional()
 }).catchall(z172.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertaskscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertaskscapability.js
 import * as z175 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertasksrequestscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertasksrequestscapability.js
 import * as z174 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskstoolscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/taskstoolscapability.js
 import * as z173 from "zod/v4";
 var TasksToolsCapability$inboundSchema = z173.object({
   call: z173.nullable(z173.record(z173.string(), z173.any())).optional()
 }).catchall(z173.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertasksrequestscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertasksrequestscapability.js
 var ServerTasksRequestsCapability$inboundSchema = z174.object({
   tools: z174.nullable(TasksToolsCapability$inboundSchema).optional()
 }).catchall(z174.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertaskscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servertaskscapability.js
 var ServerTasksCapability$inboundSchema = z175.object({
   list: z175.nullable(z175.record(z175.string(), z175.any())).optional(),
   cancel: z175.nullable(z175.record(z175.string(), z175.any())).optional(),
   requests: z175.nullable(ServerTasksRequestsCapability$inboundSchema).optional()
 }).catchall(z175.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolscapability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolscapability.js
 import * as z176 from "zod/v4";
 var ToolsCapability$inboundSchema = z176.object({
   listChanged: z176.nullable(z176.boolean()).optional()
 }).catchall(z176.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servercapabilities.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/servercapabilities.js
 var ServerCapabilities$inboundSchema = z177.object({
   experimental: z177.nullable(z177.record(z177.string(), z177.record(z177.string(), z177.any()))).optional(),
   logging: z177.nullable(z177.record(z177.string(), z177.any())).optional(),
@@ -6720,7 +6720,7 @@ var ServerCapabilities$inboundSchema = z177.object({
   tasks: z177.nullable(ServerTasksCapability$inboundSchema).optional()
 }).catchall(z177.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercard.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcpservercard.js
 var Resources$inboundSchema = smartUnion([z178.string(), z178.array(MCPResource$inboundSchema)]);
 var Tools$inboundSchema = smartUnion([
   z178.string(),
@@ -6753,11 +6753,11 @@ var MCPServerCard$inboundSchema = z178.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicauthenticationmethod.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicauthenticationmethod.js
 init_primitives();
 import * as z180 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorauthenticationheader.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorauthenticationheader.js
 init_primitives();
 import * as z179 from "zod/v4";
 var ConnectorAuthenticationHeader$inboundSchema = z179.object({
@@ -6771,7 +6771,7 @@ var ConnectorAuthenticationHeader$inboundSchema = z179.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicauthenticationmethod.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicauthenticationmethod.js
 var PublicAuthenticationMethod$inboundSchema = z180.object({
   method_type: OutboundAuthenticationType$inboundSchema,
   headers: z180.nullable(z180.array(ConnectorAuthenticationHeader$inboundSchema)).optional(),
@@ -6783,7 +6783,7 @@ var PublicAuthenticationMethod$inboundSchema = z180.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicconnectionconfig.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/publicconnectionconfig.js
 init_primitives();
 import * as z181 from "zod/v4";
 var PublicConnectionConfig$inboundSchema = z181.object({
@@ -6797,7 +6797,7 @@ var PublicConnectionConfig$inboundSchema = z181.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcetype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcetype.js
 init_enums();
 var ResourceType = {
   One: 1,
@@ -6807,7 +6807,7 @@ var ResourceType = {
 };
 var ResourceType$inboundSchema = inboundSchemaInt(ResourceType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connector.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connector.js
 var Connector$inboundSchema = z182.object({
   id: z182.string(),
   name: z182.string(),
@@ -6853,23 +6853,23 @@ var Connector$inboundSchema = z182.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorcalltoolrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorcalltoolrequest.js
 import * as z183 from "zod/v4";
 var ConnectorCallToolRequest$outboundSchema = z183.object({
   arguments: z183.record(z183.string(), z183.any()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorsqueryfilters.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectorsqueryfilters.js
 import * as z184 from "zod/v4";
 var ConnectorsQueryFilters$outboundSchema = z184.object({
   active: z184.nullable(z184.boolean()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallmetadata.js
 init_primitives();
 import * as z186 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolresultmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolresultmetadata.js
 init_primitives();
 import * as z185 from "zod/v4";
 var ConnectorToolResultMetadata$inboundSchema = z185.object({
@@ -6882,7 +6882,7 @@ var ConnectorToolResultMetadata$inboundSchema = z185.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallmetadata.js
 var ConnectorToolCallMetadata$inboundSchema = z186.object({
   mcp_meta: z186.nullable(ConnectorToolResultMetadata$inboundSchema).optional()
 }).catchall(z186.any()).transform((v) => {
@@ -6891,16 +6891,16 @@ var ConnectorToolCallMetadata$inboundSchema = z186.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallresponse.js
 import * as z192 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddedresource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddedresource.js
 init_primitives();
 import * as z188 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textresourcecontents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textresourcecontents.js
 init_primitives();
 import * as z187 from "zod/v4";
 var TextResourceContents$inboundSchema = z187.object({
@@ -6914,7 +6914,7 @@ var TextResourceContents$inboundSchema = z187.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddedresource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddedresource.js
 var Resource$inboundSchema = smartUnion([
   TextResourceContents$inboundSchema,
   BlobResourceContents$inboundSchema
@@ -6933,7 +6933,7 @@ var EmbeddedResource$inboundSchema = z188.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagecontent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/imagecontent.js
 init_primitives();
 import * as z189 from "zod/v4";
 var ImageContent$inboundSchema = z189.object({
@@ -6948,7 +6948,7 @@ var ImageContent$inboundSchema = z189.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcelink.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resourcelink.js
 init_primitives();
 import * as z190 from "zod/v4";
 var ResourceLink$inboundSchema = z190.object({
@@ -6968,7 +6968,7 @@ var ResourceLink$inboundSchema = z190.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textcontent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/textcontent.js
 init_primitives();
 import * as z191 from "zod/v4";
 var TextContent$inboundSchema = z191.object({
@@ -6982,7 +6982,7 @@ var TextContent$inboundSchema = z191.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/connectortoolcallresponse.js
 var ConnectorToolCallResponseContent$inboundSchema = discriminatedUnion("type", {
   text: TextContent$inboundSchema,
   image: ImageContent$inboundSchema,
@@ -7001,29 +7001,29 @@ var ConnectorToolCallResponse$inboundSchema = z192.object({
   metadata: z192.nullable(ConnectorToolCallMetadata$inboundSchema).optional()
 }).catchall(z192.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendrequest.js
 init_primitives();
 import * as z202 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationinputs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationinputs.js
 init_smartUnion();
 import * as z200 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputentries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputentries.js
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentry.js
 init_primitives();
 import * as z194 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentryarguments.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentryarguments.js
 import * as z193 from "zod/v4";
 init_smartUnion();
 var FunctionCallEntryArguments$inboundSchema = smartUnion([z193.record(z193.string(), z193.any()), z193.string()]);
 var FunctionCallEntryArguments$outboundSchema = smartUnion([z193.record(z193.string(), z193.any()), z193.string()]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallentry.js
 var FunctionCallEntryConfirmationStatus = {
   Pending: "pending",
   Allowed: "allowed",
@@ -7074,7 +7074,7 @@ var FunctionCallEntry$outboundSchema = z194.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functionresultentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functionresultentry.js
 init_primitives();
 import * as z195 from "zod/v4";
 var FunctionResultEntry$inboundSchema = z195.object({
@@ -7108,20 +7108,20 @@ var FunctionResultEntry$outboundSchema = z195.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputentry.js
 init_primitives();
 import * as z197 from "zod/v4";
 init_enums();
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputcontentchunks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputcontentchunks.js
 init_smartUnion();
 init_documenturlchunk();
 init_imageurlchunk();
 init_textchunk();
 init_thinkchunk();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolfilechunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolfilechunk.js
 init_primitives();
 import * as z196 from "zod/v4";
 init_smartUnion();
@@ -7155,7 +7155,7 @@ var ToolFileChunk$outboundSchema = z196.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputcontentchunks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputcontentchunks.js
 var MessageInputContentChunks$inboundSchema = smartUnion([
   ToolFileChunk$inboundSchema,
   TextChunk$inboundSchema,
@@ -7171,7 +7171,7 @@ var MessageInputContentChunks$outboundSchema = smartUnion([
   ThinkChunk$outboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageinputentry.js
 var Role = {
   Assistant: "assistant",
   User: "user"
@@ -7217,12 +7217,12 @@ var MessageInputEntry$outboundSchema = z197.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputentry.js
 init_primitives();
 import * as z198 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputcontentchunks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputcontentchunks.js
 init_smartUnion();
 init_documenturlchunk();
 init_imageurlchunk();
@@ -7246,7 +7246,7 @@ var MessageOutputContentChunks$outboundSchema = smartUnion([
   ThinkChunk$outboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputentry.js
 var MessageOutputEntryContent$inboundSchema = smartUnion([z198.string(), z198.array(MessageOutputContentChunks$inboundSchema)]);
 var MessageOutputEntryContent$outboundSchema = smartUnion([
   z198.string(),
@@ -7293,7 +7293,7 @@ var MessageOutputEntry$outboundSchema = z198.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionentry.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionentry.js
 init_primitives();
 import * as z199 from "zod/v4";
 init_smartUnion();
@@ -7337,7 +7337,7 @@ var ToolExecutionEntry$outboundSchema = z199.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputentries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/inputentries.js
 var InputEntries$outboundSchema = smartUnion([
   AgentHandoffEntry$outboundSchema,
   FunctionCallEntry$outboundSchema,
@@ -7347,10 +7347,10 @@ var InputEntries$outboundSchema = smartUnion([
   MessageOutputEntry$outboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationinputs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationinputs.js
 var ConversationInputs$outboundSchema = smartUnion([z200.string(), z200.array(InputEntries$outboundSchema)]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcallconfirmation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolcallconfirmation.js
 init_primitives();
 import * as z201 from "zod/v4";
 var Confirmation = {
@@ -7367,7 +7367,7 @@ var ToolCallConfirmation$outboundSchema = z201.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendrequest.js
 var ConversationAppendRequestHandoffExecution = {
   Client: "client",
   Server: "server"
@@ -7388,7 +7388,7 @@ var ConversationAppendRequest$outboundSchema = z202.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationappendstreamrequest.js
 init_primitives();
 import * as z203 from "zod/v4";
 var ConversationAppendStreamRequestHandoffExecution = {
@@ -7411,11 +7411,11 @@ var ConversationAppendStreamRequest$outboundSchema = z203.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationevents.js
 import * as z213 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/functioncallevent.js
 init_primitives();
 import * as z204 from "zod/v4";
 init_enums();
@@ -7446,12 +7446,12 @@ var FunctionCallEvent$inboundSchema = z204.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputevent.js
 init_primitives();
 import * as z205 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/outputcontentchunks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/outputcontentchunks.js
 init_smartUnion();
 init_documenturlchunk();
 init_imageurlchunk();
@@ -7467,7 +7467,7 @@ var OutputContentChunks$inboundSchema = smartUnion([
   ThinkChunk$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageoutputevent.js
 var MessageOutputEventContent$inboundSchema = smartUnion([z205.string(), OutputContentChunks$inboundSchema]);
 var MessageOutputEvent$inboundSchema = z205.object({
   type: z205.literal("message.output.delta"),
@@ -7488,11 +7488,11 @@ var MessageOutputEvent$inboundSchema = z205.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsedoneevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsedoneevent.js
 init_primitives();
 import * as z207 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationusageinfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationusageinfo.js
 init_primitives();
 import * as z206 from "zod/v4";
 var ConversationUsageInfo$inboundSchema = z206.object({
@@ -7510,7 +7510,7 @@ var ConversationUsageInfo$inboundSchema = z206.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsedoneevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsedoneevent.js
 var ResponseDoneEvent$inboundSchema = z207.object({
   type: z207.literal("conversation.response.done"),
   created_at: z207.iso.datetime({ offset: true }).transform((v) => new Date(v)).optional(),
@@ -7521,7 +7521,7 @@ var ResponseDoneEvent$inboundSchema = z207.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseerrorevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responseerrorevent.js
 init_primitives();
 import * as z208 from "zod/v4";
 var ResponseErrorEvent$inboundSchema = z208.object({
@@ -7535,7 +7535,7 @@ var ResponseErrorEvent$inboundSchema = z208.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsestartedevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/responsestartedevent.js
 init_primitives();
 import * as z209 from "zod/v4";
 var ResponseStartedEvent$inboundSchema = z209.object({
@@ -7549,7 +7549,7 @@ var ResponseStartedEvent$inboundSchema = z209.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ssetypes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ssetypes.js
 init_enums();
 var SSETypes = {
   ConversationResponseStarted: "conversation.response.started",
@@ -7565,7 +7565,7 @@ var SSETypes = {
 };
 var SSETypes$inboundSchema = inboundSchema(SSETypes);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutiondeltaevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutiondeltaevent.js
 init_primitives();
 import * as z210 from "zod/v4";
 init_smartUnion();
@@ -7585,7 +7585,7 @@ var ToolExecutionDeltaEvent$inboundSchema = z210.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutiondoneevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutiondoneevent.js
 init_primitives();
 import * as z211 from "zod/v4";
 init_smartUnion();
@@ -7605,7 +7605,7 @@ var ToolExecutionDoneEvent$inboundSchema = z211.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionstartedevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/toolexecutionstartedevent.js
 init_primitives();
 import * as z212 from "zod/v4";
 init_smartUnion();
@@ -7628,7 +7628,7 @@ var ToolExecutionStartedEvent$inboundSchema = z212.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationevents.js
 var ConversationEventsData$inboundSchema = discriminatedUnion("type", {
   ["agent.handoff.done"]: AgentHandoffDoneEvent$inboundSchema,
   ["agent.handoff.started"]: AgentHandoffStartedEvent$inboundSchema,
@@ -7668,7 +7668,7 @@ var ConversationEvents$inboundSchema = z213.object({
   }))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationhistory.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationhistory.js
 init_primitives();
 import * as z214 from "zod/v4";
 init_smartUnion();
@@ -7697,18 +7697,18 @@ var ConversationHistory$inboundSchema = z214.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationmessages.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationmessages.js
 init_primitives();
 import * as z215 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageentries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageentries.js
 init_smartUnion();
 var MessageEntries$inboundSchema = smartUnion([
   MessageInputEntry$inboundSchema,
   MessageOutputEntry$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationmessages.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationmessages.js
 var ConversationMessages$inboundSchema = z215.object({
   object: z215.literal("conversation.messages").default("conversation.messages"),
   conversation_id: z215.string(),
@@ -7719,7 +7719,7 @@ var ConversationMessages$inboundSchema = z215.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationpayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationpayload.js
 import * as z216 from "zod/v4";
 var ConversationPayload$inboundSchema = z216.object({
   messages: z216.array(z216.record(z216.string(), z216.any()))
@@ -7728,7 +7728,7 @@ var ConversationPayload$outboundSchema = z216.object({
   messages: z216.array(z216.record(z216.string(), z216.any()))
 }).catchall(z216.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrequest.js
 init_primitives();
 init_smartUnion();
 import * as z217 from "zod/v4";
@@ -7779,7 +7779,7 @@ var ConversationRequest$outboundSchema = z217.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationresponse.js
 init_primitives();
 import * as z218 from "zod/v4";
 init_smartUnion();
@@ -7806,7 +7806,7 @@ var ConversationResponse$inboundSchema = z218.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrestartrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrestartrequest.js
 init_primitives();
 init_smartUnion();
 import * as z219 from "zod/v4";
@@ -7835,7 +7835,7 @@ var ConversationRestartRequest$outboundSchema = z219.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrestartstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationrestartstreamrequest.js
 init_primitives();
 init_smartUnion();
 import * as z220 from "zod/v4";
@@ -7864,7 +7864,7 @@ var ConversationRestartStreamRequest$outboundSchema = z220.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationsource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationsource.js
 init_enums();
 var ConversationSource = {
   Explorer: "EXPLORER",
@@ -7874,7 +7874,7 @@ var ConversationSource = {
 };
 var ConversationSource$inboundSchema = inboundSchema(ConversationSource);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/conversationstreamrequest.js
 init_primitives();
 init_smartUnion();
 import * as z221 from "zod/v4";
@@ -7925,7 +7925,7 @@ var ConversationStreamRequest$outboundSchema = z221.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createagentrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createagentrequest.js
 init_primitives();
 import * as z222 from "zod/v4";
 var CreateAgentRequestTool$outboundSchema = z222.union([
@@ -7963,7 +7963,7 @@ var CreateAgentRequest$outboundSchema = z222.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createbatchjobrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createbatchjobrequest.js
 init_primitives();
 import * as z223 from "zod/v4";
 var CreateBatchJobRequest$outboundSchema = z223.object({
@@ -7982,7 +7982,7 @@ var CreateBatchJobRequest$outboundSchema = z223.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createcampaignrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createcampaignrequest.js
 init_primitives();
 import * as z224 from "zod/v4";
 var CreateCampaignRequest$outboundSchema = z224.object({
@@ -7999,11 +7999,11 @@ var CreateCampaignRequest$outboundSchema = z224.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createconnectorrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createconnectorrequest.js
 init_primitives();
 import * as z226 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/extendedoauthservermetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/extendedoauthservermetadata.js
 init_primitives();
 import * as z225 from "zod/v4";
 var ExtendedOAuthServerMetadata$outboundSchema = z225.object({
@@ -8057,7 +8057,7 @@ var ExtendedOAuthServerMetadata$outboundSchema = z225.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createconnectorrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createconnectorrequest.js
 var CreateConnectorRequest$outboundSchema = z226.object({
   protocol: z226.literal("mcp").default("mcp"),
   name: z226.string(),
@@ -8081,25 +8081,25 @@ var CreateConnectorRequest$outboundSchema = z226.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createdatasetrecordrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createdatasetrecordrequest.js
 import * as z227 from "zod/v4";
 var CreateDatasetRecordRequest$outboundSchema = z227.object({
   payload: ConversationPayload$outboundSchema,
   properties: z227.record(z227.string(), z227.any())
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createdatasetrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createdatasetrequest.js
 import * as z228 from "zod/v4";
 var CreateDatasetRequest$outboundSchema = z228.object({
   name: z228.string(),
   description: z228.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfileresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfileresponse.js
 init_primitives();
 import * as z229 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filepurpose.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filepurpose.js
 init_enums();
 var FilePurpose = {
   FineTune: "fine-tune",
@@ -8109,7 +8109,7 @@ var FilePurpose = {
 var FilePurpose$inboundSchema = inboundSchema(FilePurpose);
 var FilePurpose$outboundSchema = outboundSchema(FilePurpose);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filevisibility.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/filevisibility.js
 init_enums();
 var FileVisibility = {
   Workspace: "workspace",
@@ -8117,7 +8117,7 @@ var FileVisibility = {
 };
 var FileVisibility$inboundSchema = inboundSchema(FileVisibility);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sampletype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sampletype.js
 init_enums();
 var SampleType = {
   Pretrain: "pretrain",
@@ -8129,7 +8129,7 @@ var SampleType = {
 var SampleType$inboundSchema = inboundSchema(SampleType);
 var SampleType$outboundSchema = outboundSchema(SampleType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/source.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/source.js
 init_enums();
 var Source = {
   Upload: "upload",
@@ -8139,7 +8139,7 @@ var Source = {
 var Source$inboundSchema = inboundSchema(Source);
 var Source$outboundSchema = outboundSchema(Source);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfileresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfileresponse.js
 var CreateFileResponse$inboundSchema = z229.object({
   id: z229.string(),
   object: z229.string(),
@@ -8164,12 +8164,12 @@ var CreateFileResponse$inboundSchema = z229.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfinetuningjobrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfinetuningjobrequest.js
 init_primitives();
 init_smartUnion();
 import * as z234 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/creategithubrepositoryrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/creategithubrepositoryrequest.js
 import * as z230 from "zod/v4";
 var CreateGithubRepositoryRequest$outboundSchema = z230.object({
   type: z230.literal("github"),
@@ -8180,7 +8180,7 @@ var CreateGithubRepositoryRequest$outboundSchema = z230.object({
   token: z230.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/finetuneablemodeltype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/finetuneablemodeltype.js
 import * as z231 from "zod/v4";
 var FineTuneableModelType = {
   Completion: "completion",
@@ -8188,7 +8188,7 @@ var FineTuneableModelType = {
 };
 var FineTuneableModelType$outboundSchema = z231.enum(FineTuneableModelType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/trainingfile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/trainingfile.js
 init_primitives();
 import * as z232 from "zod/v4";
 var TrainingFile$outboundSchema = z232.object({
@@ -8200,7 +8200,7 @@ var TrainingFile$outboundSchema = z232.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/wandbintegration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/wandbintegration.js
 init_primitives();
 import * as z233 from "zod/v4";
 var WandbIntegration$outboundSchema = z233.object({
@@ -8216,7 +8216,7 @@ var WandbIntegration$outboundSchema = z233.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfinetuningjobrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createfinetuningjobrequest.js
 var Hyperparameters$outboundSchema = smartUnion([
   CompletionTrainingParameters$outboundSchema,
   ClassifierTrainingParameters$outboundSchema
@@ -8247,7 +8247,7 @@ var CreateFineTuningJobRequest$outboundSchema = z234.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createingestionpipelineconfigurationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createingestionpipelineconfigurationrequest.js
 init_primitives();
 import * as z235 from "zod/v4";
 var CreateIngestionPipelineConfigurationRequest$outboundSchema = z235.object({
@@ -8259,7 +8259,7 @@ var CreateIngestionPipelineConfigurationRequest$outboundSchema = z235.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createjudgerequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createjudgerequest.js
 init_primitives();
 import * as z236 from "zod/v4";
 var CreateJudgeRequestOutput$outboundSchema = z236.union([
@@ -8282,7 +8282,7 @@ var CreateJudgeRequest$outboundSchema = z236.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createlibraryrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createlibraryrequest.js
 init_primitives();
 import * as z237 from "zod/v4";
 var OwnerType = {
@@ -8302,15 +8302,15 @@ var CreateLibraryRequest$outboundSchema = z237.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createsearchindexinforequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createsearchindexinforequest.js
 init_primitives();
 import * as z240 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespasearchindexinforequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespasearchindexinforequest.js
 init_primitives();
 import * as z239 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespaschemarequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespaschemarequest.js
 init_primitives();
 import * as z238 from "zod/v4";
 var CreateVespaSchemaRequest$outboundSchema = z238.object({
@@ -8322,7 +8322,7 @@ var CreateVespaSchemaRequest$outboundSchema = z238.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespasearchindexinforequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createvespasearchindexinforequest.js
 var CreateVespaSearchIndexInfoRequest$outboundSchema = z239.object({
   type: z239.literal("vespa"),
   k8sCluster: z239.string(),
@@ -8337,7 +8337,7 @@ var CreateVespaSearchIndexInfoRequest$outboundSchema = z239.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createsearchindexinforequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/createsearchindexinforequest.js
 var CreateSearchIndexInfoRequestStatus = {
   Online: "online",
   Offline: "offline"
@@ -8354,7 +8354,7 @@ var CreateSearchIndexInfoRequest$outboundSchema = z240.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialscreateorupdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialscreateorupdate.js
 init_primitives();
 import * as z241 from "zod/v4";
 var CredentialsCreateOrUpdate$outboundSchema = z241.object({
@@ -8367,7 +8367,7 @@ var CredentialsCreateOrUpdate$outboundSchema = z241.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/credentialsresponse.js
 init_primitives();
 import * as z242 from "zod/v4";
 var CredentialsResponse$inboundSchema = z242.object({
@@ -8379,7 +8379,7 @@ var CredentialsResponse$inboundSchema = z242.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcanceledattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcanceledattributes.js
 init_primitives();
 import * as z243 from "zod/v4";
 var CustomTaskCanceledAttributes$inboundSchema = z243.object({
@@ -8393,7 +8393,7 @@ var CustomTaskCanceledAttributes$inboundSchema = z243.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcanceledresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcanceledresponse.js
 init_primitives();
 import * as z244 from "zod/v4";
 var CustomTaskCanceledResponse$inboundSchema = z244.object({
@@ -8419,7 +8419,7 @@ var CustomTaskCanceledResponse$inboundSchema = z244.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcompletedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcompletedattributesresponse.js
 init_primitives();
 import * as z245 from "zod/v4";
 var CustomTaskCompletedAttributesResponse$inboundSchema = z245.object({
@@ -8433,7 +8433,7 @@ var CustomTaskCompletedAttributesResponse$inboundSchema = z245.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcompletedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskcompletedresponse.js
 init_primitives();
 import * as z246 from "zod/v4";
 var CustomTaskCompletedResponse$inboundSchema = z246.object({
@@ -8459,7 +8459,7 @@ var CustomTaskCompletedResponse$inboundSchema = z246.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskfailedattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskfailedattributes.js
 init_primitives();
 import * as z247 from "zod/v4";
 var CustomTaskFailedAttributes$inboundSchema = z247.object({
@@ -8473,7 +8473,7 @@ var CustomTaskFailedAttributes$inboundSchema = z247.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskfailedresponse.js
 init_primitives();
 import * as z248 from "zod/v4";
 var CustomTaskFailedResponse$inboundSchema = z248.object({
@@ -8499,23 +8499,23 @@ var CustomTaskFailedResponse$inboundSchema = z248.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressattributesresponse.js
 init_primitives();
 import * as z256 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadresponse.js
 init_primitives();
 import * as z255 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadvalueresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadvalueresponse.js
 import * as z254 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatch.js
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchadd.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchadd.js
 import * as z249 from "zod/v4";
 var JSONPatchAdd$inboundSchema = z249.object({
   path: z249.string(),
@@ -8523,18 +8523,18 @@ var JSONPatchAdd$inboundSchema = z249.object({
   op: z249.literal("add")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchappend.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchappend.js
 import * as z251 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encryptedpatchvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encryptedpatchvalue.js
 import * as z250 from "zod/v4";
 var EncryptedPatchValue$inboundSchema = z250.object({
   type: z250.literal("__encrypted__"),
   value: z250.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchappend.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchappend.js
 var JSONPatchAppendValue$inboundSchema = smartUnion([EncryptedPatchValue$inboundSchema, z251.string()]);
 var JSONPatchAppend$inboundSchema = z251.object({
   path: z251.string(),
@@ -8542,7 +8542,7 @@ var JSONPatchAppend$inboundSchema = z251.object({
   op: z251.literal("append")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchremove.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchremove.js
 import * as z252 from "zod/v4";
 var JSONPatchRemove$inboundSchema = z252.object({
   path: z252.string(),
@@ -8550,7 +8550,7 @@ var JSONPatchRemove$inboundSchema = z252.object({
   op: z252.literal("remove")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchreplace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchreplace.js
 import * as z253 from "zod/v4";
 var JSONPatchReplace$inboundSchema = z253.object({
   path: z253.string(),
@@ -8558,7 +8558,7 @@ var JSONPatchReplace$inboundSchema = z253.object({
   op: z253.literal("replace")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatch.js
 var JSONPatch$inboundSchema = discriminatedUnion("op", {
   add: JSONPatchAdd$inboundSchema,
   append: JSONPatchAppend$inboundSchema,
@@ -8566,10 +8566,10 @@ var JSONPatch$inboundSchema = discriminatedUnion("op", {
   replace: JSONPatchReplace$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadvalueresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadvalueresponse.js
 var JSONPatchPayloadValueResponse$inboundSchema = smartUnion([z254.array(JSONPatch$inboundSchema), z254.string()]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/jsonpatchpayloadresponse.js
 var JSONPatchPayloadResponse$inboundSchema = z255.object({
   type: z255.literal("json_patch"),
   value: JSONPatchPayloadValueResponse$inboundSchema,
@@ -8580,7 +8580,7 @@ var JSONPatchPayloadResponse$inboundSchema = z255.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressattributesresponse.js
 var Payload$inboundSchema = discriminatedUnion("type", {
   json: JSONPayloadResponse$inboundSchema.and(z256.object({ type: z256.literal("json") })),
   json_patch: JSONPatchPayloadResponse$inboundSchema
@@ -8599,7 +8599,7 @@ var CustomTaskInProgressAttributesResponse$inboundSchema = z256.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskinprogressresponse.js
 init_primitives();
 import * as z257 from "zod/v4";
 var CustomTaskInProgressResponse$inboundSchema = z257.object({
@@ -8625,7 +8625,7 @@ var CustomTaskInProgressResponse$inboundSchema = z257.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskstartedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskstartedattributesresponse.js
 init_primitives();
 import * as z258 from "zod/v4";
 var CustomTaskStartedAttributesResponse$inboundSchema = z258.object({
@@ -8639,7 +8639,7 @@ var CustomTaskStartedAttributesResponse$inboundSchema = z258.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskstartedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtaskstartedresponse.js
 init_primitives();
 import * as z259 from "zod/v4";
 var CustomTaskStartedResponse$inboundSchema = z259.object({
@@ -8665,7 +8665,7 @@ var CustomTaskStartedResponse$inboundSchema = z259.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtasktimedoutattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtasktimedoutattributes.js
 init_primitives();
 import * as z260 from "zod/v4";
 var CustomTaskTimedOutAttributes$inboundSchema = z260.object({
@@ -8680,7 +8680,7 @@ var CustomTaskTimedOutAttributes$inboundSchema = z260.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtasktimedoutresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/customtasktimedoutresponse.js
 init_primitives();
 import * as z261 from "zod/v4";
 var CustomTaskTimedOutResponse$inboundSchema = z261.object({
@@ -8706,7 +8706,7 @@ var CustomTaskTimedOutResponse$inboundSchema = z261.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/dataset.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/dataset.js
 init_primitives();
 import * as z262 from "zod/v4";
 var Dataset$inboundSchema = z262.object({
@@ -8728,7 +8728,7 @@ var Dataset$inboundSchema = z262.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetimporttask.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetimporttask.js
 init_primitives();
 import * as z263 from "zod/v4";
 var DatasetImportTask$inboundSchema = z263.object({
@@ -8753,7 +8753,7 @@ var DatasetImportTask$inboundSchema = z263.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetpreview.js
 init_primitives();
 import * as z264 from "zod/v4";
 var DatasetPreview$inboundSchema = z264.object({
@@ -8775,7 +8775,7 @@ var DatasetPreview$inboundSchema = z264.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetrecord.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/datasetrecord.js
 init_primitives();
 import * as z265 from "zod/v4";
 var DatasetRecord$inboundSchema = z265.object({
@@ -8796,7 +8796,7 @@ var DatasetRecord$inboundSchema = z265.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletebatchjobresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletebatchjobresponse.js
 import * as z266 from "zod/v4";
 var DeleteBatchJobResponse$inboundSchema = z266.object({
   id: z266.string(),
@@ -8804,7 +8804,7 @@ var DeleteBatchJobResponse$inboundSchema = z266.object({
   deleted: z266.boolean().default(true)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletedatasetrecordsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletedatasetrecordsrequest.js
 init_primitives();
 import * as z267 from "zod/v4";
 var DeleteDatasetRecordsRequest$outboundSchema = z267.object({
@@ -8815,7 +8815,7 @@ var DeleteDatasetRecordsRequest$outboundSchema = z267.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletefileresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletefileresponse.js
 import * as z268 from "zod/v4";
 var DeleteFileResponse$inboundSchema = z268.object({
   id: z268.string(),
@@ -8823,7 +8823,7 @@ var DeleteFileResponse$inboundSchema = z268.object({
   deleted: z268.boolean()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletemodelresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deletemodelresponse.js
 import * as z269 from "zod/v4";
 var DeleteModelResponse$inboundSchema = z269.object({
   id: z269.string(),
@@ -8831,15 +8831,15 @@ var DeleteModelResponse$inboundSchema = z269.object({
   deleted: z269.boolean().default(true)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentdetailresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentdetailresponse.js
 init_primitives();
 import * as z272 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlocation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlocation.js
 init_primitives();
 import * as z270 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/locationtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/locationtype.js
 init_enums();
 var LocationType = {
   Local: "local",
@@ -8847,7 +8847,7 @@ var LocationType = {
 };
 var LocationType$inboundSchema = inboundSchema(LocationType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlocation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlocation.js
 var DeploymentLocation$inboundSchema = z270.object({
   location_type: LocationType$inboundSchema,
   k8s_cluster: z270.nullable(z270.string()).optional(),
@@ -8860,7 +8860,7 @@ var DeploymentLocation$inboundSchema = z270.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentworkerresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentworkerresponse.js
 init_primitives();
 import * as z271 from "zod/v4";
 var DeploymentWorkerResponse$inboundSchema = z271.object({
@@ -8876,7 +8876,7 @@ var DeploymentWorkerResponse$inboundSchema = z271.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentdetailresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentdetailresponse.js
 var DeploymentDetailResponse$inboundSchema = z272.object({
   id: z272.string(),
   name: z272.string(),
@@ -8895,11 +8895,11 @@ var DeploymentDetailResponse$inboundSchema = z272.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlistresponse.js
 init_primitives();
 import * as z274 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentresponse.js
 init_primitives();
 import * as z273 from "zod/v4";
 var DeploymentResponse$inboundSchema = z273.object({
@@ -8919,7 +8919,7 @@ var DeploymentResponse$inboundSchema = z273.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/deploymentlistresponse.js
 var DeploymentListResponse$inboundSchema = z274.object({
   deployments: z274.array(DeploymentResponse$inboundSchema),
   next_cursor: z274.nullable(z274.string()),
@@ -8931,11 +8931,11 @@ var DeploymentListResponse$inboundSchema = z274.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/document.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/document.js
 init_primitives();
 import * as z275 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/processstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/processstatus.js
 init_enums();
 var ProcessStatus = {
   SelfManaged: "self_managed",
@@ -8949,7 +8949,7 @@ var ProcessStatus = {
 };
 var ProcessStatus$inboundSchema = inboundSchema(ProcessStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/document.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/document.js
 var Document$inboundSchema = z275.object({
   id: z275.string(),
   library_id: z275.string(),
@@ -8990,13 +8990,13 @@ var Document$inboundSchema = z275.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenttextcontent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/documenttextcontent.js
 import * as z276 from "zod/v4";
 var DocumentTextContent$inboundSchema = z276.object({
   text: z276.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingdtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingdtype.js
 import * as z277 from "zod/v4";
 var EmbeddingDtype = {
   Float: "float",
@@ -9007,12 +9007,12 @@ var EmbeddingDtype = {
 };
 var EmbeddingDtype$outboundSchema = z277.enum(EmbeddingDtype);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingrequest.js
 init_primitives();
 init_smartUnion();
 import * as z279 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encodingformat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/encodingformat.js
 import * as z278 from "zod/v4";
 var EncodingFormat = {
   Float: "float",
@@ -9020,7 +9020,7 @@ var EncodingFormat = {
 };
 var EncodingFormat$outboundSchema = z278.enum(EncodingFormat);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingrequest.js
 var EmbeddingRequestInputs$outboundSchema = smartUnion([z279.string(), z279.array(z279.string())]);
 var EmbeddingRequest$outboundSchema = z279.object({
   model: z279.string(),
@@ -9038,10 +9038,10 @@ var EmbeddingRequest$outboundSchema = z279.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponse.js
 import * as z281 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponsedata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponsedata.js
 import * as z280 from "zod/v4";
 var EmbeddingResponseData$inboundSchema = z280.object({
   object: z280.string().optional(),
@@ -9049,7 +9049,7 @@ var EmbeddingResponseData$inboundSchema = z280.object({
   index: z280.int().optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/embeddingresponse.js
 init_usageinfo();
 var EmbeddingResponse$inboundSchema = z281.object({
   id: z281.string(),
@@ -9059,7 +9059,7 @@ var EmbeddingResponse$inboundSchema = z281.object({
   data: z281.array(EmbeddingResponseData$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/entitytype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/entitytype.js
 init_enums();
 var EntityType = {
   User: "User",
@@ -9068,7 +9068,7 @@ var EntityType = {
 };
 var EntityType$outboundSchema = outboundSchema(EntityType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventprogressstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventprogressstatus.js
 init_enums();
 var EventProgressStatus = {
   Running: "RUNNING",
@@ -9077,7 +9077,7 @@ var EventProgressStatus = {
 };
 var EventProgressStatus$inboundSchema = inboundSchema(EventProgressStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventsource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventsource.js
 import * as z282 from "zod/v4";
 var EventSource = {
   Database: "DATABASE",
@@ -9086,7 +9086,7 @@ var EventSource = {
 };
 var EventSource$outboundSchema = z282.enum(EventSource);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/eventtype.js
 init_enums();
 var EventType = {
   Event: "EVENT",
@@ -9094,7 +9094,7 @@ var EventType = {
 };
 var EventType$inboundSchema = inboundSchema(EventType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionlogrecord.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionlogrecord.js
 init_primitives();
 import * as z283 from "zod/v4";
 var ExecutionLogRecord$inboundSchema = z283.object({
@@ -9113,7 +9113,7 @@ var ExecutionLogRecord$inboundSchema = z283.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionlogsearchresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/executionlogsearchresponse.js
 init_primitives();
 import * as z284 from "zod/v4";
 var ExecutionLogSearchResponse$inboundSchema = z284.object({
@@ -9125,7 +9125,7 @@ var ExecutionLogSearchResponse$inboundSchema = z284.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/exportdatasetresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/exportdatasetresponse.js
 init_primitives();
 import * as z285 from "zod/v4";
 var ExportDatasetResponse$inboundSchema = z285.object({
@@ -9136,7 +9136,7 @@ var ExportDatasetResponse$inboundSchema = z285.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultchatcompletioneventpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultchatcompletioneventpreview.js
 import * as z286 from "zod/v4";
 var FeedResultChatCompletionEventPreview$inboundSchema = z286.object({
   results: z286.array(ChatCompletionEventPreview$inboundSchema).optional(),
@@ -9144,10 +9144,10 @@ var FeedResultChatCompletionEventPreview$inboundSchema = z286.object({
   cursor: z286.nullable(z286.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetlog.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetlog.js
 import * as z288 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlog.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlog.js
 init_primitives();
 import * as z287 from "zod/v4";
 var GetLog$inboundSchema = z287.object({
@@ -9194,17 +9194,17 @@ var GetLog$inboundSchema = z287.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetlog.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetlog.js
 var FeedResultGetLog$inboundSchema = z288.object({
   results: z288.array(GetLog$inboundSchema).optional(),
   next: z288.nullable(z288.string()).optional(),
   cursor: z288.nullable(z288.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspan.js
 import * as z290 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspan.js
 init_primitives();
 import * as z289 from "zod/v4";
 init_enums();
@@ -9338,17 +9338,17 @@ var GetSpan$inboundSchema = z289.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspan.js
 var FeedResultGetSpan$inboundSchema = z290.object({
   results: z290.array(GetSpan$inboundSchema).optional(),
   next: z290.nullable(z290.string()).optional(),
   cursor: z290.nullable(z290.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspanevaluation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspanevaluation.js
 import * as z292 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluation.js
 init_primitives();
 import * as z291 from "zod/v4";
 var GetSpanEvaluation$inboundSchema = z291.object({
@@ -9382,17 +9382,17 @@ var GetSpanEvaluation$inboundSchema = z291.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspanevaluation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgetspanevaluation.js
 var FeedResultGetSpanEvaluation$inboundSchema = z292.object({
   results: z292.array(GetSpanEvaluation$inboundSchema).optional(),
   next: z292.nullable(z292.string()).optional(),
   cursor: z292.nullable(z292.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgettrace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgettrace.js
 import * as z294 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettrace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettrace.js
 init_primitives();
 import * as z293 from "zod/v4";
 init_enums();
@@ -9474,20 +9474,20 @@ var GetTrace$inboundSchema = z293.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgettrace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/feedresultgettrace.js
 var FeedResultGetTrace$inboundSchema = z294.object({
   results: z294.array(GetTrace$inboundSchema).optional(),
   next: z294.nullable(z294.string()).optional(),
   cursor: z294.nullable(z294.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchcampaignstatusresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchcampaignstatusresponse.js
 import * as z295 from "zod/v4";
 var FetchCampaignStatusResponse$inboundSchema = z295.object({
   status: BaseTaskStatus$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchchatcompletionfieldoptionsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchchatcompletionfieldoptionsresponse.js
 import * as z296 from "zod/v4";
 init_smartUnion();
 var Option$inboundSchema = smartUnion([
@@ -9498,7 +9498,7 @@ var FetchChatCompletionFieldOptionsResponse$inboundSchema = z296.object({
   options: z296.nullable(z296.array(z296.nullable(smartUnion([z296.string(), z296.boolean()])))).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsrequest.js
 init_primitives();
 import * as z297 from "zod/v4";
 var FetchFieldOptionCountsRequest$outboundSchema = z297.object({
@@ -9509,29 +9509,29 @@ var FetchFieldOptionCountsRequest$outboundSchema = z297.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsresponse.js
 import * as z299 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fieldoptioncountitem.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fieldoptioncountitem.js
 import * as z298 from "zod/v4";
 var FieldOptionCountItem$inboundSchema = z298.object({
   value: z298.string(),
   count: z298.int()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fetchfieldoptioncountsresponse.js
 var FetchFieldOptionCountsResponse$inboundSchema = z299.object({
   counts: z299.array(FieldOptionCountItem$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fieldgroup.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fieldgroup.js
 import * as z300 from "zod/v4";
 var FieldGroup$inboundSchema = z300.object({
   name: z300.string(),
   label: z300.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fileschema.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fileschema.js
 init_primitives();
 import * as z301 from "zod/v4";
 var FileSchema$inboundSchema = z301.object({
@@ -9558,7 +9558,7 @@ var FileSchema$inboundSchema = z301.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionrequest.js
 init_primitives();
 init_smartUnion();
 import * as z302 from "zod/v4";
@@ -9586,7 +9586,7 @@ var FIMCompletionRequest$outboundSchema = z302.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionresponse.js
 import * as z303 from "zod/v4";
 init_usageinfo();
 var FIMCompletionResponse$inboundSchema = z303.object({
@@ -9598,7 +9598,7 @@ var FIMCompletionResponse$inboundSchema = z303.object({
   choices: z303.array(ChatCompletionChoice$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionstreamrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/fimcompletionstreamrequest.js
 init_primitives();
 init_smartUnion();
 import * as z304 from "zod/v4";
@@ -9626,7 +9626,7 @@ var FIMCompletionStreamRequest$outboundSchema = z304.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ftmodelcard.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ftmodelcard.js
 init_primitives();
 import * as z305 from "zod/v4";
 var FTModelCard$inboundSchema = z305.object({
@@ -9655,7 +9655,7 @@ var FTModelCard$inboundSchema = z305.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getfileresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getfileresponse.js
 init_primitives();
 import * as z306 from "zod/v4";
 var GetFileResponse$inboundSchema = z306.object({
@@ -9683,17 +9683,17 @@ var GetFileResponse$inboundSchema = z306.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfieldoptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfieldoptions.js
 import * as z307 from "zod/v4";
 var GetLogFieldOptions$inboundSchema = z307.object({
   options: z307.nullable(z307.array(z307.string()))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfields.js
 init_primitives();
 import * as z309 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/otelfielddefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/otelfielddefinition.js
 init_primitives();
 import * as z308 from "zod/v4";
 init_enums();
@@ -9747,7 +9747,7 @@ var OtelFieldDefinition$inboundSchema = z308.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogfields.js
 var GetLogFields$inboundSchema = z309.object({
   field_definitions: z309.array(OtelFieldDefinition$inboundSchema)
 }).transform((v) => {
@@ -9756,25 +9756,25 @@ var GetLogFields$inboundSchema = z309.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getlogs.js
 import * as z310 from "zod/v4";
 var GetLogs$inboundSchema = z310.object({
   logs: FeedResultGetLog$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getsignedurlresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getsignedurlresponse.js
 import * as z311 from "zod/v4";
 var GetSignedUrlResponse$inboundSchema = z311.object({
   url: z311.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluationfieldoptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluationfieldoptions.js
 import * as z312 from "zod/v4";
 var GetSpanEvaluationFieldOptions$inboundSchema = z312.object({
   options: z312.nullable(z312.array(z312.string()))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluationfields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluationfields.js
 init_primitives();
 import * as z313 from "zod/v4";
 var GetSpanEvaluationFields$inboundSchema = z313.object({
@@ -9785,7 +9785,7 @@ var GetSpanEvaluationFields$inboundSchema = z313.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanevaluations.js
 init_primitives();
 import * as z314 from "zod/v4";
 var GetSpanEvaluations$inboundSchema = z314.object({
@@ -9796,13 +9796,13 @@ var GetSpanEvaluations$inboundSchema = z314.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanfieldoptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanfieldoptions.js
 import * as z315 from "zod/v4";
 var GetSpanFieldOptions$inboundSchema = z315.object({
   options: z315.nullable(z315.array(z315.string()))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanfields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspanfields.js
 init_primitives();
 import * as z316 from "zod/v4";
 var GetSpanFields$inboundSchema = z316.object({
@@ -9813,19 +9813,19 @@ var GetSpanFields$inboundSchema = z316.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspans.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/getspans.js
 import * as z317 from "zod/v4";
 var GetSpans$inboundSchema = z317.object({
   spans: FeedResultGetSpan$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettracefieldoptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettracefieldoptions.js
 import * as z318 from "zod/v4";
 var GetTraceFieldOptions$inboundSchema = z318.object({
   options: z318.nullable(z318.array(z318.string()))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettracefields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettracefields.js
 init_primitives();
 import * as z319 from "zod/v4";
 var GetTraceFields$inboundSchema = z319.object({
@@ -9836,13 +9836,13 @@ var GetTraceFields$inboundSchema = z319.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettraces.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/gettraces.js
 import * as z320 from "zod/v4";
 var GetTraces$inboundSchema = z320.object({
   traces: FeedResultGetTrace$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromcampaignrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromcampaignrequest.js
 init_primitives();
 import * as z321 from "zod/v4";
 var ImportDatasetFromCampaignRequest$outboundSchema = z321.object({
@@ -9853,7 +9853,7 @@ var ImportDatasetFromCampaignRequest$outboundSchema = z321.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromdatasetrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromdatasetrequest.js
 init_primitives();
 import * as z322 from "zod/v4";
 var ImportDatasetFromDatasetRequest$outboundSchema = z322.object({
@@ -9864,7 +9864,7 @@ var ImportDatasetFromDatasetRequest$outboundSchema = z322.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromexplorerrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromexplorerrequest.js
 init_primitives();
 import * as z323 from "zod/v4";
 var ImportDatasetFromExplorerRequest$outboundSchema = z323.object({
@@ -9875,7 +9875,7 @@ var ImportDatasetFromExplorerRequest$outboundSchema = z323.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromfilerequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromfilerequest.js
 init_primitives();
 import * as z324 from "zod/v4";
 var ImportDatasetFromFileRequest$outboundSchema = z324.object({
@@ -9886,7 +9886,7 @@ var ImportDatasetFromFileRequest$outboundSchema = z324.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromplaygroundrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/importdatasetfromplaygroundrequest.js
 init_primitives();
 import * as z325 from "zod/v4";
 var ImportDatasetFromPlaygroundRequest$outboundSchema = z325.object({
@@ -9897,7 +9897,7 @@ var ImportDatasetFromPlaygroundRequest$outboundSchema = z325.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ingestionpipelineconfiguration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ingestionpipelineconfiguration.js
 init_primitives();
 import * as z326 from "zod/v4";
 var IngestionPipelineConfiguration$inboundSchema = z326.object({
@@ -9922,7 +9922,7 @@ var IngestionPipelineConfiguration$inboundSchema = z326.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgechatcompletioneventrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgechatcompletioneventrequest.js
 init_primitives();
 import * as z327 from "zod/v4";
 var JudgeChatCompletionEventRequest$outboundSchema = z327.object({
@@ -9933,14 +9933,14 @@ var JudgeChatCompletionEventRequest$outboundSchema = z327.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeconversationrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeconversationrequest.js
 import * as z328 from "zod/v4";
 var JudgeConversationRequest$outboundSchema = z328.object({
   messages: z328.array(z328.record(z328.string(), z328.any())),
   properties: z328.nullable(z328.record(z328.string(), z328.any())).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgedatasetrecordrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgedatasetrecordrequest.js
 init_primitives();
 import * as z329 from "zod/v4";
 var JudgeDatasetRecordRequest$outboundSchema = z329.object({
@@ -9951,7 +9951,7 @@ var JudgeDatasetRecordRequest$outboundSchema = z329.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeoutput.js
 import * as z330 from "zod/v4";
 init_smartUnion();
 var Answer$inboundSchema = smartUnion([
@@ -9963,7 +9963,7 @@ var JudgeOutput$inboundSchema = z330.object({
   answer: smartUnion([z330.string(), z330.number()])
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeoutputtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/judgeoutputtype.js
 import * as z331 from "zod/v4";
 var JudgeOutputType = {
   Regression: "REGRESSION",
@@ -9971,7 +9971,7 @@ var JudgeOutputType = {
 };
 var JudgeOutputType$outboundSchema = z331.enum(JudgeOutputType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/legacyjobmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/legacyjobmetadata.js
 init_primitives();
 import * as z332 from "zod/v4";
 var LegacyJobMetadata$inboundSchema = z332.object({
@@ -9999,7 +9999,7 @@ var LegacyJobMetadata$inboundSchema = z332.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/library.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/library.js
 init_primitives();
 import * as z333 from "zod/v4";
 var Library$inboundSchema = z333.object({
@@ -10036,7 +10036,7 @@ var Library$inboundSchema = z333.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listbatchjobsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listbatchjobsresponse.js
 import * as z334 from "zod/v4";
 var ListBatchJobsResponse$inboundSchema = z334.object({
   data: z334.array(BatchJob$inboundSchema).optional(),
@@ -10044,11 +10044,11 @@ var ListBatchJobsResponse$inboundSchema = z334.object({
   total: z334.int()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignselectedeventsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignselectedeventsresponse.js
 init_primitives();
 import * as z336 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultchatcompletioneventpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultchatcompletioneventpreview.js
 import * as z335 from "zod/v4";
 var PaginatedResultChatCompletionEventPreview$inboundSchema = z335.object({
   results: z335.array(ChatCompletionEventPreview$inboundSchema).optional(),
@@ -10057,7 +10057,7 @@ var PaginatedResultChatCompletionEventPreview$inboundSchema = z335.object({
   previous: z335.nullable(z335.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignselectedeventsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignselectedeventsresponse.js
 var ListCampaignSelectedEventsResponse$inboundSchema = z336.object({
   completion_events: PaginatedResultChatCompletionEventPreview$inboundSchema
 }).transform((v) => {
@@ -10066,10 +10066,10 @@ var ListCampaignSelectedEventsResponse$inboundSchema = z336.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignsresponse.js
 import * as z338 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultcampaignpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultcampaignpreview.js
 import * as z337 from "zod/v4";
 var PaginatedResultCampaignPreview$inboundSchema = z337.object({
   results: z337.array(Campaign$inboundSchema).optional(),
@@ -10078,12 +10078,12 @@ var PaginatedResultCampaignPreview$inboundSchema = z337.object({
   previous: z337.nullable(z337.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listcampaignsresponse.js
 var ListCampaignsResponse$inboundSchema = z338.object({
   campaigns: PaginatedResultCampaignPreview$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listchatcompletionfieldsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listchatcompletionfieldsresponse.js
 init_primitives();
 import * as z339 from "zod/v4";
 var ListChatCompletionFieldsResponse$inboundSchema = z339.object({
@@ -10096,10 +10096,10 @@ var ListChatCompletionFieldsResponse$inboundSchema = z339.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetimporttasksresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetimporttasksresponse.js
 import * as z341 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetimporttask.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetimporttask.js
 import * as z340 from "zod/v4";
 var PaginatedResultDatasetImportTask$inboundSchema = z340.object({
   results: z340.array(DatasetImportTask$inboundSchema).optional(),
@@ -10108,15 +10108,15 @@ var PaginatedResultDatasetImportTask$inboundSchema = z340.object({
   previous: z340.nullable(z340.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetimporttasksresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetimporttasksresponse.js
 var ListDatasetImportTasksResponse$inboundSchema = z341.object({
   tasks: PaginatedResultDatasetImportTask$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetrecordsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetrecordsresponse.js
 import * as z343 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetrecord.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetrecord.js
 import * as z342 from "zod/v4";
 var PaginatedResultDatasetRecord$inboundSchema = z342.object({
   results: z342.array(DatasetRecord$inboundSchema).optional(),
@@ -10125,15 +10125,15 @@ var PaginatedResultDatasetRecord$inboundSchema = z342.object({
   previous: z342.nullable(z342.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetrecordsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetrecordsresponse.js
 var ListDatasetRecordsResponse$inboundSchema = z343.object({
   records: PaginatedResultDatasetRecord$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetsresponse.js
 import * as z345 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetpreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultdatasetpreview.js
 import * as z344 from "zod/v4";
 var PaginatedResultDatasetPreview$inboundSchema = z344.object({
   results: z344.array(DatasetPreview$inboundSchema).optional(),
@@ -10142,15 +10142,15 @@ var PaginatedResultDatasetPreview$inboundSchema = z344.object({
   previous: z344.nullable(z344.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdatasetsresponse.js
 var ListDatasetsResponse$inboundSchema = z345.object({
   datasets: PaginatedResultDatasetPreview$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdocumentsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdocumentsresponse.js
 import * as z347 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginationinfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginationinfo.js
 init_primitives();
 import * as z346 from "zod/v4";
 var PaginationInfo$inboundSchema = z346.object({
@@ -10169,13 +10169,13 @@ var PaginationInfo$inboundSchema = z346.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdocumentsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listdocumentsresponse.js
 var ListDocumentsResponse$inboundSchema = z347.object({
   pagination: PaginationInfo$inboundSchema,
   data: z347.array(Document$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listfilesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listfilesresponse.js
 import * as z348 from "zod/v4";
 var ListFilesResponse$inboundSchema = z348.object({
   data: z348.array(FileSchema$inboundSchema),
@@ -10183,7 +10183,7 @@ var ListFilesResponse$inboundSchema = z348.object({
   total: z348.nullable(z348.int()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listfinetuningjobsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listfinetuningjobsresponse.js
 import * as z349 from "zod/v4";
 init_discriminatedUnion();
 var ListFineTuningJobsResponseData$inboundSchema = discriminatedUnion("job_type", {
@@ -10199,10 +10199,10 @@ var ListFineTuningJobsResponse$inboundSchema = z349.object({
   total: z349.int()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listjudgesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listjudgesresponse.js
 import * as z351 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultjudgepreview.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedresultjudgepreview.js
 import * as z350 from "zod/v4";
 var PaginatedResultJudgePreview$inboundSchema = z350.object({
   results: z350.array(Judge$inboundSchema).optional(),
@@ -10211,22 +10211,22 @@ var PaginatedResultJudgePreview$inboundSchema = z350.object({
   previous: z350.nullable(z350.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listjudgesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listjudgesresponse.js
 var ListJudgesResponse$inboundSchema = z351.object({
   judges: PaginatedResultJudgePreview$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listlibrariesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listlibrariesresponse.js
 import * as z352 from "zod/v4";
 var ListLibrariesResponse$inboundSchema = z352.object({
   pagination: PaginationInfo$inboundSchema,
   data: z352.array(Library$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listsharingresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listsharingresponse.js
 import * as z354 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharing.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharing.js
 init_primitives();
 import * as z353 from "zod/v4";
 var Sharing$inboundSchema = z353.object({
@@ -10246,21 +10246,21 @@ var Sharing$inboundSchema = z353.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listsharingresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listsharingresponse.js
 var ListSharingResponse$inboundSchema = z354.object({
   data: z354.array(Sharing$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listworkfloweventresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listworkfloweventresponse.js
 init_primitives();
 import * as z369 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledresponse.js
 init_primitives();
 import * as z356 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledattributes.js
 init_primitives();
 import * as z355 from "zod/v4";
 var WorkflowExecutionCanceledAttributes$inboundSchema = z355.object({
@@ -10272,7 +10272,7 @@ var WorkflowExecutionCanceledAttributes$inboundSchema = z355.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncanceledresponse.js
 var WorkflowExecutionCanceledResponse$inboundSchema = z356.object({
   event_id: z356.string(),
   event_timestamp: z356.int(),
@@ -10296,11 +10296,11 @@ var WorkflowExecutionCanceledResponse$inboundSchema = z356.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedresponse.js
 init_primitives();
 import * as z358 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedattributesresponse.js
 init_primitives();
 import * as z357 from "zod/v4";
 var WorkflowExecutionCompletedAttributesResponse$inboundSchema = z357.object({
@@ -10312,7 +10312,7 @@ var WorkflowExecutionCompletedAttributesResponse$inboundSchema = z357.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncompletedresponse.js
 var WorkflowExecutionCompletedResponse$inboundSchema = z358.object({
   event_id: z358.string(),
   event_timestamp: z358.int(),
@@ -10336,11 +10336,11 @@ var WorkflowExecutionCompletedResponse$inboundSchema = z358.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewresponse.js
 init_primitives();
 import * as z360 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewattributesresponse.js
 init_primitives();
 import * as z359 from "zod/v4";
 var WorkflowExecutionContinuedAsNewAttributesResponse$inboundSchema = z359.object({
@@ -10356,7 +10356,7 @@ var WorkflowExecutionContinuedAsNewAttributesResponse$inboundSchema = z359.objec
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutioncontinuedasnewresponse.js
 var WorkflowExecutionContinuedAsNewResponse$inboundSchema = z360.object({
   event_id: z360.string(),
   event_timestamp: z360.int(),
@@ -10380,11 +10380,11 @@ var WorkflowExecutionContinuedAsNewResponse$inboundSchema = z360.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedresponse.js
 init_primitives();
 import * as z362 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedattributes.js
 init_primitives();
 import * as z361 from "zod/v4";
 var WorkflowExecutionFailedAttributes$inboundSchema = z361.object({
@@ -10396,7 +10396,7 @@ var WorkflowExecutionFailedAttributes$inboundSchema = z361.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionfailedresponse.js
 var WorkflowExecutionFailedResponse$inboundSchema = z362.object({
   event_id: z362.string(),
   event_timestamp: z362.int(),
@@ -10420,11 +10420,11 @@ var WorkflowExecutionFailedResponse$inboundSchema = z362.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedresponse.js
 init_primitives();
 import * as z364 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedattributesresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedattributesresponse.js
 init_primitives();
 import * as z363 from "zod/v4";
 var WorkflowExecutionStartedAttributesResponse$inboundSchema = z363.object({
@@ -10440,7 +10440,7 @@ var WorkflowExecutionStartedAttributesResponse$inboundSchema = z363.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstartedresponse.js
 var WorkflowExecutionStartedResponse$inboundSchema = z364.object({
   event_id: z364.string(),
   event_timestamp: z364.int(),
@@ -10464,11 +10464,11 @@ var WorkflowExecutionStartedResponse$inboundSchema = z364.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedresponse.js
 init_primitives();
 import * as z366 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedattributes.js
 init_primitives();
 import * as z365 from "zod/v4";
 var WorkflowTaskFailedAttributes$inboundSchema = z365.object({
@@ -10480,7 +10480,7 @@ var WorkflowTaskFailedAttributes$inboundSchema = z365.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtaskfailedresponse.js
 var WorkflowTaskFailedResponse$inboundSchema = z366.object({
   event_id: z366.string(),
   event_timestamp: z366.int(),
@@ -10504,11 +10504,11 @@ var WorkflowTaskFailedResponse$inboundSchema = z366.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutresponse.js
 init_primitives();
 import * as z368 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutattributes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutattributes.js
 init_primitives();
 import * as z367 from "zod/v4";
 var WorkflowTaskTimedOutAttributes$inboundSchema = z367.object({
@@ -10521,7 +10521,7 @@ var WorkflowTaskTimedOutAttributes$inboundSchema = z367.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtasktimedoutresponse.js
 var WorkflowTaskTimedOutResponse$inboundSchema = z368.object({
   event_id: z368.string(),
   event_timestamp: z368.int(),
@@ -10545,7 +10545,7 @@ var WorkflowTaskTimedOutResponse$inboundSchema = z368.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listworkfloweventresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/listworkfloweventresponse.js
 var ListWorkflowEventResponseEvent$inboundSchema = smartUnion([
   WorkflowExecutionStartedResponse$inboundSchema,
   WorkflowExecutionCompletedResponse$inboundSchema,
@@ -10592,7 +10592,7 @@ var ListWorkflowEventResponse$inboundSchema = z369.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/logsrequest.js
 init_primitives();
 import * as z370 from "zod/v4";
 var Order = {
@@ -10609,7 +10609,7 @@ var LogsRequest$outboundSchema = z370.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/mcptool.js
 init_primitives();
 import * as z371 from "zod/v4";
 var MCPTool$inboundSchema = z371.object({
@@ -10628,17 +10628,17 @@ var MCPTool$inboundSchema = z371.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messageresponse.js
 import * as z372 from "zod/v4";
 var MessageResponse$inboundSchema = z372.object({
   message: z372.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messagetokens.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messagetokens.js
 init_primitives();
 import * as z373 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/roles.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/roles.js
 init_enums();
 var Roles = {
   System: "system",
@@ -10648,7 +10648,7 @@ var Roles = {
 };
 var Roles$inboundSchema = inboundSchema(Roles);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messagetokens.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/messagetokens.js
 var MessageTokens$inboundSchema = z373.object({
   role: Roles$inboundSchema,
   total_tokens: z373.nullable(z373.int()).optional(),
@@ -10661,7 +10661,7 @@ var MessageTokens$inboundSchema = z373.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modelconversation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modelconversation.js
 init_primitives();
 import * as z374 from "zod/v4";
 init_discriminatedUnion();
@@ -10703,7 +10703,7 @@ var ModelConversation$inboundSchema = z374.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modellist.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/modellist.js
 import * as z375 from "zod/v4";
 init_discriminatedUnion();
 var ModelListData$inboundSchema = discriminatedUnion("type", {
@@ -10718,7 +10718,7 @@ var ModelList$inboundSchema = z375.object({
   })).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationobject.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationobject.js
 init_primitives();
 import * as z376 from "zod/v4";
 var ModerationObject$inboundSchema = z376.object({
@@ -10730,7 +10730,7 @@ var ModerationObject$inboundSchema = z376.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/moderationresponse.js
 import * as z377 from "zod/v4";
 var ModerationResponse$inboundSchema = z377.object({
   id: z377.string(),
@@ -10738,7 +10738,7 @@ var ModerationResponse$inboundSchema = z377.object({
   results: z377.array(ModerationObject$inboundSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/networkencodedinput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/networkencodedinput.js
 init_primitives();
 import * as z378 from "zod/v4";
 var NetworkEncodedInput$outboundSchema = z378.object({
@@ -10751,7 +10751,7 @@ var NetworkEncodedInput$outboundSchema = z378.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/observabilityerrorcode.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/observabilityerrorcode.js
 init_enums();
 var ObservabilityErrorCode = {
   UnknownError: "UNKNOWN_ERROR",
@@ -10805,7 +10805,7 @@ var ObservabilityErrorCode = {
 };
 var ObservabilityErrorCode$inboundSchema = inboundSchema(ObservabilityErrorCode);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/observabilityerrordetail.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/observabilityerrordetail.js
 init_primitives();
 import * as z379 from "zod/v4";
 var ObservabilityErrorDetail$inboundSchema = z379.object({
@@ -10817,7 +10817,7 @@ var ObservabilityErrorDetail$inboundSchema = z379.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrconfidencescore.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrconfidencescore.js
 init_primitives();
 import * as z380 from "zod/v4";
 var OCRConfidenceScore$inboundSchema = z380.object({
@@ -10830,7 +10830,7 @@ var OCRConfidenceScore$inboundSchema = z380.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrimageobject.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrimageobject.js
 init_primitives();
 import * as z381 from "zod/v4";
 var OCRImageObject$inboundSchema = z381.object({
@@ -10852,7 +10852,7 @@ var OCRImageObject$inboundSchema = z381.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageconfidencescores.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageconfidencescores.js
 init_primitives();
 import * as z382 from "zod/v4";
 var OCRPageConfidenceScores$inboundSchema = z382.object({
@@ -10867,7 +10867,7 @@ var OCRPageConfidenceScores$inboundSchema = z382.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpagedimensions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpagedimensions.js
 import * as z383 from "zod/v4";
 var OCRPageDimensions$inboundSchema = z383.object({
   dpi: z383.int(),
@@ -10875,11 +10875,11 @@ var OCRPageDimensions$inboundSchema = z383.object({
   width: z383.int()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageobject.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageobject.js
 init_primitives();
 import * as z385 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrtableobject.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrtableobject.js
 init_primitives();
 import * as z384 from "zod/v4";
 init_enums();
@@ -10899,7 +10899,7 @@ var OCRTableObject$inboundSchema = z384.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageobject.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrpageobject.js
 var OCRPageObject$inboundSchema = z385.object({
   index: z385.int(),
   markdown: z385.string(),
@@ -10916,7 +10916,7 @@ var OCRPageObject$inboundSchema = z385.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrrequest.js
 init_primitives();
 init_smartUnion();
 init_documenturlchunk();
@@ -10972,11 +10972,11 @@ var OCRRequest$outboundSchema = z386.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrresponse.js
 init_primitives();
 import * as z388 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrusageinfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrusageinfo.js
 init_primitives();
 import * as z387 from "zod/v4";
 var OCRUsageInfo$inboundSchema = z387.object({
@@ -10989,7 +10989,7 @@ var OCRUsageInfo$inboundSchema = z387.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/ocrresponse.js
 var OCRResponse$inboundSchema = z388.object({
   pages: z388.array(OCRPageObject$inboundSchema),
   model: z388.string(),
@@ -11002,10 +11002,10 @@ var OCRResponse$inboundSchema = z388.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedconnectors.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedconnectors.js
 import * as z390 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginationresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginationresponse.js
 init_primitives();
 import * as z389 from "zod/v4";
 var PaginationResponse$inboundSchema = z389.object({
@@ -11018,21 +11018,21 @@ var PaginationResponse$inboundSchema = z389.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedconnectors.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/paginatedconnectors.js
 var PaginatedConnectors$inboundSchema = z390.object({
   items: z390.array(Connector$inboundSchema),
   pagination: PaginationResponse$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/partialscheduledefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/partialscheduledefinition.js
 init_primitives();
 import * as z395 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulecalendar.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulecalendar.js
 init_primitives();
 import * as z392 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulerange.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulerange.js
 import * as z391 from "zod/v4";
 var ScheduleRange$inboundSchema = z391.object({
   start: z391.int(),
@@ -11045,7 +11045,7 @@ var ScheduleRange$outboundSchema = z391.object({
   step: z391.int().default(0)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulecalendar.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulecalendar.js
 var ScheduleCalendar$inboundSchema = z392.object({
   second: z392.array(ScheduleRange$inboundSchema).optional(),
   minute: z392.array(ScheduleRange$inboundSchema).optional(),
@@ -11077,7 +11077,7 @@ var ScheduleCalendar$outboundSchema = z392.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduleinterval.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduleinterval.js
 import * as z393 from "zod/v4";
 var ScheduleInterval$inboundSchema = z393.object({
   every: z393.string(),
@@ -11088,11 +11088,11 @@ var ScheduleInterval$outboundSchema = z393.object({
   offset: z393.nullable(z393.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulepolicy.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulepolicy.js
 init_primitives();
 import * as z394 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduleoverlappolicy.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduleoverlappolicy.js
 init_enums();
 var ScheduleOverlapPolicy = {
   One: 1,
@@ -11105,7 +11105,7 @@ var ScheduleOverlapPolicy = {
 var ScheduleOverlapPolicy$inboundSchema = inboundSchemaInt(ScheduleOverlapPolicy);
 var ScheduleOverlapPolicy$outboundSchema = outboundSchemaInt(ScheduleOverlapPolicy);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulepolicy.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulepolicy.js
 var SchedulePolicy$inboundSchema = z394.object({
   catchup_window_seconds: z394.int().default(31536e3),
   overlap: ScheduleOverlapPolicy$inboundSchema.optional(),
@@ -11127,7 +11127,7 @@ var SchedulePolicy$outboundSchema = z394.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/partialscheduledefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/partialscheduledefinition.js
 var PartialScheduleDefinition$outboundSchema = z395.object({
   input: z395.any().optional(),
   calendars: z395.array(ScheduleCalendar$outboundSchema).optional(),
@@ -11150,7 +11150,7 @@ var PartialScheduleDefinition$outboundSchema = z395.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/processingstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/processingstatus.js
 init_primitives();
 import * as z396 from "zod/v4";
 var ProcessingStatus$inboundSchema = z396.object({
@@ -11165,7 +11165,7 @@ var ProcessingStatus$inboundSchema = z396.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/prompttokensdetails.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/prompttokensdetails.js
 init_primitives();
 import * as z397 from "zod/v4";
 var PromptTokensDetails$inboundSchema = z397.object({
@@ -11179,7 +11179,7 @@ var PromptTokensDetails$inboundSchema = z397.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/querydefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/querydefinition.js
 init_primitives();
 import * as z398 from "zod/v4";
 var QueryDefinition$inboundSchema = z398.object({
@@ -11194,7 +11194,7 @@ var QueryDefinition$inboundSchema = z398.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/queryinvocationbody.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/queryinvocationbody.js
 init_smartUnion();
 import * as z399 from "zod/v4";
 var QueryInvocationBodyInput$outboundSchema = smartUnion([
@@ -11209,7 +11209,7 @@ var QueryInvocationBody$outboundSchema = z399.object({
   ])).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/queryworkflowresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/queryworkflowresponse.js
 init_primitives();
 import * as z400 from "zod/v4";
 var QueryWorkflowResponse$inboundSchema = z400.object({
@@ -11221,7 +11221,7 @@ var QueryWorkflowResponse$inboundSchema = z400.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/requestsource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/requestsource.js
 import * as z401 from "zod/v4";
 var RequestSource = {
   Api: "api",
@@ -11230,7 +11230,7 @@ var RequestSource = {
 };
 var RequestSource$outboundSchema = z401.enum(RequestSource);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resetinvocationbody.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/resetinvocationbody.js
 init_primitives();
 import * as z402 from "zod/v4";
 var ResetInvocationBody$outboundSchema = z402.object({
@@ -11246,7 +11246,7 @@ var ResetInvocationBody$outboundSchema = z402.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scalarmetric.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scalarmetric.js
 import * as z403 from "zod/v4";
 init_smartUnion();
 var ScalarMetricValue$inboundSchema = smartUnion([z403.int(), z403.number()]);
@@ -11254,7 +11254,7 @@ var ScalarMetric$inboundSchema = z403.object({
   value: smartUnion([z403.int(), z403.number()])
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinition.js
 init_primitives();
 import * as z404 from "zod/v4";
 var ScheduleDefinition$outboundSchema = z404.object({
@@ -11281,11 +11281,11 @@ var ScheduleDefinition$outboundSchema = z404.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinitionoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinitionoutput.js
 init_primitives();
 import * as z407 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulefutureexecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulefutureexecution.js
 init_primitives();
 import * as z405 from "zod/v4";
 var ScheduleFutureExecution$inboundSchema = z405.object({
@@ -11296,7 +11296,7 @@ var ScheduleFutureExecution$inboundSchema = z405.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulerecentexecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/schedulerecentexecution.js
 init_primitives();
 import * as z406 from "zod/v4";
 var ScheduleRecentExecution$inboundSchema = z406.object({
@@ -11311,7 +11311,7 @@ var ScheduleRecentExecution$inboundSchema = z406.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinitionoutput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/scheduledefinitionoutput.js
 var ScheduleDefinitionOutput$inboundSchema = z407.object({
   input: z407.any(),
   calendars: z407.array(ScheduleCalendar$inboundSchema).optional(),
@@ -11344,7 +11344,7 @@ var ScheduleDefinitionOutput$inboundSchema = z407.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventidsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventidsrequest.js
 init_primitives();
 import * as z408 from "zod/v4";
 var SearchChatCompletionEventIdsRequest$outboundSchema = z408.object({
@@ -11357,7 +11357,7 @@ var SearchChatCompletionEventIdsRequest$outboundSchema = z408.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventidsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventidsresponse.js
 init_primitives();
 import * as z409 from "zod/v4";
 var SearchChatCompletionEventIdsResponse$inboundSchema = z409.object({
@@ -11368,7 +11368,7 @@ var SearchChatCompletionEventIdsResponse$inboundSchema = z409.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventsrequest.js
 init_primitives();
 import * as z410 from "zod/v4";
 var SearchChatCompletionEventsRequest$outboundSchema = z410.object({
@@ -11381,7 +11381,7 @@ var SearchChatCompletionEventsRequest$outboundSchema = z410.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchchatcompletioneventsresponse.js
 init_primitives();
 import * as z411 from "zod/v4";
 var SearchChatCompletionEventsResponse$inboundSchema = z411.object({
@@ -11392,16 +11392,16 @@ var SearchChatCompletionEventsResponse$inboundSchema = z411.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchindexresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchindexresponse.js
 init_primitives();
 import * as z414 from "zod/v4";
 init_enums();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespasearchindexinforesponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespasearchindexinforesponse.js
 init_primitives();
 import * as z413 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespaschemaresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespaschemaresponse.js
 init_primitives();
 import * as z412 from "zod/v4";
 var VespaSchemaResponse$inboundSchema = z412.object({
@@ -11413,7 +11413,7 @@ var VespaSchemaResponse$inboundSchema = z412.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespasearchindexinforesponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/vespasearchindexinforesponse.js
 var VespaSearchIndexInfoResponse$inboundSchema = z413.object({
   type: z413.literal("vespa"),
   k8s_cluster: z413.string(),
@@ -11428,7 +11428,7 @@ var VespaSearchIndexInfoResponse$inboundSchema = z413.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchindexresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/searchindexresponse.js
 var SearchIndexResponseStatus = {
   Online: "online",
   Offline: "offline"
@@ -11452,7 +11452,7 @@ var SearchIndexResponse$inboundSchema = z414.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/shareenum.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/shareenum.js
 init_enums();
 var ShareEnum = {
   Viewer: "Viewer",
@@ -11460,7 +11460,7 @@ var ShareEnum = {
 };
 var ShareEnum$outboundSchema = outboundSchema(ShareEnum);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharingdelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharingdelete.js
 init_primitives();
 import * as z415 from "zod/v4";
 var SharingDelete$outboundSchema = z415.object({
@@ -11475,7 +11475,7 @@ var SharingDelete$outboundSchema = z415.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharingrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/sharingrequest.js
 init_primitives();
 import * as z416 from "zod/v4";
 var SharingRequest$outboundSchema = z416.object({
@@ -11491,7 +11491,7 @@ var SharingRequest$outboundSchema = z416.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signaldefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signaldefinition.js
 init_primitives();
 import * as z417 from "zod/v4";
 var SignalDefinition$inboundSchema = z417.object({
@@ -11504,7 +11504,7 @@ var SignalDefinition$inboundSchema = z417.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signalinvocationbody.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signalinvocationbody.js
 init_primitives();
 init_smartUnion();
 import * as z418 from "zod/v4";
@@ -11531,13 +11531,13 @@ var SignalInvocationBody$outboundSchema = z418.object({
   ])).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signalworkflowresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/signalworkflowresponse.js
 import * as z419 from "zod/v4";
 var SignalWorkflowResponse$inboundSchema = z419.object({
   message: z419.string().default("Signal accepted")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/spanevaluationsrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/spanevaluationsrequest.js
 init_primitives();
 import * as z420 from "zod/v4";
 var SpanEvaluationsRequest$outboundSchema = z420.object({
@@ -11548,7 +11548,7 @@ var SpanEvaluationsRequest$outboundSchema = z420.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/spansrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/spansrequest.js
 init_primitives();
 import * as z421 from "zod/v4";
 var SpansRequest$outboundSchema = z421.object({
@@ -11559,7 +11559,7 @@ var SpansRequest$outboundSchema = z421.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechoutputformat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechoutputformat.js
 import * as z422 from "zod/v4";
 var SpeechOutputFormat = {
   Pcm: "pcm",
@@ -11570,7 +11570,7 @@ var SpeechOutputFormat = {
 };
 var SpeechOutputFormat$outboundSchema = z422.enum(SpeechOutputFormat);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechrequest.js
 init_primitives();
 import * as z423 from "zod/v4";
 var SpeechRequest$outboundSchema = z423.object({
@@ -11591,7 +11591,7 @@ var SpeechRequest$outboundSchema = z423.object({
   };
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamaudiodelta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamaudiodelta.js
 init_primitives();
 import * as z424 from "zod/v4";
 var SpeechStreamAudioDelta$inboundSchema = z424.object({
@@ -11603,10 +11603,10 @@ var SpeechStreamAudioDelta$inboundSchema = z424.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamdone.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamdone.js
 import * as z426 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfodollardefs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/usageinfodollardefs.js
 init_primitives();
 import * as z425 from "zod/v4";
 var UsageInfoDollarDefs$inboundSchema = z425.object({
@@ -11633,13 +11633,13 @@ var UsageInfoDollarDefs$inboundSchema = z425.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamdone.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreamdone.js
 var SpeechStreamDone$inboundSchema = z426.object({
   type: z426.literal("speech.audio.done"),
   usage: UsageInfoDollarDefs$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreameventtypes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/speechstreameventtypes.js
 init_enums();
 var SpeechStreamEventTypes = {
   SpeechAudioDelta: "speech.audio.delta",
@@ -11647,18 +11647,18 @@ var SpeechStreamEventTypes = {
 };
 var SpeechStreamEventTypes$inboundSchema = inboundSchema(SpeechStreamEventTypes);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streamerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streamerror.js
 import * as z427 from "zod/v4";
 var StreamError$inboundSchema = z427.object({
   error: z427.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventssepayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventssepayload.js
 init_primitives();
 import * as z429 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventworkflowcontext.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventworkflowcontext.js
 init_primitives();
 import * as z428 from "zod/v4";
 var StreamEventWorkflowContext$inboundSchema = z428.object({
@@ -11676,7 +11676,7 @@ var StreamEventWorkflowContext$inboundSchema = z428.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventssepayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/streameventssepayload.js
 var StreamEventSsePayloadData$inboundSchema = smartUnion([
   WorkflowExecutionStartedResponse$inboundSchema,
   WorkflowExecutionCompletedResponse$inboundSchema,
@@ -11728,26 +11728,26 @@ var StreamEventSsePayload$inboundSchema = z429.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempogettraceresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempogettraceresponse.js
 import * as z443 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracebatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracebatch.js
 import * as z442 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceresource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceresource.js
 import * as z437 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattribute.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattribute.js
 import * as z436 from "zod/v4";
 init_smartUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayvalue.js
 import * as z432 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearraycontainer.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearraycontainer.js
 import * as z431 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayelement.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayelement.js
 import * as z430 from "zod/v4";
 var TempoTraceAttributeArrayElement$inboundSchema = z430.object({
   stringValue: z430.nullable(z430.string()).optional(),
@@ -11755,35 +11755,35 @@ var TempoTraceAttributeArrayElement$inboundSchema = z430.object({
   boolValue: z430.nullable(z430.boolean()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearraycontainer.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearraycontainer.js
 var TempoTraceAttributeArrayContainer$inboundSchema = z431.object({
   values: z431.array(TempoTraceAttributeArrayElement$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributearrayvalue.js
 var TempoTraceAttributeArrayValue$inboundSchema = z432.object({
   arrayValue: TempoTraceAttributeArrayContainer$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributeboolvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributeboolvalue.js
 import * as z433 from "zod/v4";
 var TempoTraceAttributeBoolValue$inboundSchema = z433.object({
   boolValue: z433.boolean()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributeintvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributeintvalue.js
 import * as z434 from "zod/v4";
 var TempoTraceAttributeIntValue$inboundSchema = z434.object({
   intValue: z434.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributestringvalue.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattributestringvalue.js
 import * as z435 from "zod/v4";
 var TempoTraceAttributeStringValue$inboundSchema = z435.object({
   stringValue: z435.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattribute.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceattribute.js
 var TempoTraceAttributeValue$inboundSchema = smartUnion([
   TempoTraceAttributeStringValue$inboundSchema,
   TempoTraceAttributeIntValue$inboundSchema,
@@ -11800,24 +11800,24 @@ var TempoTraceAttribute$inboundSchema = z436.object({
   ])
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceresource.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceresource.js
 var TempoTraceResource$inboundSchema = z437.object({
   attributes: z437.array(TempoTraceAttribute$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopespan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopespan.js
 import * as z441 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescope.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescope.js
 import * as z438 from "zod/v4";
 var TempoTraceScope$inboundSchema = z438.object({
   name: z438.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracespan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracespan.js
 import * as z440 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotraceevent.js
 import * as z439 from "zod/v4";
 var TempoTraceEvent$inboundSchema = z439.object({
   name: z439.string(),
@@ -11825,7 +11825,7 @@ var TempoTraceEvent$inboundSchema = z439.object({
   attributes: z439.array(TempoTraceAttribute$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopekind.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopekind.js
 init_enums();
 var TempoTraceScopeKind = {
   SpanKindInternal: "SPAN_KIND_INTERNAL",
@@ -11834,7 +11834,7 @@ var TempoTraceScopeKind = {
 };
 var TempoTraceScopeKind$inboundSchema = inboundSchema(TempoTraceScopeKind);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracespan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracespan.js
 var TempoTraceSpan$inboundSchema = z440.object({
   traceId: z440.string(),
   spanId: z440.string(),
@@ -11847,24 +11847,24 @@ var TempoTraceSpan$inboundSchema = z440.object({
   events: z440.array(TempoTraceEvent$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopespan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracescopespan.js
 var TempoTraceScopeSpan$inboundSchema = z441.object({
   scope: TempoTraceScope$inboundSchema,
   spans: z441.array(TempoTraceSpan$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracebatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempotracebatch.js
 var TempoTraceBatch$inboundSchema = z442.object({
   resource: TempoTraceResource$inboundSchema,
   scopeSpans: z442.array(TempoTraceScopeSpan$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempogettraceresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tempogettraceresponse.js
 var TempoGetTraceResponse$inboundSchema = z443.object({
   batches: z443.array(TempoTraceBatch$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/timeseriesmetric.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/timeseriesmetric.js
 import * as z444 from "zod/v4";
 init_smartUnion();
 var TimeSeriesMetricValue1$inboundSchema = smartUnion([z444.int(), z444.number()]);
@@ -11873,7 +11873,7 @@ var TimeSeriesMetric$inboundSchema = z444.object({
   value: z444.array(z444.array(smartUnion([z444.int(), smartUnion([z444.int(), z444.number()])])))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tracesrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/tracesrequest.js
 init_primitives();
 import * as z445 from "zod/v4";
 var TracesRequest$outboundSchema = z445.object({
@@ -11884,10 +11884,10 @@ var TracesRequest$outboundSchema = z445.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionresponse.js
 import * as z447 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionsegmentchunk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionsegmentchunk.js
 init_primitives();
 import * as z446 from "zod/v4";
 var TranscriptionSegmentChunk$inboundSchema = z446.object({
@@ -11917,7 +11917,7 @@ var TranscriptionSegmentChunk$outboundSchema = z446.object({
   };
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionresponse.js
 init_usageinfo();
 var TranscriptionResponse$inboundSchema = z447.object({
   model: z447.string(),
@@ -11927,7 +11927,7 @@ var TranscriptionResponse$inboundSchema = z447.object({
   language: z447.nullable(z447.string())
 }).catchall(z447.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamdone.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamdone.js
 import * as z448 from "zod/v4";
 init_usageinfo();
 var TranscriptionStreamDone$inboundSchema = z448.object({
@@ -11947,11 +11947,11 @@ var TranscriptionStreamDone$outboundSchema = z448.object({
   language: z448.nullable(z448.string())
 }).catchall(z448.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamevents.js
 import * as z452 from "zod/v4";
 init_discriminatedUnion();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreameventtypes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreameventtypes.js
 init_enums();
 var TranscriptionStreamEventTypes = {
   TranscriptionLanguage: "transcription.language",
@@ -11961,7 +11961,7 @@ var TranscriptionStreamEventTypes = {
 };
 var TranscriptionStreamEventTypes$inboundSchema = inboundSchema(TranscriptionStreamEventTypes);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamlanguage.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamlanguage.js
 init_primitives();
 import * as z449 from "zod/v4";
 var TranscriptionStreamLanguage$inboundSchema = z449.object({
@@ -11983,7 +11983,7 @@ var TranscriptionStreamLanguage$outboundSchema = z449.object({
   };
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamsegmentdelta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamsegmentdelta.js
 init_primitives();
 import * as z450 from "zod/v4";
 var TranscriptionStreamSegmentDelta$inboundSchema = z450.object({
@@ -11998,7 +11998,7 @@ var TranscriptionStreamSegmentDelta$inboundSchema = z450.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamtextdelta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamtextdelta.js
 import * as z451 from "zod/v4";
 var TranscriptionStreamTextDelta$inboundSchema = z451.object({
   type: z451.literal("transcription.text.delta"),
@@ -12009,7 +12009,7 @@ var TranscriptionStreamTextDelta$outboundSchema = z451.object({
   text: z451.string()
 }).catchall(z451.any());
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/transcriptionstreamevents.js
 var TranscriptionStreamEventsData$inboundSchema = discriminatedUnion("type", {
   ["transcription.done"]: TranscriptionStreamDone$inboundSchema,
   ["transcription.language"]: TranscriptionStreamLanguage$inboundSchema,
@@ -12037,7 +12037,7 @@ var TranscriptionStreamEvents$inboundSchema = z452.object({
   }))
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/unarchivemodelresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/unarchivemodelresponse.js
 import * as z453 from "zod/v4";
 var UnarchiveModelResponse$inboundSchema = z453.object({
   id: z453.string(),
@@ -12045,7 +12045,7 @@ var UnarchiveModelResponse$inboundSchema = z453.object({
   archived: z453.boolean().default(false)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateagentrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateagentrequest.js
 init_primitives();
 import * as z454 from "zod/v4";
 var UpdateAgentRequestTool$outboundSchema = z454.union([
@@ -12085,7 +12085,7 @@ var UpdateAgentRequest$outboundSchema = z454.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateconnectorrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateconnectorrequest.js
 init_primitives();
 import * as z455 from "zod/v4";
 var UpdateConnectorRequest$outboundSchema = z455.object({
@@ -12110,26 +12110,26 @@ var UpdateConnectorRequest$outboundSchema = z455.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrecordpayloadrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrecordpayloadrequest.js
 import * as z456 from "zod/v4";
 var UpdateDatasetRecordPayloadRequest$outboundSchema = z456.object({
   payload: ConversationPayload$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrecordpropertiesrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrecordpropertiesrequest.js
 import * as z457 from "zod/v4";
 var UpdateDatasetRecordPropertiesRequest$outboundSchema = z457.object({
   properties: z457.record(z457.string(), z457.any())
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedatasetrequest.js
 import * as z458 from "zod/v4";
 var UpdateDatasetRequest$outboundSchema = z458.object({
   name: z458.nullable(z458.string()).optional(),
   description: z458.nullable(z458.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedefinition.js
 init_primitives();
 import * as z459 from "zod/v4";
 var UpdateDefinition$inboundSchema = z459.object({
@@ -12144,7 +12144,7 @@ var UpdateDefinition$inboundSchema = z459.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedocumentrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatedocumentrequest.js
 init_primitives();
 init_smartUnion();
 import * as z460 from "zod/v4";
@@ -12179,7 +12179,7 @@ var UpdateDocumentRequest$outboundSchema = z460.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateinvocationbody.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateinvocationbody.js
 init_smartUnion();
 import * as z461 from "zod/v4";
 var UpdateInvocationBodyInput$outboundSchema = smartUnion([
@@ -12194,7 +12194,7 @@ var UpdateInvocationBody$outboundSchema = z461.object({
   ])).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatejudgerequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatejudgerequest.js
 init_primitives();
 import * as z462 from "zod/v4";
 var UpdateJudgeRequestOutput$outboundSchema = z462.union([
@@ -12217,21 +12217,21 @@ var UpdateJudgeRequest$outboundSchema = z462.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatelibraryrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatelibraryrequest.js
 import * as z463 from "zod/v4";
 var UpdateLibraryRequest$outboundSchema = z463.object({
   name: z463.string().optional(),
   description: z463.nullable(z463.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatemodelrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updatemodelrequest.js
 import * as z464 from "zod/v4";
 var UpdateModelRequest$outboundSchema = z464.object({
   name: z464.nullable(z464.string()).optional(),
   description: z464.nullable(z464.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateruninfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateruninfo.js
 init_primitives();
 import * as z465 from "zod/v4";
 var UpdateRunInfo$outboundSchema = z465.object({
@@ -12244,7 +12244,7 @@ var UpdateRunInfo$outboundSchema = z465.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateworkflowresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/updateworkflowresponse.js
 init_primitives();
 import * as z466 from "zod/v4";
 var UpdateWorkflowResponse$inboundSchema = z466.object({
@@ -12256,7 +12256,7 @@ var UpdateWorkflowResponse$inboundSchema = z466.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/validationerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/validationerror.js
 import * as z467 from "zod/v4";
 init_smartUnion();
 var Loc$inboundSchema = smartUnion([
@@ -12272,7 +12272,7 @@ var ValidationError$inboundSchema = z467.object({
   ctx: z467.lazy(() => Context$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicecreaterequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicecreaterequest.js
 init_primitives();
 import * as z468 from "zod/v4";
 var VoiceCreateRequest$outboundSchema = z468.object({
@@ -12295,11 +12295,11 @@ var VoiceCreateRequest$outboundSchema = z468.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicelistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicelistresponse.js
 init_primitives();
 import * as z470 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voiceresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voiceresponse.js
 init_primitives();
 import * as z469 from "zod/v4";
 var VoiceResponse$inboundSchema = z469.object({
@@ -12325,7 +12325,7 @@ var VoiceResponse$inboundSchema = z469.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicelistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voicelistresponse.js
 var VoiceListResponse$inboundSchema = z470.object({
   items: z470.array(VoiceResponse$inboundSchema),
   total: z470.int(),
@@ -12339,7 +12339,7 @@ var VoiceListResponse$inboundSchema = z470.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voiceupdaterequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/voiceupdaterequest.js
 import * as z471 from "zod/v4";
 var VoiceUpdateRequest$outboundSchema = z471.object({
   name: z471.nullable(z471.string()).optional(),
@@ -12350,18 +12350,18 @@ var VoiceUpdateRequest$outboundSchema = z471.object({
   description: z471.nullable(z471.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflow.js
 init_primitives();
 import * as z473 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowtype.js
 import * as z472 from "zod/v4";
 var WorkflowType = {
   Code: "code"
 };
 var WorkflowType$inboundSchema = z472.enum(WorkflowType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflow.js
 var Workflow$inboundSchema = z473.object({
   id: z473.string(),
   name: z473.string(),
@@ -12386,17 +12386,17 @@ var Workflow$inboundSchema = z473.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowarchiveresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowarchiveresponse.js
 import * as z474 from "zod/v4";
 var WorkflowArchiveResponse$inboundSchema = z474.object({
   workflow: Workflow$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbasicdefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbasicdefinition.js
 init_primitives();
 import * as z476 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowmetadata.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowmetadata.js
 init_primitives();
 import * as z475 from "zod/v4";
 var WorkflowMetadata$inboundSchema = z475.object({
@@ -12407,7 +12407,7 @@ var WorkflowMetadata$inboundSchema = z475.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbasicdefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbasicdefinition.js
 var WorkflowBasicDefinition$inboundSchema = z476.object({
   id: z476.string(),
   name: z476.string(),
@@ -12422,7 +12422,7 @@ var WorkflowBasicDefinition$inboundSchema = z476.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiverequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiverequest.js
 init_primitives();
 import * as z477 from "zod/v4";
 var WorkflowBulkArchiveRequest$outboundSchema = z477.object({
@@ -12433,10 +12433,10 @@ var WorkflowBulkArchiveRequest$outboundSchema = z477.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiveresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiveresponse.js
 import * as z479 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkerror.js
 init_primitives();
 import * as z478 from "zod/v4";
 var WorkflowBulkError$inboundSchema = z478.object({
@@ -12449,13 +12449,13 @@ var WorkflowBulkError$inboundSchema = z478.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiveresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkarchiveresponse.js
 var WorkflowBulkArchiveResponse$inboundSchema = z479.object({
   archived: z479.array(Workflow$inboundSchema),
   errored: z479.array(WorkflowBulkError$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkunarchiverequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkunarchiverequest.js
 init_primitives();
 import * as z480 from "zod/v4";
 var WorkflowBulkUnarchiveRequest$outboundSchema = z480.object({
@@ -12466,14 +12466,14 @@ var WorkflowBulkUnarchiveRequest$outboundSchema = z480.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkunarchiveresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowbulkunarchiveresponse.js
 import * as z481 from "zod/v4";
 var WorkflowBulkUnarchiveResponse$inboundSchema = z481.object({
   unarchived: z481.array(Workflow$inboundSchema),
   errored: z481.array(WorkflowBulkError$inboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowcodedefinition.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowcodedefinition.js
 init_primitives();
 import * as z482 from "zod/v4";
 var WorkflowCodeDefinition$inboundSchema = z482.object({
@@ -12497,7 +12497,7 @@ var WorkflowCodeDefinition$inboundSchema = z482.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workfloweventtype.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workfloweventtype.js
 import * as z483 from "zod/v4";
 var WorkflowEventType = {
   WorkflowExecutionStarted: "WORKFLOW_EXECUTION_STARTED",
@@ -12520,15 +12520,15 @@ var WorkflowEventType = {
 };
 var WorkflowEventType$outboundSchema = z483.enum(WorkflowEventType);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionlistresponse.js
 init_primitives();
 import * as z485 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionwithoutresultresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionwithoutresultresponse.js
 init_primitives();
 import * as z484 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionstatus.js
 init_enums();
 var WorkflowExecutionStatus = {
   Running: "RUNNING",
@@ -12543,7 +12543,7 @@ var WorkflowExecutionStatus = {
 var WorkflowExecutionStatus$inboundSchema = inboundSchema(WorkflowExecutionStatus);
 var WorkflowExecutionStatus$outboundSchema = outboundSchema(WorkflowExecutionStatus);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionwithoutresultresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionwithoutresultresponse.js
 var WorkflowExecutionWithoutResultResponse$inboundSchema = z484.object({
   workflow_name: z484.string(),
   execution_id: z484.string(),
@@ -12567,7 +12567,7 @@ var WorkflowExecutionWithoutResultResponse$inboundSchema = z484.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionlistresponse.js
 var WorkflowExecutionListResponse$inboundSchema = z485.object({
   executions: z485.array(WorkflowExecutionWithoutResultResponse$inboundSchema),
   next_page_token: z485.nullable(z485.string()).optional()
@@ -12577,11 +12577,11 @@ var WorkflowExecutionListResponse$inboundSchema = z485.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionprogresstraceevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionprogresstraceevent.js
 init_primitives();
 import * as z487 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryattributesvalues.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryattributesvalues.js
 import * as z486 from "zod/v4";
 init_smartUnion();
 var WorkflowExecutionTraceSummaryAttributesValues$inboundSchema = smartUnion([
@@ -12592,7 +12592,7 @@ var WorkflowExecutionTraceSummaryAttributesValues$inboundSchema = smartUnion([
   z486.array(z486.any())
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionprogresstraceevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionprogresstraceevent.js
 var WorkflowExecutionProgressTraceEvent$inboundSchema = z487.object({
   type: EventType$inboundSchema.optional(),
   name: z487.string(),
@@ -12612,7 +12612,7 @@ var WorkflowExecutionProgressTraceEvent$inboundSchema = z487.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionrequest.js
 init_primitives();
 import * as z488 from "zod/v4";
 var WorkflowExecutionRequest$outboundSchema = z488.object({
@@ -12635,7 +12635,7 @@ var WorkflowExecutionRequest$outboundSchema = z488.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionresponse.js
 init_primitives();
 import * as z489 from "zod/v4";
 var WorkflowExecutionResponse$inboundSchema = z489.object({
@@ -12662,7 +12662,7 @@ var WorkflowExecutionResponse$inboundSchema = z489.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionsyncresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutionsyncresponse.js
 init_primitives();
 import * as z490 from "zod/v4";
 var WorkflowExecutionSyncResponse$inboundSchema = z490.object({
@@ -12676,7 +12676,7 @@ var WorkflowExecutionSyncResponse$inboundSchema = z490.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceevent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceevent.js
 init_primitives();
 import * as z491 from "zod/v4";
 var WorkflowExecutionTraceEvent$inboundSchema = z491.object({
@@ -12692,7 +12692,7 @@ var WorkflowExecutionTraceEvent$inboundSchema = z491.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceeventsresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceeventsresponse.js
 init_primitives();
 import * as z492 from "zod/v4";
 init_smartUnion();
@@ -12728,7 +12728,7 @@ var WorkflowExecutionTraceEventsResponse$inboundSchema = z492.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceotelresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontraceotelresponse.js
 init_primitives();
 import * as z493 from "zod/v4";
 var WorkflowExecutionTraceOTelResponse$inboundSchema = z493.object({
@@ -12761,11 +12761,11 @@ var WorkflowExecutionTraceOTelResponse$inboundSchema = z493.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryresponse.js
 init_primitives();
 import * as z495 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryspan.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryspan.js
 init_primitives();
 import * as z494 from "zod/v4";
 var WorkflowExecutionTraceSummarySpan$inboundSchema = z494.object({
@@ -12784,7 +12784,7 @@ var WorkflowExecutionTraceSummarySpan$inboundSchema = z494.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowexecutiontracesummaryresponse.js
 var WorkflowExecutionTraceSummaryResponse$inboundSchema = z495.object({
   workflow_name: z495.string(),
   execution_id: z495.string(),
@@ -12811,10 +12811,10 @@ var WorkflowExecutionTraceSummaryResponse$inboundSchema = z495.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowgetresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowgetresponse.js
 import * as z497 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowwithworkerstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowwithworkerstatus.js
 init_primitives();
 import * as z496 from "zod/v4";
 var WorkflowWithWorkerStatus$inboundSchema = z496.object({
@@ -12842,12 +12842,12 @@ var WorkflowWithWorkerStatus$inboundSchema = z496.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowgetresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowgetresponse.js
 var WorkflowGetResponse$inboundSchema = z497.object({
   workflow: WorkflowWithWorkerStatus$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowlistresponse.js
 init_primitives();
 import * as z498 from "zod/v4";
 var WorkflowListResponse$inboundSchema = z498.object({
@@ -12859,7 +12859,7 @@ var WorkflowListResponse$inboundSchema = z498.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowmetrics.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowmetrics.js
 init_primitives();
 import * as z499 from "zod/v4";
 var WorkflowMetrics$inboundSchema = z499.object({
@@ -12880,7 +12880,7 @@ var WorkflowMetrics$inboundSchema = z499.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistration.js
 init_primitives();
 import * as z500 from "zod/v4";
 var WorkflowRegistration$inboundSchema = z500.object({
@@ -12900,11 +12900,11 @@ var WorkflowRegistration$inboundSchema = z500.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationgetresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationgetresponse.js
 init_primitives();
 import * as z502 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationwithworkerstatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationwithworkerstatus.js
 init_primitives();
 import * as z501 from "zod/v4";
 var WorkflowRegistrationWithWorkerStatus$inboundSchema = z501.object({
@@ -12925,7 +12925,7 @@ var WorkflowRegistrationWithWorkerStatus$inboundSchema = z501.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationgetresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationgetresponse.js
 var WorkflowRegistrationGetResponse$inboundSchema = z502.object({
   workflow_registration: WorkflowRegistrationWithWorkerStatus$inboundSchema,
   workflow_version: WorkflowRegistrationWithWorkerStatus$inboundSchema
@@ -12936,7 +12936,7 @@ var WorkflowRegistrationGetResponse$inboundSchema = z502.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationlistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowregistrationlistresponse.js
 init_primitives();
 import * as z503 from "zod/v4";
 var WorkflowRegistrationListResponse$inboundSchema = z503.object({
@@ -12951,7 +12951,7 @@ var WorkflowRegistrationListResponse$inboundSchema = z503.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulelistresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulelistresponse.js
 init_primitives();
 import * as z504 from "zod/v4";
 var WorkflowScheduleListResponse$inboundSchema = z504.object({
@@ -12963,13 +12963,13 @@ var WorkflowScheduleListResponse$inboundSchema = z504.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulepauserequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulepauserequest.js
 import * as z505 from "zod/v4";
 var WorkflowSchedulePauseRequest$outboundSchema = z505.object({
   note: z505.nullable(z505.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulerequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowschedulerequest.js
 init_primitives();
 import * as z506 from "zod/v4";
 var WorkflowScheduleRequest$outboundSchema = z506.object({
@@ -12991,7 +12991,7 @@ var WorkflowScheduleRequest$outboundSchema = z506.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduleresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduleresponse.js
 init_primitives();
 import * as z507 from "zod/v4";
 var WorkflowScheduleResponse$inboundSchema = z507.object({
@@ -13002,25 +13002,25 @@ var WorkflowScheduleResponse$inboundSchema = z507.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduletriggerrequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduletriggerrequest.js
 import * as z508 from "zod/v4";
 var WorkflowScheduleTriggerRequest$outboundSchema = z508.object({
   overlap: z508.nullable(ScheduleOverlapPolicy$outboundSchema).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduleupdaterequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowscheduleupdaterequest.js
 import * as z509 from "zod/v4";
 var WorkflowScheduleUpdateRequest$outboundSchema = z509.object({
   schedule: PartialScheduleDefinition$outboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowunarchiveresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowunarchiveresponse.js
 import * as z510 from "zod/v4";
 var WorkflowUnarchiveResponse$inboundSchema = z510.object({
   workflow: Workflow$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowupdaterequest.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowupdaterequest.js
 init_primitives();
 import * as z511 from "zod/v4";
 var WorkflowUpdateRequest$outboundSchema = z511.object({
@@ -13035,13 +13035,13 @@ var WorkflowUpdateRequest$outboundSchema = z511.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowupdateresponse.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/components/workflowupdateresponse.js
 import * as z512 from "zod/v4";
 var WorkflowUpdateResponse$inboundSchema = z512.object({
   workflow: Workflow$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/httpvalidationerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/httpvalidationerror.js
 import * as z513 from "zod/v4";
 var HTTPValidationError = class extends MistralError {
   detail;
@@ -13069,7 +13069,7 @@ var HTTPValidationError$inboundSchema = z513.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/observabilityerror.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/errors/observabilityerror.js
 import * as z514 from "zod/v4";
 var ObservabilityError = class extends MistralError {
   detail;
@@ -13096,7 +13096,7 @@ var ObservabilityError$inboundSchema = z514.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/async.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/async.js
 var APIPromise = class {
   #promise;
   #unwrapped;
@@ -13122,7 +13122,7 @@ var APIPromise = class {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsComplete.js
 function agentsComplete(client, request, options) {
   return new APIPromise($do(client, request, options));
 }
@@ -13185,10 +13185,10 @@ async function $do(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsStream.js
 import * as z515 from "zod/v4";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/event-streams.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/lib/event-streams.js
 var EventStream = class extends ReadableStream {
   constructor(responseBody, parse, opts) {
     const upstream = responseBody.getReader();
@@ -13340,7 +13340,7 @@ function parseMessage(chunk, parse, state, dataRequired) {
   return parse(ret);
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/agentsStream.js
 init_primitives();
 init_schemas();
 function agentsStream(client, request, options) {
@@ -13415,7 +13415,7 @@ async function $do2(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/agents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/agents.js
 init_fp();
 var Agents = class extends ClientSDK {
   /**
@@ -13435,11 +13435,11 @@ var Agents = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioSpeechComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioSpeechComplete.js
 init_primitives();
 init_schemas();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentscreateorupdatealias.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentscreateorupdatealias.js
 init_primitives();
 import * as z516 from "zod/v4";
 var AgentsApiV1AgentsCreateOrUpdateAliasRequest$outboundSchema = z516.object({
@@ -13452,7 +13452,7 @@ var AgentsApiV1AgentsCreateOrUpdateAliasRequest$outboundSchema = z516.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsdelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsdelete.js
 init_primitives();
 import * as z517 from "zod/v4";
 var AgentsApiV1AgentsDeleteRequest$outboundSchema = z517.object({
@@ -13463,7 +13463,7 @@ var AgentsApiV1AgentsDeleteRequest$outboundSchema = z517.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsdeletealias.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsdeletealias.js
 init_primitives();
 import * as z518 from "zod/v4";
 var AgentsApiV1AgentsDeleteAliasRequest$outboundSchema = z518.object({
@@ -13475,7 +13475,7 @@ var AgentsApiV1AgentsDeleteAliasRequest$outboundSchema = z518.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsget.js
 init_primitives();
 init_smartUnion();
 import * as z519 from "zod/v4";
@@ -13490,7 +13490,7 @@ var AgentsApiV1AgentsGetRequest$outboundSchema = z519.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsgetversion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsgetversion.js
 init_primitives();
 import * as z520 from "zod/v4";
 var AgentsApiV1AgentsGetVersionRequest$outboundSchema = z520.object({
@@ -13502,7 +13502,7 @@ var AgentsApiV1AgentsGetVersionRequest$outboundSchema = z520.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslist.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslist.js
 init_primitives();
 import * as z521 from "zod/v4";
 var AgentsApiV1AgentsListRequest$outboundSchema = z521.object({
@@ -13521,7 +13521,7 @@ var AgentsApiV1AgentsListRequest$outboundSchema = z521.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslistversionaliases.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslistversionaliases.js
 init_primitives();
 import * as z522 from "zod/v4";
 var AgentsApiV1AgentsListVersionAliasesRequest$outboundSchema = z522.object({
@@ -13532,7 +13532,7 @@ var AgentsApiV1AgentsListVersionAliasesRequest$outboundSchema = z522.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslistversions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentslistversions.js
 init_primitives();
 import * as z523 from "zod/v4";
 var AgentsApiV1AgentsListVersionsRequest$outboundSchema = z523.object({
@@ -13546,7 +13546,7 @@ var AgentsApiV1AgentsListVersionsRequest$outboundSchema = z523.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsupdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsupdate.js
 init_primitives();
 import * as z524 from "zod/v4";
 var AgentsApiV1AgentsUpdateRequest$outboundSchema = z524.object({
@@ -13559,7 +13559,7 @@ var AgentsApiV1AgentsUpdateRequest$outboundSchema = z524.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsupdateversion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1agentsupdateversion.js
 init_primitives();
 import * as z525 from "zod/v4";
 var AgentsApiV1AgentsUpdateVersionRequest$outboundSchema = z525.object({
@@ -13571,7 +13571,7 @@ var AgentsApiV1AgentsUpdateVersionRequest$outboundSchema = z525.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsappend.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsappend.js
 init_primitives();
 import * as z526 from "zod/v4";
 var AgentsApiV1ConversationsAppendRequest$outboundSchema = z526.object({
@@ -13584,7 +13584,7 @@ var AgentsApiV1ConversationsAppendRequest$outboundSchema = z526.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsappendstream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsappendstream.js
 init_primitives();
 import * as z527 from "zod/v4";
 var AgentsApiV1ConversationsAppendStreamRequest$outboundSchema = z527.object({
@@ -13597,7 +13597,7 @@ var AgentsApiV1ConversationsAppendStreamRequest$outboundSchema = z527.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsdelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsdelete.js
 init_primitives();
 import * as z528 from "zod/v4";
 var AgentsApiV1ConversationsDeleteRequest$outboundSchema = z528.object({
@@ -13608,7 +13608,7 @@ var AgentsApiV1ConversationsDeleteRequest$outboundSchema = z528.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsget.js
 init_primitives();
 import * as z529 from "zod/v4";
 init_smartUnion();
@@ -13624,7 +13624,7 @@ var ResponseV1ConversationsGet$inboundSchema = smartUnion([
   AgentConversation$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationshistory.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationshistory.js
 init_primitives();
 import * as z530 from "zod/v4";
 var AgentsApiV1ConversationsHistoryRequest$outboundSchema = z530.object({
@@ -13635,7 +13635,7 @@ var AgentsApiV1ConversationsHistoryRequest$outboundSchema = z530.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationslist.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationslist.js
 init_primitives();
 import * as z531 from "zod/v4";
 init_smartUnion();
@@ -13653,7 +13653,7 @@ var AgentsApiV1ConversationsListResponse$inboundSchema = smartUnion([
   AgentConversation$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsmessages.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsmessages.js
 init_primitives();
 import * as z532 from "zod/v4";
 var AgentsApiV1ConversationsMessagesRequest$outboundSchema = z532.object({
@@ -13664,7 +13664,7 @@ var AgentsApiV1ConversationsMessagesRequest$outboundSchema = z532.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsrestart.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsrestart.js
 init_primitives();
 import * as z533 from "zod/v4";
 var AgentsApiV1ConversationsRestartRequest$outboundSchema = z533.object({
@@ -13677,7 +13677,7 @@ var AgentsApiV1ConversationsRestartRequest$outboundSchema = z533.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsrestartstream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/agentsapiv1conversationsrestartstream.js
 init_primitives();
 import * as z534 from "zod/v4";
 var AgentsApiV1ConversationsRestartStreamRequest$outboundSchema = z534.object({
@@ -13690,7 +13690,7 @@ var AgentsApiV1ConversationsRestartStreamRequest$outboundSchema = z534.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/archiveworkflowv1workflowsworkflowidentifierarchiveput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/archiveworkflowv1workflowsworkflowidentifierarchiveput.js
 init_primitives();
 import * as z535 from "zod/v4";
 var ArchiveWorkflowV1WorkflowsWorkflowIdentifierArchivePutRequest$outboundSchema = z535.object({
@@ -13701,7 +13701,7 @@ var ArchiveWorkflowV1WorkflowsWorkflowIdentifierArchivePutRequest$outboundSchema
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/cancelworkflowexecutionv1workflowsexecutionsexecutionidcancelpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/cancelworkflowexecutionv1workflowsexecutionsexecutionidcancelpost.js
 init_primitives();
 import * as z536 from "zod/v4";
 var CancelWorkflowExecutionV1WorkflowsExecutionsExecutionIdCancelPostRequest$outboundSchema = z536.object({
@@ -13712,7 +13712,7 @@ var CancelWorkflowExecutionV1WorkflowsExecutionsExecutionIdCancelPostRequest$out
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivatefororganizationv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivatefororganizationv1.js
 init_primitives();
 import * as z537 from "zod/v4";
 var ConnectorActivateForOrganizationV1Request$outboundSchema = z537.object({
@@ -13725,7 +13725,7 @@ var ConnectorActivateForOrganizationV1Request$outboundSchema = z537.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivateforuserv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivateforuserv1.js
 init_primitives();
 import * as z538 from "zod/v4";
 var ConnectorActivateForUserV1Request$outboundSchema = z538.object({
@@ -13738,7 +13738,7 @@ var ConnectorActivateForUserV1Request$outboundSchema = z538.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivateforworkspacev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectoractivateforworkspacev1.js
 init_primitives();
 import * as z539 from "zod/v4";
 var ConnectorActivateForWorkspaceV1Request$outboundSchema = z539.object({
@@ -13751,7 +13751,7 @@ var ConnectorActivateForWorkspaceV1Request$outboundSchema = z539.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcalltoolv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcalltoolv1.js
 init_primitives();
 import * as z540 from "zod/v4";
 var ConnectorCallToolV1Request$outboundSchema = z540.object({
@@ -13768,7 +13768,7 @@ var ConnectorCallToolV1Request$outboundSchema = z540.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateorganizationcredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateorganizationcredentialsv1.js
 init_primitives();
 import * as z541 from "zod/v4";
 var ConnectorCreateOrUpdateOrganizationCredentialsV1Request$outboundSchema = z541.object({
@@ -13781,7 +13781,7 @@ var ConnectorCreateOrUpdateOrganizationCredentialsV1Request$outboundSchema = z54
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateusercredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateusercredentialsv1.js
 init_primitives();
 import * as z542 from "zod/v4";
 var ConnectorCreateOrUpdateUserCredentialsV1Request$outboundSchema = z542.object({
@@ -13794,7 +13794,7 @@ var ConnectorCreateOrUpdateUserCredentialsV1Request$outboundSchema = z542.object
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateworkspacecredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorcreateorupdateworkspacecredentialsv1.js
 init_primitives();
 import * as z543 from "zod/v4";
 var ConnectorCreateOrUpdateWorkspaceCredentialsV1Request$outboundSchema = z543.object({
@@ -13807,7 +13807,7 @@ var ConnectorCreateOrUpdateWorkspaceCredentialsV1Request$outboundSchema = z543.o
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivatefororganizationv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivatefororganizationv1.js
 init_primitives();
 import * as z544 from "zod/v4";
 var ConnectorDeactivateForOrganizationV1Request$outboundSchema = z544.object({
@@ -13818,7 +13818,7 @@ var ConnectorDeactivateForOrganizationV1Request$outboundSchema = z544.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivateforuserv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivateforuserv1.js
 init_primitives();
 import * as z545 from "zod/v4";
 var ConnectorDeactivateForUserV1Request$outboundSchema = z545.object({
@@ -13829,7 +13829,7 @@ var ConnectorDeactivateForUserV1Request$outboundSchema = z545.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivateforworkspacev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeactivateforworkspacev1.js
 init_primitives();
 import * as z546 from "zod/v4";
 var ConnectorDeactivateForWorkspaceV1Request$outboundSchema = z546.object({
@@ -13840,7 +13840,7 @@ var ConnectorDeactivateForWorkspaceV1Request$outboundSchema = z546.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteorganizationcredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteorganizationcredentialsv1.js
 init_primitives();
 import * as z547 from "zod/v4";
 var ConnectorDeleteOrganizationCredentialsV1Request$outboundSchema = z547.object({
@@ -13853,7 +13853,7 @@ var ConnectorDeleteOrganizationCredentialsV1Request$outboundSchema = z547.object
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteusercredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteusercredentialsv1.js
 init_primitives();
 import * as z548 from "zod/v4";
 var ConnectorDeleteUserCredentialsV1Request$outboundSchema = z548.object({
@@ -13866,7 +13866,7 @@ var ConnectorDeleteUserCredentialsV1Request$outboundSchema = z548.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeletev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeletev1.js
 init_primitives();
 import * as z549 from "zod/v4";
 var ConnectorDeleteV1Request$outboundSchema = z549.object({
@@ -13877,7 +13877,7 @@ var ConnectorDeleteV1Request$outboundSchema = z549.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteworkspacecredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectordeleteworkspacecredentialsv1.js
 init_primitives();
 import * as z550 from "zod/v4";
 var ConnectorDeleteWorkspaceCredentialsV1Request$outboundSchema = z550.object({
@@ -13890,7 +13890,7 @@ var ConnectorDeleteWorkspaceCredentialsV1Request$outboundSchema = z550.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetauthenticationmethodsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetauthenticationmethodsv1.js
 init_primitives();
 import * as z551 from "zod/v4";
 var ConnectorGetAuthenticationMethodsV1Request$outboundSchema = z551.object({
@@ -13901,7 +13901,7 @@ var ConnectorGetAuthenticationMethodsV1Request$outboundSchema = z551.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetauthurlv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetauthurlv1.js
 init_primitives();
 import * as z552 from "zod/v4";
 var ConnectorGetAuthUrlV1Request$outboundSchema = z552.object({
@@ -13920,7 +13920,7 @@ var ConnectorGetAuthUrlV1Request$outboundSchema = z552.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorgetv1.js
 init_primitives();
 import * as z553 from "zod/v4";
 var ConnectorGetV1Request$outboundSchema = z553.object({
@@ -13935,7 +13935,7 @@ var ConnectorGetV1Request$outboundSchema = z553.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistorganizationcredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistorganizationcredentialsv1.js
 init_primitives();
 import * as z554 from "zod/v4";
 var ConnectorListOrganizationCredentialsV1Request$outboundSchema = z554.object({
@@ -13950,7 +13950,7 @@ var ConnectorListOrganizationCredentialsV1Request$outboundSchema = z554.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlisttoolsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlisttoolsv1.js
 init_primitives();
 import * as z555 from "zod/v4";
 init_smartUnion();
@@ -13974,7 +13974,7 @@ var ResponseConnectorListToolsV1$inboundSchema = smartUnion([
   z555.array(z555.record(z555.string(), z555.any()))
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistusercredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistusercredentialsv1.js
 init_primitives();
 import * as z556 from "zod/v4";
 var ConnectorListUserCredentialsV1Request$outboundSchema = z556.object({
@@ -13989,7 +13989,7 @@ var ConnectorListUserCredentialsV1Request$outboundSchema = z556.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistv1.js
 init_primitives();
 import * as z557 from "zod/v4";
 var ConnectorListV1Request$outboundSchema = z557.object({
@@ -14003,7 +14003,7 @@ var ConnectorListV1Request$outboundSchema = z557.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistworkspacecredentialsv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorlistworkspacecredentialsv1.js
 init_primitives();
 import * as z558 from "zod/v4";
 var ConnectorListWorkspaceCredentialsV1Request$outboundSchema = z558.object({
@@ -14018,7 +14018,7 @@ var ConnectorListWorkspaceCredentialsV1Request$outboundSchema = z558.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorupdatev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/connectorupdatev1.js
 init_primitives();
 import * as z559 from "zod/v4";
 var ConnectorUpdateV1Request$outboundSchema = z559.object({
@@ -14031,7 +14031,7 @@ var ConnectorUpdateV1Request$outboundSchema = z559.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/createdatasetrecordv1observabilitydatasetsdatasetidrecordspost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/createdatasetrecordv1observabilitydatasetsdatasetidrecordspost.js
 init_primitives();
 import * as z560 from "zod/v4";
 var CreateDatasetRecordV1ObservabilityDatasetsDatasetIdRecordsPostRequest$outboundSchema = z560.object({
@@ -14044,7 +14044,7 @@ var CreateDatasetRecordV1ObservabilityDatasetsDatasetIdRecordsPostRequest$outbou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletecampaignv1observabilitycampaignscampaigniddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletecampaignv1observabilitycampaignscampaigniddelete.js
 init_primitives();
 import * as z561 from "zod/v4";
 var DeleteCampaignV1ObservabilityCampaignsCampaignIdDeleteRequest$outboundSchema = z561.object({
@@ -14055,7 +14055,7 @@ var DeleteCampaignV1ObservabilityCampaignsCampaignIdDeleteRequest$outboundSchema
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletedatasetrecordv1observabilitydatasetrecordsdatasetrecordiddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletedatasetrecordv1observabilitydatasetrecordsdatasetrecordiddelete.js
 init_primitives();
 import * as z562 from "zod/v4";
 var DeleteDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdDeleteRequest$outboundSchema = z562.object({
@@ -14066,7 +14066,7 @@ var DeleteDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdDeleteRequest
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletedatasetv1observabilitydatasetsdatasetiddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletedatasetv1observabilitydatasetsdatasetiddelete.js
 init_primitives();
 import * as z563 from "zod/v4";
 var DeleteDatasetV1ObservabilityDatasetsDatasetIdDeleteRequest$outboundSchema = z563.object({
@@ -14077,7 +14077,7 @@ var DeleteDatasetV1ObservabilityDatasetsDatasetIdDeleteRequest$outboundSchema = 
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletejudgev1observabilityjudgesjudgeiddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletejudgev1observabilityjudgesjudgeiddelete.js
 init_primitives();
 import * as z564 from "zod/v4";
 var DeleteJudgeV1ObservabilityJudgesJudgeIdDeleteRequest$outboundSchema = z564.object({
@@ -14088,7 +14088,7 @@ var DeleteJudgeV1ObservabilityJudgesJudgeIdDeleteRequest$outboundSchema = z564.o
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletemodelv1modelsmodeliddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletemodelv1modelsmodeliddelete.js
 init_primitives();
 import * as z565 from "zod/v4";
 var DeleteModelV1ModelsModelIdDeleteRequest$outboundSchema = z565.object({
@@ -14099,7 +14099,7 @@ var DeleteModelV1ModelsModelIdDeleteRequest$outboundSchema = z565.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletevoicev1audiovoicesvoiceiddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/deletevoicev1audiovoicesvoiceiddelete.js
 init_primitives();
 import * as z566 from "zod/v4";
 var DeleteVoiceV1AudioVoicesVoiceIdDeleteRequest$outboundSchema = z566.object({
@@ -14110,7 +14110,7 @@ var DeleteVoiceV1AudioVoicesVoiceIdDeleteRequest$outboundSchema = z566.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/executeworkflowregistrationv1workflowsregistrationsworkflowregistrationidexecutepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/executeworkflowregistrationv1workflowsregistrationsworkflowregistrationidexecutepost.js
 init_primitives();
 import * as z567 from "zod/v4";
 init_smartUnion();
@@ -14128,7 +14128,7 @@ var ResponseExecuteWorkflowRegistrationV1WorkflowsRegistrationsWorkflowRegistrat
   WorkflowExecutionSyncResponse$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/executeworkflowv1workflowsworkflowidentifierexecutepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/executeworkflowv1workflowsworkflowidentifierexecutepost.js
 init_primitives();
 import * as z568 from "zod/v4";
 init_smartUnion();
@@ -14146,7 +14146,7 @@ var ResponseExecuteWorkflowV1WorkflowsWorkflowIdentifierExecutePost$inboundSchem
   WorkflowExecutionSyncResponse$inboundSchema
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/exportdatasettojsonlv1observabilitydatasetsdatasetidexportstojsonlget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/exportdatasettojsonlv1observabilitydatasetsdatasetidexportstojsonlget.js
 init_primitives();
 import * as z569 from "zod/v4";
 var ExportDatasetToJsonlV1ObservabilityDatasetsDatasetIdExportsToJsonlGetRequest$outboundSchema = z569.object({
@@ -14157,7 +14157,7 @@ var ExportDatasetToJsonlV1ObservabilityDatasetsDatasetIdExportsToJsonlGetRequest
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesdeletefile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesdeletefile.js
 init_primitives();
 import * as z570 from "zod/v4";
 var FilesApiRoutesDeleteFileRequest$outboundSchema = z570.object({
@@ -14168,7 +14168,7 @@ var FilesApiRoutesDeleteFileRequest$outboundSchema = z570.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesdownloadfile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesdownloadfile.js
 init_primitives();
 import * as z571 from "zod/v4";
 var FilesApiRoutesDownloadFileRequest$outboundSchema = z571.object({
@@ -14179,7 +14179,7 @@ var FilesApiRoutesDownloadFileRequest$outboundSchema = z571.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesgetsignedurl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesgetsignedurl.js
 init_primitives();
 import * as z572 from "zod/v4";
 var FilesApiRoutesGetSignedUrlRequest$outboundSchema = z572.object({
@@ -14191,7 +14191,7 @@ var FilesApiRoutesGetSignedUrlRequest$outboundSchema = z572.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapirouteslistfiles.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapirouteslistfiles.js
 init_primitives();
 import * as z573 from "zod/v4";
 var FilesApiRoutesListFilesRequest$outboundSchema = z573.object({
@@ -14211,7 +14211,7 @@ var FilesApiRoutesListFilesRequest$outboundSchema = z573.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesretrievefile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesretrievefile.js
 init_primitives();
 import * as z574 from "zod/v4";
 var FilesApiRoutesRetrieveFileRequest$outboundSchema = z574.object({
@@ -14222,7 +14222,7 @@ var FilesApiRoutesRetrieveFileRequest$outboundSchema = z574.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesuploadfile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/filesapiroutesuploadfile.js
 import * as z575 from "zod/v4";
 var FileVisibility2 = {
   Workspace: "workspace",
@@ -14236,7 +14236,7 @@ var MultiPartBodyParams$outboundSchema = z575.object({
   file: FileT$outboundSchema.or(blobLikeSchema)
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignbyidv1observabilitycampaignscampaignidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignbyidv1observabilitycampaignscampaignidget.js
 init_primitives();
 import * as z576 from "zod/v4";
 var GetCampaignByIdV1ObservabilityCampaignsCampaignIdGetRequest$outboundSchema = z576.object({
@@ -14247,7 +14247,7 @@ var GetCampaignByIdV1ObservabilityCampaignsCampaignIdGetRequest$outboundSchema =
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignselectedeventsv1observabilitycampaignscampaignidselectedeventsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignselectedeventsv1observabilitycampaignscampaignidselectedeventsget.js
 init_primitives();
 import * as z577 from "zod/v4";
 var GetCampaignSelectedEventsV1ObservabilityCampaignsCampaignIdSelectedEventsGetRequest$outboundSchema = z577.object({
@@ -14261,7 +14261,7 @@ var GetCampaignSelectedEventsV1ObservabilityCampaignsCampaignIdSelectedEventsGet
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignstatusbyidv1observabilitycampaignscampaignidstatusget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignstatusbyidv1observabilitycampaignscampaignidstatusget.js
 init_primitives();
 import * as z578 from "zod/v4";
 var GetCampaignStatusByIdV1ObservabilityCampaignsCampaignIdStatusGetRequest$outboundSchema = z578.object({
@@ -14272,7 +14272,7 @@ var GetCampaignStatusByIdV1ObservabilityCampaignsCampaignIdStatusGetRequest$outb
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignsv1observabilitycampaignsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getcampaignsv1observabilitycampaignsget.js
 init_primitives();
 import * as z579 from "zod/v4";
 var GetCampaignsV1ObservabilityCampaignsGetRequest$outboundSchema = z579.object({
@@ -14285,7 +14285,7 @@ var GetCampaignsV1ObservabilityCampaignsGetRequest$outboundSchema = z579.object(
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletioneventsv1observabilitychatcompletioneventssearchpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletioneventsv1observabilitychatcompletioneventssearchpost.js
 init_primitives();
 import * as z580 from "zod/v4";
 var GetChatCompletionEventsV1ObservabilityChatCompletionEventsSearchPostRequest$outboundSchema = z580.object({
@@ -14299,7 +14299,7 @@ var GetChatCompletionEventsV1ObservabilityChatCompletionEventsSearchPostRequest$
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletioneventv1observabilitychatcompletioneventseventidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletioneventv1observabilitychatcompletioneventseventidget.js
 init_primitives();
 import * as z581 from "zod/v4";
 var GetChatCompletionEventV1ObservabilityChatCompletionEventsEventIdGetRequest$outboundSchema = z581.object({
@@ -14310,7 +14310,7 @@ var GetChatCompletionEventV1ObservabilityChatCompletionEventsEventIdGetRequest$o
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletionfieldoptionscountsv1observabilitychatcompletionfieldsfieldnameoptionscountspost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletionfieldoptionscountsv1observabilitychatcompletionfieldsfieldnameoptionscountspost.js
 init_primitives();
 import * as z582 from "zod/v4";
 var GetChatCompletionFieldOptionsCountsV1ObservabilityChatCompletionFieldsFieldNameOptionsCountsPostRequest$outboundSchema = z582.object({
@@ -14323,7 +14323,7 @@ var GetChatCompletionFieldOptionsCountsV1ObservabilityChatCompletionFieldsFieldN
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletionfieldoptionsv1observabilitychatcompletionfieldsfieldnameoptionsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getchatcompletionfieldoptionsv1observabilitychatcompletionfieldsfieldnameoptionsget.js
 init_primitives();
 import * as z583 from "zod/v4";
 var Operator = {
@@ -14357,7 +14357,7 @@ var GetChatCompletionFieldOptionsV1ObservabilityChatCompletionFieldsFieldNameOpt
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetbyidv1observabilitydatasetsdatasetidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetbyidv1observabilitydatasetsdatasetidget.js
 init_primitives();
 import * as z584 from "zod/v4";
 var GetDatasetByIdV1ObservabilityDatasetsDatasetIdGetRequest$outboundSchema = z584.object({
@@ -14368,7 +14368,7 @@ var GetDatasetByIdV1ObservabilityDatasetsDatasetIdGetRequest$outboundSchema = z5
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetimporttasksv1observabilitydatasetsdatasetidtasksget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetimporttasksv1observabilitydatasetsdatasetidtasksget.js
 init_primitives();
 import * as z585 from "zod/v4";
 var GetDatasetImportTasksV1ObservabilityDatasetsDatasetIdTasksGetRequest$outboundSchema = z585.object({
@@ -14382,7 +14382,7 @@ var GetDatasetImportTasksV1ObservabilityDatasetsDatasetIdTasksGetRequest$outboun
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetimporttaskv1observabilitydatasetsdatasetidtaskstaskidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetimporttaskv1observabilitydatasetsdatasetidtaskstaskidget.js
 init_primitives();
 import * as z586 from "zod/v4";
 var GetDatasetImportTaskV1ObservabilityDatasetsDatasetIdTasksTaskIdGetRequest$outboundSchema = z586.object({
@@ -14395,7 +14395,7 @@ var GetDatasetImportTaskV1ObservabilityDatasetsDatasetIdTasksTaskIdGetRequest$ou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetrecordsv1observabilitydatasetsdatasetidrecordsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetrecordsv1observabilitydatasetsdatasetidrecordsget.js
 init_primitives();
 import * as z587 from "zod/v4";
 var GetDatasetRecordsV1ObservabilityDatasetsDatasetIdRecordsGetRequest$outboundSchema = z587.object({
@@ -14409,7 +14409,7 @@ var GetDatasetRecordsV1ObservabilityDatasetsDatasetIdRecordsGetRequest$outboundS
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetrecordv1observabilitydatasetrecordsdatasetrecordidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetrecordv1observabilitydatasetrecordsdatasetrecordidget.js
 init_primitives();
 import * as z588 from "zod/v4";
 var GetDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdGetRequest$outboundSchema = z588.object({
@@ -14420,7 +14420,7 @@ var GetDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdGetRequest$outbo
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetsv1observabilitydatasetsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdatasetsv1observabilitydatasetsget.js
 init_primitives();
 import * as z589 from "zod/v4";
 var GetDatasetsV1ObservabilityDatasetsGetRequest$outboundSchema = z589.object({
@@ -14433,13 +14433,13 @@ var GetDatasetsV1ObservabilityDatasetsGetRequest$outboundSchema = z589.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdeploymentv1workflowsdeploymentsnameget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getdeploymentv1workflowsdeploymentsnameget.js
 import * as z590 from "zod/v4";
 var GetDeploymentV1WorkflowsDeploymentsNameGetRequest$outboundSchema = z590.object({
   name: z590.string()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getjudgebyidv1observabilityjudgesjudgeidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getjudgebyidv1observabilityjudgesjudgeidget.js
 init_primitives();
 import * as z591 from "zod/v4";
 var GetJudgeByIdV1ObservabilityJudgesJudgeIdGetRequest$outboundSchema = z591.object({
@@ -14450,7 +14450,7 @@ var GetJudgeByIdV1ObservabilityJudgesJudgeIdGetRequest$outboundSchema = z591.obj
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getjudgesv1observabilityjudgesget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getjudgesv1observabilityjudgesget.js
 init_primitives();
 import * as z592 from "zod/v4";
 var GetJudgesV1ObservabilityJudgesGetRequest$outboundSchema = z592.object({
@@ -14467,7 +14467,7 @@ var GetJudgesV1ObservabilityJudgesGetRequest$outboundSchema = z592.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getlogfieldoptionsv1observabilitylogsfieldsfieldnameoptionsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getlogfieldoptionsv1observabilitylogsfieldsfieldnameoptionsget.js
 init_primitives();
 import * as z593 from "zod/v4";
 var GetLogFieldOptionsV1ObservabilityLogsFieldsFieldNameOptionsGetRequest$outboundSchema = z593.object({
@@ -14480,7 +14480,7 @@ var GetLogFieldOptionsV1ObservabilityLogsFieldsFieldNameOptionsGetRequest$outbou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getrunhistoryv1workflowsrunsrunidhistoryget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getrunhistoryv1workflowsrunsrunidhistoryget.js
 init_primitives();
 import * as z594 from "zod/v4";
 var GetRunHistoryV1WorkflowsRunsRunIdHistoryGetRequest$outboundSchema = z594.object({
@@ -14493,7 +14493,7 @@ var GetRunHistoryV1WorkflowsRunsRunIdHistoryGetRequest$outboundSchema = z594.obj
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getrunv1workflowsrunsrunidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getrunv1workflowsrunsrunidget.js
 init_primitives();
 import * as z595 from "zod/v4";
 var GetRunV1WorkflowsRunsRunIdGetRequest$outboundSchema = z595.object({
@@ -14504,7 +14504,7 @@ var GetRunV1WorkflowsRunsRunIdGetRequest$outboundSchema = z595.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getschedulesv1workflowsschedulesget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getschedulesv1workflowsschedulesget.js
 init_primitives();
 import * as z596 from "zod/v4";
 var GetSchedulesV1WorkflowsSchedulesGetStatus = {
@@ -14534,7 +14534,7 @@ var GetSchedulesV1WorkflowsSchedulesGetResponse$inboundSchema = z596.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getschedulev1workflowsschedulesscheduleidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getschedulev1workflowsschedulesscheduleidget.js
 init_primitives();
 import * as z597 from "zod/v4";
 var GetScheduleV1WorkflowsSchedulesScheduleIdGetRequest$outboundSchema = z597.object({
@@ -14545,7 +14545,7 @@ var GetScheduleV1WorkflowsSchedulesScheduleIdGetRequest$outboundSchema = z597.ob
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getsimilarchatcompletioneventsv1observabilitychatcompletioneventseventidsimilareventsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getsimilarchatcompletioneventsv1observabilitychatcompletioneventseventidsimilareventsget.js
 init_primitives();
 import * as z598 from "zod/v4";
 var GetSimilarChatCompletionEventsV1ObservabilityChatCompletionEventsEventIdSimilarEventsGetRequest$outboundSchema = z598.object({
@@ -14556,7 +14556,7 @@ var GetSimilarChatCompletionEventsV1ObservabilityChatCompletionEventsEventIdSimi
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanbyidv1observabilitytracestraceidspansspanidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanbyidv1observabilitytracestraceidspansspanidget.js
 init_primitives();
 import * as z599 from "zod/v4";
 var GetSpanByIdV1ObservabilityTracesTraceIdSpansSpanIdGetRequest$outboundSchema = z599.object({
@@ -14571,7 +14571,7 @@ var GetSpanByIdV1ObservabilityTracesTraceIdSpansSpanIdGetRequest$outboundSchema 
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanevaluationfieldoptionsv1observabilityspansevaluationsfieldsfieldnameoptionsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanevaluationfieldoptionsv1observabilityspansevaluationsfieldsfieldnameoptionsget.js
 init_primitives();
 import * as z600 from "zod/v4";
 var GetSpanEvaluationFieldOptionsV1ObservabilitySpansEvaluationsFieldsFieldNameOptionsGetRequest$outboundSchema = z600.object({
@@ -14584,7 +14584,7 @@ var GetSpanEvaluationFieldOptionsV1ObservabilitySpansEvaluationsFieldsFieldNameO
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanfieldoptionsv1observabilityspansfieldsfieldnameoptionsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getspanfieldoptionsv1observabilityspansfieldsfieldnameoptionsget.js
 init_primitives();
 import * as z601 from "zod/v4";
 var GetSpanFieldOptionsV1ObservabilitySpansFieldsFieldNameOptionsGetRequest$outboundSchema = z601.object({
@@ -14597,7 +14597,7 @@ var GetSpanFieldOptionsV1ObservabilitySpansFieldsFieldNameOptionsGetRequest$outb
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getstreameventsv1workflowseventsstreamget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getstreameventsv1workflowseventsstreamget.js
 init_primitives();
 import * as z602 from "zod/v4";
 var Scope = {
@@ -14653,7 +14653,7 @@ var GetStreamEventsV1WorkflowsEventsStreamGetResponseBody$inboundSchema = z602.o
   retry: z602.int().optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracebyidv1observabilitytracestraceidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracebyidv1observabilitytracestraceidget.js
 init_primitives();
 import * as z603 from "zod/v4";
 var GetTraceByIdV1ObservabilityTracesTraceIdGetRequest$outboundSchema = z603.object({
@@ -14664,7 +14664,7 @@ var GetTraceByIdV1ObservabilityTracesTraceIdGetRequest$outboundSchema = z603.obj
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracefieldoptionsv1observabilitytracesfieldsfieldnameoptionsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracefieldoptionsv1observabilitytracesfieldsfieldnameoptionsget.js
 init_primitives();
 import * as z604 from "zod/v4";
 var GetTraceFieldOptionsV1ObservabilityTracesFieldsFieldNameOptionsGetRequest$outboundSchema = z604.object({
@@ -14677,7 +14677,7 @@ var GetTraceFieldOptionsV1ObservabilityTracesFieldsFieldNameOptionsGetRequest$ou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracespansv1observabilitytracestraceidspansget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/gettracespansv1observabilitytracestraceidspansget.js
 init_primitives();
 import * as z605 from "zod/v4";
 var GetTraceSpansV1ObservabilityTracesTraceIdSpansGetRequest$outboundSchema = z605.object({
@@ -14693,7 +14693,7 @@ var GetTraceSpansV1ObservabilityTracesTraceIdSpansGetRequest$outboundSchema = z6
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getvoicesampleaudiov1audiovoicesvoiceidsampleget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getvoicesampleaudiov1audiovoicesvoiceidsampleget.js
 init_primitives();
 import * as z606 from "zod/v4";
 var GetVoiceSampleAudioV1AudioVoicesVoiceIdSampleGetRequest$outboundSchema = z606.object({
@@ -14704,7 +14704,7 @@ var GetVoiceSampleAudioV1AudioVoicesVoiceIdSampleGetRequest$outboundSchema = z60
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getvoicev1audiovoicesvoiceidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getvoicev1audiovoicesvoiceidget.js
 init_primitives();
 import * as z607 from "zod/v4";
 var GetVoiceV1AudioVoicesVoiceIdGetRequest$outboundSchema = z607.object({
@@ -14715,7 +14715,7 @@ var GetVoiceV1AudioVoicesVoiceIdGetRequest$outboundSchema = z607.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkfloweventsv1workflowseventslistget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkfloweventsv1workflowseventslistget.js
 init_primitives();
 import * as z608 from "zod/v4";
 var GetWorkflowEventsV1WorkflowsEventsListGetRequest$outboundSchema = z608.object({
@@ -14732,7 +14732,7 @@ var GetWorkflowEventsV1WorkflowsEventsListGetRequest$outboundSchema = z608.objec
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionhistoryv1workflowsexecutionsexecutionidhistoryget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionhistoryv1workflowsexecutionsexecutionidhistoryget.js
 init_primitives();
 import * as z609 from "zod/v4";
 var GetWorkflowExecutionHistoryV1WorkflowsExecutionsExecutionIdHistoryGetRequest$outboundSchema = z609.object({
@@ -14745,7 +14745,7 @@ var GetWorkflowExecutionHistoryV1WorkflowsExecutionsExecutionIdHistoryGetRequest
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionlogs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionlogs.js
 init_primitives();
 import * as z610 from "zod/v4";
 var GetWorkflowExecutionLogsOrder = {
@@ -14770,7 +14770,7 @@ var GetWorkflowExecutionLogsRequest$outboundSchema = z610.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontraceevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontraceevents.js
 init_primitives();
 import * as z611 from "zod/v4";
 var GetWorkflowExecutionTraceEventsRequest$outboundSchema = z611.object({
@@ -14785,7 +14785,7 @@ var GetWorkflowExecutionTraceEventsRequest$outboundSchema = z611.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontraceotel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontraceotel.js
 init_primitives();
 import * as z612 from "zod/v4";
 var GetWorkflowExecutionTraceOtelRequest$outboundSchema = z612.object({
@@ -14796,7 +14796,7 @@ var GetWorkflowExecutionTraceOtelRequest$outboundSchema = z612.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontracesummary.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutiontracesummary.js
 init_primitives();
 import * as z613 from "zod/v4";
 var GetWorkflowExecutionTraceSummaryRequest$outboundSchema = z613.object({
@@ -14807,7 +14807,7 @@ var GetWorkflowExecutionTraceSummaryRequest$outboundSchema = z613.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionv1workflowsexecutionsexecutionidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowexecutionv1workflowsexecutionsexecutionidget.js
 init_primitives();
 import * as z614 from "zod/v4";
 var GetWorkflowExecutionV1WorkflowsExecutionsExecutionIdGetRequest$outboundSchema = z614.object({
@@ -14818,7 +14818,7 @@ var GetWorkflowExecutionV1WorkflowsExecutionsExecutionIdGetRequest$outboundSchem
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowmetricsv1workflowsworkflownamemetricsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowmetricsv1workflowsworkflownamemetricsget.js
 init_primitives();
 import * as z615 from "zod/v4";
 var GetWorkflowMetricsV1WorkflowsWorkflowNameMetricsGetRequest$outboundSchema = z615.object({
@@ -14833,7 +14833,7 @@ var GetWorkflowMetricsV1WorkflowsWorkflowNameMetricsGetRequest$outboundSchema = 
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowregistrationsv1workflowsregistrationsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowregistrationsv1workflowsregistrationsget.js
 init_primitives();
 import * as z616 from "zod/v4";
 var GetWorkflowRegistrationsV1WorkflowsRegistrationsGetRequest$outboundSchema = z616.object({
@@ -14859,7 +14859,7 @@ var GetWorkflowRegistrationsV1WorkflowsRegistrationsGetRequest$outboundSchema = 
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowregistrationv1workflowsregistrationsworkflowregistrationidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowregistrationv1workflowsregistrationsworkflowregistrationidget.js
 init_primitives();
 import * as z617 from "zod/v4";
 var GetWorkflowRegistrationV1WorkflowsRegistrationsWorkflowRegistrationIdGetRequest$outboundSchema = z617.object({
@@ -14874,7 +14874,7 @@ var GetWorkflowRegistrationV1WorkflowsRegistrationsWorkflowRegistrationIdGetRequ
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowsv1workflowsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowsv1workflowsget.js
 init_primitives();
 import * as z618 from "zod/v4";
 init_smartUnion();
@@ -14926,7 +14926,7 @@ var GetWorkflowsV1WorkflowsGetResponse$inboundSchema = z618.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowv1workflowsworkflowidentifierget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/getworkflowv1workflowsworkflowidentifierget.js
 init_primitives();
 import * as z619 from "zod/v4";
 var GetWorkflowV1WorkflowsWorkflowIdentifierGetRequest$outboundSchema = z619.object({
@@ -14937,7 +14937,7 @@ var GetWorkflowV1WorkflowsWorkflowIdentifierGetRequest$outboundSchema = z619.obj
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchcancelbatchjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchcancelbatchjob.js
 init_primitives();
 import * as z620 from "zod/v4";
 var JobsApiRoutesBatchCancelBatchJobRequest$outboundSchema = z620.object({
@@ -14948,7 +14948,7 @@ var JobsApiRoutesBatchCancelBatchJobRequest$outboundSchema = z620.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchdeletebatchjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchdeletebatchjob.js
 init_primitives();
 import * as z621 from "zod/v4";
 var JobsApiRoutesBatchDeleteBatchJobRequest$outboundSchema = z621.object({
@@ -14959,7 +14959,7 @@ var JobsApiRoutesBatchDeleteBatchJobRequest$outboundSchema = z621.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchgetbatchjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchgetbatchjob.js
 init_primitives();
 import * as z622 from "zod/v4";
 var JobsApiRoutesBatchGetBatchJobRequest$outboundSchema = z622.object({
@@ -14971,7 +14971,7 @@ var JobsApiRoutesBatchGetBatchJobRequest$outboundSchema = z622.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchgetbatchjobs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesbatchgetbatchjobs.js
 init_primitives();
 import * as z623 from "zod/v4";
 var OrderBy = {
@@ -14999,7 +14999,7 @@ var JobsApiRoutesBatchGetBatchJobsRequest$outboundSchema = z623.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningarchivefinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningarchivefinetunedmodel.js
 init_primitives();
 import * as z624 from "zod/v4";
 var JobsApiRoutesFineTuningArchiveFineTunedModelRequest$outboundSchema = z624.object({
@@ -15010,7 +15010,7 @@ var JobsApiRoutesFineTuningArchiveFineTunedModelRequest$outboundSchema = z624.ob
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningcancelfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningcancelfinetuningjob.js
 init_primitives();
 import * as z625 from "zod/v4";
 init_discriminatedUnion();
@@ -15026,7 +15026,7 @@ var JobsApiRoutesFineTuningCancelFineTuningJobResponse$inboundSchema = discrimin
   completion: CompletionFineTuningJobDetails$inboundSchema
 }, { outputPropertyName: "jobType" });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningcreatefinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningcreatefinetuningjob.js
 init_discriminatedUnion();
 init_smartUnion();
 var ResponseT$inboundSchema = discriminatedUnion("job_type", {
@@ -15041,7 +15041,7 @@ var JobsApiRoutesFineTuningCreateFineTuningJobResponse$inboundSchema = smartUnio
   }, { outputPropertyName: "jobType" })
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuninggetfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuninggetfinetuningjob.js
 init_primitives();
 import * as z626 from "zod/v4";
 init_discriminatedUnion();
@@ -15057,7 +15057,7 @@ var JobsApiRoutesFineTuningGetFineTuningJobResponse$inboundSchema = discriminate
   completion: CompletionFineTuningJobDetails$inboundSchema
 }, { outputPropertyName: "jobType" });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuninggetfinetuningjobs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuninggetfinetuningjobs.js
 init_primitives();
 import * as z627 from "zod/v4";
 var JobsApiRoutesFineTuningGetFineTuningJobsStatus = {
@@ -15095,7 +15095,7 @@ var JobsApiRoutesFineTuningGetFineTuningJobsRequest$outboundSchema = z627.object
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningstartfinetuningjob.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningstartfinetuningjob.js
 init_primitives();
 import * as z628 from "zod/v4";
 init_discriminatedUnion();
@@ -15111,7 +15111,7 @@ var JobsApiRoutesFineTuningStartFineTuningJobResponse$inboundSchema = discrimina
   completion: CompletionFineTuningJobDetails$inboundSchema
 }, { outputPropertyName: "jobType" });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningunarchivefinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningunarchivefinetunedmodel.js
 init_primitives();
 import * as z629 from "zod/v4";
 var JobsApiRoutesFineTuningUnarchiveFineTunedModelRequest$outboundSchema = z629.object({
@@ -15122,7 +15122,7 @@ var JobsApiRoutesFineTuningUnarchiveFineTunedModelRequest$outboundSchema = z629.
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningupdatefinetunedmodel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/jobsapiroutesfinetuningupdatefinetunedmodel.js
 init_primitives();
 import * as z630 from "zod/v4";
 init_discriminatedUnion();
@@ -15140,7 +15140,7 @@ var JobsApiRoutesFineTuningUpdateFineTunedModelResponse$inboundSchema = discrimi
   completion: CompletionFineTunedModel$inboundSchema
 }, { outputPropertyName: "modelType" });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgechatcompletioneventv1observabilitychatcompletioneventseventidlivejudgingpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgechatcompletioneventv1observabilitychatcompletioneventseventidlivejudgingpost.js
 init_primitives();
 import * as z631 from "zod/v4";
 var JudgeChatCompletionEventV1ObservabilityChatCompletionEventsEventIdLiveJudgingPostRequest$outboundSchema = z631.object({
@@ -15153,7 +15153,7 @@ var JudgeChatCompletionEventV1ObservabilityChatCompletionEventsEventIdLiveJudgin
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgeconversationv1observabilityjudgesjudgeidlivejudgingpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgeconversationv1observabilityjudgesjudgeidlivejudgingpost.js
 init_primitives();
 import * as z632 from "zod/v4";
 var JudgeConversationV1ObservabilityJudgesJudgeIdLiveJudgingPostRequest$outboundSchema = z632.object({
@@ -15166,7 +15166,7 @@ var JudgeConversationV1ObservabilityJudgesJudgeIdLiveJudgingPostRequest$outbound
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgedatasetrecordv1observabilitydatasetrecordsdatasetrecordidlivejudgingpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/judgedatasetrecordv1observabilitydatasetrecordsdatasetrecordidlivejudgingpost.js
 init_primitives();
 import * as z633 from "zod/v4";
 var JudgeDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdLiveJudgingPostRequest$outboundSchema = z633.object({
@@ -15179,7 +15179,7 @@ var JudgeDatasetRecordV1ObservabilityDatasetRecordsDatasetRecordIdLiveJudgingPos
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdeletev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdeletev1.js
 init_primitives();
 import * as z634 from "zod/v4";
 var LibrariesDeleteV1Request$outboundSchema = z634.object({
@@ -15190,7 +15190,7 @@ var LibrariesDeleteV1Request$outboundSchema = z634.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsdeletev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsdeletev1.js
 init_primitives();
 import * as z635 from "zod/v4";
 var LibrariesDocumentsDeleteV1Request$outboundSchema = z635.object({
@@ -15203,7 +15203,7 @@ var LibrariesDocumentsDeleteV1Request$outboundSchema = z635.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetextractedtextsignedurlv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetextractedtextsignedurlv1.js
 init_primitives();
 import * as z636 from "zod/v4";
 var LibrariesDocumentsGetExtractedTextSignedUrlV1Request$outboundSchema = z636.object({
@@ -15216,7 +15216,7 @@ var LibrariesDocumentsGetExtractedTextSignedUrlV1Request$outboundSchema = z636.o
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetsignedurlv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetsignedurlv1.js
 init_primitives();
 import * as z637 from "zod/v4";
 var LibrariesDocumentsGetSignedUrlV1Request$outboundSchema = z637.object({
@@ -15229,7 +15229,7 @@ var LibrariesDocumentsGetSignedUrlV1Request$outboundSchema = z637.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetstatusv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetstatusv1.js
 init_primitives();
 import * as z638 from "zod/v4";
 var LibrariesDocumentsGetStatusV1Request$outboundSchema = z638.object({
@@ -15242,7 +15242,7 @@ var LibrariesDocumentsGetStatusV1Request$outboundSchema = z638.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgettextcontentv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgettextcontentv1.js
 init_primitives();
 import * as z639 from "zod/v4";
 var LibrariesDocumentsGetTextContentV1Request$outboundSchema = z639.object({
@@ -15259,7 +15259,7 @@ var LibrariesDocumentsGetTextContentV1Request$outboundSchema = z639.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsgetv1.js
 init_primitives();
 import * as z640 from "zod/v4";
 var LibrariesDocumentsGetV1Request$outboundSchema = z640.object({
@@ -15272,7 +15272,7 @@ var LibrariesDocumentsGetV1Request$outboundSchema = z640.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentslistv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentslistv1.js
 init_primitives();
 import * as z641 from "zod/v4";
 var LibrariesDocumentsListV1Request$outboundSchema = z641.object({
@@ -15293,7 +15293,7 @@ var LibrariesDocumentsListV1Request$outboundSchema = z641.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentspatchv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentspatchv1.js
 init_primitives();
 import * as z642 from "zod/v4";
 var LibrariesDocumentsPatchV1Request$outboundSchema = z642.object({
@@ -15308,7 +15308,7 @@ var LibrariesDocumentsPatchV1Request$outboundSchema = z642.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsreprocessv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsreprocessv1.js
 init_primitives();
 import * as z643 from "zod/v4";
 var LibrariesDocumentsReprocessV1Request$outboundSchema = z643.object({
@@ -15321,7 +15321,7 @@ var LibrariesDocumentsReprocessV1Request$outboundSchema = z643.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsupdatev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsupdatev1.js
 init_primitives();
 import * as z644 from "zod/v4";
 var LibrariesDocumentsUpdateV1Request$outboundSchema = z644.object({
@@ -15336,7 +15336,7 @@ var LibrariesDocumentsUpdateV1Request$outboundSchema = z644.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsuploadv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesdocumentsuploadv1.js
 init_primitives();
 import * as z645 from "zod/v4";
 var DocumentUpload$outboundSchema = z645.object({
@@ -15352,7 +15352,7 @@ var LibrariesDocumentsUploadV1Request$outboundSchema = z645.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesgetv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesgetv1.js
 init_primitives();
 import * as z646 from "zod/v4";
 var LibrariesGetV1Request$outboundSchema = z646.object({
@@ -15363,7 +15363,7 @@ var LibrariesGetV1Request$outboundSchema = z646.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librarieslistv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librarieslistv1.js
 init_primitives();
 import * as z647 from "zod/v4";
 var LibrariesListV1Request$outboundSchema = z647.object({
@@ -15378,7 +15378,7 @@ var LibrariesListV1Request$outboundSchema = z647.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariespatchv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariespatchv1.js
 init_primitives();
 import * as z648 from "zod/v4";
 var LibrariesPatchV1Request$outboundSchema = z648.object({
@@ -15391,7 +15391,7 @@ var LibrariesPatchV1Request$outboundSchema = z648.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharecreatev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharecreatev1.js
 init_primitives();
 import * as z649 from "zod/v4";
 var LibrariesShareCreateV1Request$outboundSchema = z649.object({
@@ -15404,7 +15404,7 @@ var LibrariesShareCreateV1Request$outboundSchema = z649.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharedeletev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharedeletev1.js
 init_primitives();
 import * as z650 from "zod/v4";
 var LibrariesShareDeleteV1Request$outboundSchema = z650.object({
@@ -15417,7 +15417,7 @@ var LibrariesShareDeleteV1Request$outboundSchema = z650.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharelistv1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariessharelistv1.js
 init_primitives();
 import * as z651 from "zod/v4";
 var LibrariesShareListV1Request$outboundSchema = z651.object({
@@ -15428,7 +15428,7 @@ var LibrariesShareListV1Request$outboundSchema = z651.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesupdatev1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/librariesupdatev1.js
 init_primitives();
 import * as z652 from "zod/v4";
 var LibrariesUpdateV1Request$outboundSchema = z652.object({
@@ -15441,7 +15441,7 @@ var LibrariesUpdateV1Request$outboundSchema = z652.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listdeploymentsv1workflowsdeploymentsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listdeploymentsv1workflowsdeploymentsget.js
 init_primitives();
 import * as z653 from "zod/v4";
 var ListDeploymentsV1WorkflowsDeploymentsGetRequest$outboundSchema = z653.object({
@@ -15461,14 +15461,14 @@ var ListDeploymentsV1WorkflowsDeploymentsGetRequest$outboundSchema = z653.object
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listmodelsv1modelsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listmodelsv1modelsget.js
 import * as z654 from "zod/v4";
 var ListModelsV1ModelsGetRequest$outboundSchema = z654.object({
   provider: z654.nullable(z654.string()).optional(),
   model: z654.nullable(z654.string()).optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listrunsv1workflowsrunsget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listrunsv1workflowsrunsget.js
 init_primitives();
 import * as z655 from "zod/v4";
 init_smartUnion();
@@ -15525,7 +15525,7 @@ var ListRunsV1WorkflowsRunsGetResponse$inboundSchema = z655.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listvoicesv1audiovoicesget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/listvoicesv1audiovoicesget.js
 import * as z656 from "zod/v4";
 var Type = {
   All: "all",
@@ -15539,7 +15539,7 @@ var ListVoicesV1AudioVoicesGetRequest$outboundSchema = z656.object({
   type: Type$outboundSchema.default("all")
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/pauseschedulev1workflowsschedulesscheduleidpausepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/pauseschedulev1workflowsschedulesscheduleidpausepost.js
 init_primitives();
 import * as z657 from "zod/v4";
 var PauseScheduleV1WorkflowsSchedulesScheduleIdPausePostRequest$outboundSchema = z657.object({
@@ -15552,7 +15552,7 @@ var PauseScheduleV1WorkflowsSchedulesScheduleIdPausePostRequest$outboundSchema =
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromcampaignv1observabilitydatasetsdatasetidimportsfromcampaignpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromcampaignv1observabilitydatasetsdatasetidimportsfromcampaignpost.js
 init_primitives();
 import * as z658 from "zod/v4";
 var PostDatasetRecordsFromCampaignV1ObservabilityDatasetsDatasetIdImportsFromCampaignPostRequest$outboundSchema = z658.object({
@@ -15565,7 +15565,7 @@ var PostDatasetRecordsFromCampaignV1ObservabilityDatasetsDatasetIdImportsFromCam
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromdatasetv1observabilitydatasetsdatasetidimportsfromdatasetpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromdatasetv1observabilitydatasetsdatasetidimportsfromdatasetpost.js
 init_primitives();
 import * as z659 from "zod/v4";
 var PostDatasetRecordsFromDatasetV1ObservabilityDatasetsDatasetIdImportsFromDatasetPostRequest$outboundSchema = z659.object({
@@ -15578,7 +15578,7 @@ var PostDatasetRecordsFromDatasetV1ObservabilityDatasetsDatasetIdImportsFromData
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromexplorerv1observabilitydatasetsdatasetidimportsfromexplorerpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromexplorerv1observabilitydatasetsdatasetidimportsfromexplorerpost.js
 init_primitives();
 import * as z660 from "zod/v4";
 var PostDatasetRecordsFromExplorerV1ObservabilityDatasetsDatasetIdImportsFromExplorerPostRequest$outboundSchema = z660.object({
@@ -15591,7 +15591,7 @@ var PostDatasetRecordsFromExplorerV1ObservabilityDatasetsDatasetIdImportsFromExp
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromfilev1observabilitydatasetsdatasetidimportsfromfilepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromfilev1observabilitydatasetsdatasetidimportsfromfilepost.js
 init_primitives();
 import * as z661 from "zod/v4";
 var PostDatasetRecordsFromFileV1ObservabilityDatasetsDatasetIdImportsFromFilePostRequest$outboundSchema = z661.object({
@@ -15604,7 +15604,7 @@ var PostDatasetRecordsFromFileV1ObservabilityDatasetsDatasetIdImportsFromFilePos
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromplaygroundv1observabilitydatasetsdatasetidimportsfromplaygroundpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/postdatasetrecordsfromplaygroundv1observabilitydatasetsdatasetidimportsfromplaygroundpost.js
 init_primitives();
 import * as z662 from "zod/v4";
 var PostDatasetRecordsFromPlaygroundV1ObservabilityDatasetsDatasetIdImportsFromPlaygroundPostRequest$outboundSchema = z662.object({
@@ -15617,7 +15617,7 @@ var PostDatasetRecordsFromPlaygroundV1ObservabilityDatasetsDatasetIdImportsFromP
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/queryworkflowexecutionv1workflowsexecutionsexecutionidqueriespost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/queryworkflowexecutionv1workflowsexecutionsexecutionidqueriespost.js
 init_primitives();
 import * as z663 from "zod/v4";
 var QueryWorkflowExecutionV1WorkflowsExecutionsExecutionIdQueriesPostRequest$outboundSchema = z663.object({
@@ -15630,7 +15630,7 @@ var QueryWorkflowExecutionV1WorkflowsExecutionsExecutionIdQueriesPostRequest$out
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/resetworkflowv1workflowsexecutionsexecutionidresetpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/resetworkflowv1workflowsexecutionsexecutionidresetpost.js
 init_primitives();
 import * as z664 from "zod/v4";
 var ResetWorkflowV1WorkflowsExecutionsExecutionIdResetPostRequest$outboundSchema = z664.object({
@@ -15643,7 +15643,7 @@ var ResetWorkflowV1WorkflowsExecutionsExecutionIdResetPostRequest$outboundSchema
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/resumeschedulev1workflowsschedulesscheduleidresumepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/resumeschedulev1workflowsschedulesscheduleidresumepost.js
 init_primitives();
 import * as z665 from "zod/v4";
 var ResumeScheduleV1WorkflowsSchedulesScheduleIdResumePostRequest$outboundSchema = z665.object({
@@ -15656,7 +15656,7 @@ var ResumeScheduleV1WorkflowsSchedulesScheduleIdResumePostRequest$outboundSchema
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/retrievemodelv1modelsmodelidget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/retrievemodelv1modelsmodelidget.js
 init_primitives();
 import * as z666 from "zod/v4";
 init_discriminatedUnion();
@@ -15672,7 +15672,7 @@ var ResponseRetrieveModelV1ModelsModelIdGet$inboundSchema = discriminatedUnion("
   ["fine-tuned"]: FTModelCard$inboundSchema
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchlatestspanevaluationsv1observabilityspansevaluationssearchlatestpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchlatestspanevaluationsv1observabilityspansevaluationssearchlatestpost.js
 init_primitives();
 import * as z667 from "zod/v4";
 var SearchLatestSpanEvaluationsV1ObservabilitySpansEvaluationsSearchLatestPostRequest$outboundSchema = z667.object({
@@ -15688,7 +15688,7 @@ var SearchLatestSpanEvaluationsV1ObservabilitySpansEvaluationsSearchLatestPostRe
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchlogsv1observabilitylogssearchpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchlogsv1observabilitylogssearchpost.js
 init_primitives();
 import * as z668 from "zod/v4";
 var SearchLogsV1ObservabilityLogsSearchPostRequest$outboundSchema = z668.object({
@@ -15704,7 +15704,7 @@ var SearchLogsV1ObservabilityLogsSearchPostRequest$outboundSchema = z668.object(
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchspanevaluationsv1observabilityspansevaluationssearchpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchspanevaluationsv1observabilityspansevaluationssearchpost.js
 init_primitives();
 import * as z669 from "zod/v4";
 var SearchSpanEvaluationsV1ObservabilitySpansEvaluationsSearchPostRequest$outboundSchema = z669.object({
@@ -15720,7 +15720,7 @@ var SearchSpanEvaluationsV1ObservabilitySpansEvaluationsSearchPostRequest$outbou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchspansv1observabilityspanssearchpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchspansv1observabilityspanssearchpost.js
 init_primitives();
 import * as z670 from "zod/v4";
 var SearchSpansV1ObservabilitySpansSearchPostRequest$outboundSchema = z670.object({
@@ -15736,7 +15736,7 @@ var SearchSpansV1ObservabilitySpansSearchPostRequest$outboundSchema = z670.objec
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchtracesv1observabilitytracessearchpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/searchtracesv1observabilitytracessearchpost.js
 init_primitives();
 import * as z671 from "zod/v4";
 var SearchTracesV1ObservabilityTracesSearchPostRequest$outboundSchema = z671.object({
@@ -15752,7 +15752,7 @@ var SearchTracesV1ObservabilityTracesSearchPostRequest$outboundSchema = z671.obj
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/signalworkflowexecutionv1workflowsexecutionsexecutionidsignalspost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/signalworkflowexecutionv1workflowsexecutionsexecutionidsignalspost.js
 init_primitives();
 import * as z672 from "zod/v4";
 var SignalWorkflowExecutionV1WorkflowsExecutionsExecutionIdSignalsPostRequest$outboundSchema = z672.object({
@@ -15765,7 +15765,7 @@ var SignalWorkflowExecutionV1WorkflowsExecutionsExecutionIdSignalsPostRequest$ou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/speechv1audiospeechpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/speechv1audiospeechpost.js
 import * as z673 from "zod/v4";
 init_primitives();
 init_discriminatedUnion();
@@ -15811,7 +15811,7 @@ var SpeechV1AudioSpeechPostResponse$inboundSchema = smartUnion([
   })
 ]);
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/streamv1workflowsexecutionsexecutionidstreamget.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/streamv1workflowsexecutionsexecutionidstreamget.js
 init_primitives();
 import * as z674 from "zod/v4";
 var StreamV1WorkflowsExecutionsExecutionIdStreamGetRequest$outboundSchema = z674.object({
@@ -15845,7 +15845,7 @@ var StreamV1WorkflowsExecutionsExecutionIdStreamGetResponseBody$inboundSchema = 
   retry: z674.int().optional()
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/streamworkflowexecutionlogs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/streamworkflowexecutionlogs.js
 init_primitives();
 import * as z675 from "zod/v4";
 init_enums();
@@ -15895,7 +15895,7 @@ var StreamWorkflowExecutionLogsResponseBody$inboundSchema = z675.object({
   ]).optional())
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/terminateworkflowexecutionv1workflowsexecutionsexecutionidterminatepost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/terminateworkflowexecutionv1workflowsexecutionsexecutionidterminatepost.js
 init_primitives();
 import * as z676 from "zod/v4";
 var TerminateWorkflowExecutionV1WorkflowsExecutionsExecutionIdTerminatePostRequest$outboundSchema = z676.object({
@@ -15906,7 +15906,7 @@ var TerminateWorkflowExecutionV1WorkflowsExecutionsExecutionIdTerminatePostReque
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/triggerschedulev1workflowsschedulesscheduleidtriggerpost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/triggerschedulev1workflowsschedulesscheduleidtriggerpost.js
 init_primitives();
 import * as z677 from "zod/v4";
 var TriggerScheduleV1WorkflowsSchedulesScheduleIdTriggerPostRequest$outboundSchema = z677.object({
@@ -15919,7 +15919,7 @@ var TriggerScheduleV1WorkflowsSchedulesScheduleIdTriggerPostRequest$outboundSche
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/unarchiveworkflowv1workflowsworkflowidentifierunarchiveput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/unarchiveworkflowv1workflowsworkflowidentifierunarchiveput.js
 init_primitives();
 import * as z678 from "zod/v4";
 var UnarchiveWorkflowV1WorkflowsWorkflowIdentifierUnarchivePutRequest$outboundSchema = z678.object({
@@ -15930,7 +15930,7 @@ var UnarchiveWorkflowV1WorkflowsWorkflowIdentifierUnarchivePutRequest$outboundSc
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/unscheduleworkflowv1workflowsschedulesscheduleiddelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/unscheduleworkflowv1workflowsschedulesscheduleiddelete.js
 init_primitives();
 import * as z679 from "zod/v4";
 var UnscheduleWorkflowV1WorkflowsSchedulesScheduleIdDeleteRequest$outboundSchema = z679.object({
@@ -15941,7 +15941,7 @@ var UnscheduleWorkflowV1WorkflowsSchedulesScheduleIdDeleteRequest$outboundSchema
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetrecordpayloadv1observabilitydatasetrecordsdatasetrecordidpayloadput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetrecordpayloadv1observabilitydatasetrecordsdatasetrecordidpayloadput.js
 init_primitives();
 import * as z680 from "zod/v4";
 var UpdateDatasetRecordPayloadV1ObservabilityDatasetRecordsDatasetRecordIdPayloadPutRequest$outboundSchema = z680.object({
@@ -15954,7 +15954,7 @@ var UpdateDatasetRecordPayloadV1ObservabilityDatasetRecordsDatasetRecordIdPayloa
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetrecordpropertiesv1observabilitydatasetrecordsdatasetrecordidpropertiesput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetrecordpropertiesv1observabilitydatasetrecordsdatasetrecordidpropertiesput.js
 init_primitives();
 import * as z681 from "zod/v4";
 var UpdateDatasetRecordPropertiesV1ObservabilityDatasetRecordsDatasetRecordIdPropertiesPutRequest$outboundSchema = z681.object({
@@ -15967,7 +15967,7 @@ var UpdateDatasetRecordPropertiesV1ObservabilityDatasetRecordsDatasetRecordIdPro
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetv1observabilitydatasetsdatasetidpatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatedatasetv1observabilitydatasetsdatasetidpatch.js
 init_primitives();
 import * as z682 from "zod/v4";
 var UpdateDatasetV1ObservabilityDatasetsDatasetIdPatchRequest$outboundSchema = z682.object({
@@ -15980,7 +15980,7 @@ var UpdateDatasetV1ObservabilityDatasetsDatasetIdPatchRequest$outboundSchema = z
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatejudgev1observabilityjudgesjudgeidput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatejudgev1observabilityjudgesjudgeidput.js
 init_primitives();
 import * as z683 from "zod/v4";
 var UpdateJudgeV1ObservabilityJudgesJudgeIdPutRequest$outboundSchema = z683.object({
@@ -15993,7 +15993,7 @@ var UpdateJudgeV1ObservabilityJudgesJudgeIdPutRequest$outboundSchema = z683.obje
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateruninfov1ragingestionpipelineconfigurationsidruninfoput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateruninfov1ragingestionpipelineconfigurationsidruninfoput.js
 init_primitives();
 import * as z684 from "zod/v4";
 var UpdateRunInfoV1RagIngestionPipelineConfigurationsIdRunInfoPutRequest$outboundSchema = z684.object({
@@ -16005,7 +16005,7 @@ var UpdateRunInfoV1RagIngestionPipelineConfigurationsIdRunInfoPutRequest$outboun
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateschedulev1workflowsschedulesscheduleidpatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateschedulev1workflowsschedulesscheduleidpatch.js
 init_primitives();
 import * as z685 from "zod/v4";
 var UpdateScheduleV1WorkflowsSchedulesScheduleIdPatchRequest$outboundSchema = z685.object({
@@ -16018,7 +16018,7 @@ var UpdateScheduleV1WorkflowsSchedulesScheduleIdPatchRequest$outboundSchema = z6
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatevoicev1audiovoicesvoiceidpatch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updatevoicev1audiovoicesvoiceidpatch.js
 init_primitives();
 import * as z686 from "zod/v4";
 var UpdateVoiceV1AudioVoicesVoiceIdPatchRequest$outboundSchema = z686.object({
@@ -16031,7 +16031,7 @@ var UpdateVoiceV1AudioVoicesVoiceIdPatchRequest$outboundSchema = z686.object({
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateworkflowexecutionv1workflowsexecutionsexecutionidupdatespost.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateworkflowexecutionv1workflowsexecutionsexecutionidupdatespost.js
 init_primitives();
 import * as z687 from "zod/v4";
 var UpdateWorkflowExecutionV1WorkflowsExecutionsExecutionIdUpdatesPostRequest$outboundSchema = z687.object({
@@ -16044,7 +16044,7 @@ var UpdateWorkflowExecutionV1WorkflowsExecutionsExecutionIdUpdatesPostRequest$ou
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateworkflowv1workflowsworkflowidentifierput.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/models/operations/updateworkflowv1workflowsworkflowidentifierput.js
 init_primitives();
 import * as z688 from "zod/v4";
 var UpdateWorkflowV1WorkflowsWorkflowIdentifierPutRequest$outboundSchema = z688.object({
@@ -16057,7 +16057,7 @@ var UpdateWorkflowV1WorkflowsWorkflowIdentifierPutRequest$outboundSchema = z688.
   });
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioSpeechComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioSpeechComplete.js
 var CompleteAcceptEnum;
 (function(CompleteAcceptEnum2) {
   CompleteAcceptEnum2["applicationJson"] = "application/json";
@@ -16125,7 +16125,7 @@ async function $do3(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/speech.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/speech.js
 init_fp();
 var Speech = class extends ClientSDK {
   async complete(request, options) {
@@ -16133,11 +16133,11 @@ var Speech = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsComplete.js
 init_primitives();
 init_schemas();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/streams.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/streams.js
 function isReadableStream(val) {
   if (typeof val !== "object" || val === null) {
     return false;
@@ -16146,7 +16146,7 @@ function isReadableStream(val) {
   return typeof stream2.getReader === "function" && typeof stream2.cancel === "function" && typeof stream2.tee === "function";
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsComplete.js
 function audioTranscriptionsComplete(client, request, options) {
   return new APIPromise($do4(client, request, options));
 }
@@ -16245,7 +16245,7 @@ async function $do4(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioTranscriptionsStream.js
 import * as z689 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -16354,7 +16354,7 @@ async function $do5(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/transcriptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/transcriptions.js
 init_fp();
 var Transcriptions = class extends ClientSDK {
   /**
@@ -16371,7 +16371,7 @@ var Transcriptions = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesCreate.js
 init_primitives();
 init_schemas();
 function audioVoicesCreate(client, request, options) {
@@ -16436,7 +16436,7 @@ async function $do6(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesDelete.js
 init_primitives();
 init_schemas();
 function audioVoicesDelete(client, request, options) {
@@ -16506,7 +16506,7 @@ async function $do7(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesGet.js
 init_primitives();
 init_schemas();
 function audioVoicesGet(client, request, options) {
@@ -16576,7 +16576,7 @@ async function $do8(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesGetSampleAudio.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesGetSampleAudio.js
 import * as z690 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -16647,7 +16647,7 @@ async function $do9(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesList.js
 init_primitives();
 init_schemas();
 function audioVoicesList(client, request, options) {
@@ -16717,7 +16717,7 @@ async function $do10(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/audioVoicesUpdate.js
 init_primitives();
 init_schemas();
 function audioVoicesUpdate(client, request, options) {
@@ -16790,7 +16790,7 @@ async function $do11(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/voices.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/voices.js
 init_fp();
 var Voices = class extends ClientSDK {
   /**
@@ -16849,7 +16849,7 @@ var Voices = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/audio.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/audio.js
 var Audio = class extends ClientSDK {
   _speech;
   get speech() {
@@ -16865,7 +16865,7 @@ var Audio = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsCancel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsCancel.js
 init_primitives();
 init_schemas();
 function batchJobsCancel(client, request, options) {
@@ -16932,7 +16932,7 @@ async function $do12(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsCreate.js
 init_primitives();
 init_schemas();
 function batchJobsCreate(client, request, options) {
@@ -16994,7 +16994,7 @@ async function $do13(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsDelete.js
 init_primitives();
 init_schemas();
 function batchJobsDelete(client, request, options) {
@@ -17061,7 +17061,7 @@ async function $do14(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsGet.js
 init_primitives();
 init_schemas();
 function batchJobsGet(client, request, options) {
@@ -17132,7 +17132,7 @@ async function $do15(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/batchJobsList.js
 init_primitives();
 init_schemas();
 function batchJobsList(client, request, options) {
@@ -17205,7 +17205,7 @@ async function $do16(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/batchjobs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/batchjobs.js
 init_fp();
 var BatchJobs = class extends ClientSDK {
   /**
@@ -17258,7 +17258,7 @@ var BatchJobs = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/batch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/batch.js
 var Batch = class extends ClientSDK {
   _jobs;
   get jobs() {
@@ -17266,7 +17266,7 @@ var Batch = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsCreate.js
 init_primitives();
 init_schemas();
 function betaAgentsCreate(client, request, options) {
@@ -17331,7 +17331,7 @@ async function $do17(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsCreateVersionAlias.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsCreateVersionAlias.js
 init_primitives();
 init_schemas();
 function betaAgentsCreateVersionAlias(client, request, options) {
@@ -17406,7 +17406,7 @@ async function $do18(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsDelete.js
 import * as z691 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -17477,7 +17477,7 @@ async function $do19(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsDeleteVersionAlias.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsDeleteVersionAlias.js
 import * as z692 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -17552,7 +17552,7 @@ async function $do20(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsGet.js
 init_primitives();
 init_schemas();
 function betaAgentsGet(client, request, options) {
@@ -17626,7 +17626,7 @@ async function $do21(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsGetVersion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsGetVersion.js
 init_primitives();
 init_schemas();
 function betaAgentsGetVersion(client, request, options) {
@@ -17700,7 +17700,7 @@ async function $do22(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsList.js
 import * as z693 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -17777,7 +17777,7 @@ async function $do23(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsListVersionAliases.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsListVersionAliases.js
 import * as z694 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -17848,7 +17848,7 @@ async function $do24(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsListVersions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsListVersions.js
 import * as z695 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -17924,7 +17924,7 @@ async function $do25(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsUpdate.js
 init_primitives();
 init_schemas();
 function betaAgentsUpdate(client, request, options) {
@@ -17997,7 +17997,7 @@ async function $do26(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsUpdateVersion.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaAgentsUpdateVersion.js
 init_primitives();
 init_schemas();
 function betaAgentsUpdateVersion(client, request, options) {
@@ -18071,7 +18071,7 @@ async function $do27(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/betaagents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/betaagents.js
 init_fp();
 var BetaAgents = class extends ClientSDK {
   /**
@@ -18172,7 +18172,7 @@ var BetaAgents = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForOrganization.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForOrganization.js
 init_primitives();
 init_schemas();
 function betaConnectorsActivateForOrganization(client, request, options) {
@@ -18245,7 +18245,7 @@ async function $do28(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForUser.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForUser.js
 init_primitives();
 init_schemas();
 function betaConnectorsActivateForUser(client, request, options) {
@@ -18318,7 +18318,7 @@ async function $do29(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForWorkspace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsActivateForWorkspace.js
 init_primitives();
 init_schemas();
 function betaConnectorsActivateForWorkspace(client, request, options) {
@@ -18391,7 +18391,7 @@ async function $do30(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCallTool.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCallTool.js
 init_primitives();
 init_schemas();
 function betaConnectorsCallTool(client, request, options) {
@@ -18469,7 +18469,7 @@ async function $do31(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreate.js
 init_primitives();
 init_schemas();
 function betaConnectorsCreate(client, request, options) {
@@ -18534,7 +18534,7 @@ async function $do32(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateOrganizationCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateOrganizationCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsCreateOrUpdateOrganizationCredentials(client, request, options) {
@@ -18604,7 +18604,7 @@ async function $do33(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateUserCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateUserCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsCreateOrUpdateUserCredentials(client, request, options) {
@@ -18674,7 +18674,7 @@ async function $do34(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateWorkspaceCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsCreateOrUpdateWorkspaceCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsCreateOrUpdateWorkspaceCredentials(client, request, options) {
@@ -18744,7 +18744,7 @@ async function $do35(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForOrganization.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForOrganization.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeactivateForOrganization(client, request, options) {
@@ -18814,7 +18814,7 @@ async function $do36(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForUser.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForUser.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeactivateForUser(client, request, options) {
@@ -18884,7 +18884,7 @@ async function $do37(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForWorkspace.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeactivateForWorkspace.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeactivateForWorkspace(client, request, options) {
@@ -18954,7 +18954,7 @@ async function $do38(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDelete.js
 init_primitives();
 init_schemas();
 function betaConnectorsDelete(client, request, options) {
@@ -19024,7 +19024,7 @@ async function $do39(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteOrganizationCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteOrganizationCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeleteOrganizationCredentials(client, request, options) {
@@ -19092,7 +19092,7 @@ async function $do40(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteUserCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteUserCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeleteUserCredentials(client, request, options) {
@@ -19160,7 +19160,7 @@ async function $do41(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteWorkspaceCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsDeleteWorkspaceCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsDeleteWorkspaceCredentials(client, request, options) {
@@ -19228,7 +19228,7 @@ async function $do42(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGet.js
 init_primitives();
 init_schemas();
 function betaConnectorsGet(client, request, options) {
@@ -19300,7 +19300,7 @@ async function $do43(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGetAuthenticationMethods.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGetAuthenticationMethods.js
 import * as z696 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -19365,7 +19365,7 @@ async function $do44(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGetAuthUrl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsGetAuthUrl.js
 init_primitives();
 init_schemas();
 function betaConnectorsGetAuthUrl(client, request, options) {
@@ -19439,7 +19439,7 @@ async function $do45(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsList.js
 init_primitives();
 init_schemas();
 function betaConnectorsList(client, request, options) {
@@ -19509,7 +19509,7 @@ async function $do46(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListOrganizationCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListOrganizationCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsListOrganizationCredentials(client, request, options) {
@@ -19581,7 +19581,7 @@ async function $do47(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListTools.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListTools.js
 init_primitives();
 init_schemas();
 function betaConnectorsListTools(client, request, options) {
@@ -19656,7 +19656,7 @@ async function $do48(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListUserCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListUserCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsListUserCredentials(client, request, options) {
@@ -19728,7 +19728,7 @@ async function $do49(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListWorkspaceCredentials.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsListWorkspaceCredentials.js
 init_primitives();
 init_schemas();
 function betaConnectorsListWorkspaceCredentials(client, request, options) {
@@ -19800,7 +19800,7 @@ async function $do50(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConnectorsUpdate.js
 init_primitives();
 init_schemas();
 function betaConnectorsUpdate(client, request, options) {
@@ -19873,7 +19873,7 @@ async function $do51(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/connectors.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/connectors.js
 init_fp();
 var Connectors = class extends ClientSDK {
   /**
@@ -20094,7 +20094,7 @@ var Connectors = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsAppend.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsAppend.js
 init_primitives();
 init_schemas();
 function betaConversationsAppend(client, request, options) {
@@ -20167,7 +20167,7 @@ async function $do52(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsAppendStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsAppendStream.js
 import * as z697 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -20248,7 +20248,7 @@ async function $do53(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsDelete.js
 import * as z698 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -20319,7 +20319,7 @@ async function $do54(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGet.js
 init_primitives();
 init_schemas();
 function betaConversationsGet(client, request, options) {
@@ -20389,7 +20389,7 @@ async function $do55(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGetHistory.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGetHistory.js
 init_primitives();
 init_schemas();
 function betaConversationsGetHistory(client, request, options) {
@@ -20459,7 +20459,7 @@ async function $do56(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGetMessages.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsGetMessages.js
 init_primitives();
 init_schemas();
 function betaConversationsGetMessages(client, request, options) {
@@ -20529,7 +20529,7 @@ async function $do57(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsList.js
 import * as z699 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -20601,7 +20601,7 @@ async function $do58(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsRestart.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsRestart.js
 init_primitives();
 init_schemas();
 function betaConversationsRestart(client, request, options) {
@@ -20674,7 +20674,7 @@ async function $do59(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsRestartStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsRestartStream.js
 import * as z700 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -20755,7 +20755,7 @@ async function $do60(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsStart.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsStart.js
 init_primitives();
 init_schemas();
 function betaConversationsStart(client, request, options) {
@@ -20820,7 +20820,7 @@ async function $do61(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsStartStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaConversationsStartStream.js
 import * as z701 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -20893,7 +20893,7 @@ async function $do62(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/conversations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/conversations.js
 init_fp();
 var Conversations = class extends ClientSDK {
   /**
@@ -20997,7 +20997,7 @@ var Conversations = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesCreate.js
 init_primitives();
 init_schemas();
 function betaLibrariesCreate(client, request, options) {
@@ -21062,7 +21062,7 @@ async function $do63(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDelete.js
 init_primitives();
 init_schemas();
 function betaLibrariesDelete(client, request, options) {
@@ -21132,7 +21132,7 @@ async function $do64(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesGet.js
 init_primitives();
 init_schemas();
 function betaLibrariesGet(client, request, options) {
@@ -21202,7 +21202,7 @@ async function $do65(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesLibrariesUpdateV1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesLibrariesUpdateV1.js
 init_primitives();
 init_schemas();
 function betaLibrariesLibrariesUpdateV1(client, request, options) {
@@ -21275,7 +21275,7 @@ async function $do66(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesList.js
 init_primitives();
 init_schemas();
 function betaLibrariesList(client, request, options) {
@@ -21346,7 +21346,7 @@ async function $do67(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesUpdate.js
 init_primitives();
 init_schemas();
 function betaLibrariesUpdate(client, request, options) {
@@ -21419,10 +21419,10 @@ async function $do68(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/libraries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/libraries.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesDelete.js
 init_primitives();
 init_schemas();
 function betaLibrariesAccessesDelete(client, request, options) {
@@ -21493,7 +21493,7 @@ async function $do69(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesList.js
 init_primitives();
 init_schemas();
 function betaLibrariesAccessesList(client, request, options) {
@@ -21563,7 +21563,7 @@ async function $do70(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesUpdateOrCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesAccessesUpdateOrCreate.js
 init_primitives();
 init_schemas();
 function betaLibrariesAccessesUpdateOrCreate(client, request, options) {
@@ -21634,7 +21634,7 @@ async function $do71(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/accesses.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/accesses.js
 init_fp();
 var Accesses = class extends ClientSDK {
   /**
@@ -21666,7 +21666,7 @@ var Accesses = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsDelete.js
 import * as z702 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -21741,7 +21741,7 @@ async function $do72(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsExtractedTextSignedUrl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsExtractedTextSignedUrl.js
 import * as z703 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -21816,7 +21816,7 @@ async function $do73(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsGet.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsGet(client, request, options) {
@@ -21890,7 +21890,7 @@ async function $do74(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsGetSignedUrl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsGetSignedUrl.js
 import * as z704 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -21965,7 +21965,7 @@ async function $do75(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsLibrariesDocumentsUpdateV1.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsLibrariesDocumentsUpdateV1.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsLibrariesDocumentsUpdateV1(client, request, options) {
@@ -22042,7 +22042,7 @@ async function $do76(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsList.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsList(client, request, options) {
@@ -22121,7 +22121,7 @@ async function $do77(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsReprocess.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsReprocess.js
 import * as z705 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -22196,7 +22196,7 @@ async function $do78(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsStatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsStatus.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsStatus(client, request, options) {
@@ -22270,7 +22270,7 @@ async function $do79(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsTextContent.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsTextContent.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsTextContent(client, request, options) {
@@ -22349,7 +22349,7 @@ async function $do80(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsUpdate.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsUpdate(client, request, options) {
@@ -22426,7 +22426,7 @@ async function $do81(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsUpload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaLibrariesDocumentsUpload.js
 init_primitives();
 init_schemas();
 function betaLibrariesDocumentsUpload(client, request, options) {
@@ -22509,7 +22509,7 @@ async function $do82(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/documents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/documents.js
 init_fp();
 var Documents = class extends ClientSDK {
   /**
@@ -22615,7 +22615,7 @@ var Documents = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/libraries.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/libraries.js
 var Libraries = class extends ClientSDK {
   _documents;
   get documents() {
@@ -22683,7 +22683,7 @@ var Libraries = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsCreate.js
 init_primitives();
 init_schemas();
 function betaObservabilityCampaignsCreate(client, request, options) {
@@ -22748,7 +22748,7 @@ async function $do83(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsDelete.js
 import * as z706 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -22819,7 +22819,7 @@ async function $do84(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsFetch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsFetch.js
 init_primitives();
 init_schemas();
 function betaObservabilityCampaignsFetch(client, request, options) {
@@ -22889,7 +22889,7 @@ async function $do85(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsFetchStatus.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsFetchStatus.js
 init_primitives();
 init_schemas();
 function betaObservabilityCampaignsFetchStatus(client, request, options) {
@@ -22959,7 +22959,7 @@ async function $do86(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsList.js
 init_primitives();
 init_schemas();
 function betaObservabilityCampaignsList(client, request, options) {
@@ -23029,7 +23029,7 @@ async function $do87(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsListEvents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityCampaignsListEvents.js
 init_primitives();
 init_schemas();
 function betaObservabilityCampaignsListEvents(client, request, options) {
@@ -23104,7 +23104,7 @@ async function $do88(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/campaigns.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/campaigns.js
 init_fp();
 var Campaigns = class extends ClientSDK {
   /**
@@ -23145,7 +23145,7 @@ var Campaigns = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFetch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFetch.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsFetch(client, request, options) {
@@ -23215,7 +23215,7 @@ async function $do89(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFetchSimilarEvents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFetchSimilarEvents.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsFetchSimilarEvents(client, request, options) {
@@ -23285,7 +23285,7 @@ async function $do90(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsJudge.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsJudge.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsJudge(client, request, options) {
@@ -23358,7 +23358,7 @@ async function $do91(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsSearch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsSearch.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsSearch(client, request, options) {
@@ -23430,7 +23430,7 @@ async function $do92(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsSearchIds.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsSearchIds.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsSearchIds(client, request, options) {
@@ -23495,10 +23495,10 @@ async function $do93(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chatcompletionevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chatcompletionevents.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsFetchOptionCounts.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsFetchOptionCounts.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsFieldsFetchOptionCounts(client, request, options) {
@@ -23571,7 +23571,7 @@ async function $do94(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsFetchOptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsFetchOptions.js
 init_primitives();
 init_schemas();
 function betaObservabilityChatCompletionEventsFieldsFetchOptions(client, request, options) {
@@ -23645,7 +23645,7 @@ async function $do95(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityChatCompletionEventsFieldsList.js
 init_primitives();
 function betaObservabilityChatCompletionEventsFieldsList(client, options) {
   return new APIPromise($do96(client, options));
@@ -23701,7 +23701,7 @@ async function $do96(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/fields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/fields.js
 init_fp();
 var Fields = class extends ClientSDK {
   /**
@@ -23724,7 +23724,7 @@ var Fields = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chatcompletionevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chatcompletionevents.js
 var ChatCompletionEvents = class extends ClientSDK {
   _fields;
   get fields() {
@@ -23762,7 +23762,7 @@ var ChatCompletionEvents = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsCreate.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsCreate(client, request, options) {
@@ -23827,7 +23827,7 @@ async function $do97(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsCreateRecord.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsCreateRecord.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsCreateRecord(client, request, options) {
@@ -23900,7 +23900,7 @@ async function $do98(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsDelete.js
 import * as z707 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -23971,7 +23971,7 @@ async function $do99(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsExportToJsonl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsExportToJsonl.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsExportToJsonl(client, request, options) {
@@ -24041,7 +24041,7 @@ async function $do100(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsFetch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsFetch.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsFetch(client, request, options) {
@@ -24111,7 +24111,7 @@ async function $do101(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsFetchTask.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsFetchTask.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsFetchTask(client, request, options) {
@@ -24185,7 +24185,7 @@ async function $do102(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromCampaign.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromCampaign.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsImportFromCampaign(client, request, options) {
@@ -24258,7 +24258,7 @@ async function $do103(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromDatasetRecords.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromDatasetRecords.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsImportFromDatasetRecords(client, request, options) {
@@ -24331,7 +24331,7 @@ async function $do104(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromExplorer.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromExplorer.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsImportFromExplorer(client, request, options) {
@@ -24404,7 +24404,7 @@ async function $do105(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromFile.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromFile.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsImportFromFile(client, request, options) {
@@ -24477,7 +24477,7 @@ async function $do106(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromPlayground.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsImportFromPlayground.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsImportFromPlayground(client, request, options) {
@@ -24550,7 +24550,7 @@ async function $do107(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsList.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsList(client, request, options) {
@@ -24620,7 +24620,7 @@ async function $do108(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsListRecords.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsListRecords.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsListRecords(client, request, options) {
@@ -24695,7 +24695,7 @@ async function $do109(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsListTasks.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsListTasks.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsListTasks(client, request, options) {
@@ -24770,7 +24770,7 @@ async function $do110(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsUpdate.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsUpdate(client, request, options) {
@@ -24843,10 +24843,10 @@ async function $do111(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/datasets.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/datasets.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsBulkDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsBulkDelete.js
 import * as z708 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -24912,7 +24912,7 @@ async function $do112(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsDelete.js
 import * as z709 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -24980,7 +24980,7 @@ async function $do113(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsFetch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsFetch.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsRecordsFetch(client, request, options) {
@@ -25047,7 +25047,7 @@ async function $do114(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsJudge.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsJudge.js
 init_primitives();
 init_schemas();
 function betaObservabilityDatasetsRecordsJudge(client, request, options) {
@@ -25117,7 +25117,7 @@ async function $do115(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsUpdatePayload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsUpdatePayload.js
 import * as z710 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -25188,7 +25188,7 @@ async function $do116(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsUpdateProperties.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityDatasetsRecordsUpdateProperties.js
 import * as z711 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -25257,7 +25257,7 @@ async function $do117(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/records.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/records.js
 init_fp();
 var Records = class extends ClientSDK {
   /**
@@ -25298,7 +25298,7 @@ var Records = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/datasets.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/datasets.js
 var Datasets = class extends ClientSDK {
   _records;
   get records() {
@@ -25396,7 +25396,7 @@ var Datasets = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesCreate.js
 init_primitives();
 init_schemas();
 function betaObservabilityJudgesCreate(client, request, options) {
@@ -25461,7 +25461,7 @@ async function $do118(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesDelete.js
 import * as z712 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -25532,7 +25532,7 @@ async function $do119(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesFetch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesFetch.js
 init_primitives();
 init_schemas();
 function betaObservabilityJudgesFetch(client, request, options) {
@@ -25602,7 +25602,7 @@ async function $do120(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesJudgeConversation.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesJudgeConversation.js
 init_primitives();
 init_schemas();
 function betaObservabilityJudgesJudgeConversation(client, request, options) {
@@ -25675,7 +25675,7 @@ async function $do121(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesList.js
 init_primitives();
 init_schemas();
 function betaObservabilityJudgesList(client, request, options) {
@@ -25747,7 +25747,7 @@ async function $do122(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityJudgesUpdate.js
 import * as z713 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -25821,7 +25821,7 @@ async function $do123(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/judges.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/judges.js
 init_fp();
 var Judges = class extends ClientSDK {
   /**
@@ -25862,7 +25862,7 @@ var Judges = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsFetchOptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsFetchOptions.js
 init_primitives();
 init_schemas();
 function betaObservabilityLogsFetchOptions(client, request, options) {
@@ -25937,7 +25937,7 @@ async function $do124(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsList.js
 init_primitives();
 function betaObservabilityLogsList(client, options) {
   return new APIPromise($do125(client, options));
@@ -25993,7 +25993,7 @@ async function $do125(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsSearch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityLogsSearch.js
 init_primitives();
 init_schemas();
 function betaObservabilityLogsSearch(client, request, options) {
@@ -26065,7 +26065,7 @@ async function $do126(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/logs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/logs.js
 init_fp();
 var Logs = class extends ClientSDK {
   /**
@@ -26088,7 +26088,7 @@ var Logs = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansFetchSpanEvalFieldOptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansFetchSpanEvalFieldOptions.js
 init_primitives();
 init_schemas();
 function betaObservabilitySpansFetchSpanEvalFieldOptions(client, request, options) {
@@ -26163,7 +26163,7 @@ async function $do127(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansFetchSpanFieldOptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansFetchSpanFieldOptions.js
 init_primitives();
 init_schemas();
 function betaObservabilitySpansFetchSpanFieldOptions(client, request, options) {
@@ -26238,7 +26238,7 @@ async function $do128(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansListSpanEvalFields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansListSpanEvalFields.js
 init_primitives();
 function betaObservabilitySpansListSpanEvalFields(client, options) {
   return new APIPromise($do129(client, options));
@@ -26294,7 +26294,7 @@ async function $do129(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansListSpanFields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansListSpanFields.js
 init_primitives();
 function betaObservabilitySpansListSpanFields(client, options) {
   return new APIPromise($do130(client, options));
@@ -26350,7 +26350,7 @@ async function $do130(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchLatestSpanEvaluations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchLatestSpanEvaluations.js
 init_primitives();
 init_schemas();
 function betaObservabilitySpansSearchLatestSpanEvaluations(client, request, options) {
@@ -26424,7 +26424,7 @@ async function $do131(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchSpanEvaluations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchSpanEvaluations.js
 init_primitives();
 init_schemas();
 function betaObservabilitySpansSearchSpanEvaluations(client, request, options) {
@@ -26498,7 +26498,7 @@ async function $do132(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchSpans.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilitySpansSearchSpans.js
 init_primitives();
 init_schemas();
 function betaObservabilitySpansSearchSpans(client, request, options) {
@@ -26570,7 +26570,7 @@ async function $do133(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/spans.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/spans.js
 init_fp();
 var Spans = class extends ClientSDK {
   /**
@@ -26617,7 +26617,7 @@ var Spans = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesFetchOptions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesFetchOptions.js
 init_primitives();
 init_schemas();
 function betaObservabilityTracesFetchOptions(client, request, options) {
@@ -26692,7 +26692,7 @@ async function $do134(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetSpanById.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetSpanById.js
 init_primitives();
 init_schemas();
 function betaObservabilityTracesGetSpanById(client, request, options) {
@@ -26771,7 +26771,7 @@ async function $do135(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceById.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceById.js
 init_primitives();
 init_schemas();
 function betaObservabilityTracesGetTraceById(client, request, options) {
@@ -26841,7 +26841,7 @@ async function $do136(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceFields.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceFields.js
 init_primitives();
 function betaObservabilityTracesGetTraceFields(client, options) {
   return new APIPromise($do137(client, options));
@@ -26897,7 +26897,7 @@ async function $do137(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceSpans.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesGetTraceSpans.js
 init_primitives();
 init_schemas();
 function betaObservabilityTracesGetTraceSpans(client, request, options) {
@@ -26974,7 +26974,7 @@ async function $do138(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesSearch.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaObservabilityTracesSearch.js
 init_primitives();
 init_schemas();
 function betaObservabilityTracesSearch(client, request, options) {
@@ -27046,7 +27046,7 @@ async function $do139(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/traces.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/traces.js
 init_fp();
 var Traces = class extends ClientSDK {
   /**
@@ -27087,7 +27087,7 @@ var Traces = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/observability.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/observability.js
 var Observability = class extends ClientSDK {
   _chatCompletionEvents;
   get chatCompletionEvents() {
@@ -27119,7 +27119,7 @@ var Observability = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsList.js
 import * as z714 from "zod/v4";
 init_primitives();
 function betaRagIngestionPipelineConfigurationsList(client, options) {
@@ -27173,7 +27173,7 @@ async function $do140(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsRegister.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsRegister.js
 init_primitives();
 init_schemas();
 function betaRagIngestionPipelineConfigurationsRegister(client, request, options) {
@@ -27238,7 +27238,7 @@ async function $do141(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsUpdateRunInfo.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagIngestionPipelineConfigurationsUpdateRunInfo.js
 init_primitives();
 init_schemas();
 function betaRagIngestionPipelineConfigurationsUpdateRunInfo(client, request, options) {
@@ -27309,7 +27309,7 @@ async function $do142(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/ingestionpipelineconfigurations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/ingestionpipelineconfigurations.js
 init_fp();
 var IngestionPipelineConfigurations = class extends ClientSDK {
   /**
@@ -27338,7 +27338,7 @@ var IngestionPipelineConfigurations = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagSearchIndexesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagSearchIndexesList.js
 import * as z715 from "zod/v4";
 init_primitives();
 function betaRagSearchIndexesList(client, options) {
@@ -27392,7 +27392,7 @@ async function $do143(client, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagSearchIndexesRegister.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/betaRagSearchIndexesRegister.js
 init_primitives();
 init_schemas();
 function betaRagSearchIndexesRegister(client, request, options) {
@@ -27457,7 +27457,7 @@ async function $do144(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/searchindexes.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/searchindexes.js
 init_fp();
 var SearchIndexes = class extends ClientSDK {
   /**
@@ -27474,7 +27474,7 @@ var SearchIndexes = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/rag.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/rag.js
 var Rag = class extends ClientSDK {
   _ingestionPipelineConfigurations;
   get ingestionPipelineConfigurations() {
@@ -27486,7 +27486,7 @@ var Rag = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/beta.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/beta.js
 var Beta = class extends ClientSDK {
   _conversations;
   get conversations() {
@@ -27514,7 +27514,7 @@ var Beta = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/chatComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/chatComplete.js
 init_primitives();
 init_schemas();
 function chatComplete(client, request, options) {
@@ -27579,7 +27579,7 @@ async function $do145(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/chatStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/chatStream.js
 import * as z716 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -27655,10 +27655,10 @@ async function $do146(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chat.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/structChat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/extra/structChat.js
 import { z as zv4 } from "zod/v4";
 import { zodToJsonSchema } from "zod-to-json-schema";
 function makeStrictJsonSchema(node) {
@@ -27782,7 +27782,7 @@ function responseFormatFromZodObject(responseFormat) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/chat.js
 var Chat = class extends ClientSDK {
   // #region sdk-class-body
   /**
@@ -27826,7 +27826,7 @@ var Chat = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersClassify.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersClassify.js
 init_primitives();
 init_schemas();
 function classifiersClassify(client, request, options) {
@@ -27891,7 +27891,7 @@ async function $do147(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersClassifyChat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersClassifyChat.js
 init_primitives();
 init_schemas();
 function classifiersClassifyChat(client, request, options) {
@@ -27956,7 +27956,7 @@ async function $do148(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersModerate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersModerate.js
 init_primitives();
 init_schemas();
 function classifiersModerate(client, request, options) {
@@ -28021,7 +28021,7 @@ async function $do149(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersModerateChat.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/classifiersModerateChat.js
 init_primitives();
 init_schemas();
 function classifiersModerateChat(client, request, options) {
@@ -28086,7 +28086,7 @@ async function $do150(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/classifiers.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/classifiers.js
 init_fp();
 var Classifiers = class extends ClientSDK {
   /**
@@ -28115,7 +28115,7 @@ var Classifiers = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/embeddingsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/embeddingsCreate.js
 init_primitives();
 init_schemas();
 function embeddingsCreate(client, request, options) {
@@ -28180,7 +28180,7 @@ async function $do151(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/embeddings.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/embeddings.js
 init_fp();
 var Embeddings = class extends ClientSDK {
   /**
@@ -28194,7 +28194,7 @@ var Embeddings = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/eventsGetStreamEvents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/eventsGetStreamEvents.js
 import * as z717 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -28284,7 +28284,7 @@ async function $do152(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/eventsGetWorkflowEvents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/eventsGetWorkflowEvents.js
 init_primitives();
 init_schemas();
 function eventsGetWorkflowEvents(client, request, options) {
@@ -28356,7 +28356,7 @@ async function $do153(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/events.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/events.js
 init_fp();
 var Events = class extends ClientSDK {
   /**
@@ -28373,7 +28373,7 @@ var Events = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesDelete.js
 init_primitives();
 init_schemas();
 function filesDelete(client, request, options) {
@@ -28440,7 +28440,7 @@ async function $do154(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesDownload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesDownload.js
 import * as z718 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -28508,7 +28508,7 @@ async function $do155(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesGetSignedUrl.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesGetSignedUrl.js
 init_primitives();
 init_schemas();
 function filesGetSignedUrl(client, request, options) {
@@ -28579,7 +28579,7 @@ async function $do156(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesList.js
 init_primitives();
 init_schemas();
 function filesList(client, request, options) {
@@ -28651,7 +28651,7 @@ async function $do157(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesRetrieve.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesRetrieve.js
 init_primitives();
 init_schemas();
 function filesRetrieve(client, request, options) {
@@ -28718,7 +28718,7 @@ async function $do158(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesUpload.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/filesUpload.js
 init_primitives();
 init_schemas();
 function filesUpload(client, request, options) {
@@ -28801,7 +28801,7 @@ async function $do159(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/files.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/files.js
 init_fp();
 var Files = class extends ClientSDK {
   /**
@@ -28861,7 +28861,7 @@ var Files = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fimComplete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fimComplete.js
 init_primitives();
 init_schemas();
 function fimComplete(client, request, options) {
@@ -28926,7 +28926,7 @@ async function $do160(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fimStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fimStream.js
 import * as z719 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -29002,7 +29002,7 @@ async function $do161(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/fim.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/fim.js
 init_fp();
 var Fim = class extends ClientSDK {
   /**
@@ -29025,7 +29025,7 @@ var Fim = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsCancel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsCancel.js
 init_primitives();
 init_schemas();
 function fineTuningJobsCancel(client, request, options) {
@@ -29092,7 +29092,7 @@ async function $do162(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsCreate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsCreate.js
 init_primitives();
 init_schemas();
 function fineTuningJobsCreate(client, request, options) {
@@ -29154,7 +29154,7 @@ async function $do163(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsGet.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsGet.js
 init_primitives();
 init_schemas();
 function fineTuningJobsGet(client, request, options) {
@@ -29221,7 +29221,7 @@ async function $do164(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsList.js
 init_primitives();
 init_schemas();
 function fineTuningJobsList(client, request, options) {
@@ -29295,7 +29295,7 @@ async function $do165(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsStart.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/fineTuningJobsStart.js
 init_primitives();
 init_schemas();
 function fineTuningJobsStart(client, request, options) {
@@ -29362,7 +29362,7 @@ async function $do166(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/finetuningjobs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/finetuningjobs.js
 init_fp();
 var FineTuningJobs = class extends ClientSDK {
   /**
@@ -29412,7 +29412,7 @@ var FineTuningJobs = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/finetuning.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/finetuning.js
 var FineTuning = class extends ClientSDK {
   _jobs;
   get jobs() {
@@ -29420,7 +29420,7 @@ var FineTuning = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsArchive.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsArchive.js
 init_primitives();
 init_schemas();
 function modelsArchive(client, request, options) {
@@ -29487,7 +29487,7 @@ async function $do167(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsDelete.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsDelete.js
 init_primitives();
 init_schemas();
 function modelsDelete(client, request, options) {
@@ -29557,7 +29557,7 @@ async function $do168(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsList.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsList.js
 init_primitives();
 init_schemas();
 function modelsList(client, request, options) {
@@ -29626,7 +29626,7 @@ async function $do169(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsRetrieve.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsRetrieve.js
 init_primitives();
 init_schemas();
 function modelsRetrieve(client, request, options) {
@@ -29696,7 +29696,7 @@ async function $do170(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsUnarchive.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsUnarchive.js
 init_primitives();
 init_schemas();
 function modelsUnarchive(client, request, options) {
@@ -29763,7 +29763,7 @@ async function $do171(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsUpdate.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/modelsUpdate.js
 init_primitives();
 init_schemas();
 function modelsUpdate(client, request, options) {
@@ -29833,7 +29833,7 @@ async function $do172(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/models.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/models.js
 init_fp();
 var Models = class extends ClientSDK {
   /**
@@ -29892,7 +29892,7 @@ var Models = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/ocrProcess.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/ocrProcess.js
 init_primitives();
 init_schemas();
 function ocrProcess(client, request, options) {
@@ -29957,7 +29957,7 @@ async function $do173(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/ocr.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/ocr.js
 init_fp();
 var Ocr = class extends ClientSDK {
   /**
@@ -29968,7 +29968,7 @@ var Ocr = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsArchiveWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsArchiveWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsArchiveWorkflow(client, request, options) {
@@ -30035,7 +30035,7 @@ async function $do174(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsBulkArchiveWorkflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsBulkArchiveWorkflows.js
 init_primitives();
 init_schemas();
 function workflowsBulkArchiveWorkflows(client, request, options) {
@@ -30100,7 +30100,7 @@ async function $do175(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsBulkUnarchiveWorkflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsBulkUnarchiveWorkflows.js
 init_primitives();
 init_schemas();
 function workflowsBulkUnarchiveWorkflows(client, request, options) {
@@ -30165,7 +30165,7 @@ async function $do176(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecuteWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecuteWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsExecuteWorkflow(client, request, options) {
@@ -30235,7 +30235,7 @@ async function $do177(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecuteWorkflowRegistration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecuteWorkflowRegistration.js
 init_primitives();
 init_schemas();
 function workflowsExecuteWorkflowRegistration(client, request, options) {
@@ -30305,7 +30305,7 @@ async function $do178(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsGetWorkflow(client, request, options) {
@@ -30372,7 +30372,7 @@ async function $do179(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflowRegistration.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflowRegistration.js
 init_primitives();
 init_schemas();
 function workflowsGetWorkflowRegistration(client, request, options) {
@@ -30444,7 +30444,7 @@ async function $do180(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflowRegistrations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflowRegistrations.js
 init_primitives();
 init_schemas();
 function workflowsGetWorkflowRegistrations(client, request, options) {
@@ -30521,11 +30521,11 @@ async function $do181(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflows.js
 init_primitives();
 init_schemas();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/operations.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/types/operations.js
 function createPageIterator(page, halt) {
   return {
     [Symbol.asyncIterator]: async function* paginator() {
@@ -30590,7 +30590,7 @@ function unwrapPaginator(paginator) {
   };
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsGetWorkflows.js
 function workflowsGetWorkflows(client, request, options) {
   return new APIPromise($do182(client, request, options));
 }
@@ -30700,7 +30700,7 @@ async function $do182(client, request, options) {
   }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsUnarchiveWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsUnarchiveWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsUnarchiveWorkflow(client, request, options) {
@@ -30767,7 +30767,7 @@ async function $do183(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsUpdateWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsUpdateWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsUpdateWorkflow(client, request, options) {
@@ -30837,10 +30837,10 @@ async function $do184(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflows.js
 init_fp();
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsDeploymentsGetDeployment.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsDeploymentsGetDeployment.js
 init_primitives();
 init_schemas();
 function workflowsDeploymentsGetDeployment(client, request, options) {
@@ -30910,7 +30910,7 @@ async function $do185(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsDeploymentsListDeployments.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsDeploymentsListDeployments.js
 init_primitives();
 init_schemas();
 function workflowsDeploymentsListDeployments(client, request, options) {
@@ -30984,7 +30984,7 @@ async function $do186(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/deployments.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/deployments.js
 init_fp();
 var Deployments = class extends ClientSDK {
   /**
@@ -31001,7 +31001,7 @@ var Deployments = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsBatchCancelWorkflowExecutions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsBatchCancelWorkflowExecutions.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsBatchCancelWorkflowExecutions(client, request, options) {
@@ -31066,7 +31066,7 @@ async function $do187(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsBatchTerminateWorkflowExecutions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsBatchTerminateWorkflowExecutions.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsBatchTerminateWorkflowExecutions(client, request, options) {
@@ -31131,7 +31131,7 @@ async function $do188(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsCancelWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsCancelWorkflowExecution.js
 import * as z720 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -31202,7 +31202,7 @@ async function $do189(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecution.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsGetWorkflowExecution(client, request, options) {
@@ -31272,7 +31272,7 @@ async function $do190(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionHistory.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionHistory.js
 import * as z721 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -31347,7 +31347,7 @@ async function $do191(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionLogs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionLogs.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsGetWorkflowExecutionLogs(client, request, options) {
@@ -31427,7 +31427,7 @@ async function $do192(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceEvents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceEvents.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsGetWorkflowExecutionTraceEvents(client, request, options) {
@@ -31502,7 +31502,7 @@ async function $do193(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceOtel.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceOtel.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsGetWorkflowExecutionTraceOtel(client, request, options) {
@@ -31572,7 +31572,7 @@ async function $do194(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceSummary.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsGetWorkflowExecutionTraceSummary.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsGetWorkflowExecutionTraceSummary(client, request, options) {
@@ -31642,7 +31642,7 @@ async function $do195(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsQueryWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsQueryWorkflowExecution.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsQueryWorkflowExecution(client, request, options) {
@@ -31715,7 +31715,7 @@ async function $do196(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsResetWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsResetWorkflow.js
 import * as z722 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -31789,7 +31789,7 @@ async function $do197(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsSignalWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsSignalWorkflowExecution.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsSignalWorkflowExecution(client, request, options) {
@@ -31862,7 +31862,7 @@ async function $do198(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsStream.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsStream.js
 import * as z723 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -31945,7 +31945,7 @@ async function $do199(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsStreamWorkflowExecutionLogs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsStreamWorkflowExecutionLogs.js
 import * as z724 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -32030,7 +32030,7 @@ async function $do200(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsTerminateWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsTerminateWorkflowExecution.js
 import * as z725 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -32101,7 +32101,7 @@ async function $do201(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsUpdateWorkflowExecution.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsExecutionsUpdateWorkflowExecution.js
 init_primitives();
 init_schemas();
 function workflowsExecutionsUpdateWorkflowExecution(client, request, options) {
@@ -32174,7 +32174,7 @@ async function $do202(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/executions.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/executions.js
 init_fp();
 var Executions = class extends ClientSDK {
   /**
@@ -32289,7 +32289,7 @@ var Executions = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsMetricsGetWorkflowMetrics.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsMetricsGetWorkflowMetrics.js
 init_primitives();
 init_schemas();
 function workflowsMetricsGetWorkflowMetrics(client, request, options) {
@@ -32364,7 +32364,7 @@ async function $do203(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/metrics.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/metrics.js
 init_fp();
 var Metrics = class extends ClientSDK {
   /**
@@ -32397,7 +32397,7 @@ var Metrics = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsGetRun.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsGetRun.js
 init_primitives();
 init_schemas();
 function workflowsRunsGetRun(client, request, options) {
@@ -32467,7 +32467,7 @@ async function $do204(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsGetRunHistory.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsGetRunHistory.js
 import * as z726 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -32542,7 +32542,7 @@ async function $do205(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsListRuns.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsRunsListRuns.js
 init_primitives();
 init_schemas();
 function workflowsRunsListRuns(client, request, options) {
@@ -32655,7 +32655,7 @@ async function $do206(client, request, options) {
   }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/runs.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/runs.js
 init_fp();
 var Runs = class extends ClientSDK {
   /**
@@ -32678,7 +32678,7 @@ var Runs = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesGetSchedule.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesGetSchedule.js
 init_primitives();
 init_schemas();
 function workflowsSchedulesGetSchedule(client, request, options) {
@@ -32748,7 +32748,7 @@ async function $do207(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesGetSchedules.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesGetSchedules.js
 init_primitives();
 init_schemas();
 function workflowsSchedulesGetSchedules(client, request, options) {
@@ -32851,7 +32851,7 @@ async function $do208(client, request, options) {
   }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesPauseSchedule.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesPauseSchedule.js
 import * as z727 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -32925,7 +32925,7 @@ async function $do209(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesResumeSchedule.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesResumeSchedule.js
 import * as z728 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -32999,7 +32999,7 @@ async function $do210(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesScheduleWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesScheduleWorkflow.js
 init_primitives();
 init_schemas();
 function workflowsSchedulesScheduleWorkflow(client, request, options) {
@@ -33064,7 +33064,7 @@ async function $do211(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesTriggerSchedule.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesTriggerSchedule.js
 import * as z729 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -33138,7 +33138,7 @@ async function $do212(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesUnscheduleWorkflow.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesUnscheduleWorkflow.js
 import * as z730 from "zod/v4";
 init_primitives();
 init_schemas();
@@ -33209,7 +33209,7 @@ async function $do213(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesUpdateSchedule.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/funcs/workflowsSchedulesUpdateSchedule.js
 init_primitives();
 init_schemas();
 function workflowsSchedulesUpdateSchedule(client, request, options) {
@@ -33282,7 +33282,7 @@ async function $do214(client, request, options) {
   return [result, { status: "complete", request: req, response }];
 }
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/schedules.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/schedules.js
 init_fp();
 var Schedules = class extends ClientSDK {
   /**
@@ -33335,7 +33335,7 @@ var Schedules = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflowsevents.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflowsevents.js
 init_fp();
 var WorkflowsEvents = class extends ClientSDK {
   /**
@@ -33352,7 +33352,7 @@ var WorkflowsEvents = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflows.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/workflows.js
 var Workflows = class extends ClientSDK {
   _executions;
   get executions() {
@@ -33448,7 +33448,7 @@ var Workflows = class extends ClientSDK {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/sdk.js
+// .harness/node_modules/.pnpm/@mistralai+mistralai@2.2.6_@opentelemetry+api@1.9.0/node_modules/@mistralai/mistralai/esm/sdk/sdk.js
 var Mistral = class extends ClientSDK {
   _audio;
   get audio() {

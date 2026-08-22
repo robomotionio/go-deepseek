@@ -7,9 +7,9 @@ var __commonJS = (cb, mod) => function __require() {
   }
 };
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Event.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Event.js
 var require_Event = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Event.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Event.js"(exports, module) {
     "use strict";
     module.exports = Event;
     Event.CAPTURING_PHASE = 1;
@@ -64,9 +64,9 @@ var require_Event = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/UIEvent.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/UIEvent.js
 var require_UIEvent = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/UIEvent.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/UIEvent.js"(exports, module) {
     "use strict";
     var Event = require_Event();
     module.exports = UIEvent;
@@ -86,9 +86,9 @@ var require_UIEvent = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MouseEvent.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MouseEvent.js
 var require_MouseEvent = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MouseEvent.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MouseEvent.js"(exports, module) {
     "use strict";
     var UIEvent = require_UIEvent();
     module.exports = MouseEvent;
@@ -147,9 +147,9 @@ var require_MouseEvent = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMException.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMException.js
 var require_DOMException = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMException.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMException.js"(exports, module) {
     "use strict";
     module.exports = DOMException;
     var INDEX_SIZE_ERR = 1;
@@ -284,16 +284,16 @@ var require_DOMException = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/config.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/config.js
 var require_config = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/config.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/config.js"(exports) {
     exports.isApiWritable = !globalThis.__domino_frozen__;
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/utils.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/utils.js
 var require_utils = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/utils.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/utils.js"(exports) {
     "use strict";
     var DOMException = require_DOMException();
     var ERR = DOMException;
@@ -406,9 +406,9 @@ var require_utils = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/EventTarget.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/EventTarget.js
 var require_EventTarget = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/EventTarget.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/EventTarget.js"(exports, module) {
     "use strict";
     var Event = require_Event();
     var MouseEvent = require_MouseEvent();
@@ -652,9 +652,9 @@ var require_EventTarget = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/LinkedList.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/LinkedList.js
 var require_LinkedList = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/LinkedList.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/LinkedList.js"(exports, module) {
     "use strict";
     var utils = require_utils();
     var LinkedList = module.exports = {
@@ -702,9 +702,9 @@ var require_LinkedList = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeUtils.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeUtils.js
 var require_NodeUtils = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeUtils.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeUtils.js"(exports, module) {
     "use strict";
     module.exports = {
       // NOTE: The `serializeOne()` function used to live on the `Node.prototype`
@@ -902,9 +902,9 @@ var require_NodeUtils = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Node.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Node.js
 var require_Node = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Node.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Node.js"(exports, module) {
     "use strict";
     module.exports = Node;
     var EventTarget = require_EventTarget();
@@ -1502,9 +1502,9 @@ var require_Node = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es6.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es6.js
 var require_NodeList_es6 = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es6.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es6.js"(exports, module) {
     "use strict";
     module.exports = class NodeList extends Array {
       constructor(a) {
@@ -1522,9 +1522,9 @@ var require_NodeList_es6 = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es5.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es5.js
 var require_NodeList_es5 = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es5.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.es5.js"(exports, module) {
     "use strict";
     function item(i) {
       return this[i] || null;
@@ -1538,9 +1538,9 @@ var require_NodeList_es5 = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.js
 var require_NodeList = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeList.js"(exports, module) {
     "use strict";
     var NodeList;
     try {
@@ -1552,9 +1552,9 @@ var require_NodeList = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ContainerNode.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ContainerNode.js
 var require_ContainerNode = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ContainerNode.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ContainerNode.js"(exports, module) {
     "use strict";
     module.exports = ContainerNode;
     var Node = require_Node();
@@ -1623,9 +1623,9 @@ var require_ContainerNode = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/xmlnames.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/xmlnames.js
 var require_xmlnames = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/xmlnames.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/xmlnames.js"(exports) {
     "use strict";
     exports.isValidName = isValidName;
     exports.isValidQName = isValidQName;
@@ -1667,9 +1667,9 @@ var require_xmlnames = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/attributes.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/attributes.js
 var require_attributes = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/attributes.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/attributes.js"(exports) {
     "use strict";
     var utils = require_utils();
     exports.property = function(attr) {
@@ -1799,9 +1799,9 @@ var require_attributes = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/FilteredElementList.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/FilteredElementList.js
 var require_FilteredElementList = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/FilteredElementList.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/FilteredElementList.js"(exports, module) {
     "use strict";
     module.exports = FilteredElementList;
     var Node = require_Node();
@@ -1871,9 +1871,9 @@ var require_FilteredElementList = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMTokenList.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMTokenList.js
 var require_DOMTokenList = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMTokenList.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMTokenList.js"(exports, module) {
     "use strict";
     var utils = require_utils();
     module.exports = DOMTokenList;
@@ -2037,9 +2037,9 @@ var require_DOMTokenList = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/select.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/select.js
 var require_select = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/select.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/select.js"(exports, module) {
     "use strict";
     var window = Object.create(null, {
       location: { get: function() {
@@ -2771,9 +2771,9 @@ var require_select = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ChildNode.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ChildNode.js
 var require_ChildNode = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ChildNode.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ChildNode.js"(exports, module) {
     "use strict";
     var Node = require_Node();
     var LinkedList = require_LinkedList();
@@ -2872,9 +2872,9 @@ var require_ChildNode = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NonDocumentTypeChildNode.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NonDocumentTypeChildNode.js
 var require_NonDocumentTypeChildNode = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NonDocumentTypeChildNode.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NonDocumentTypeChildNode.js"(exports, module) {
     "use strict";
     var Node = require_Node();
     var NonDocumentTypeChildNode = {
@@ -2899,9 +2899,9 @@ var require_NonDocumentTypeChildNode = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NamedNodeMap.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NamedNodeMap.js
 var require_NamedNodeMap = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NamedNodeMap.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NamedNodeMap.js"(exports, module) {
     "use strict";
     module.exports = NamedNodeMap;
     var utils = require_utils();
@@ -2939,9 +2939,9 @@ var require_NamedNodeMap = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Element.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Element.js
 var require_Element = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Element.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Element.js"(exports, module) {
     "use strict";
     module.exports = Element;
     var xml = require_xmlnames();
@@ -3975,9 +3975,9 @@ var require_Element = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Leaf.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Leaf.js
 var require_Leaf = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Leaf.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Leaf.js"(exports, module) {
     "use strict";
     module.exports = Leaf;
     var Node = require_Node();
@@ -4016,9 +4016,9 @@ var require_Leaf = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CharacterData.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CharacterData.js
 var require_CharacterData = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CharacterData.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CharacterData.js"(exports, module) {
     "use strict";
     module.exports = CharacterData;
     var Leaf = require_Leaf();
@@ -4127,9 +4127,9 @@ var require_CharacterData = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Text.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Text.js
 var require_Text = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Text.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Text.js"(exports, module) {
     "use strict";
     module.exports = Text;
     var utils = require_utils();
@@ -4203,9 +4203,9 @@ var require_Text = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Comment.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Comment.js
 var require_Comment = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Comment.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Comment.js"(exports, module) {
     "use strict";
     module.exports = Comment;
     var Node = require_Node();
@@ -4250,9 +4250,9 @@ var require_Comment = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentFragment.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentFragment.js
 var require_DocumentFragment = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentFragment.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentFragment.js"(exports, module) {
     "use strict";
     module.exports = DocumentFragment;
     var Node = require_Node();
@@ -4315,9 +4315,9 @@ var require_DocumentFragment = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ProcessingInstruction.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ProcessingInstruction.js
 var require_ProcessingInstruction = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ProcessingInstruction.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/ProcessingInstruction.js"(exports, module) {
     "use strict";
     module.exports = ProcessingInstruction;
     var Node = require_Node();
@@ -4367,9 +4367,9 @@ var require_ProcessingInstruction = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeFilter.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeFilter.js
 var require_NodeFilter = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeFilter.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeFilter.js"(exports, module) {
     "use strict";
     var NodeFilter = {
       // Constants for acceptNode()
@@ -4400,9 +4400,9 @@ var require_NodeFilter = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeTraversal.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeTraversal.js
 var require_NodeTraversal = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeTraversal.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeTraversal.js"(exports, module) {
     "use strict";
     var NodeTraversal = module.exports = {
       nextSkippingChildren,
@@ -4467,9 +4467,9 @@ var require_NodeTraversal = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/TreeWalker.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/TreeWalker.js
 var require_TreeWalker = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/TreeWalker.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/TreeWalker.js"(exports, module) {
     "use strict";
     module.exports = TreeWalker;
     var Node = require_Node();
@@ -4748,9 +4748,9 @@ var require_TreeWalker = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeIterator.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeIterator.js
 var require_NodeIterator = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeIterator.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NodeIterator.js"(exports, module) {
     "use strict";
     module.exports = NodeIterator;
     var NodeFilter = require_NodeFilter();
@@ -4920,9 +4920,9 @@ var require_NodeIterator = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URL.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URL.js
 var require_URL = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URL.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URL.js"(exports, module) {
     "use strict";
     module.exports = URL;
     function URL(url) {
@@ -5086,9 +5086,9 @@ var require_URL = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CustomEvent.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CustomEvent.js
 var require_CustomEvent = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CustomEvent.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CustomEvent.js"(exports, module) {
     "use strict";
     module.exports = CustomEvent;
     var Event = require_Event();
@@ -5101,9 +5101,9 @@ var require_CustomEvent = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/events.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/events.js
 var require_events = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/events.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/events.js"(exports, module) {
     "use strict";
     module.exports = {
       Event: require_Event(),
@@ -5114,9 +5114,9 @@ var require_events = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/style_parser.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/style_parser.js
 var require_style_parser = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/style_parser.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/style_parser.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.hyphenate = exports.parse = void 0;
@@ -5184,9 +5184,9 @@ var require_style_parser = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CSSStyleDeclaration.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CSSStyleDeclaration.js
 var require_CSSStyleDeclaration = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CSSStyleDeclaration.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/CSSStyleDeclaration.js"(exports, module) {
     "use strict";
     var { parse } = require_style_parser();
     module.exports = function(elt) {
@@ -5368,9 +5368,9 @@ var require_CSSStyleDeclaration = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URLUtils.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URLUtils.js
 var require_URLUtils = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URLUtils.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/URLUtils.js"(exports, module) {
     "use strict";
     var URL = require_URL();
     module.exports = URLUtils;
@@ -5615,9 +5615,9 @@ var require_URLUtils = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/defineElement.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/defineElement.js
 var require_defineElement = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/defineElement.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/defineElement.js"(exports, module) {
     "use strict";
     var attributes = require_attributes();
     var isApiWritable = require_config().isApiWritable;
@@ -5679,9 +5679,9 @@ var require_defineElement = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/htmlelts.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/htmlelts.js
 var require_htmlelts = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/htmlelts.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/htmlelts.js"(exports) {
     "use strict";
     var Node = require_Node();
     var Element = require_Element();
@@ -7234,9 +7234,9 @@ var require_htmlelts = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/svg.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/svg.js
 var require_svg = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/svg.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/svg.js"(exports) {
     "use strict";
     var Element = require_Element();
     var defineElement = require_defineElement();
@@ -7363,9 +7363,9 @@ var require_svg = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MutationConstants.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MutationConstants.js
 var require_MutationConstants = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MutationConstants.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/MutationConstants.js"(exports, module) {
     "use strict";
     module.exports = {
       VALUE: 1,
@@ -7384,9 +7384,9 @@ var require_MutationConstants = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Document.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Document.js
 var require_Document = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Document.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Document.js"(exports, module) {
     "use strict";
     module.exports = Document;
     var Node = require_Node();
@@ -8128,9 +8128,9 @@ var require_Document = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentType.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentType.js
 var require_DocumentType = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentType.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DocumentType.js"(exports, module) {
     "use strict";
     module.exports = DocumentType;
     var Node = require_Node();
@@ -8167,9 +8167,9 @@ var require_DocumentType = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/HTMLParser.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/HTMLParser.js
 var require_HTMLParser = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/HTMLParser.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/HTMLParser.js"(exports, module) {
     "use strict";
     module.exports = HTMLParser;
     var Document = require_Document();
@@ -16329,9 +16329,9 @@ var require_HTMLParser = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMImplementation.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMImplementation.js
 var require_DOMImplementation = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMImplementation.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/DOMImplementation.js"(exports, module) {
     "use strict";
     module.exports = DOMImplementation;
     var Document = require_Document();
@@ -16408,9 +16408,9 @@ var require_DOMImplementation = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Location.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Location.js
 var require_Location = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Location.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Location.js"(exports, module) {
     "use strict";
     var URL = require_URL();
     var URLUtils = require_URLUtils();
@@ -16448,9 +16448,9 @@ var require_Location = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NavigatorID.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NavigatorID.js
 var require_NavigatorID = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NavigatorID.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/NavigatorID.js"(exports, module) {
     "use strict";
     var NavigatorID = Object.create(null, {
       appCodeName: { value: "Mozilla" },
@@ -16470,9 +16470,9 @@ var require_NavigatorID = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/WindowTimers.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/WindowTimers.js
 var require_WindowTimers = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/WindowTimers.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/WindowTimers.js"(exports, module) {
     "use strict";
     var WindowTimers = {
       setTimeout,
@@ -16484,9 +16484,9 @@ var require_WindowTimers = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/impl.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/impl.js
 var require_impl = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/impl.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/impl.js"(exports, module) {
     "use strict";
     var utils = require_utils();
     exports = module.exports = {
@@ -16515,9 +16515,9 @@ var require_impl = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Window.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Window.js
 var require_Window = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Window.js"(exports, module) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/Window.js"(exports, module) {
     "use strict";
     var DOMImplementation = require_DOMImplementation();
     var EventTarget = require_EventTarget();
@@ -16583,9 +16583,9 @@ var require_Window = __commonJS({
   }
 });
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/index.js
+// .harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/index.js
 var require_index = __commonJS({
-  "../../source/deepseek-harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/index.js"(exports) {
+  ".harness/node_modules/.pnpm/@mixmark-io+domino@2.2.0/node_modules/@mixmark-io/domino/lib/index.js"(exports) {
     var DOMImplementation = require_DOMImplementation();
     var HTMLParser = require_HTMLParser();
     var Window = require_Window();

@@ -1,4 +1,4 @@
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_attributes.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_attributes.js
 var ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT = "aspnetcore.diagnostics.exception.result";
 var ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_ABORTED = "aborted";
 var ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_HANDLED = "handled";
@@ -192,7 +192,7 @@ var ATTR_URL_QUERY = "url.query";
 var ATTR_URL_SCHEME = "url.scheme";
 var ATTR_USER_AGENT_ORIGINAL = "user_agent.original";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_metrics.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_metrics.js
 var METRIC_ASPNETCORE_DIAGNOSTICS_EXCEPTIONS = "aspnetcore.diagnostics.exceptions";
 var METRIC_ASPNETCORE_RATE_LIMITING_ACTIVE_REQUEST_LEASES = "aspnetcore.rate_limiting.active_request_leases";
 var METRIC_ASPNETCORE_RATE_LIMITING_QUEUED_REQUESTS = "aspnetcore.rate_limiting.queued_requests";
@@ -245,10 +245,10 @@ var METRIC_KESTREL_UPGRADED_CONNECTIONS = "kestrel.upgraded_connections";
 var METRIC_SIGNALR_SERVER_ACTIVE_CONNECTIONS = "signalr.server.active_connections";
 var METRIC_SIGNALR_SERVER_CONNECTION_DURATION = "signalr.server.connection.duration";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_events.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/stable_events.js
 var EVENT_EXCEPTION = "exception";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_attributes.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_attributes.js
 var ATTR_ANDROID_APP_STATE = "android.app.state";
 var ANDROID_APP_STATE_VALUE_BACKGROUND = "background";
 var ANDROID_APP_STATE_VALUE_CREATED = "created";
@@ -1951,7 +1951,7 @@ var ATTR_WEBENGINE_VERSION = "webengine.version";
 var ATTR_ZOS_SMF_ID = "zos.smf.id";
 var ATTR_ZOS_SYSPLEX_NAME = "zos.sysplex.name";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_metrics.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_metrics.js
 var METRIC_ASPNETCORE_AUTHENTICATION_AUTHENTICATE_DURATION = "aspnetcore.authentication.authenticate.duration";
 var METRIC_ASPNETCORE_AUTHENTICATION_CHALLENGES = "aspnetcore.authentication.challenges";
 var METRIC_ASPNETCORE_AUTHENTICATION_FORBIDS = "aspnetcore.authentication.forbids";
@@ -2432,7 +2432,7 @@ var METRIC_VCS_REF_REVISIONS_DELTA = "vcs.ref.revisions_delta";
 var METRIC_VCS_REF_TIME = "vcs.ref.time";
 var METRIC_VCS_REPOSITORY_COUNT = "vcs.repository.count";
 
-// ../../source/deepseek-harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_events.js
+// .harness/node_modules/.pnpm/@opentelemetry+semantic-conventions@1.43.0/node_modules/@opentelemetry/semantic-conventions/build/esm/experimental_events.js
 var EVENT_APP_CRASH = "app.crash";
 var EVENT_APP_JANK = "app.jank";
 var EVENT_APP_SCREEN_CLICK = "app.screen.click";

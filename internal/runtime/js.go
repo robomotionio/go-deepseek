@@ -43,3 +43,19 @@ func BundleVersion() (version, commit string) {
 	}
 	return b.Version()
 }
+
+// BundledSource returns the source the bundle serves for one specifier.
+func BundledSource(specifier string) (string, error) {
+	b, err := bundle.Load()
+	if err != nil {
+		return "", err
+	}
+	source, _, ok, err := b.Resolve(specifier, "")
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", fmt.Errorf("deepseek: %q is not in the embedded bundle", specifier)
+	}
+	return source, nil
+}
