@@ -95,6 +95,13 @@ type Tool = runtime.Tool
 // system. Apply receives one, and everything the harness offers is reachable
 // through it by name: register a tool, provide a service, read one it declared,
 // listen to an event, wrap every tool call, install a revertible effect.
+//
+// Three ways to hand JavaScript a Go function, and the seam decides which. Func
+// answers with a promise and may block, which is what a tool's execute or a
+// service method usually needs. SyncFunc answers immediately, for the callbacks
+// cordis requires a value from. Promise is neither: it is the VALUE of a
+// promise-shaped property — `handle.done` on upstream's subprocess seam is the
+// shape — awaited by reading a field rather than by calling one.
 type Context = runtime.Context
 
 // Object is something live in the harness that Go is holding: a service, a

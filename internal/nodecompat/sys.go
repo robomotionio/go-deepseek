@@ -377,6 +377,7 @@ func (c *Compat) hostObject() map[string]any {
 		"timers":  c.timerBindings(),
 		"zlib":    c.compressBindings(),
 		"http":    c.httpBindings(),
+		"watch":   c.watchBindings(),
 		"sortStrings": func(in []string) []string {
 			out := append([]string(nil), in...)
 			sort.Strings(out)

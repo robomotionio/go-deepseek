@@ -258,6 +258,27 @@ func (c *Context) Func(fn Handler) any {
 	return c.bridge.register(c.ref, fn, false)
 }
 
+// Promise makes a Go function the value of a promise-shaped PROPERTY, for the
+// seams that have one.
+//
+// Some services do not hand out a method to await; they hand out an object with
+// a promise on it. `handle.done` is the shape — upstream's subprocess seam
+// settles a spawn that way, and a Go provider of that seam has to produce
+// something a caller can `await` by reading a field. Func cannot: a function is
+// not a promise, and a caller reading `.done` would get the function itself.
+//
+// What crosses is a thenable, not a promise, and the difference buys two things
+// worth having. The Go call does not start until somebody awaits — so a handle
+// nobody waits on costs nothing — and it is started once however many times the
+// value is awaited. `await value`, `value.then(...)` and Promise.resolve(value)
+// all behave as they would on a promise, because that is what a thenable is for.
+//
+// Like Func, it runs on its own goroutine and may block, which is the point: the
+// Go side of `done` is usually a wait.
+func (c *Context) Promise(fn Handler) any {
+	return c.bridge.registerThenable(c.ref, fn)
+}
+
 // SyncFunc makes a Go function callable and answers immediately, on the
 // goroutine that owns the JavaScript world.
 //

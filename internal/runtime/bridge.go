@@ -38,6 +38,12 @@ type jsFunc struct {
 	Sync bool  `json:"$sync,omitempty"`
 }
 
+// jsThenable is a Go function encoded as the VALUE of a promise-shaped
+// property. See Context.Promise.
+type jsThenable struct {
+	ID int64 `json:"$promise"`
+}
+
 // jsUndefined is JavaScript's undefined, encoded. See Undefined, which is the
 // only thing that makes one.
 type jsUndefined struct {
@@ -261,6 +267,10 @@ func (b *bridge) callback(id int64) *hostCallback {
 
 // register keeps a Go function reachable from JavaScript for as long as the
 // context that created it is loaded.
+func (b *bridge) registerThenable(owner int64, fn Handler) jsThenable {
+	return jsThenable{ID: b.register(owner, fn, false).ID}
+}
+
 func (b *bridge) register(owner int64, fn Handler, sync bool) jsFunc {
 	id := b.id()
 	b.mu.Lock()

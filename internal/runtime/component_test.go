@@ -3,10 +3,13 @@ package runtime_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -304,4 +307,89 @@ func startPlugins(t *testing.T, dir string, plugins ...dsh.Plugin) dsh.Harness {
 		t.Fatalf("start: %v", err)
 	}
 	return h
+}
+
+// A promise-shaped PROPERTY, which some seams hand out instead of a method to
+// await: upstream's subprocess handle settles its spawn through `handle.done`,
+// and a Go provider of that seam has to produce something a consumer can await
+// by reading a field. Two things are asserted here beyond "it resolves": the Go
+// side is not called until somebody awaits, and it is called once however many
+// times the value is awaited.
+func TestComponentProvidesAPromiseProperty(t *testing.T) {
+	var calls atomic.Int64
+	settled := make(chan string, 1)
+	fail := make(chan error, 2)
+
+	provider := dsh.Plugin{
+		ID:      "spawner",
+		Provide: []string{"spawner"},
+		Apply: func(ctx *dsh.Context) error {
+			return ctx.Provide("spawner", map[string]any{
+				"start": ctx.SyncFunc(func([]json.RawMessage) (any, error) {
+					return map[string]any{
+						"done": ctx.Promise(func([]json.RawMessage) (any, error) {
+							calls.Add(1)
+							return map[string]any{"exitCode": 0}, nil
+						}),
+					}, nil
+				}),
+			})
+		},
+	}
+
+	consumer := dsh.Plugin{
+		ID:     "starter",
+		Inject: []string{"spawner"},
+		Apply: func(ctx *dsh.Context) error {
+			spawner, err := ctx.Service("spawner")
+			if err != nil {
+				fail <- err
+				return err
+			}
+			handle, err := spawner.CallForObject("start")
+			if err != nil {
+				fail <- err
+				return err
+			}
+			// Handing the value out must not start the work. If Promise were a
+			// plain Func the wait would already be running, which is the
+			// difference that matters when the Go side of `done` is a wait on a
+			// process nobody may ever ask about.
+			//
+			// (Reading it INTO Go with handle.Get would await it — the bridge
+			// resolves whatever it is about to encode — so the assertion is
+			// made here, where nothing has touched it.)
+			if started := calls.Load(); started != 0 {
+				fail <- fmt.Errorf("the Go side ran %d times before anything awaited", started)
+				return nil
+			}
+			// .then is what await uses. Twice, because a thenable awaited twice
+			// must not spawn the wait twice.
+			first, err := handle.Call("done.then", ctx.Func(func([]json.RawMessage) (any, error) { return "first", nil }))
+			if err != nil {
+				fail <- err
+				return err
+			}
+			if _, err := handle.Call("done.then", ctx.Func(func([]json.RawMessage) (any, error) { return "second", nil })); err != nil {
+				fail <- err
+				return err
+			}
+			settled <- first.String() + ":" + strconv.FormatInt(calls.Load(), 10)
+			return nil
+		},
+	}
+
+	h := startPlugins(t, t.TempDir(), provider, consumer)
+	defer h.Close()
+
+	select {
+	case err := <-fail:
+		t.Fatalf("the promise property was not usable: %v", err)
+	case got := <-settled:
+		if got != "first:1" {
+			t.Fatalf("got %q, want \"first:1\" — the value resolved once, through await", got)
+		}
+	case <-time.After(30 * time.Second):
+		t.Fatal("the consumer never ran")
+	}
 }
