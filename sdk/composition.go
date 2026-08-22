@@ -87,3 +87,20 @@ func Plugins() []string { return runtime.BundledPlugins() }
 // was built from. Worth logging: the harness is a developer preview whose
 // session format is still version zero.
 func HarnessVersion() (version, commit string) { return runtime.BundleVersion() }
+
+// PluginSource returns the JavaScript the bundle serves for one specifier.
+//
+// It exists for the question a downstream package cannot otherwise answer:
+// "does this plugin still read the config key my UI writes?" Config keys are
+// not validated — an unknown one is accepted silently by the loader — so a key
+// renamed upstream turns a settings screen into a set of switches that write a
+// value nothing reads, with nothing failing anywhere. Reading the shipped
+// source is a coarse check, and it is the only one available: the alternative
+// is a UI that quietly stops working.
+//
+// It reports what is BUNDLED, which is not the same as what upstream has. A
+// package inlined into the one that imports it (tsdown does this to workspace
+// dependencies) has no specifier of its own and cannot be read here.
+func PluginSource(specifier string) (string, error) {
+	return runtime.BundledSource(specifier)
+}
