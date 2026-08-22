@@ -226,13 +226,7 @@ func statObject(info os.FileInfo) map[string]any {
 	}
 	// The ownership and inode fields only exist on a real syscall stat. Code
 	// that reads them is usually deciding whether two paths are the same file.
-	if sys, ok := info.Sys().(*syscall.Stat_t); ok {
-		m["uid"] = sys.Uid
-		m["gid"] = sys.Gid
-		m["ino"] = uint64(sys.Ino)
-		m["dev"] = uint64(sys.Dev)
-		m["nlink"] = uint64(sys.Nlink)
-	}
+	statFields(info, m)
 	return m
 }
 

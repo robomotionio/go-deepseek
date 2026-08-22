@@ -84,8 +84,20 @@ bundle:
 # evaluate on the engine. A new upstream revision reaching for a Node API this
 # runtime does not have fails here, naming the module, rather than later during
 # a plugin mount.
-verify:
+verify: crosscheck
 	go test ./... -count=1
+
+# Every platform a Robomotion package ships to. Tests alone run on the host
+# only, so a unix-only symbol -- syscall.Stat_t was the one that got through --
+# compiles clean here and fails in CI on a runner nobody watches. Building each
+# target is the cheapest way to find that before a release rather than after.
+CROSS_TARGETS := linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64
+
+crosscheck:
+	@for t in $(CROSS_TARGETS); do \
+		GOOS=$${t%%/*} GOARCH=$${t##*/} go build ./... || { echo "CROSS-COMPILE FAILED: $$t"; exit 1; }; \
+		echo "  ok $$t"; \
+	done
 
 show:
 	@$(NODE) -e "const m=require('./$(OUT)/manifest.json'); \
