@@ -43,7 +43,7 @@ NODE  ?= node
 PNPM  ?= pnpm
 GIT   ?= git
 
-.PHONY: update sync build bundle verify upstream-check upstream-drift-report show clean-harness help
+.PHONY: update sync build bundle verify fmtcheck crosscheck upstream-check upstream-drift-report show clean-harness help
 
 help:
 	@sed -n '1,30p' $(MAKEFILE_LIST) | sed 's/^# \{0,1\}//'
@@ -92,7 +92,7 @@ bundle:
 # evaluate on the engine. A new upstream revision reaching for a Node API this
 # runtime does not have fails here, naming the module, rather than later during
 # a plugin mount.
-verify: crosscheck
+verify: fmtcheck crosscheck
 	go test ./... -count=1
 	@$(MAKE) --no-print-directory upstream-drift-report
 
@@ -120,6 +120,18 @@ upstream-check:
 # compiles clean here and fails in CI on a runner nobody watches. Building each
 # target is the cheapest way to find that before a release rather than after.
 CROSS_TARGETS := linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64
+
+# gofmt is not a matter of taste here, it is a matter of noticing. An
+# unformatted file makes `gofmt -l` non-empty, and a non-empty `gofmt -l` that
+# is always non-empty is one nobody reads — so the next genuinely odd
+# formatting, the kind that usually means a bad merge, arrives invisible.
+fmtcheck:
+	@unformatted=$$(gofmt -l . 2>/dev/null); \
+	if [ -n "$$unformatted" ]; then \
+		echo "gofmt would change:"; echo "$$unformatted" | sed 's/^/  /'; \
+		echo "run: gofmt -w ."; exit 1; \
+	fi
+	@echo "  ok gofmt"
 
 crosscheck:
 	@for t in $(CROSS_TARGETS); do \

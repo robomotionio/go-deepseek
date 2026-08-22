@@ -60,13 +60,34 @@ function fail(message) {
   process.exit(2)
 }
 
+function readJSON(file, what) {
+  let text
+  try {
+    text = fs.readFileSync(file, 'utf8')
+  } catch (error) {
+    fail(`cannot read ${what} at ${file}: ${String(error?.message ?? error)}`)
+  }
+  try {
+    return JSON.parse(text)
+  } catch (error) {
+    fail(`${what} at ${file} is not valid JSON: ${String(error?.message ?? error)}`)
+  }
+}
+
 function git(args, cwd) {
   return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
 }
 
+// Both of these are read through readJSON rather than JSON.parse, and the
+// lockfile is the reason. It is hand-edited on purpose — that is the whole
+// point of it being separate from the generated manifest — which makes a
+// trailing comma the single most likely failure this script will ever see. An
+// uncaught SyntaxError exits 1, and 1 is the code that means "drift found": the
+// weekly workflow would open a public issue with a Node stack trace where the
+// drift report should be, in exactly the case that is supposed to go red.
 const lockPath = path.join(root, 'UPSTREAM.lock.json')
 if (!fs.existsSync(lockPath)) fail(`no UPSTREAM.lock.json at ${lockPath}`)
-const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'))
+const lock = readJSON(lockPath, 'the pin')
 const { repo, ref, commit } = lock.harness ?? {}
 if (!repo || !commit) fail('UPSTREAM.lock.json has no harness.repo / harness.commit')
 
@@ -74,7 +95,7 @@ if (!repo || !commit) fail('UPSTREAM.lock.json has no harness.repo / harness.com
 // the check that needs no network, and the one that catches the likelier
 // mistake: a bundle regenerated with a wider ENTRIES list and a lockfile nobody
 // updated, which would then under-report drift for every path newly bundled.
-const manifest = JSON.parse(fs.readFileSync(path.join(root, 'internal/bundle/manifest.json'), 'utf8'))
+const manifest = readJSON(path.join(root, 'internal/bundle/manifest.json'), 'the bundle manifest')
 const pinned = Object.keys(lock.entries ?? {})
 const bundled = manifest.entries ?? []
 const onlyBundle = bundled.filter((e) => !pinned.includes(e))
@@ -90,7 +111,9 @@ if (onlyBundle.length || onlyLock.length) {
 }
 
 // A cache rather than the working .harness/, so the check never disturbs a
-// checkout somebody is building from, and so CI pays the clone once.
+// checkout somebody is building from. It is a cache for repeated LOCAL runs
+// only: the workflow gets a fresh runner every week and no actions/cache step,
+// so CI pays the full clone every time.
 let dir = value('--repo', process.env.HARNESS_DIR || path.join(root, '.harness'))
 let usable = fs.existsSync(path.join(dir, '.git'))
 if (!usable) {
@@ -110,11 +133,20 @@ try {
   process.exit(2)
 }
 
+// origin/HEAD is absent from a checkout cloned with --no-checkout and from one
+// whose clone was interrupted, so origin/master is the fallback — and it can be
+// absent too, which is a broken cache rather than drift. Both are failures of
+// this script's own machinery, so both exit 2.
 let head
 try {
   head = git(['rev-parse', 'origin/HEAD'], dir)
 } catch {
-  head = git(['rev-parse', 'origin/master'], dir)
+  try {
+    head = git(['rev-parse', 'origin/master'], dir)
+  } catch (error) {
+    fail(`cannot find upstream's default branch in ${dir} — the cache may be half-cloned; `
+      + `remove it and retry (${String(error?.stderr || error?.message || error).split('\n')[0]})`)
+  }
 }
 
 // Only the paths the bundle carries. `path` comes from the lockfile rather than

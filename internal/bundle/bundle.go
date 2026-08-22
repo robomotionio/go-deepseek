@@ -66,8 +66,8 @@ type Bundle struct {
 const Namespace = "dsh:/"
 
 var (
-	once   sync.Once
-	shared *Bundle
+	once    sync.Once
+	shared  *Bundle
 	loadErr error
 )
 

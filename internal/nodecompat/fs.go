@@ -147,6 +147,10 @@ func writeFlags(flag string) (int, bool) {
 		return os.O_RDWR | os.O_CREATE | os.O_APPEND | os.O_EXCL, true
 	case "r+":
 		return os.O_RDWR, true
+	case "r":
+		// Meaningful to fs.open and a mistake in a whole-file write, which is
+		// why write() names its own default rather than sharing this one.
+		return os.O_RDONLY, true
 	}
 	return 0, false
 }
@@ -549,7 +553,11 @@ func (c *Compat) fsOpen(path, flags string, mode int) (int64, error) {
 	if mode > 0 {
 		perm = os.FileMode(mode)
 	}
-	f, err := os.OpenFile(p, openFlags(flags), perm)
+	osFlags, ok := openFlags(flags)
+	if !ok {
+		return 0, fmt.Errorf("EINVAL: invalid flag %q, open '%s'", flags, path)
+	}
+	f, err := os.OpenFile(p, osFlags, perm)
 	if err != nil {
 		return 0, fsError(err, "open", path)
 	}
@@ -565,29 +573,21 @@ func (c *Compat) fsOpen(path, flags string, mode int) (int64, error) {
 	return id, nil
 }
 
-// openFlags maps Node's flag strings onto the os package's constants.
-func openFlags(flags string) int {
-	switch flags {
-	case "", "r":
-		return os.O_RDONLY
-	case "r+":
-		return os.O_RDWR
-	case "w":
-		return os.O_WRONLY | os.O_CREATE | os.O_TRUNC
-	case "w+":
-		return os.O_RDWR | os.O_CREATE | os.O_TRUNC
-	case "a":
-		return os.O_WRONLY | os.O_CREATE | os.O_APPEND
-	case "a+":
-		return os.O_RDWR | os.O_CREATE | os.O_APPEND
-	case "wx", "xw":
-		return os.O_WRONLY | os.O_CREATE | os.O_EXCL
-	case "wx+", "xw+":
-		return os.O_RDWR | os.O_CREATE | os.O_EXCL
-	case "ax", "xa":
-		return os.O_WRONLY | os.O_CREATE | os.O_APPEND | os.O_EXCL
+// openFlags maps Node's flag strings onto the os package's constants, for the
+// descriptor-based path (`fs.open`).
+//
+// It shares its table with writeFlags and differs in one way that is forced:
+// `fs.open` has a real default, `r`, so an empty flag is meaningful here where
+// it is not in a whole-file write. Everything else is the same mapping, and
+// this returns the same "no" to a flag it does not know — because the
+// alternative was silently opening read-only, which is the shape of the bug the
+// write path had: the call succeeds, and the failure surfaces later somewhere
+// that cannot explain it.
+func openFlags(flags string) (int, bool) {
+	if flags == "" || flags == "r" {
+		return os.O_RDONLY, true
 	}
-	return os.O_RDONLY
+	return writeFlags(flags)
 }
 
 func (c *Compat) file(id int64) (*os.File, error) {

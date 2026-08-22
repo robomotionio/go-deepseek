@@ -354,7 +354,7 @@ func (c *Compat) textBindings() map[string]any {
 		// converts between them at the boundary — so decoding is this short and
 		// still correct, including for the replacement character a lone
 		// surrogate or a truncated sequence produces.
-		"decode": func(b []byte) string { return string(b) },
+		"decode":       func(b []byte) string { return string(b) },
 		"base64Encode": func(b []byte) string { return base64Encode(b) },
 		"base64Decode": func(s string) ([]byte, error) { return base64Decode(s) },
 		"hexEncode":    func(b []byte) string { return hexEncode(b) },

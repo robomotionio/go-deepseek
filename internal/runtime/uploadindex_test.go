@@ -194,4 +194,3 @@ globalThis.settled = index.commit({
 	}
 	t.Logf("contended lock: %s", got)
 }
-

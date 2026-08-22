@@ -615,3 +615,51 @@ func TestExclusiveCreateReportsEEXIST(t *testing.T) {
 		t.Fatalf("exclusive create:\n got %s\nwant %s", got, want)
 	}
 }
+
+// The descriptor path has the same contract as the whole-file one: `ax+` is a
+// flag Node documents, and a flag nobody documents is refused rather than
+// guessed at. Guessing meant silently opening read-only — the call succeeded
+// and the failure surfaced later, at a write, as EBADF: an error that cannot
+// explain itself. That is the same shape as the truncation bug on the write
+// path, reached through a different door.
+func TestOpenFlagsAreCompleteAndRefuseNonsense(t *testing.T) {
+	dir := t.TempDir()
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: dir, Roots: []string{dir}})
+	got := run(t, rt, `
+		import { openSync, closeSync, writeSync, readFileSync } from 'node:fs';
+		import path from 'node:path';
+		const checks = [];
+		const at = (name) => path.join(`+quote(dir)+`, name);
+
+		// ax+ : exclusive create, append, readable. Documented by Node, and
+		// missing from this shim's table until it shared one with the write path.
+		const fd = openSync(at('exclusive'), 'ax+');
+		writeSync(fd, 'first');
+		closeSync(fd);
+		checks.push('created=' + readFileSync(at('exclusive'), 'utf8'));
+
+		try {
+			closeSync(openSync(at('exclusive'), 'ax+'));
+			checks.push('second=NONE');
+		} catch (error) {
+			checks.push('second=' + error.code);
+		}
+
+		// A flag that means nothing must say so, not open read-only.
+		try {
+			closeSync(openSync(at('exclusive'), 'not-a-flag'));
+			checks.push('nonsense=ACCEPTED');
+		} catch (error) {
+			checks.push('nonsense=' + error.code);
+		}
+
+		// The ordinary spellings still work.
+		closeSync(openSync(at('plain'), 'w'));
+		checks.push('plain=ok');
+		globalThis.result = checks.join('|');
+	`)
+	want := "created=first|second=EEXIST|nonsense=EINVAL|plain=ok"
+	if got != want {
+		t.Fatalf("open flags:\n got %s\nwant %s", got, want)
+	}
+}
