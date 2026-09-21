@@ -60,10 +60,12 @@ async function boot(entries) {
   const loader = ctx.get('loader');
   if (!loader) throw new Error('the loader did not register itself as a service');
   try {
+    await importEntries(entries);
     await loader.root.update(entries);
     // The tree settles asynchronously: entries import, mount and inject in
     // parallel, and a plugin that failed reports here rather than at update().
     await loader.await();
+    await assertStarted(loader);
   } catch (error) {
     // The loader wraps a failing entry once per tree layer, and the wrap
     // carries the layer's message rather than the plugin's. Without unwrapping,
@@ -73,6 +75,62 @@ async function boot(entries) {
   }
   context = ctx;
   return ctx;
+}
+
+// importEntries loads every enabled entry's module before the loader does.
+//
+// The loader stopped reporting this itself in harness 0.1.5, when upstream
+// reverted its transactional reload: an entry whose import fails is written to
+// the logger and skipped, and `await()` returns as though the tree were whole.
+// A composition naming a plugin that does not exist would then boot, minus that
+// plugin, and a plugin that cannot evaluate here — a Node API this runtime
+// lacks — would take its tools away without a word. Importing first is what
+// gets the real error, with the specifier in it; the module cache means the
+// loader's own import a moment later costs nothing.
+async function importEntries(entries, path = '') {
+  for (const [index, entry] of entries.entries()) {
+    if (entry.disabled) continue;
+    if (entry.name) {
+      try {
+        await import(entry.name);
+      } catch (error) {
+        throw new Error(
+          `composition${path}[${index}]: entry "${entry.id}" cannot load "${entry.name}": ${error?.message ?? error}`,
+          { cause: error },
+        );
+      }
+    }
+    if (Array.isArray(entry.config_group)) await importEntries(entry.config_group, `${path}[${index}]`);
+  }
+}
+
+// assertStarted fails the boot when a plugin failed to START — its config did
+// not validate, or its apply threw. The loader records that on the entry's
+// fiber and carries on; `fiber.await()` is what rethrows it. A plugin that is
+// merely waiting for a service nobody provides is not a failure — that is how
+// the dormant `bash` of the default composition is meant to look — and its
+// fiber settles without an error.
+async function assertStarted(loader) {
+  const failures = [];
+  for (const entry of loader.entries()) {
+    if (entry.disabled || entry.options.group) continue;
+    if (!entry.fiber) {
+      failures.push(new Error(`entry "${entry.options.id}" (${entry.options.name}) did not start`));
+      continue;
+    }
+    try {
+      await entry.fiber.await();
+    } catch (error) {
+      failures.push(new Error(
+        `entry "${entry.options.id}" (${entry.options.name}) failed to start: ${error?.message ?? error}`,
+        { cause: error },
+      ));
+    }
+  }
+  if (failures.length === 1) throw failures[0];
+  if (failures.length > 1) {
+    throw new Error(failures.map((failure) => failure.message).join('\n'), { cause: failures[0] });
+  }
 }
 
 // describeCause walks the cause chain to the error that actually happened and
@@ -90,14 +148,23 @@ function describeCause(error) {
   return lines.join('\n');
 }
 
-// forwardEvents pipes the session's own event stream to Go. The events are
-// upstream's vocabulary, not ours: keeping their names and shapes is what makes
-// a Go consumer of this the same consumer as a JSON-RPC one.
-function forwardEvents(ctx, sessionId, agent) {
+// forwardEvents pipes the session's own event stream to Go, and hands each
+// event to `collect` as it goes. The events are upstream's vocabulary, not
+// ours: keeping their names and shapes is what makes a Go consumer of this the
+// same consumer as a JSON-RPC one.
+//
+// The delivered stream is also the turn's RECORD. This used to slice
+// `agent.session.events` once the agent went idle; harness 0.1.5 removed that
+// getter and deprecated every synchronous read of session history, with the
+// rule that a consumer processes the event it is handed rather than looking
+// back through the log. Every event a turn appends is delivered here before
+// the agent reports idle, so nothing is lost by it.
+function forwardEvents(ctx, sessionId, agent, collect) {
   const seen = new Set();
   const push = (event) => {
     if (!event || seen.has(event)) return;
     seen.add(event);
+    collect(event);
     try {
       emit(sessionId, JSON.stringify(event, replacer));
     } catch (err) {
@@ -107,14 +174,47 @@ function forwardEvents(ctx, sessionId, agent) {
     }
   };
   // (session, event) — two arguments, not one payload object. Reading it as one
-  // meant the filter never matched and nothing was ever streamed: every event
-  // arrived at the end of the turn instead, in a burst, from the replay below.
-  // The JSON-RPC server plugin upstream subscribes the same way.
+  // meant the filter never matched and nothing was ever streamed. The JSON-RPC
+  // server plugin upstream subscribes the same way.
   const dispose = ctx.on('session/event', (session, event) => {
     if (session && String(session.id) !== String(sessionId)) return;
     push(event);
   });
-  return { dispose, push };
+  // Streamed deltas stopped being session events in harness 0.1.5: they are
+  // transient `agent/assistant-stream` frames now, and only the assembled
+  // assistant/message is durable. A caller of this runtime has always seen
+  // them as `assistant/chunk` events, so that is what each chunk frame becomes
+  // on its way to Go — streamed, but not collected: it is not part of the
+  // session's record any more, and the turn's record is.
+  const steps = new Map();
+  const disposeStream = ctx.on('agent/assistant-stream', ({ agent: subject, frame }) => {
+    if (subject !== agent || !frame) return;
+    if (frame.type === 'start') {
+      steps.set(frame.attemptId, { turn: frame.turn, step: frame.step });
+      return;
+    }
+    if (frame.type === 'end') {
+      steps.delete(frame.attemptId);
+      return;
+    }
+    if (frame.type !== 'chunk') return;
+    const at = steps.get(frame.attemptId) ?? {};
+    try {
+      emit(sessionId, JSON.stringify({
+        type: 'assistant/chunk',
+        time: frame.time,
+        data: { turn: at.turn, step: at.step, chunk: frame.chunk },
+      }, replacer));
+    } catch (err) {
+      emit(sessionId, JSON.stringify({ type: 'runtime/event-error', data: { message: String(err) } }));
+    }
+  });
+  return {
+    dispose: () => {
+      dispose();
+      disposeStream();
+    },
+  };
 }
 
 // replacer keeps JSON.stringify from failing on the things a session event may
@@ -193,16 +293,21 @@ async function openAgent(ctx, loop, sessionId, options, cwd) {
 async function isStored(ctx, sessionId) {
   const persistence = ctx.get('sessionPersistence');
   if (!persistence) return false;
-  let stored;
+  // stat() answers exactly this question for one id. It replaced reading the
+  // whole listing in harness 0.1.5, when list() also started returning
+  // snapshots ({ header, revision }) rather than headers — which made the old
+  // `header.id` comparison answer "not stored" for every session, and every
+  // resume a collision.
+  let snapshot;
   try {
-    stored = await persistence.list();
+    snapshot = await persistence.stat(SessionId(sessionId));
   } catch (error) {
     throw new Error(
       `cannot tell whether session "${sessionId}" has a stored log: ${error?.message ?? error}`,
       { cause: error },
     );
   }
-  return stored.some((header) => String(header.id) === String(sessionId));
+  return snapshot !== undefined;
 }
 
 // finalText is the answer as a caller means it: the text of the last assistant
@@ -237,19 +342,18 @@ async function run(sessionId, text, agentOptions) {
   const ctx = context;
   if (!ctx) throw new Error('the harness has not been started');
   const agent = await agentFor(ctx, sessionId, agentOptions);
-  const forwarding = forwardEvents(ctx, sessionId, agent);
+  // Everything this turn produced, which is what a caller wants to inspect —
+  // the session accumulates across turns. Subscribed BEFORE the follow-up is
+  // queued, so the user's own message is the first thing collected.
+  const turn = [];
+  const forwarding = forwardEvents(ctx, sessionId, agent, (event) => turn.push(event));
   try {
-    const before = agent.session ? agent.session.events.length : 0;
+    const idle = waitForIdle(ctx, agent);
     agent.followup(createUserMessage({
       content: [{ type: 'text', text }],
       source: { kind: 'user' },
     }));
-    await waitForIdle(ctx, agent);
-    const events = [...(agent.session?.events ?? [])];
-    // Everything this turn produced, which is what a caller wants to inspect —
-    // the session accumulates across turns.
-    const turn = events.slice(before);
-    for (const event of turn) forwarding.push(event);
+    await idle;
     const outcome = turnOutcome(turn);
     if (outcome.failed) {
       const label = [outcome.code, outcome.status].filter(Boolean).join(' ');

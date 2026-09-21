@@ -436,6 +436,42 @@
   }
   g.Blob = Blob;
 
+  // --- DOMException ---------------------------------------------------------
+  //
+  // Node has it as a global, and code checks for it by class: the JSONL session
+  // backend tells a cancelled migration from a corrupt log with
+  // `error instanceof DOMException && error.name === 'AbortError'`. A missing
+  // global is a ReferenceError on that line — which is how a resumed session
+  // failed, whatever the actual outcome was. The abort and timeout reasons
+  // below are DOMExceptions too, as Node's are, so the check sees what it would
+  // see there.
+
+  if (typeof g.DOMException !== 'function') {
+    const LEGACY_CODES = {
+      IndexSizeError: 1, HierarchyRequestError: 3, WrongDocumentError: 4, InvalidCharacterError: 5,
+      NoModificationAllowedError: 7, NotFoundError: 8, NotSupportedError: 9, InvalidStateError: 11,
+      SyntaxError: 12, InvalidModificationError: 13, NamespaceError: 14, InvalidAccessError: 15,
+      TypeMismatchError: 17, SecurityError: 18, NetworkError: 19, AbortError: 20, URLMismatchError: 21,
+      QuotaExceededError: 22, TimeoutError: 23, InvalidNodeTypeError: 24, DataCloneError: 25,
+    };
+    class DOMException extends Error {
+      #name;
+      constructor(message = '', options = 'Error') {
+        const named = typeof options === 'object' && options !== null;
+        super(String(message), named && 'cause' in options ? { cause: options.cause } : undefined);
+        this.#name = named ? String(options.name ?? 'Error') : String(options);
+      }
+      get name() { return this.#name; }
+      get code() { return LEGACY_CODES[this.#name] ?? 0; }
+      get [Symbol.toStringTag]() { return 'DOMException'; }
+    }
+    for (const [name, code] of Object.entries(LEGACY_CODES)) {
+      const constant = name.replace(/Error$/, '').replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase() + '_ERR';
+      Object.defineProperty(DOMException, constant, { value: code, enumerable: true });
+    }
+    g.DOMException = DOMException;
+  }
+
   // --- AbortController ------------------------------------------------------
 
   class AbortSignal extends EventTarget0() {
@@ -483,14 +519,10 @@
   }
 
   function abortError() {
-    const e = new Error('This operation was aborted');
-    e.name = 'AbortError';
-    return e;
+    return new g.DOMException('This operation was aborted', 'AbortError');
   }
   function timeoutError(ms) {
-    const e = new Error(`The operation was aborted due to timeout (${ms}ms)`);
-    e.name = 'TimeoutError';
-    return e;
+    return new g.DOMException(`The operation was aborted due to timeout (${ms}ms)`, 'TimeoutError');
   }
 
   // A minimal EventTarget, defined lazily so a real one wins if the engine ever
@@ -859,6 +891,21 @@
     execArgv: [],
     title: 'dsh',
     release: { name: 'node' },
+    // process.report exists so that code probing the C library can ask. The
+    // answer is honest: there is no glibc to report, because nothing native is
+    // loaded — the flock addon loader reads glibcVersionRuntime to choose a
+    // binary directory, and module.js serves the host's flock either way.
+    report: {
+      getReport: () => ({
+        header: {
+          reportVersion: 3,
+          nodejsVersion: 'v22.0.0',
+          arch: host.os.arch(),
+          platform: host.os.platform(),
+          glibcVersionRuntime: undefined,
+        },
+      }),
+    },
     config: { variables: {} },
     exitCode: undefined,
     pid: host.process.pid(),

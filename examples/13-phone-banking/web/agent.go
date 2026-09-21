@@ -160,15 +160,8 @@ func openHarness(ctx context.Context, c creds, model, workspace string, line *iv
 	// provider cannot complete discovery in this runtime, one incomplete
 	// provider suppresses the whole catalog, and every skill here is
 	// host-registered anyway — so it is pointed at no roots.
-	entries := sdk.Compose(cfg)
-	for i := range entries {
-		if entries[i].ID == "agent-spine" {
-			entries[i].Config["skills"] = map[string]any{
-				"filesystem": map[string]any{"includeDefaultRoots": false},
-			}
-		}
-	}
-	cfg.Composition = entries
+	cfg.Composition = sdk.With(sdk.Compose(cfg), "skill-filesystem",
+		map[string]any{"includeDefaultRoots": false})
 
 	return sdk.Open(ctx, cfg)
 }

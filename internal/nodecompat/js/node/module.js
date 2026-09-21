@@ -12,6 +12,7 @@ export function createRequire(from) {
     : String(from || host.process.cwd());
 
   const require = (specifier) => {
+    if (String(specifier).endsWith('.node')) return nativeAddon(specifier);
     if (!specifier.startsWith('.') && !specifier.startsWith('/')) {
       throw Object.assign(
         new Error(`require('${specifier}') is not supported: this runtime resolves modules through its host, not node_modules`),
@@ -33,6 +34,32 @@ export function createRequire(from) {
   return require;
 }
 
+// nativeAddon answers a require() for a Node-API binary.
+//
+// A .node file is machine code this runtime cannot load, so the only addons
+// that resolve are ones the host implements itself, by name. There is one:
+// @deepseek-ai/node-addon-system, whose `tryLock` is flock(2) — the session
+// backend's cross-process write lock since harness 0.1.5. Its loader asks for
+// `@deepseek-ai/node-addon-system-<platform>-<arch>/bin/[glibc|musl/]system.node`
+// after require.resolve has answered the package.json path verbatim, which is
+// the specifier matched below. Anything else is refused by name.
+const SYSTEM_ADDON = /^@deepseek-ai\/node-addon-system-[^/]+\/bin\/(?:[^/]+\/)?system\.node$/;
+
+function nativeAddon(specifier) {
+  if (SYSTEM_ADDON.test(specifier)) {
+    return {
+      tryLock(fd, callback) {
+        const errno = host.native.tryLock(fd);
+        setTimeout(() => callback(errno), 0);
+      },
+    };
+  }
+  throw Object.assign(
+    new Error(`require('${specifier}') is a native addon, which this runtime cannot load`),
+    { code: 'ERR_DLOPEN_FAILED' },
+  );
+}
+
 // normalise resolves `.` and `..` textually. The path is not necessarily a file
 // path — a module compiled into the binary is reached by a URL-shaped key — so
 // node:path's algebra is the wrong tool and its separator handling would mangle
@@ -51,9 +78,10 @@ function normalise(p) {
 }
 
 export const builtinModules = [
-  'assert', 'async_hooks', 'buffer', 'crypto', 'events', 'fs', 'module', 'os',
-  'path', 'perf_hooks', 'process', 'querystring', 'stream', 'string_decoder',
-  'timers', 'tty', 'url', 'util', 'zlib',
+  'assert', 'async_hooks', 'buffer', 'child_process', 'crypto', 'events', 'fs',
+  'module', 'os', 'path', 'perf_hooks', 'process', 'querystring', 'readline',
+  'stream', 'string_decoder', 'timers', 'tty', 'url', 'util', 'worker_threads',
+  'zlib',
 ];
 
 export const isBuiltin = (name) => builtinModules.includes(String(name).replace(/^node:/, ''));

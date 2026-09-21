@@ -1,21 +1,32 @@
 {
   "generated": "by tools/bundle/build.mjs — do not edit by hand",
   "harness": {
-    "version": "0.1.1-rc.2",
-    "commit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+    "version": "0.1.6-alpha.2",
+    "commit": "ddefc45fbc7f8e46dd73185e68295696d1297887"
   },
   "entries": [
     "@deepseek-ai/cordis",
     "@deepseek-ai/cordis-plugin-loader",
     "@deepseek-ai/cosmokit",
     "@deepseek-ai/schemastery",
-    "@deepseek-ai/dsh-agent-spine-demo",
+    "@deepseek-ai/cordis-plugin-timer",
     "@deepseek-ai/dsh-agent",
+    "@deepseek-ai/dsh-agent/invariant",
     "@deepseek-ai/dsh-agent-loop",
+    "@deepseek-ai/dsh-agent-loop/invariant",
     "@deepseek-ai/dsh-session",
+    "@deepseek-ai/dsh-session/invariant",
+    "@deepseek-ai/dsh-session-projection",
+    "@deepseek-ai/dsh-session-title",
     "@deepseek-ai/dsh-scope",
+    "@deepseek-ai/dsh-scope/invariant",
     "@deepseek-ai/dsh-system-prompt",
     "@deepseek-ai/dsh-tools",
+    "@deepseek-ai/dsh-invariants",
+    "@deepseek-ai/dsh-jobs-local",
+    "@deepseek-ai/dsh-tool-jobs",
+    "@deepseek-ai/dsh-agent-instructions",
+    "@deepseek-ai/dsh-shell-env",
     "@deepseek-ai/dsh-llm",
     "@deepseek-ai/dsh-llm-deepseek",
     "@deepseek-ai/dsh-llm-pi-ai",
@@ -42,15 +53,19 @@
   "modules": {
     "@anthropic-ai/sdk": {
       "file": "modules/anthropic-ai__sdk.mjs",
-      "bytes": 222608
+      "bytes": 636454
     },
     "@deepseek-ai/cordis": {
       "file": "modules/deepseek-ai__cordis.mjs",
-      "bytes": 66638
+      "bytes": 59707
     },
     "@deepseek-ai/cordis-plugin-loader": {
       "file": "modules/deepseek-ai__cordis-plugin-loader.mjs",
-      "bytes": 94934
+      "bytes": 19528
+    },
+    "@deepseek-ai/cordis-plugin-timer": {
+      "file": "modules/deepseek-ai__cordis-plugin-timer.mjs",
+      "bytes": 4390
     },
     "@deepseek-ai/cosmokit": {
       "file": "modules/deepseek-ai__cosmokit.mjs",
@@ -58,143 +73,271 @@
     },
     "@deepseek-ai/dsh-agent": {
       "file": "modules/deepseek-ai__dsh-agent.mjs",
-      "bytes": 96087
+      "bytes": 21884
+    },
+    "@deepseek-ai/dsh-agent-instructions": {
+      "file": "modules/deepseek-ai__dsh-agent-instructions.mjs",
+      "bytes": 43857
     },
     "@deepseek-ai/dsh-agent-loop": {
       "file": "modules/deepseek-ai__dsh-agent-loop.mjs",
-      "bytes": 326976
+      "bytes": 68853
     },
-    "@deepseek-ai/dsh-agent-spine-demo": {
-      "file": "modules/deepseek-ai__dsh-agent-spine-demo.mjs",
-      "bytes": 708017
+    "@deepseek-ai/dsh-agent-loop/invariant": {
+      "file": "modules/deepseek-ai__dsh-agent-loop__invariant.mjs",
+      "bytes": 2125
+    },
+    "@deepseek-ai/dsh-agent/invariant": {
+      "file": "modules/deepseek-ai__dsh-agent__invariant.mjs",
+      "bytes": 574
+    },
+    "@deepseek-ai/dsh-anonymous-user-id": {
+      "file": "modules/deepseek-ai__dsh-anonymous-user-id.mjs",
+      "bytes": 1500
+    },
+    "@deepseek-ai/dsh-atomic-write": {
+      "file": "modules/deepseek-ai__dsh-atomic-write.mjs",
+      "bytes": 2926
+    },
+    "@deepseek-ai/dsh-attachment": {
+      "file": "modules/deepseek-ai__dsh-attachment.mjs",
+      "bytes": 10897
     },
     "@deepseek-ai/dsh-bash-local": {
       "file": "modules/deepseek-ai__dsh-bash-local.mjs",
-      "bytes": 130089
+      "bytes": 13201
+    },
+    "@deepseek-ai/dsh-brand": {
+      "file": "modules/deepseek-ai__dsh-brand.mjs",
+      "bytes": 182
+    },
+    "@deepseek-ai/dsh-compaction-image-offload/projection": {
+      "file": "modules/deepseek-ai__dsh-compaction-image-offload__projection.mjs",
+      "bytes": 3369
     },
     "@deepseek-ai/dsh-credentials": {
       "file": "modules/deepseek-ai__dsh-credentials.mjs",
-      "bytes": 71803
+      "bytes": 3594
     },
     "@deepseek-ai/dsh-fs": {
       "file": "modules/deepseek-ai__dsh-fs.mjs",
-      "bytes": 97402
+      "bytes": 1776
     },
     "@deepseek-ai/dsh-fs-local": {
       "file": "modules/deepseek-ai__dsh-fs-local.mjs",
-      "bytes": 124179
+      "bytes": 28373
+    },
+    "@deepseek-ai/dsh-home-paths": {
+      "file": "modules/deepseek-ai__dsh-home-paths.mjs",
+      "bytes": 1972
+    },
+    "@deepseek-ai/dsh-http-proxy": {
+      "file": "modules/deepseek-ai__dsh-http-proxy.mjs",
+      "bytes": 10034
+    },
+    "@deepseek-ai/dsh-invariants": {
+      "file": "modules/deepseek-ai__dsh-invariants.mjs",
+      "bytes": 4668
+    },
+    "@deepseek-ai/dsh-jobs": {
+      "file": "modules/deepseek-ai__dsh-jobs.mjs",
+      "bytes": 476
+    },
+    "@deepseek-ai/dsh-jobs-local": {
+      "file": "modules/deepseek-ai__dsh-jobs-local.mjs",
+      "bytes": 18067
+    },
+    "@deepseek-ai/dsh-launch-environment": {
+      "file": "modules/deepseek-ai__dsh-launch-environment.mjs",
+      "bytes": 1590
     },
     "@deepseek-ai/dsh-llm": {
       "file": "modules/deepseek-ai__dsh-llm.mjs",
-      "bytes": 148326
+      "bytes": 79626
     },
     "@deepseek-ai/dsh-llm-deepseek": {
       "file": "modules/deepseek-ai__dsh-llm-deepseek.mjs",
-      "bytes": 210629
+      "bytes": 116787
     },
     "@deepseek-ai/dsh-llm-pi-ai": {
       "file": "modules/deepseek-ai__dsh-llm-pi-ai.mjs",
-      "bytes": 204858
+      "bytes": 77533
     },
     "@deepseek-ai/dsh-llm-retry": {
       "file": "modules/deepseek-ai__dsh-llm-retry.mjs",
-      "bytes": 36459
+      "bytes": 6143
+    },
+    "@deepseek-ai/dsh-output-retention": {
+      "file": "modules/deepseek-ai__dsh-output-retention.mjs",
+      "bytes": 6665
     },
     "@deepseek-ai/dsh-sandbox": {
       "file": "modules/deepseek-ai__dsh-sandbox.mjs",
-      "bytes": 100383
+      "bytes": 6179
     },
     "@deepseek-ai/dsh-scope": {
       "file": "modules/deepseek-ai__dsh-scope.mjs",
-      "bytes": 72913
+      "bytes": 8197
+    },
+    "@deepseek-ai/dsh-scope/invariant": {
+      "file": "modules/deepseek-ai__dsh-scope__invariant.mjs",
+      "bytes": 2446
     },
     "@deepseek-ai/dsh-session": {
       "file": "modules/deepseek-ai__dsh-session.mjs",
-      "bytes": 163074
+      "bytes": 66954
     },
     "@deepseek-ai/dsh-session-checkpoint-policy": {
       "file": "modules/deepseek-ai__dsh-session-checkpoint-policy.mjs",
-      "bytes": 226044
+      "bytes": 1431
+    },
+    "@deepseek-ai/dsh-session-format": {
+      "file": "modules/deepseek-ai__dsh-session-format.mjs",
+      "bytes": 18539
+    },
+    "@deepseek-ai/dsh-session-format-catalog": {
+      "file": "modules/deepseek-ai__dsh-session-format-catalog.mjs",
+      "bytes": 2505
+    },
+    "@deepseek-ai/dsh-session-format-catalog/message-projections": {
+      "file": "modules/deepseek-ai__dsh-session-format-catalog__message-projections.mjs",
+      "bytes": 292
+    },
+    "@deepseek-ai/dsh-session-format-v0-to-v1": {
+      "file": "modules/deepseek-ai__dsh-session-format-v0-to-v1.mjs",
+      "bytes": 106356
+    },
+    "@deepseek-ai/dsh-session-format-v1-to-v2": {
+      "file": "modules/deepseek-ai__dsh-session-format-v1-to-v2.mjs",
+      "bytes": 33488
+    },
+    "@deepseek-ai/dsh-session-format-v2-to-v3": {
+      "file": "modules/deepseek-ai__dsh-session-format-v2-to-v3.mjs",
+      "bytes": 33824
     },
     "@deepseek-ai/dsh-session-persistence": {
       "file": "modules/deepseek-ai__dsh-session-persistence.mjs",
-      "bytes": 162345
+      "bytes": 6697
     },
     "@deepseek-ai/dsh-session-persistence-jsonl": {
       "file": "modules/deepseek-ai__dsh-session-persistence-jsonl.mjs",
-      "bytes": 218945
+      "bytes": 117727
+    },
+    "@deepseek-ai/dsh-session-projection": {
+      "file": "modules/deepseek-ai__dsh-session-projection.mjs",
+      "bytes": 18517
+    },
+    "@deepseek-ai/dsh-session-title": {
+      "file": "modules/deepseek-ai__dsh-session-title.mjs",
+      "bytes": 24873
+    },
+    "@deepseek-ai/dsh-session/invariant": {
+      "file": "modules/deepseek-ai__dsh-session__invariant.mjs",
+      "bytes": 6153
     },
     "@deepseek-ai/dsh-settings": {
       "file": "modules/deepseek-ai__dsh-settings.mjs",
-      "bytes": 90926
+      "bytes": 23065
+    },
+    "@deepseek-ai/dsh-shell": {
+      "file": "modules/deepseek-ai__dsh-shell.mjs",
+      "bytes": 1042
+    },
+    "@deepseek-ai/dsh-shell-env": {
+      "file": "modules/deepseek-ai__dsh-shell-env.mjs",
+      "bytes": 4685
     },
     "@deepseek-ai/dsh-skill": {
       "file": "modules/deepseek-ai__dsh-skill.mjs",
-      "bytes": 123044
+      "bytes": 21747
     },
     "@deepseek-ai/dsh-skill-filesystem": {
       "file": "modules/deepseek-ai__dsh-skill-filesystem.mjs",
-      "bytes": 151477
+      "bytes": 28946
     },
     "@deepseek-ai/dsh-subprocess": {
       "file": "modules/deepseek-ai__dsh-subprocess.mjs",
-      "bytes": 68953
+      "bytes": 1248
     },
     "@deepseek-ai/dsh-system-prompt": {
       "file": "modules/deepseek-ai__dsh-system-prompt.mjs",
-      "bytes": 113134
+      "bytes": 14750
+    },
+    "@deepseek-ai/dsh-timeout": {
+      "file": "modules/deepseek-ai__dsh-timeout.mjs",
+      "bytes": 2883
     },
     "@deepseek-ai/dsh-tool-bash": {
       "file": "modules/deepseek-ai__dsh-tool-bash.mjs",
-      "bytes": 265920
+      "bytes": 16592
     },
     "@deepseek-ai/dsh-tool-fs": {
       "file": "modules/deepseek-ai__dsh-tool-fs.mjs",
-      "bytes": 263510
+      "bytes": 37648
+    },
+    "@deepseek-ai/dsh-tool-jobs": {
+      "file": "modules/deepseek-ai__dsh-tool-jobs.mjs",
+      "bytes": 12268
     },
     "@deepseek-ai/dsh-tool-skill": {
       "file": "modules/deepseek-ai__dsh-tool-skill.mjs",
-      "bytes": 258163
+      "bytes": 12566
     },
     "@deepseek-ai/dsh-tool-str-replace-editor": {
       "file": "modules/deepseek-ai__dsh-tool-str-replace-editor.mjs",
-      "bytes": 241247
+      "bytes": 17316
     },
     "@deepseek-ai/dsh-tool-todo": {
       "file": "modules/deepseek-ai__dsh-tool-todo.mjs",
-      "bytes": 230593
+      "bytes": 5880
     },
     "@deepseek-ai/dsh-tool-web": {
       "file": "modules/deepseek-ai__dsh-tool-web.mjs",
-      "bytes": 244991
+      "bytes": 22159
     },
     "@deepseek-ai/dsh-tools": {
       "file": "modules/deepseek-ai__dsh-tools.mjs",
-      "bytes": 223573
+      "bytes": 121455
+    },
+    "@deepseek-ai/dsh-typert-protocol": {
+      "file": "modules/deepseek-ai__dsh-typert-protocol.mjs",
+      "bytes": 6709
+    },
+    "@deepseek-ai/dsh-util-crypto": {
+      "file": "modules/deepseek-ai__dsh-util-crypto.mjs",
+      "bytes": 706
+    },
+    "@deepseek-ai/dsh-util-values": {
+      "file": "modules/deepseek-ai__dsh-util-values.mjs",
+      "bytes": 8161
+    },
+    "@deepseek-ai/node-addon-system/flock": {
+      "file": "modules/deepseek-ai__node-addon-system__flock.mjs",
+      "bytes": 1308
     },
     "@deepseek-ai/schemastery": {
       "file": "modules/deepseek-ai__schemastery.mjs",
-      "bytes": 30476
-    },
-    "@earendil-works/pi-ai": {
-      "file": "modules/earendil-works__pi-ai.mjs",
-      "bytes": 66950
+      "bytes": 22051
     },
     "@earendil-works/pi-ai/api/anthropic-messages.lazy": {
       "file": "modules/earendil-works__pi-ai__api__anthropic-messages.lazy.mjs",
-      "bytes": 66868
+      "bytes": 79714
     },
     "@earendil-works/pi-ai/api/openai-completions.lazy": {
       "file": "modules/earendil-works__pi-ai__api__openai-completions.lazy.mjs",
-      "bytes": 82970
+      "bytes": 95848
     },
     "@earendil-works/pi-ai/api/openai-responses.lazy": {
       "file": "modules/earendil-works__pi-ai__api__openai-responses.lazy.mjs",
-      "bytes": 73328
+      "bytes": 83167
     },
     "@earendil-works/pi-ai/providers/all": {
       "file": "modules/earendil-works__pi-ai__providers__all.mjs",
-      "bytes": 865267
+      "bytes": 1059854
+    },
+    "@earendil-works/pi-ai/utils/overflow": {
+      "file": "modules/earendil-works__pi-ai__utils__overflow.mjs",
+      "bytes": 3344
     },
     "@google/genai": {
       "file": "modules/google__genai.mjs",
@@ -204,21 +347,13 @@
       "file": "modules/joplin__turndown-plugin-gfm.mjs",
       "bytes": 13741
     },
-    "@mistralai/mistralai": {
-      "file": "modules/mistralai__mistralai.mjs",
-      "bytes": 1340409
-    },
     "@mixmark-io/domino": {
       "file": "modules/mixmark-io__domino.mjs",
       "bytes": 533778
     },
-    "@opentelemetry/api": {
-      "file": "modules/opentelemetry__api.mjs",
-      "bytes": 46866
-    },
-    "@opentelemetry/semantic-conventions/incubating": {
-      "file": "modules/opentelemetry__semantic-conventions__incubating.mjs",
-      "bytes": 239452
+    "@stablelib/base64": {
+      "file": "modules/stablelib__base64.mjs",
+      "bytes": 8351
     },
     "chokidar": {
       "file": "modules/chokidar.mjs",
@@ -232,6 +367,10 @@
       "file": "modules/eventsource-parser__stream.mjs",
       "bytes": 8686
     },
+    "fast-sha256": {
+      "file": "modules/fast-sha256.mjs",
+      "bytes": 13829
+    },
     "koffi": {
       "file": "modules/koffi.mjs",
       "bytes": 529,
@@ -239,7 +378,7 @@
     },
     "openai": {
       "file": "modules/openai.mjs",
-      "bytes": 263545
+      "bytes": 342882
     },
     "p-retry": {
       "file": "modules/p-retry.mjs",
@@ -257,45 +396,32 @@
       "file": "modules/retry.mjs",
       "bytes": 7677
     },
+    "standardwebhooks": {
+      "file": "modules/standardwebhooks.mjs",
+      "bytes": 7068
+    },
     "turndown": {
       "file": "modules/turndown.mjs",
       "bytes": 21429
     },
-    "typebox": {
-      "file": "modules/typebox.mjs",
-      "bytes": 222881
-    },
-    "typebox/compile": {
-      "file": "modules/typebox__compile.mjs",
-      "bytes": 360615
-    },
-    "typebox/value": {
-      "file": "modules/typebox__value.mjs",
-      "bytes": 329940
+    "undici": {
+      "file": "modules/undici.mjs",
+      "bytes": 586,
+      "refused": "Node's socket-level HTTP stack; this runtime's HTTP is fetch, and a proxy is the host's to configure"
     },
     "yaml": {
       "file": "modules/yaml.mjs",
-      "bytes": 267931
+      "bytes": 267976
     },
     "zod": {
       "file": "modules/zod.mjs",
       "bytes": 548552
-    },
-    "zod-to-json-schema": {
-      "file": "modules/zod-to-json-schema.mjs",
-      "bytes": 45798
-    },
-    "zod/v3": {
-      "file": "modules/zod__v3.mjs",
-      "bytes": 123707
-    },
-    "zod/v4": {
-      "file": "modules/zod__v4.mjs",
-      "bytes": 548673
-    },
-    "zod/v4/core": {
-      "file": "modules/zod__v4__core.mjs",
-      "bytes": 464704
+    }
+  },
+  "assets": {
+    "modules/deepseek-ai__dsh-session-persistence-jsonl/worker.cjs": {
+      "bytes": 473998,
+      "of": "deepseek-ai__dsh-session-persistence-jsonl"
     }
   }
 }

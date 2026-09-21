@@ -84,11 +84,11 @@ because there is no gap for one to cross.
 
 | | |
 |---|---|
-| Cold boot (parse and mount the default composition) | **0.37 s** |
-| Go heap after boot | **58 MB** |
+| Cold boot (parse and mount the default composition) | **0.36 s** |
+| Go heap after boot | **48 MB** |
 | One text turn | **3.2 s** |
 | One tool-using turn (read a file, edit it, verify) | **4.2 s**, 3 tool calls |
-| Harness compiled into the binary | 12.5 MB across 64 modules |
+| Harness compiled into the binary | 5.7 MB across 89 modules |
 
 (`go test -run TestBootCost -v ./internal/runtime`. Measure it on an idle
 machine: the first numbers recorded here were four times worse, taken while a
@@ -155,7 +155,7 @@ proxy, a local server — with `BaseURL`, `APIKey` and that endpoint's model id:
 h, err := sdk.Open(ctx, sdk.Config{
     BaseURL: "https://openrouter.ai/api/v1",
     APIKey:  os.Getenv("OPENROUTER_API_KEY"),
-    Model:   "deepseek/deepseek-v4-flash-0731",   // the gateway's id for it
+    Model:   "deepseek/deepseek-v4.1-flash",   // the gateway's id for it
     CWD:     workdir,
 })
 ```
@@ -373,7 +373,7 @@ func main() {
 		// "deepseek-v4-flash" as the model.
 		BaseURL: "https://openrouter.ai/api/v1",
 		APIKey:  os.Getenv("OPENROUTER_API_KEY"),
-		Model:   "deepseek/deepseek-v4-flash-0731",
+		Model:   "deepseek/deepseek-v4.1-flash",
 
 		// Where the agent works, and the fence its tools cannot reach outside.
 		CWD: workdir,
@@ -556,7 +556,7 @@ func main() {
 	h, err := sdk.Open(ctx, sdk.Config{
 		BaseURL: "https://openrouter.ai/api/v1",
 		APIKey:  os.Getenv("OPENROUTER_API_KEY"),
-		Model:   "deepseek/deepseek-v4-flash-0731",
+		Model:   "deepseek/deepseek-v4.1-flash",
 		CWD:     workdir,
 		Plugins: []sdk.Plugin{policy(func(name, verdict string) {
 			fmt.Fprintf(os.Stderr, "[policy] %-8s %s\n", name, verdict)
@@ -766,7 +766,7 @@ needs node, pnpm and git; using it needs none of them.
 
 ```bash
 make update                                   # fetch upstream, build, regenerate, test
-make update HARNESS_REF=dsh-v0.1.1-rc.3       # move to another revision
+make update HARNESS_REF=dsh-v0.1.6-alpha.3    # move to another revision
 make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
 make show                                     # what the committed bundle was built from
 make upstream-check                           # how far upstream has moved since the pin
@@ -780,7 +780,7 @@ during a plugin mount.
 ### The pin
 
 `UPSTREAM.lock.json` records which upstream revision this repository ships, the
-33 bundled packages at their versions, and what is deliberately refused. The
+44 bundled entries at their versions, and what is deliberately refused. The
 generated manifest records the same revision, but it is generated: it changes
 whenever the bundler runs and proves only that it ran. The lockfile is written
 by hand, so a diff in it is somebody deciding to move the pin, with the reason
@@ -796,13 +796,18 @@ and a gate you cannot satisfy is a gate people learn to skip.
 
 ## Status
 
-The harness is a developer preview at `0.1.1-rc.2` whose session format is still
-version zero, and upstream says breaking changes will happen. The bundle is
-pinned by tag, and `sdk.HarnessVersion()` reports which one you have.
+The harness is a developer preview at `0.1.6-alpha.2`, and upstream says
+breaking changes will happen. Its session format is version 3; a log written
+by an older release (format 0, before go-deepseek 0.4.0) is migrated the first
+time it is resumed, and the original is left beside it. The bundle is pinned by
+tag, and `sdk.HarnessVersion()` reports which one you have.
 
 Not everything upstream ships is bundled. Excluded, with the reason recorded in
-the manifest: anything needing `node:sqlite`, native image processing, worker
-threads, `node:vm`, or a pseudo-terminal. `sdk.Plugins()` lists what is there,
+the manifest: anything needing `node:sqlite`, native image processing,
+`node:vm`, a pseudo-terminal, native FFI, or a socket-level HTTP stack. Two
+native paths are served by the host instead: the session write lock is
+flock(2) from Go, and a `worker_threads` Worker runs its script on the one
+event loop (session migration verifies in one). `sdk.Plugins()` lists what is there,
 and a capability none of them covers can be written in Go instead of bundled —
 see "Giving the agent your own tools".
 

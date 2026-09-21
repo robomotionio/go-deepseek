@@ -1,3 +1,4 @@
+import "node:fs";
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
@@ -19,10 +20,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
 var EventStream, AssistantMessageEventStream;
 var init_event_stream = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
     EventStream = class {
       queue = [];
       waiting = [];
@@ -95,7 +96,7 @@ var init_event_stream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
 function createSetupErrorMessage(model, error) {
   return {
     role: "assistant",
@@ -134,19 +135,45 @@ function lazyStream(model, setup) {
   });
   return outer;
 }
-function lazyApi(load) {
-  return {
+function lazyApi(load, capabilities) {
+  const api = {
     stream: (model, context, options) => lazyStream(model, async () => (await load()).stream(model, context, options)),
     streamSimple: (model, context, options) => lazyStream(model, async () => (await load()).streamSimple(model, context, options))
   };
+  if (capabilities?.fetchDeferred) {
+    api.fetchDeferred = (model, handle, options) => lazyStream(model, async () => {
+      const implementation = await load();
+      if (!implementation.fetchDeferred)
+        throw new Error("API does not support deferred responses");
+      return implementation.fetchDeferred(model, handle, options);
+    });
+  }
+  if (capabilities?.cancelDeferred) {
+    api.cancelDeferred = async (model, handle, options) => {
+      const implementation = await load();
+      if (!implementation.cancelDeferred)
+        throw new Error("API cannot cancel deferred responses");
+      await implementation.cancelDeferred(model, handle, options);
+    };
+  }
+  return api;
 }
 var init_lazy = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
     init_event_stream();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js
+function appendAssistantMessageDiagnostic(message, diagnostic) {
+  message.diagnostics = [...message.diagnostics ?? [], diagnostic];
+}
+var init_diagnostics = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js"() {
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
 function calculateCost(model, usage) {
   const inputTokens = usage.input + usage.cacheRead + usage.cacheWrite;
   let rates = model.cost;
@@ -167,11 +194,11 @@ function calculateCost(model, usage) {
   return usage.cost;
 }
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js
 function splitDeferredTools(context, enabled, normalizeName = identityToolName) {
   const uniqueTools = /* @__PURE__ */ new Map();
   for (const tool of context.tools ?? [])
@@ -206,12 +233,12 @@ function splitDeferredTools(context, enabled, normalizeName = identityToolName) 
 }
 var identityToolName;
 var init_deferred_tools = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js"() {
     identityToolName = (name) => name;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
 function headersToRecord(headers) {
   const result = {};
   for (const [key, value] of headers.entries()) {
@@ -220,11 +247,11 @@ function headersToRecord(headers) {
   return result;
 }
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
 import { parse as partialParse } from "partial-json";
 function isControlCharacter(char) {
   const codePoint = char.codePointAt(0);
@@ -322,12 +349,29 @@ function parseStreamingJson(partialJson) {
 }
 var VALID_JSON_ESCAPES;
 var init_json_parse = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
     VALID_JSON_ESCAPES = /* @__PURE__ */ new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
+function loadNodeOs() {
+  if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
+    return null;
+  }
+  return process.getBuiltinModule?.("node:os") ?? null;
+}
+function getPiUserAgent() {
+  return nodeOs ? `pi (${nodeOs.platform()} ${nodeOs.release()}; ${nodeOs.arch()})` : "pi (browser)";
+}
+var nodeOs;
+var init_pi_user_agent = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
+    nodeOs = loadNodeOs();
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
 function getBunSandboxEnvValue(name) {
   if (typeof process === "undefined" || !process.versions?.bun || Object.keys(process.env).length > 0) {
     return void 0;
@@ -353,12 +397,12 @@ function getProviderEnvValue(name, env) {
 }
 var procEnvCache;
 var init_provider_env = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
     procEnvCache = null;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
 function isProviderError(error) {
   if (!(error instanceof Error) || !("status" in error) || !("headers" in error))
     return false;
@@ -438,40 +482,157 @@ async function retryProviderRequest(request, options = {}) {
 }
 var DEFAULT_MAX_RETRY_DELAY_MS;
 var init_provider_retry = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
     DEFAULT_MAX_RETRY_DELAY_MS = 6e4;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
 function sanitizeSurrogates(text) {
   return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 var init_sanitize_unicode = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+function isJsonSchemaObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function isStructuredSchema(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  const types = typeof schema.type === "string" ? [schema.type] : Array.isArray(schema.type) ? schema.type : [];
+  return types.includes("object") || types.includes("array") || schema.properties !== void 0 || schema.items !== void 0;
+}
+function schemaAllowsNull(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  if (schema.type === "null" || Array.isArray(schema.type) && schema.type.includes("null"))
+    return true;
+  if (schema.const === null || Array.isArray(schema.enum) && schema.enum.includes(null))
+    return true;
+  return Array.isArray(schema.anyOf) && schema.anyOf.some((variant) => schemaAllowsNull(variant));
+}
+function makeJsonSchemaNodeStrict(schema) {
+  if (!isJsonSchemaObject(schema)) {
+    throw new UnsupportedStrictJsonSchemaError("boolean schemas are unsupported");
+  }
+  for (const key of UNSUPPORTED_STRICT_SCHEMA_KEYS) {
+    if (schema[key] !== void 0) {
+      throw new UnsupportedStrictJsonSchemaError(`${key} schemas are unsupported`);
+    }
+  }
+  if (schema.anyOf !== void 0) {
+    if (!Array.isArray(schema.anyOf) || schema.anyOf.length === 0) {
+      throw new UnsupportedStrictJsonSchemaError("anyOf must contain at least one schema");
+    }
+    for (const variant of schema.anyOf) {
+      if (isStructuredSchema(variant)) {
+        throw new UnsupportedStrictJsonSchemaError("object and array unions are unsupported");
+      }
+      makeJsonSchemaNodeStrict(variant);
+    }
+  }
+  if (schema.items !== void 0) {
+    if (Array.isArray(schema.items)) {
+      throw new UnsupportedStrictJsonSchemaError("tuple schemas are unsupported");
+    }
+    makeJsonSchemaNodeStrict(schema.items);
+  }
+  const isObjectSchema = schema.type === "object";
+  if (schema.properties !== void 0 && !isObjectSchema) {
+    throw new UnsupportedStrictJsonSchemaError("properties require type object");
+  }
+  if (!isObjectSchema)
+    return;
+  if (schema.additionalProperties !== void 0 && schema.additionalProperties !== false) {
+    throw new UnsupportedStrictJsonSchemaError("schema-valued or true additionalProperties is unsupported");
+  }
+  if (schema.properties !== void 0 && !isJsonSchemaObject(schema.properties)) {
+    throw new UnsupportedStrictJsonSchemaError("object properties must be a schema map");
+  }
+  if (schema.required !== void 0 && (!Array.isArray(schema.required) || schema.required.some((key) => typeof key !== "string"))) {
+    throw new UnsupportedStrictJsonSchemaError("object required must be a string array");
+  }
+  const properties = schema.properties ?? {};
+  const propertyNames = Object.keys(properties);
+  const required = new Set(Array.isArray(schema.required) ? schema.required : []);
+  if ([...required].some((key) => !propertyNames.includes(key))) {
+    throw new UnsupportedStrictJsonSchemaError("required contains an unknown property");
+  }
+  for (const [key, property] of Object.entries(properties)) {
+    makeJsonSchemaNodeStrict(property);
+    if (!required.has(key) && !schemaAllowsNull(property)) {
+      properties[key] = { anyOf: [property, { type: "null" }] };
+    }
+  }
+  schema.required = propertyNames;
+  schema.additionalProperties = false;
+}
+function makeStrictJsonSchema(schema) {
+  const cloned = structuredClone(schema);
+  if (!isJsonSchemaObject(cloned)) {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  makeJsonSchemaNodeStrict(cloned);
+  if (cloned.type !== "object") {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  return cloned;
+}
+function getJsonSchemaToolParameters(tool, strict) {
+  return strict === true ? makeStrictJsonSchema(tool.parameters) : tool.parameters;
+}
 function resolveJsonSchemaStrictSampling(tool, supportsStrictMode) {
   const config = tool.constrainedSampling;
-  if (!config || config.type !== "json_schema") {
+  if (!config || config.type !== "json_schema")
     return void 0;
-  }
   if (supportsStrictMode) {
-    return true;
+    try {
+      makeStrictJsonSchema(tool.parameters);
+      return true;
+    } catch (error) {
+      if (!(error instanceof UnsupportedStrictJsonSchemaError))
+        throw error;
+      if (config.strict !== "require")
+        return void 0;
+      throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but ${error.message}.`);
+    }
   }
   if (config.strict === "require") {
     throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but strict tools are unsupported.`);
   }
   return void 0;
 }
+var UnsupportedStrictJsonSchemaError, UNSUPPORTED_STRICT_SCHEMA_KEYS;
 var init_constrained_sampling = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+    UnsupportedStrictJsonSchemaError = class extends Error {
+    };
+    UNSUPPORTED_STRICT_SCHEMA_KEYS = [
+      "$ref",
+      "$defs",
+      "definitions",
+      "allOf",
+      "oneOf",
+      "patternProperties",
+      "dependentSchemas",
+      "dependencies",
+      "unevaluatedProperties",
+      "propertyNames",
+      "contains",
+      "prefixItems",
+      "not",
+      "if",
+      "then",
+      "else"
+    ];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
 function inferCopilotInitiator(messages) {
   const last = messages[messages.length - 1];
   return last && last.role !== "user" ? "agent" : "user";
@@ -498,11 +659,11 @@ function buildCopilotDynamicHeaders(params) {
   return headers;
 }
 var init_github_copilot_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
 function calculateContextTokens(usage) {
   return usage.totalTokens || usage.input + usage.output + usage.cacheRead + usage.cacheWrite;
 }
@@ -607,13 +768,13 @@ function estimateContextTokens(context) {
 }
 var CHARS_PER_TOKEN, ESTIMATED_IMAGE_CHARS;
 var init_estimate = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
     CHARS_PER_TOKEN = 4;
     ESTIMATED_IMAGE_CHARS = 4800;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
 function clampMaxTokensToContext(model, context, maxTokens) {
   if (model.contextWindow <= 0)
     return Math.max(MIN_MAX_TOKENS, maxTokens);
@@ -621,11 +782,15 @@ function clampMaxTokensToContext(model, context, maxTokens) {
   return Math.min(maxTokens, Math.max(MIN_MAX_TOKENS, available));
 }
 function buildBaseOptions(model, context, options, apiKey) {
+  const samplingParams = model.samplingParams || options?.samplingParams ? { ...model.samplingParams, ...options?.samplingParams } : void 0;
   return {
     temperature: options?.temperature,
+    samplingParams,
     maxTokens: clampMaxTokensToContext(model, context, options?.maxTokens ?? model.maxTokens),
     signal: options?.signal,
+    telemetryContext: options?.telemetryContext,
     apiKey: apiKey || options?.apiKey,
+    fetch: options?.fetch,
     transport: options?.transport,
     cacheRetention: options?.cacheRetention,
     sessionId: options?.sessionId,
@@ -643,33 +808,39 @@ function buildBaseOptions(model, context, options, apiKey) {
 function clampReasoning(effort) {
   return effort === "xhigh" || effort === "max" ? "high" : effort;
 }
-function adjustMaxTokensForThinking(baseMaxTokens, modelMaxTokens, reasoningLevel, customBudgets) {
-  const defaultBudgets = {
-    minimal: 1024,
-    low: 2048,
-    medium: 8192,
-    high: 16384
-  };
-  const budgets = { ...defaultBudgets, ...customBudgets };
-  const minOutputTokens = 1024;
+function thinkingBudgetForLevel(reasoningLevel, customBudgets) {
+  const budgets = { ...DEFAULT_THINKING_BUDGETS, ...customBudgets };
   const level = clampReasoning(reasoningLevel);
-  let thinkingBudget = budgets[level];
+  return budgets[level];
+}
+function clampThinkingBudgetToAnswerRoom(thinkingBudget, ceiling) {
+  return Math.min(thinkingBudget, Math.max(0, ceiling - MIN_ANSWER_TOKENS));
+}
+function adjustMaxTokensForThinking(baseMaxTokens, modelMaxTokens, reasoningLevel, customBudgets) {
+  let thinkingBudget = thinkingBudgetForLevel(reasoningLevel, customBudgets);
   const maxTokens = baseMaxTokens === void 0 ? modelMaxTokens : Math.min(baseMaxTokens + thinkingBudget, modelMaxTokens);
   if (maxTokens <= thinkingBudget) {
-    thinkingBudget = Math.max(0, maxTokens - minOutputTokens);
+    thinkingBudget = clampThinkingBudgetToAnswerRoom(thinkingBudget, maxTokens);
   }
   return { maxTokens, thinkingBudget };
 }
-var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS;
+var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS, MIN_ANSWER_TOKENS, DEFAULT_THINKING_BUDGETS;
 var init_simple_options = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
     init_estimate();
     CONTEXT_SAFETY_TOKENS = 4096;
     MIN_MAX_TOKENS = 1;
+    MIN_ANSWER_TOKENS = 1024;
+    DEFAULT_THINKING_BUDGETS = {
+      minimal: 1024,
+      low: 2048,
+      medium: 8192,
+      high: 16384
+    };
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
 function replaceImagesWithPlaceholder(content, placeholder) {
   const result = [];
   let previousWasPlaceholder = false;
@@ -823,13 +994,13 @@ function transformMessages(messages, model, normalizeToolCallId2) {
 }
 var NON_VISION_USER_IMAGE_PLACEHOLDER, NON_VISION_TOOL_IMAGE_PLACEHOLDER;
 var init_transform_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
     NON_VISION_USER_IMAGE_PLACEHOLDER = "(image omitted: model does not support images)";
     NON_VISION_TOOL_IMAGE_PLACEHOLDER = "(tool image omitted: model does not support images)";
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js
 var anthropic_messages_exports = {};
 __export(anthropic_messages_exports, {
   stream: () => stream,
@@ -886,6 +1057,9 @@ function convertContentBlocks(content) {
   }
   return blocks;
 }
+function shouldUseServerSideFallbackBeta(model) {
+  return (model.compat?.allowedFallbackModels?.length ?? 0) > 0;
+}
 function getAnthropicCompat(model) {
   return {
     supportsEagerToolInputStreaming: model.compat?.supportsEagerToolInputStreaming ?? true,
@@ -916,6 +1090,9 @@ function mergeHeaders(...headerSources) {
     }
   }
   return merged;
+}
+function mergeClientHeaders(...headerSources) {
+  return mergeHeaders({ "User-Agent": getPiUserAgent() }, ...headerSources);
 }
 function hasHeader(headers, name) {
   if (!headers)
@@ -1093,25 +1270,17 @@ function mapThinkingLevelToEffort(model, level) {
 function isOAuthToken(apiKey) {
   return apiKey.includes("sk-ant-oat");
 }
-function createClient(model, apiKey, interleavedThinking, useFineGrainedToolStreamingBeta, optionsHeaders, dynamicHeaders, sessionId) {
-  const needsInterleavedBeta = interleavedThinking && model.compat?.forceAdaptiveThinking !== true;
-  const betaFeatures = [];
-  if (useFineGrainedToolStreamingBeta) {
-    betaFeatures.push(FINE_GRAINED_TOOL_STREAMING_BETA);
-  }
-  if (needsInterleavedBeta) {
-    betaFeatures.push(INTERLEAVED_THINKING_BETA);
-  }
+function createClient(model, apiKey, optionsHeaders, fetch, dynamicHeaders, sessionId) {
   if (model.provider === "github-copilot") {
     const client2 = new Anthropic({
       apiKey: null,
       authToken: apiKey ?? null,
       baseURL: model.baseUrl,
       dangerouslyAllowBrowser: true,
-      defaultHeaders: mergeHeaders({
+      fetch,
+      defaultHeaders: mergeClientHeaders({
         accept: "application/json",
-        "anthropic-dangerous-direct-browser-access": "true",
-        ...betaFeatures.length > 0 ? { "anthropic-beta": betaFeatures.join(",") } : {}
+        "anthropic-dangerous-direct-browser-access": "true"
       }, model.headers, dynamicHeaders, optionsHeaders)
     });
     return { client: client2, isOAuthToken: false };
@@ -1122,10 +1291,10 @@ function createClient(model, apiKey, interleavedThinking, useFineGrainedToolStre
       authToken: apiKey,
       baseURL: model.baseUrl,
       dangerouslyAllowBrowser: true,
-      defaultHeaders: mergeHeaders({
+      fetch,
+      defaultHeaders: mergeClientHeaders({
         accept: "application/json",
         "anthropic-dangerous-direct-browser-access": "true",
-        "anthropic-beta": ["claude-code-20250219", "oauth-2025-04-20", ...betaFeatures].join(","),
         "user-agent": `claude-cli/${claudeCodeVersion}`,
         "x-app": "cli"
       }, model.headers, optionsHeaders)
@@ -1133,19 +1302,49 @@ function createClient(model, apiKey, interleavedThinking, useFineGrainedToolStre
     return { client: client2, isOAuthToken: true };
   }
   const sessionAffinityHeaders = sessionId && getAnthropicCompat(model).sendSessionAffinityHeaders ? { "x-session-affinity": sessionId } : {};
-  const defaultHeaders = mergeHeaders({
+  const defaultHeaders = mergeClientHeaders({
     accept: "application/json",
-    "anthropic-dangerous-direct-browser-access": "true",
-    ...betaFeatures.length > 0 ? { "anthropic-beta": betaFeatures.join(",") } : {}
+    "anthropic-dangerous-direct-browser-access": "true"
   }, sessionAffinityHeaders, model.headers, optionsHeaders);
   const client = new Anthropic({
     apiKey: apiKey ?? null,
     authToken: null,
     baseURL: model.baseUrl,
     dangerouslyAllowBrowser: true,
+    fetch,
     defaultHeaders
   });
   return { client, isOAuthToken: false };
+}
+function getBetaFeatures(model, context, isOAuthToken2, options) {
+  let configuredFeatures;
+  for (const headers of [model.headers, options?.headers]) {
+    for (const [name, value] of Object.entries(headers ?? {})) {
+      if (name.toLowerCase() === "anthropic-beta")
+        configuredFeatures = value;
+    }
+  }
+  if (configuredFeatures === null)
+    return [];
+  if (configuredFeatures !== void 0) {
+    return [
+      ...new Set(configuredFeatures.split(",").map((feature) => feature.trim()).filter((feature) => feature.length > 0))
+    ];
+  }
+  const features = [];
+  if (isOAuthToken2)
+    features.push("claude-code-20250219", "oauth-2025-04-20");
+  if (shouldUseFineGrainedToolStreamingBeta(model, context))
+    features.push(FINE_GRAINED_TOOL_STREAMING_BETA);
+  if (model.reasoning && options?.thinkingEnabled === true && (options.interleavedThinking ?? true) && model.compat?.forceAdaptiveThinking !== true) {
+    features.push(INTERLEAVED_THINKING_BETA);
+  }
+  if (shouldUseServerSideFallbackBeta(model))
+    features.push(SERVER_SIDE_FALLBACK_BETA);
+  if (model.compat?.supportsMidConvoEffort === true) {
+    features.push(MID_CONVERSATION_OUTPUT_CONFIG_BETA, THINKING_BINDING_CONTROLS_BETA);
+  }
+  return [...new Set(features)];
 }
 function buildParams(model, context, isOAuthToken2, options) {
   const { cacheControl } = getCacheControl(model, options?.cacheRetention, options?.env);
@@ -1160,11 +1359,15 @@ function buildParams(model, context, isOAuthToken2, options) {
     deferredTools = [];
   }
   const deferredToolNames = new Set(deferredTools.map((tool) => normalizeToolName(tool.name)));
+  const converted = convertMessages(transformedMessages, isOAuthToken2, cacheControl, compat.allowEmptySignature, deferredToolNames, normalizeToolName, model.compat?.supportsMidConvoEffort === true ? model.provider : void 0);
+  const activeEffort = options?.effort ?? "high";
+  const betaFeatures = getBetaFeatures(model, context, isOAuthToken2, options);
   const params = {
     model: model.id,
-    messages: convertMessages(transformedMessages, isOAuthToken2, cacheControl, compat.allowEmptySignature, deferredToolNames, normalizeToolName),
+    messages: model.compat?.supportsMidConvoEffort === true ? insertThinkingLevelMessages(converted, activeEffort) : converted.messages,
     max_tokens: options?.maxTokens ?? model.maxTokens,
-    stream: true
+    stream: true,
+    ...betaFeatures.length > 0 ? { betas: betaFeatures } : {}
   };
   if (isOAuthToken2) {
     params.system = [
@@ -1190,7 +1393,7 @@ function buildParams(model, context, isOAuthToken2, options) {
       }
     ];
   }
-  if (options?.temperature !== void 0 && !options?.thinkingEnabled && compat.supportsTemperature) {
+  if (options?.temperature !== void 0 && !options?.thinkingEnabled && model.compat?.supportsMidConvoEffort !== true && compat.supportsTemperature) {
     params.temperature = options.temperature;
   }
   if (immediateTools.length > 0 || deferredTools.length > 0) {
@@ -1199,13 +1402,20 @@ function buildParams(model, context, isOAuthToken2, options) {
       ...convertTools(deferredTools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools, void 0, true)
     ];
   }
-  if (model.reasoning) {
+  if (model.compat?.supportsMidConvoEffort === true) {
+    params.thinking = {
+      type: "adaptive",
+      display: options?.thinkingDisplay ?? "summarized",
+      block_binding: { prefix_mismatch_behavior: "drop_block" }
+    };
+    params.output_config = { effort: "high" };
+  } else if (model.reasoning) {
     if (options?.thinkingEnabled) {
       const display = options.thinkingDisplay ?? "summarized";
       if (model.compat?.forceAdaptiveThinking === true) {
         params.thinking = { type: "adaptive", display };
         if (options.effort) {
-          params.output_config = options.effort === "xhigh" ? { effort: options.effort } : { effort: options.effort };
+          params.output_config = { effort: options.effort };
         }
       } else {
         params.thinking = {
@@ -1230,6 +1440,10 @@ function buildParams(model, context, isOAuthToken2, options) {
     } else {
       params.tool_choice = options.toolChoice;
     }
+  }
+  const allowedFallbackModels = model.compat?.allowedFallbackModels;
+  if (allowedFallbackModels && allowedFallbackModels.length > 0) {
+    params.fallbacks = allowedFallbackModels.map((fallback) => ({ model: fallback.model }));
   }
   return params;
 }
@@ -1259,8 +1473,9 @@ function convertToolResult(msg, isOAuthToken2, deferredToolNames, loadedToolName
     siblingContent: references.length === 0 ? [] : typeof convertedContent === "string" ? [{ type: "text", text: convertedContent }] : convertedContent
   };
 }
-function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allowEmptySignature = false, deferredToolNames = /* @__PURE__ */ new Set(), normalizeToolName = (name) => name) {
+function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allowEmptySignature = false, deferredToolNames = /* @__PURE__ */ new Set(), normalizeToolName = (name) => name, managedProvider) {
   const params = [];
+  const assistantLevels = /* @__PURE__ */ new Map();
   const loadedToolNames = /* @__PURE__ */ new Set();
   for (let i = 0; i < transformedMessages.length; i++) {
     const msg = transformedMessages[i];
@@ -1352,10 +1567,14 @@ function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allow
       }
       if (blocks.length === 0)
         continue;
+      const messageIndex = params.length;
       params.push({
         role: "assistant",
         content: blocks
       });
+      if (managedProvider !== void 0 && msg.api === "anthropic-messages" && msg.provider === managedProvider && isAnthropicEffort(msg.providerThinkingLevel)) {
+        assistantLevels.set(messageIndex, msg.providerThinkingLevel);
+      }
     } else if (msg.role === "toolResult") {
       const toolResults = [];
       const siblingContent = [];
@@ -1392,7 +1611,22 @@ function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allow
       }
     }
   }
-  return params;
+  return { messages: params, assistantLevels };
+}
+function isAnthropicEffort(value) {
+  return value === "low" || value === "medium" || value === "high" || value === "xhigh" || value === "max";
+}
+function insertThinkingLevelMessages(converted, activeEffort) {
+  const messages = [];
+  for (let index = 0; index < converted.messages.length; index++) {
+    const historicalEffort = converted.assistantLevels.get(index);
+    if (historicalEffort !== void 0) {
+      messages.push({ role: "system", content: [], output_config: { effort: historicalEffort } });
+    }
+    messages.push(converted.messages[index]);
+  }
+  messages.push({ role: "system", content: [], output_config: { effort: activeEffort } });
+  return messages;
 }
 function shouldUseFineGrainedToolStreamingBeta(model, context) {
   return !!context.tools?.length && !getAnthropicCompat(model).supportsEagerToolInputStreaming;
@@ -1402,14 +1636,15 @@ function convertTools(tools, isOAuthToken2, supportsEagerToolInputStreaming, sup
     return [];
   return tools.map((tool, index) => {
     const strict = resolveJsonSchemaStrictSampling(tool, supportsStrictTools);
-    const schema = tool.parameters;
+    const parameters = getJsonSchemaToolParameters(tool, strict);
+    const schema = parameters;
     const legacyInputSchema = {
       type: "object",
       properties: schema.properties ?? {},
       required: schema.required ?? []
     };
     const inputSchema = strict === true ? {
-      ...tool.parameters,
+      ...parameters,
       ...legacyInputSchema
     } : legacyInputSchema;
     return {
@@ -1442,19 +1677,21 @@ function mapStopReason(reason, stopDetails) {
       return { stopReason: "stop" };
     // We don't supply stop sequences, so this should never happen
     case "sensitive":
-      return { stopReason: "error" };
+      return { stopReason: "error", errorMessage: "Provider stopped with: sensitive" };
     default:
       throw new Error(`Unhandled stop reason: ${reason}`);
   }
 }
-var claudeCodeVersion, claudeCodeTools, ccToolLookup, toClaudeCodeName, fromClaudeCodeName, FINE_GRAINED_TOOL_STREAMING_BETA, INTERLEAVED_THINKING_BETA, ANTHROPIC_MESSAGE_EVENTS, stream, streamSimple;
+var claudeCodeVersion, claudeCodeTools, ccToolLookup, toClaudeCodeName, fromClaudeCodeName, FINE_GRAINED_TOOL_STREAMING_BETA, INTERLEAVED_THINKING_BETA, SERVER_SIDE_FALLBACK_BETA, MID_CONVERSATION_OUTPUT_CONFIG_BETA, THINKING_BINDING_CONTROLS_BETA, ANTHROPIC_MESSAGE_EVENTS, stream, streamSimple;
 var init_anthropic_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js"() {
     init_models();
     init_deferred_tools();
+    init_diagnostics();
     init_event_stream();
     init_headers();
     init_json_parse();
+    init_pi_user_agent();
     init_provider_env();
     init_provider_retry();
     init_sanitize_unicode();
@@ -1462,7 +1699,7 @@ var init_anthropic_messages = __esm({
     init_github_copilot_headers();
     init_simple_options();
     init_transform_messages();
-    claudeCodeVersion = "2.1.75";
+    claudeCodeVersion = "2.1.251";
     claudeCodeTools = [
       "Read",
       "Write",
@@ -1495,6 +1732,9 @@ var init_anthropic_messages = __esm({
     };
     FINE_GRAINED_TOOL_STREAMING_BETA = "fine-grained-tool-streaming-2025-05-14";
     INTERLEAVED_THINKING_BETA = "interleaved-thinking-2025-05-14";
+    SERVER_SIDE_FALLBACK_BETA = "server-side-fallback-2026-07-01";
+    MID_CONVERSATION_OUTPUT_CONFIG_BETA = "mid-conversation-output-config-2026-07-01";
+    THINKING_BINDING_CONTROLS_BETA = "thinking-binding-controls-2026-08-01";
     ANTHROPIC_MESSAGE_EVENTS = /* @__PURE__ */ new Set([
       "message_start",
       "message_delta",
@@ -1506,12 +1746,14 @@ var init_anthropic_messages = __esm({
     stream = (model, context, options) => {
       const stream2 = new AssistantMessageEventStream();
       (async () => {
+        const providerThinkingLevel = model.compat?.supportsMidConvoEffort ? options?.effort ?? "high" : void 0;
         const output = {
           role: "assistant",
           content: [],
           api: model.api,
           provider: model.provider,
           model: model.id,
+          ...providerThinkingLevel === void 0 ? {} : { providerThinkingLevel },
           usage: {
             input: 0,
             output: 0,
@@ -1520,12 +1762,14 @@ var init_anthropic_messages = __esm({
             totalTokens: 0,
             cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 }
           },
-          stopReason: "stop",
+          stopReason: "pending",
           timestamp: Date.now()
         };
         try {
           let client;
           let isOAuth;
+          let usageModel = model;
+          let inputTransformations;
           if (options?.client) {
             client = options.client;
             isOAuth = false;
@@ -1542,21 +1786,21 @@ var init_anthropic_messages = __esm({
             }
             const cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env);
             const cacheSessionId = cacheRetention === "none" ? void 0 : options?.sessionId;
-            const created = createClient(model, apiKey, options?.interleavedThinking ?? true, shouldUseFineGrainedToolStreamingBeta(model, context), options?.headers, copilotDynamicHeaders, cacheSessionId);
+            const created = createClient(model, apiKey, options?.headers, options?.fetch, copilotDynamicHeaders, cacheSessionId);
             client = created.client;
             isOAuth = created.isOAuthToken;
           }
           let params = buildParams(model, context, isOAuth, options);
           const nextParams = await options?.onPayload?.(params, model);
           if (nextParams !== void 0) {
-            params = nextParams;
+            params = { ...nextParams, stream: true };
           }
           const requestOptions = {
             ...options?.signal ? { signal: options.signal } : {},
             ...options?.timeoutMs !== void 0 ? { timeout: options.timeoutMs } : {},
             maxRetries: 0
           };
-          const response = await retryProviderRequest(() => client.messages.create({ ...params, stream: true }, requestOptions).asResponse(), {
+          const response = await retryProviderRequest(() => client.beta.messages.create(params, requestOptions).asResponse(), {
             maxRetries: options?.maxRetries,
             maxRetryDelayMs: options?.maxRetryDelayMs,
             signal: options?.signal
@@ -1567,18 +1811,30 @@ var init_anthropic_messages = __esm({
           for await (const event of iterateAnthropicEvents(response, options?.signal)) {
             if (event.type === "message_start") {
               output.responseId = event.message.id;
+              const transformations = event.message.input_transformations;
+              if (Array.isArray(transformations))
+                inputTransformations = transformations;
+              output.model = event.message.model;
+              const fallbackCost = output.model === model.id ? void 0 : model.compat?.allowedFallbackModels?.find((fallback) => fallback.provider === model.provider && fallback.model === output.model)?.cost;
+              usageModel = fallbackCost ? { ...model, id: output.model, cost: fallbackCost } : model;
               output.usage.input = event.message.usage.input_tokens || 0;
               output.usage.output = event.message.usage.output_tokens || 0;
               output.usage.cacheRead = event.message.usage.cache_read_input_tokens || 0;
               output.usage.cacheWrite = event.message.usage.cache_creation_input_tokens || 0;
               output.usage.cacheWrite1h = event.message.usage.cache_creation?.ephemeral_1h_input_tokens || 0;
               output.usage.totalTokens = output.usage.input + output.usage.output + output.usage.cacheRead + output.usage.cacheWrite;
-              calculateCost(model, output.usage);
+              calculateCost(usageModel, output.usage);
             } else if (event.type === "content_block_start") {
+              if (event.content_block.type === "fallback") {
+                if (output.content.length > 0) {
+                  throw new Error("Anthropic performed an unsupported mid-output model fallback");
+                }
+                continue;
+              }
               if (event.content_block.type === "text") {
                 const block = {
                   type: "text",
-                  text: "",
+                  text: event.content_block.text ?? "",
                   index: event.index
                 };
                 output.content.push(block);
@@ -1586,8 +1842,8 @@ var init_anthropic_messages = __esm({
               } else if (event.content_block.type === "thinking") {
                 const block = {
                   type: "thinking",
-                  thinking: "",
-                  thinkingSignature: "",
+                  thinking: event.content_block.thinking ?? "",
+                  thinkingSignature: event.content_block.signature ?? "",
                   index: event.index
                 };
                 output.content.push(block);
@@ -1691,7 +1947,11 @@ var init_anthropic_messages = __esm({
                 }
               }
             } else if (event.type === "message_delta") {
+              const transformations = event.input_transformations;
+              if (Array.isArray(transformations))
+                inputTransformations = transformations;
               if (event.delta.stop_reason) {
+                output.rawStopReason = event.delta.stop_reason;
                 const stopReasonResult = mapStopReason(event.delta.stop_reason, event.delta.stop_details);
                 output.stopReason = stopReasonResult.stopReason;
                 if (stopReasonResult.errorMessage) {
@@ -1717,14 +1977,30 @@ var init_anthropic_messages = __esm({
                 }
               }
               output.usage.totalTokens = output.usage.input + output.usage.output + output.usage.cacheRead + output.usage.cacheWrite;
-              calculateCost(model, output.usage);
+              calculateCost(usageModel, output.usage);
             }
           }
           if (options?.signal?.aborted) {
             throw new Error("Request was aborted");
           }
+          if (output.stopReason === "pending") {
+            throw new Error("Anthropic stream ended without a stop reason");
+          }
           if (output.stopReason === "aborted" || output.stopReason === "error") {
             throw new Error(output.errorMessage || "An unknown error occurred");
+          }
+          if (inputTransformations && inputTransformations.length > 0) {
+            appendAssistantMessageDiagnostic(output, {
+              type: "anthropic_input_transformations",
+              timestamp: Date.now(),
+              details: {
+                transformations: inputTransformations.map((transformation) => ({
+                  type: transformation.type ?? void 0,
+                  path: transformation.path ?? void 0,
+                  reason: transformation.reason ?? void 0
+                }))
+              }
+            });
           }
           stream2.push({ type: "done", reason: output.stopReason, message: output });
           stream2.end();
@@ -1743,9 +2019,15 @@ var init_anthropic_messages = __esm({
     };
     streamSimple = (model, context, options) => {
       assertRequestAuth(model.provider, options?.apiKey, options?.headers);
-      const base = buildBaseOptions(model, context, options, options?.apiKey);
+      const base = {
+        ...buildBaseOptions(model, context, options, options?.apiKey),
+        toolChoice: options?.toolChoice
+      };
       if (!options?.reasoning) {
-        return stream(model, context, { ...base, thinkingEnabled: false });
+        return stream(model, context, {
+          ...base,
+          thinkingEnabled: false
+        });
       }
       if (model.compat?.forceAdaptiveThinking === true) {
         const effort = mapThinkingLevelToEffort(model, options.reasoning);
@@ -1767,7 +2049,7 @@ var init_anthropic_messages = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.lazy.js
 init_lazy();
 var anthropicMessagesApi = () => lazyApi(() => Promise.resolve().then(() => (init_anthropic_messages(), anthropic_messages_exports)));
 export {

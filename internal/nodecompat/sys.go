@@ -378,6 +378,13 @@ func (c *Compat) hostObject() map[string]any {
 		"zlib":    c.compressBindings(),
 		"http":    c.httpBindings(),
 		"watch":   c.watchBindings(),
+		"win32":   c.win32Bindings(),
+		"native": map[string]any{
+			// See flock_unix.go: the one Node-API addon a bundled module
+			// reaches for, served by the host instead of a .node binary.
+			"tryLock":   c.tryLock,
+			"errnoName": errnoName,
+		},
 		"sortStrings": func(in []string) []string {
 			out := append([]string(nil), in...)
 			sort.Strings(out)

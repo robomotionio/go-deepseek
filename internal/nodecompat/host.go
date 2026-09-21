@@ -99,9 +99,14 @@ type Compat struct {
 	files    map[int64]*os.File
 	bodies   map[int64]*bodyReader
 	watchers map[int64]*watcher
+	encoders map[int64]*zstdStream
 	nextID   int64
-	closed   bool
-	cancels  map[int64]context.CancelFunc
+
+	// win32LastError is the last error of the most recent Win32 call made
+	// for a script (win32_windows.go), which is what its GetLastError asks.
+	win32LastError uint32
+	closed         bool
+	cancels        map[int64]context.CancelFunc
 
 	// exitCode is what a script asked to exit with. There is no os.Exit here:
 	// the Runtime is one part of a larger program, and a plugin calling
@@ -131,11 +136,12 @@ func Install(rt *goant.Runtime, opts Options) (*Compat, error) {
 		opts.Argv = []string{"node", "dsh"}
 	}
 	c := &Compat{
-		rt:      rt,
-		opts:    opts,
-		files:   map[int64]*os.File{},
-		bodies:  map[int64]*bodyReader{},
-		cancels: map[int64]context.CancelFunc{},
+		rt:       rt,
+		opts:     opts,
+		files:    map[int64]*os.File{},
+		bodies:   map[int64]*bodyReader{},
+		cancels:  map[int64]context.CancelFunc{},
+		encoders: map[int64]*zstdStream{},
 	}
 	if err := rt.Set(hostGlobal, c.hostObject()); err != nil {
 		return nil, fmt.Errorf("nodecompat: install host: %w", err)
@@ -187,6 +193,10 @@ func (c *Compat) Close() error {
 	}
 	clear(c.bodies)
 	c.closeWatchers()
+	for _, stream := range c.encoders {
+		stream.enc.Close()
+	}
+	clear(c.encoders)
 	return nil
 }
 
@@ -244,6 +254,7 @@ var builtinFiles = map[string]string{
 	"assert":          "node/assert.js",
 	"async_hooks":     "node/async_hooks.js",
 	"buffer":          "node/buffer.js",
+	"child_process":   "node/child_process.js",
 	"crypto":          "node/crypto.js",
 	"events":          "node/events.js",
 	"fs":              "node/fs.js",
@@ -255,7 +266,9 @@ var builtinFiles = map[string]string{
 	"perf_hooks":      "node/perf_hooks.js",
 	"process":         "node/process.js",
 	"querystring":     "node/querystring.js",
+	"readline":        "node/readline.js",
 	"stream":          "node/stream.js",
+	"stream/promises": "node/stream_promises.js",
 	"stream/web":      "node/stream_web.js",
 	"string_decoder":  "node/string_decoder.js",
 	"timers":          "node/timers.js",
@@ -264,6 +277,7 @@ var builtinFiles = map[string]string{
 	"url":             "node/url.js",
 	"util":            "node/util.js",
 	"util/types":      "node/util_types.js",
+	"worker_threads":  "node/worker_threads.js",
 	"zlib":            "node/zlib.js",
 }
 
@@ -272,7 +286,7 @@ var builtinFiles = map[string]string{
 // has a seam that grants it deliberately.
 func isKnownAbsentBuiltin(name string) bool {
 	switch name {
-	case "child_process", "worker_threads", "vm", "net", "tls", "http", "https",
+	case "vm", "net", "tls", "http", "https",
 		"dgram", "cluster", "inspector", "repl", "sqlite", "v8", "wasi":
 		return true
 	}

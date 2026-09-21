@@ -4,11 +4,22 @@
 // so this is what lets the runtime read back a session it wrote. The rest come along
 // because the standard library has them.
 
+import { Transform } from './stream.js';
+
 const host = globalThis.__nodeHost;
 
+// Node's values, because callers key options objects by them:
+// `params: { [constants.ZSTD_c_checksumFlag]: 1 }` with the constant missing
+// is a key named "undefined" that asks for nothing.
 export const constants = {
+  Z_NO_FLUSH: 0, Z_PARTIAL_FLUSH: 1, Z_SYNC_FLUSH: 2, Z_FULL_FLUSH: 3, Z_FINISH: 4, Z_BLOCK: 5,
   Z_NO_COMPRESSION: 0, Z_BEST_SPEED: 1, Z_BEST_COMPRESSION: 9, Z_DEFAULT_COMPRESSION: -1,
-  ZSTD_c_compressionLevel: 100,
+  ZSTD_e_continue: 0, ZSTD_e_flush: 1, ZSTD_e_end: 2,
+  ZSTD_c_compressionLevel: 100, ZSTD_c_windowLog: 101, ZSTD_c_hashLog: 102, ZSTD_c_chainLog: 103,
+  ZSTD_c_searchLog: 104, ZSTD_c_minMatch: 105, ZSTD_c_targetLength: 106, ZSTD_c_strategy: 107,
+  ZSTD_c_enableLongDistanceMatching: 160, ZSTD_c_contentSizeFlag: 200, ZSTD_c_checksumFlag: 201,
+  ZSTD_c_dictIDFlag: 202, ZSTD_c_nbWorkers: 400, ZSTD_c_jobSize: 401, ZSTD_c_overlapLog: 402,
+  ZSTD_d_windowLogMax: 100,
 };
 
 const bytesOf = (data) => (typeof data === 'string' ? Buffer.from(data, 'utf8') : Buffer.from(data));
@@ -27,7 +38,7 @@ const levelOf = (options) => {
 // (through util.promisify) promise. They are generated from one implementation
 // so the three cannot disagree.
 function trio(name, fn) {
-  const sync = (data, options) => Buffer.from(fn(bytesOf(data), levelOf(options)));
+  const sync = (data, options) => Buffer.from(fn(bytesOf(data), levelOf(options), options));
   const async_ = (data, options, cb) => {
     if (typeof options === 'function') { cb = options; options = undefined; }
     queueMicrotask(() => {
@@ -41,7 +52,11 @@ function trio(name, fn) {
 }
 
 const zstd = trio('zstdCompress', (b, level) => host.zlib.zstdCompress(b, level));
-const unzstd = trio('zstdDecompress', (b) => host.zlib.zstdDecompress(b));
+// `finishFlush: ZSTD_e_flush` asks for everything decodable up to a frame the
+// writer never finished, instead of an error — crash recovery reads a torn log
+// tail that way.
+const unzstd = trio('zstdDecompress', (b, _level, options) =>
+  (options?.finishFlush === constants.ZSTD_e_flush ? host.zlib.zstdDecompressTorn(b) : host.zlib.zstdDecompress(b)));
 const gz = trio('gzip', (b, level) => host.zlib.gzip(b, level));
 const gunz = trio('gunzip', (b) => host.zlib.gunzip(b));
 const defl = trio('deflate', (b, level) => host.zlib.deflate(b, level));
@@ -78,7 +93,58 @@ export const createGzip = noStreams('createGzip');
 export const createGunzip = noStreams('createGunzip');
 export const createDeflate = noStreams('createDeflate');
 export const createInflate = noStreams('createInflate');
-export const createZstdCompress = noStreams('createZstdCompress');
+
+// createZstdCompress is a real stream: the session backend migrates every
+// older log through one (harness 0.1.5+), and a log is the thing that grows
+// without bound. Each chunk is encoded as it arrives; the encoder's state is
+// held by the host behind an id, and released when the stream ends or is
+// destroyed.
+export function createZstdCompress(options = {}) {
+  const params = options.params ?? {};
+  const checksum = Boolean(params[constants.ZSTD_c_checksumFlag]);
+  const id = host.zlib.zstdStreamOpen(levelOf(options), checksum);
+  let open = true;
+  const release = () => {
+    if (open) { open = false; host.zlib.zstdStreamDestroy(id); }
+  };
+  const stream = new Transform({
+    transform(chunk, encoding, callback) {
+      try {
+        const out = host.zlib.zstdStreamWrite(id, bytesOf(typeof chunk === 'string' ? Buffer.from(chunk, encoding || 'utf8') : chunk));
+        callback(null, out && out.length > 0 ? Buffer.from(out) : undefined);
+      } catch (error) {
+        release();
+        callback(error);
+      }
+    },
+    flush(callback) {
+      try {
+        const out = host.zlib.zstdStreamEnd(id);
+        open = false;
+        callback(null, out && out.length > 0 ? Buffer.from(out) : undefined);
+      } catch (error) {
+        release();
+        callback(error);
+      }
+    },
+  });
+  // Node's zlib streams take flush(kind, callback) to emit what is buffered
+  // without ending the frame.
+  stream.flush = (kind, callback) => {
+    if (typeof kind === 'function') callback = kind;
+    try {
+      const out = host.zlib.zstdStreamFlush(id);
+      if (out && out.length > 0) stream.push(Buffer.from(out));
+      callback?.();
+    } catch (error) {
+      callback?.(error);
+    }
+  };
+  const destroy = stream.destroy.bind(stream);
+  stream.destroy = (error) => { release(); return destroy(error); };
+  stream.close = (callback) => { release(); if (callback) queueMicrotask(callback); };
+  return stream;
+}
 
 // createZstdDecompress is the one that must EXIST rather than throw, because
 // callers PROBE it instead of using it. Node's session-log reader builds one

@@ -46,29 +46,19 @@ func TestSkillDiscoveryCompletes(t *testing.T) {
 	failed := make(chan error, 1)
 
 	cfg := sdk.Config{CWD: dir, Env: map[string]string{"HOME": dir}}
-	cfg.Composition = sdk.With(sdk.Compose(cfg), "agent-spine", map[string]any{
-		"agents": []map[string]any{{
-			"id": "main", "provider": "deepseek-official",
-			"model": "deepseek-v4-flash", "cwd": dir,
-		}},
-		"workspaceContext": map[string]any{"maxBytes": 65536},
-		"skills": map[string]any{
-			"filesystem": map[string]any{
-				// Only this root: the default ones are whatever the machine
-				// running the test happens to have, which is not a fixture.
-				"includeDefaultRoots": false,
-				"customSkillDirs":     []string{filepath.Join(dir, "skills")},
-				// The setting under test. Watching is what needs fs.watch;
-				// with it unimplemented this is where discovery stopped being
-				// complete.
-				"watch": true,
-			},
-		},
+	cfg.Composition = sdk.With(sdk.Compose(cfg), "skill-filesystem", map[string]any{
+		// Only this root: the default ones are whatever the machine running
+		// the test happens to have, which is not a fixture.
+		"includeDefaultRoots": false,
+		"customSkillDirs":     []string{filepath.Join(dir, "skills")},
+		// The setting under test. Watching is what needs fs.watch; with it
+		// unimplemented this is where discovery stopped being complete.
+		"watch": true,
 	})
 
 	// The observation has to happen while the event loop is running, and Apply
-	// is the one place a Go plugin is certain of that. Mounted last, so the
-	// spine — and the skill provider inside it — is already up.
+	// is the one place a Go plugin is certain of that. It injects `skills`, so
+	// it mounts only once the registry — and the provider under it — is up.
 	cfg.Plugins = []sdk.Plugin{{
 		ID:     "observe-skills",
 		Inject: []string{"skills"},

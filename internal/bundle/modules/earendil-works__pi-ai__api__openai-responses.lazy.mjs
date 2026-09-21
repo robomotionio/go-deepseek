@@ -1,3 +1,4 @@
+import "node:fs";
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
@@ -19,10 +20,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
 var EventStream, AssistantMessageEventStream;
 var init_event_stream = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
     EventStream = class {
       queue = [];
       waiting = [];
@@ -95,7 +96,7 @@ var init_event_stream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
 function createSetupErrorMessage(model, error) {
   return {
     role: "assistant",
@@ -134,19 +135,36 @@ function lazyStream(model, setup) {
   });
   return outer;
 }
-function lazyApi(load) {
-  return {
+function lazyApi(load, capabilities) {
+  const api = {
     stream: (model, context, options) => lazyStream(model, async () => (await load()).stream(model, context, options)),
     streamSimple: (model, context, options) => lazyStream(model, async () => (await load()).streamSimple(model, context, options))
   };
+  if (capabilities?.fetchDeferred) {
+    api.fetchDeferred = (model, handle, options) => lazyStream(model, async () => {
+      const implementation = await load();
+      if (!implementation.fetchDeferred)
+        throw new Error("API does not support deferred responses");
+      return implementation.fetchDeferred(model, handle, options);
+    });
+  }
+  if (capabilities?.cancelDeferred) {
+    api.cancelDeferred = async (model, handle, options) => {
+      const implementation = await load();
+      if (!implementation.cancelDeferred)
+        throw new Error("API cannot cancel deferred responses");
+      await implementation.cancelDeferred(model, handle, options);
+    };
+  }
+  return api;
 }
 var init_lazy = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
     init_event_stream();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
 function calculateCost(model, usage) {
   const inputTokens = usage.input + usage.cacheRead + usage.cacheWrite;
   let rates = model.cost;
@@ -199,12 +217,12 @@ function clampThinkingLevel(model, level) {
 }
 var EXTENDED_THINKING_LEVELS;
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
     EXTENDED_THINKING_LEVELS = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js
 function splitDeferredTools(context, enabled, normalizeName = identityToolName) {
   const uniqueTools = /* @__PURE__ */ new Map();
   for (const tool of context.tools ?? [])
@@ -239,12 +257,12 @@ function splitDeferredTools(context, enabled, normalizeName = identityToolName) 
 }
 var identityToolName;
 var init_deferred_tools = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js"() {
     identityToolName = (name) => name;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
 function normalizeProviderError(error) {
   if (!(error instanceof Error)) {
     return { message: safeJsonStringify(error), messageCarriesBody: false };
@@ -283,22 +301,27 @@ function extractBody(error) {
 function pickBodyText(error) {
   if (typeof error.body === "string")
     return error.body;
-  if (isNonEmptyObject(error.error))
+  if (isPlainNonEmptyObject(error.error))
     return safeJsonStringify(error.error);
   const responseBody = error.$response?.body;
   if (typeof responseBody === "string")
     return responseBody;
   if (isReadableStreamLike(responseBody))
     return void 0;
-  if (isNonEmptyObject(responseBody))
+  if (isPlainNonEmptyObject(responseBody))
     return safeJsonStringify(responseBody);
   return void 0;
 }
 function isReadableStreamLike(value) {
   return typeof value === "object" && value !== null && "pipe" in value && typeof value.pipe === "function";
 }
-function isNonEmptyObject(value) {
-  return typeof value === "object" && value !== null && Object.keys(value).length > 0;
+function isPlainNonEmptyObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto !== Object.prototype && proto !== null)
+    return false;
+  return Object.keys(value).length > 0;
 }
 function formatProviderError(norm, prefix) {
   if (norm.messageCarriesBody || norm.status === void 0 || norm.body === void 0) {
@@ -321,12 +344,12 @@ function safeJsonStringify(value) {
 }
 var MAX_PROVIDER_ERROR_BODY_CHARS;
 var init_error_body = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
     MAX_PROVIDER_ERROR_BODY_CHARS = 4e3;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
 function headersToRecord(headers) {
   const result = {};
   for (const [key, value] of headers.entries()) {
@@ -335,11 +358,28 @@ function headersToRecord(headers) {
   return result;
 }
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
+function loadNodeOs() {
+  if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
+    return null;
+  }
+  return process.getBuiltinModule?.("node:os") ?? null;
+}
+function getPiUserAgent() {
+  return nodeOs ? `pi (${nodeOs.platform()} ${nodeOs.release()}; ${nodeOs.arch()})` : "pi (browser)";
+}
+var nodeOs;
+var init_pi_user_agent = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
+    nodeOs = loadNodeOs();
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
 function getBunSandboxEnvValue(name) {
   if (typeof process === "undefined" || !process.versions?.bun || Object.keys(process.env).length > 0) {
     return void 0;
@@ -365,12 +405,12 @@ function getProviderEnvValue(name, env) {
 }
 var procEnvCache;
 var init_provider_env = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
     procEnvCache = null;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
 function isProviderError(error) {
   if (!(error instanceof Error) || !("status" in error) || !("headers" in error))
     return false;
@@ -450,12 +490,100 @@ async function retryProviderRequest(request, options = {}) {
 }
 var DEFAULT_MAX_RETRY_DELAY_MS;
 var init_provider_retry = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
     DEFAULT_MAX_RETRY_DELAY_MS = 6e4;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+function isJsonSchemaObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function isStructuredSchema(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  const types = typeof schema.type === "string" ? [schema.type] : Array.isArray(schema.type) ? schema.type : [];
+  return types.includes("object") || types.includes("array") || schema.properties !== void 0 || schema.items !== void 0;
+}
+function schemaAllowsNull(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  if (schema.type === "null" || Array.isArray(schema.type) && schema.type.includes("null"))
+    return true;
+  if (schema.const === null || Array.isArray(schema.enum) && schema.enum.includes(null))
+    return true;
+  return Array.isArray(schema.anyOf) && schema.anyOf.some((variant) => schemaAllowsNull(variant));
+}
+function makeJsonSchemaNodeStrict(schema) {
+  if (!isJsonSchemaObject(schema)) {
+    throw new UnsupportedStrictJsonSchemaError("boolean schemas are unsupported");
+  }
+  for (const key of UNSUPPORTED_STRICT_SCHEMA_KEYS) {
+    if (schema[key] !== void 0) {
+      throw new UnsupportedStrictJsonSchemaError(`${key} schemas are unsupported`);
+    }
+  }
+  if (schema.anyOf !== void 0) {
+    if (!Array.isArray(schema.anyOf) || schema.anyOf.length === 0) {
+      throw new UnsupportedStrictJsonSchemaError("anyOf must contain at least one schema");
+    }
+    for (const variant of schema.anyOf) {
+      if (isStructuredSchema(variant)) {
+        throw new UnsupportedStrictJsonSchemaError("object and array unions are unsupported");
+      }
+      makeJsonSchemaNodeStrict(variant);
+    }
+  }
+  if (schema.items !== void 0) {
+    if (Array.isArray(schema.items)) {
+      throw new UnsupportedStrictJsonSchemaError("tuple schemas are unsupported");
+    }
+    makeJsonSchemaNodeStrict(schema.items);
+  }
+  const isObjectSchema = schema.type === "object";
+  if (schema.properties !== void 0 && !isObjectSchema) {
+    throw new UnsupportedStrictJsonSchemaError("properties require type object");
+  }
+  if (!isObjectSchema)
+    return;
+  if (schema.additionalProperties !== void 0 && schema.additionalProperties !== false) {
+    throw new UnsupportedStrictJsonSchemaError("schema-valued or true additionalProperties is unsupported");
+  }
+  if (schema.properties !== void 0 && !isJsonSchemaObject(schema.properties)) {
+    throw new UnsupportedStrictJsonSchemaError("object properties must be a schema map");
+  }
+  if (schema.required !== void 0 && (!Array.isArray(schema.required) || schema.required.some((key) => typeof key !== "string"))) {
+    throw new UnsupportedStrictJsonSchemaError("object required must be a string array");
+  }
+  const properties = schema.properties ?? {};
+  const propertyNames = Object.keys(properties);
+  const required = new Set(Array.isArray(schema.required) ? schema.required : []);
+  if ([...required].some((key) => !propertyNames.includes(key))) {
+    throw new UnsupportedStrictJsonSchemaError("required contains an unknown property");
+  }
+  for (const [key, property] of Object.entries(properties)) {
+    makeJsonSchemaNodeStrict(property);
+    if (!required.has(key) && !schemaAllowsNull(property)) {
+      properties[key] = { anyOf: [property, { type: "null" }] };
+    }
+  }
+  schema.required = propertyNames;
+  schema.additionalProperties = false;
+}
+function makeStrictJsonSchema(schema) {
+  const cloned = structuredClone(schema);
+  if (!isJsonSchemaObject(cloned)) {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  makeJsonSchemaNodeStrict(cloned);
+  if (cloned.type !== "object") {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  return cloned;
+}
+function getJsonSchemaToolParameters(tool, strict) {
+  return strict === true ? makeStrictJsonSchema(tool.parameters) : tool.parameters;
+}
 function getGrammarToolInput(toolName, arguments_, inputProperty) {
   const input = arguments_[inputProperty];
   if (typeof input !== "string") {
@@ -507,11 +635,19 @@ function inferGrammarInputProperty(tool) {
 }
 function resolveJsonSchemaStrictSampling(tool, supportsStrictMode) {
   const config = tool.constrainedSampling;
-  if (!config || config.type !== "json_schema") {
+  if (!config || config.type !== "json_schema")
     return void 0;
-  }
   if (supportsStrictMode) {
-    return true;
+    try {
+      makeStrictJsonSchema(tool.parameters);
+      return true;
+    } catch (error) {
+      if (!(error instanceof UnsupportedStrictJsonSchemaError))
+        throw error;
+      if (config.strict !== "require")
+        return void 0;
+      throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but ${error.message}.`);
+    }
   }
   if (config.strict === "require") {
     throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but strict tools are unsupported.`);
@@ -554,12 +690,33 @@ function createGrammarToolInputProperties(tools, supportsOpenAIGrammarTools) {
   }
   return properties;
 }
+var UnsupportedStrictJsonSchemaError, UNSUPPORTED_STRICT_SCHEMA_KEYS;
 var init_constrained_sampling = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+    UnsupportedStrictJsonSchemaError = class extends Error {
+    };
+    UNSUPPORTED_STRICT_SCHEMA_KEYS = [
+      "$ref",
+      "$defs",
+      "definitions",
+      "allOf",
+      "oneOf",
+      "patternProperties",
+      "dependentSchemas",
+      "dependencies",
+      "unevaluatedProperties",
+      "propertyNames",
+      "contains",
+      "prefixItems",
+      "not",
+      "if",
+      "then",
+      "else"
+    ];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
 function inferCopilotInitiator(messages) {
   const last = messages[messages.length - 1];
   return last && last.role !== "user" ? "agent" : "user";
@@ -586,11 +743,11 @@ function buildCopilotDynamicHeaders(params) {
   return headers;
 }
 var init_github_copilot_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
 function clampOpenAIPromptCacheKey(key) {
   if (key === void 0)
     return void 0;
@@ -601,12 +758,12 @@ function clampOpenAIPromptCacheKey(key) {
 }
 var OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH;
 var init_openai_prompt_cache = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
     OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH = 64;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
 function shortHash(str) {
   let h1 = 3735928559;
   let h2 = 1103547991;
@@ -620,11 +777,11 @@ function shortHash(str) {
   return (h2 >>> 0).toString(36) + (h1 >>> 0).toString(36);
 }
 var init_hash = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
 import { parse as partialParse } from "partial-json";
 function isControlCharacter(char) {
   const codePoint = char.codePointAt(0);
@@ -722,21 +879,21 @@ function parseStreamingJson(partialJson) {
 }
 var VALID_JSON_ESCAPES;
 var init_json_parse = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
     VALID_JSON_ESCAPES = /* @__PURE__ */ new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
 function sanitizeSurrogates(text) {
   return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 var init_sanitize_unicode = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
 function replaceImagesWithPlaceholder(content, placeholder) {
   const result = [];
   let previousWasPlaceholder = false;
@@ -890,13 +1047,13 @@ function transformMessages(messages, model, normalizeToolCallId) {
 }
 var NON_VISION_USER_IMAGE_PLACEHOLDER, NON_VISION_TOOL_IMAGE_PLACEHOLDER;
 var init_transform_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
     NON_VISION_USER_IMAGE_PLACEHOLDER = "(image omitted: model does not support images)";
     NON_VISION_TOOL_IMAGE_PLACEHOLDER = "(tool image omitted: model does not support images)";
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses-shared.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses-shared.js
 function encodeTextSignatureV1(id, phase) {
   const payload = { v: 1, id };
   if (phase)
@@ -1008,7 +1165,9 @@ function convertResponsesMessages(model, context, allowedToolCallProviders, opti
     } else if (msg.role === "assistant") {
       const output = [];
       const assistantMsg = msg;
-      const isDifferentModel = assistantMsg.model !== model.id && assistantMsg.provider === model.provider && assistantMsg.api === model.api;
+      const isSameProviderAndApi = assistantMsg.provider === model.provider && assistantMsg.api === model.api;
+      const isSameModel = isSameProviderAndApi && assistantMsg.model === model.id;
+      const isDifferentModel = isSameProviderAndApi && assistantMsg.model !== model.id;
       let textBlockIndex = 0;
       for (const block of msg.content) {
         if (block.type === "thinking") {
@@ -1043,13 +1202,15 @@ function convertResponsesMessages(model, context, allowedToolCallProviders, opti
           if (isDifferentModel && itemId?.startsWith("fc_") || customInputProperty === void 0 && !itemId?.startsWith("fc_")) {
             itemId = void 0;
           }
+          const canReplayNamespace = isSameModel || options?.deferredTools?.has(toolCall.name) === true;
           if (customInputProperty !== void 0) {
             output.push({
               type: "custom_tool_call",
               id: itemId,
               call_id: callId,
               name: toolCall.name,
-              input: sanitizeSurrogates(getGrammarToolInput(toolCall.name, toolCall.arguments, customInputProperty))
+              input: sanitizeSurrogates(getGrammarToolInput(toolCall.name, toolCall.arguments, customInputProperty)),
+              ...canReplayNamespace && toolCall.namespace !== void 0 ? { namespace: toolCall.namespace } : {}
             });
           } else {
             output.push({
@@ -1057,7 +1218,8 @@ function convertResponsesMessages(model, context, allowedToolCallProviders, opti
               id: itemId,
               call_id: callId,
               name: toolCall.name,
-              arguments: JSON.stringify(toolCall.arguments)
+              arguments: JSON.stringify(toolCall.arguments),
+              ...canReplayNamespace && toolCall.namespace !== void 0 ? { namespace: toolCall.namespace } : {}
             });
           }
         }
@@ -1089,7 +1251,13 @@ function convertResponsesMessages(model, context, allowedToolCallProviders, opti
         loadedToolNames.add(name);
         deferredTools.push(tool);
       }
-      if (deferredTools.length > 0) {
+      if (deferredTools.length > 0 && options?.deferredToolsMode === "additional-tools") {
+        messages.push({
+          type: "additional_tools",
+          role: "developer",
+          tools: convertResponsesTools(deferredTools, options.toolOptions)
+        });
+      } else if (deferredTools.length > 0 && options?.deferredToolsMode === "tool-search") {
         const names = deferredTools.map((tool) => tool.name);
         const searchCallId = `pi_tool_load_${shortHash(`${msg.toolCallId}:${names.join(",")}`)}`;
         messages.push({
@@ -1105,7 +1273,7 @@ function convertResponsesMessages(model, context, allowedToolCallProviders, opti
           execution: "client",
           status: "completed",
           tools: convertResponsesTools(deferredTools, {
-            ...options?.toolOptions,
+            ...options.toolOptions,
             deferLoading: true
           })
         });
@@ -1135,16 +1303,16 @@ function convertResponsesTools(tools, options) {
       };
     }
     const constrainedStrict = resolveJsonSchemaStrictSampling(tool, supportsStrictMode);
+    const strict = constrainedStrict ?? defaultStrict;
     const functionTool = {
       type: "function",
       name: tool.name,
       description: tool.description,
-      parameters: tool.parameters,
-      // TypeBox already generates JSON Schema
+      parameters: getJsonSchemaToolParameters(tool, strict === true),
       ...options?.deferLoading ? { defer_loading: true } : {}
     };
     if (supportsStrictMode) {
-      functionTool.strict = constrainedStrict ?? defaultStrict;
+      functionTool.strict = strict;
     }
     return functionTool;
   });
@@ -1168,6 +1336,11 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
   let sawTerminalResponseEvent = false;
   const outputSlots = /* @__PURE__ */ new Map();
   const reasoningBlocksById = /* @__PURE__ */ new Map();
+  const applyMessagePhaseStopReason = (item) => {
+    if (item.type === "message" && item.phase === "final_answer") {
+      output.stopReason = "stop";
+    }
+  };
   const getSlot = (outputIndex, type) => {
     const slot = outputSlots.get(outputIndex);
     return slot?.type === type ? slot : void 0;
@@ -1196,6 +1369,7 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
       return slot;
     }
     if (item.type === "message") {
+      applyMessagePhaseStopReason(item);
       const block = { type: "text", text: "" };
       output.content.push(block);
       const slot = { type: "text", block, contentIndex: output.content.length - 1 };
@@ -1209,6 +1383,7 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
         id: `${item.call_id}|${item.id}`,
         name: item.name,
         arguments: {},
+        ...item.namespace !== void 0 ? { namespace: item.namespace } : {},
         partialJson: item.arguments || ""
       };
       output.content.push(block);
@@ -1229,6 +1404,7 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
         id: `${item.call_id}|${item.id}`,
         name: item.name,
         arguments: { [inputProperty]: input },
+        ...item.namespace !== void 0 ? { namespace: item.namespace } : {},
         customInput: {
           property: inputProperty,
           jsonBuffer: { input: "", started: false, closed: false }
@@ -1291,7 +1467,16 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
       const serviceTier = options.resolveServiceTier ? options.resolveServiceTier(response?.service_tier, options.serviceTier) : response?.service_tier ?? options.serviceTier;
       options.applyServiceTierPricing(output.usage, serviceTier);
     }
-    output.stopReason = mapStopReason(response?.status);
+    const status = response?.status;
+    const incompleteDetails = response?.incomplete_details;
+    const incompleteReason = typeof incompleteDetails?.reason === "string" ? incompleteDetails.reason : void 0;
+    output.rawStopReason = incompleteReason ? `${status}.${incompleteReason}` : status;
+    const mappedStop = mapStopReason(status, incompleteReason);
+    output.stopReason = mappedStop.stopReason;
+    if (mappedStop.errorMessage === void 0)
+      delete output.errorMessage;
+    else
+      output.errorMessage = mappedStop.errorMessage;
     if (output.content.some((b) => b.type === "toolCall") && output.stopReason === "stop") {
       output.stopReason = "toolUse";
     }
@@ -1387,6 +1572,7 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
       pushToolCallDelta(slot, appendCustomToolCallInput(slot.block, event.input, true));
     } else if (event.type === "response.output_item.done") {
       const item = event.item;
+      applyMessagePhaseStopReason(item);
       const slot = getOrCreateSlot(event.output_index, item);
       if (item.type === "reasoning" && slot?.type === "thinking") {
         const summaryText = item.summary?.map((s) => s.text).join("\n\n") || "";
@@ -1413,6 +1599,8 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
         outputSlots.delete(event.output_index);
       } else if (item.type === "function_call" && slot?.type === "toolCall" && slot.block.partialJson !== void 0) {
         slot.block.arguments = parseStreamingJson(item.arguments || slot.block.partialJson || "{}");
+        if (item.namespace !== void 0)
+          slot.block.namespace = item.namespace;
         delete slot.block.partialJson;
         stream2.push({
           type: "toolcall_end",
@@ -1423,6 +1611,8 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
         outputSlots.delete(event.output_index);
       } else if (item.type === "custom_tool_call" && slot?.type === "toolCall" && slot.block.customInput) {
         pushToolCallDelta(slot, appendCustomToolCallInput(slot.block, item.input ?? getCustomToolCallInput(slot.block), true));
+        if (item.namespace !== void 0)
+          slot.block.namespace = item.namespace;
         delete slot.block.customInput;
         stream2.push({
           type: "toolcall_end",
@@ -1438,6 +1628,7 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
       throw new Error(`Error Code ${event.code}: ${event.message}` || "Unknown error");
     } else if (event.type === "response.failed") {
       sawTerminalResponseEvent = true;
+      output.rawStopReason = event.response?.status;
       const error = event.response?.error;
       const details = event.response?.incomplete_details;
       const msg = error ? `${error.code || "unknown"}: ${error.message || "no message"}` : details?.reason ? `incomplete: ${details.reason}` : "Unknown error (no error details in response)";
@@ -1448,21 +1639,27 @@ async function processResponsesStream(openaiStream, output, stream2, model, opti
     throw new Error("OpenAI Responses stream ended before a terminal response event");
   }
 }
-function mapStopReason(status) {
+function mapStopReason(status, incompleteReason) {
   if (!status)
-    return "stop";
+    return { stopReason: "stop" };
   switch (status) {
     case "completed":
-      return "stop";
+      return { stopReason: "stop" };
     case "incomplete":
-      return "length";
+      if (incompleteReason === "max_output_tokens") {
+        return { stopReason: "length" };
+      }
+      return {
+        stopReason: "error",
+        errorMessage: incompleteReason ? `Response incomplete: ${incompleteReason}` : "Response incomplete without a provider reason"
+      };
     case "failed":
     case "cancelled":
-      return "error";
+      return { stopReason: "error" };
     // These two are wonky ...
     case "in_progress":
     case "queued":
-      return "stop";
+      return { stopReason: "stop" };
     default: {
       const _exhaustive = status;
       throw new Error(`Unhandled stop reason: ${_exhaustive}`);
@@ -1470,7 +1667,7 @@ function mapStopReason(status) {
   }
 }
 var init_openai_responses_shared = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses-shared.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses-shared.js"() {
     init_models();
     init_hash();
     init_json_parse();
@@ -1480,7 +1677,7 @@ var init_openai_responses_shared = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
 function calculateContextTokens(usage) {
   return usage.totalTokens || usage.input + usage.output + usage.cacheRead + usage.cacheWrite;
 }
@@ -1585,13 +1782,13 @@ function estimateContextTokens(context) {
 }
 var CHARS_PER_TOKEN, ESTIMATED_IMAGE_CHARS;
 var init_estimate = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
     CHARS_PER_TOKEN = 4;
     ESTIMATED_IMAGE_CHARS = 4800;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
 function clampMaxTokensToContext(model, context, maxTokens) {
   if (model.contextWindow <= 0)
     return Math.max(MIN_MAX_TOKENS, maxTokens);
@@ -1599,11 +1796,15 @@ function clampMaxTokensToContext(model, context, maxTokens) {
   return Math.min(maxTokens, Math.max(MIN_MAX_TOKENS, available));
 }
 function buildBaseOptions(model, context, options, apiKey) {
+  const samplingParams = model.samplingParams || options?.samplingParams ? { ...model.samplingParams, ...options?.samplingParams } : void 0;
   return {
     temperature: options?.temperature,
+    samplingParams,
     maxTokens: clampMaxTokensToContext(model, context, options?.maxTokens ?? model.maxTokens),
     signal: options?.signal,
+    telemetryContext: options?.telemetryContext,
     apiKey: apiKey || options?.apiKey,
+    fetch: options?.fetch,
     transport: options?.transport,
     cacheRetention: options?.cacheRetention,
     sessionId: options?.sessionId,
@@ -1620,14 +1821,14 @@ function buildBaseOptions(model, context, options, apiKey) {
 }
 var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS;
 var init_simple_options = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
     init_estimate();
     CONTEXT_SAFETY_TOKENS = 4096;
     MIN_MAX_TOKENS = 1;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.js
 var openai_responses_exports = {};
 __export(openai_responses_exports, {
   stream: () => stream,
@@ -1670,19 +1871,30 @@ function getCompat(model) {
     supportsLongCacheRetention: model.compat?.supportsLongCacheRetention ?? true,
     supportsStrictMode: model.compat?.supportsStrictMode ?? false,
     supportsOpenAIGrammarTools: model.compat?.supportsOpenAIGrammarTools ?? false,
+    supportsAdditionalTools: model.compat?.supportsAdditionalTools ?? false,
     supportsToolSearch: model.compat?.supportsToolSearch ?? false,
-    supportsExplicitPromptCacheMode: model.compat?.supportsExplicitPromptCacheMode ?? false
+    supportsExplicitPromptCacheMode: model.compat?.supportsExplicitPromptCacheMode ?? false,
+    supportsMaxOutputTokens: model.compat?.supportsMaxOutputTokens ?? true
   };
 }
 function getPromptCacheRetention(compat, cacheRetention) {
-  return cacheRetention === "long" && compat.supportsLongCacheRetention ? "24h" : void 0;
+  return cacheRetention === "long" && compat.supportsLongCacheRetention && !compat.supportsExplicitPromptCacheMode ? "24h" : void 0;
+}
+function getPromptCacheOptions(compat, cacheRetention) {
+  if (!compat.supportsExplicitPromptCacheMode)
+    return void 0;
+  if (cacheRetention === "none")
+    return { mode: "explicit" };
+  if (cacheRetention === "long" && compat.supportsLongCacheRetention)
+    return { ttl: "30m" };
+  return void 0;
 }
 function formatOpenAIResponsesError(error) {
   return formatProviderError(normalizeProviderError(error), "OpenAI API error");
 }
-function createClient(model, context, apiKey, optionsHeaders, sessionId) {
+function createClient(model, context, apiKey, optionsHeaders, fetch, sessionId) {
   const compat = getCompat(model);
-  const headers = { ...model.headers };
+  const headers = { "User-Agent": getPiUserAgent(), ...model.headers };
   if (model.provider === "github-copilot") {
     const hasImages = hasCopilotVisionInput(context.messages);
     const copilotHeaders = buildCopilotDynamicHeaders({
@@ -1708,31 +1920,33 @@ function createClient(model, context, apiKey, optionsHeaders, sessionId) {
     apiKey,
     baseURL: model.baseUrl,
     dangerouslyAllowBrowser: true,
+    fetch,
     defaultHeaders: headers
   });
 }
 function buildParams(model, context, options, compat = getCompat(model), grammarToolInputProperties = createGrammarToolInputProperties(context.tools, compat.supportsOpenAIGrammarTools)) {
-  const toolPlacement = splitDeferredTools(context, compat.supportsToolSearch);
+  const deferredToolsMode = compat.supportsAdditionalTools ? "additional-tools" : compat.supportsToolSearch ? "tool-search" : void 0;
+  const toolPlacement = splitDeferredTools(context, deferredToolsMode !== void 0);
   const messages = convertResponsesMessages(model, context, OPENAI_TOOL_CALL_PROVIDERS, {
     grammarToolInputProperties,
     deferredTools: toolPlacement.deferred,
+    deferredToolsMode,
     toolOptions: {
       supportsStrictMode: compat.supportsStrictMode,
       supportsOpenAIGrammarTools: compat.supportsOpenAIGrammarTools
     }
   });
   const cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env);
-  const disableImplicitPromptCache = cacheRetention === "none" && compat.supportsExplicitPromptCacheMode;
   const params = {
     model: model.id,
     input: messages,
     stream: true,
     prompt_cache_key: cacheRetention === "none" ? void 0 : clampOpenAIPromptCacheKey(options?.sessionId),
     prompt_cache_retention: getPromptCacheRetention(compat, cacheRetention),
-    prompt_cache_options: disableImplicitPromptCache ? { mode: "explicit" } : void 0,
+    prompt_cache_options: getPromptCacheOptions(compat, cacheRetention),
     store: false
   };
-  if (options?.maxTokens) {
+  if (options?.maxTokens && compat.supportsMaxOutputTokens) {
     params.max_output_tokens = Math.max(options.maxTokens, OPENAI_RESPONSES_MIN_OUTPUT_TOKENS);
   }
   if (options?.temperature !== void 0) {
@@ -1766,6 +1980,9 @@ function buildParams(model, context, options, compat = getCompat(model), grammar
     if (model.provider === "xai")
       params.include = ["reasoning.encrypted_content"];
   }
+  if (options?.samplingParams) {
+    Object.assign(params, options.samplingParams);
+  }
   return params;
 }
 function getServiceTierCostMultiplier(model, serviceTier) {
@@ -1790,12 +2007,13 @@ function applyServiceTierPricing(usage, serviceTier, model) {
 }
 var OPENAI_TOOL_CALL_PROVIDERS, OPENAI_RESPONSES_MIN_OUTPUT_TOKENS, stream, streamSimple;
 var init_openai_responses = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.js"() {
     init_models();
     init_deferred_tools();
     init_error_body();
     init_event_stream();
     init_headers();
+    init_pi_user_agent();
     init_provider_env();
     init_provider_retry();
     init_constrained_sampling();
@@ -1822,7 +2040,7 @@ var init_openai_responses = __esm({
             totalTokens: 0,
             cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 }
           },
-          stopReason: "stop",
+          stopReason: "pending",
           timestamp: Date.now()
         };
         try {
@@ -1831,7 +2049,7 @@ var init_openai_responses = __esm({
           const cacheSessionId = cacheRetention === "none" ? void 0 : options?.sessionId;
           const compat = getCompat(model);
           const grammarToolInputProperties = createGrammarToolInputProperties(context.tools, compat.supportsOpenAIGrammarTools);
-          const client = createClient(model, context, apiKey, options?.headers, cacheSessionId);
+          const client = createClient(model, context, apiKey, options?.headers, options?.fetch, cacheSessionId);
           let params = buildParams(model, context, options, compat, grammarToolInputProperties);
           const nextParams = await options?.onPayload?.(params, model);
           if (nextParams !== void 0) {
@@ -1857,8 +2075,11 @@ var init_openai_responses = __esm({
           if (options?.signal?.aborted) {
             throw new Error("Request was aborted");
           }
+          if (output.stopReason === "pending") {
+            throw new Error("OpenAI Responses stream ended without a stop reason");
+          }
           if (output.stopReason === "aborted" || output.stopReason === "error") {
-            throw new Error("An unknown error occurred");
+            throw new Error(output.errorMessage || "An unknown error occurred");
           }
           stream2.push({ type: "done", reason: output.stopReason, message: output });
           stream2.end();
@@ -1878,7 +2099,10 @@ var init_openai_responses = __esm({
     };
     streamSimple = (model, context, options) => {
       getClientApiKey(model.provider, options?.apiKey, options?.headers);
-      const base = buildBaseOptions(model, context, options, options?.apiKey);
+      const base = {
+        ...buildBaseOptions(model, context, options, options?.apiKey),
+        toolChoice: options?.toolChoice
+      };
       const clampedReasoning = options?.reasoning ? clampThinkingLevel(model, options.reasoning) : void 0;
       const reasoningEffort = clampedReasoning === "off" ? void 0 : clampedReasoning;
       return stream(model, context, {
@@ -1889,7 +2113,7 @@ var init_openai_responses = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-responses.lazy.js
 init_lazy();
 var openAIResponsesApi = () => lazyApi(() => Promise.resolve().then(() => (init_openai_responses(), openai_responses_exports)));
 export {

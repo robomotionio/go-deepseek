@@ -14,7 +14,7 @@ revision is in the binary you just built.
 ```sh
 export DEEPSEEK_API_KEY=...                             # read by the SDK itself
 export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1   # optional; unset = DeepSeek
-export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731   # optional; unset = deepseek-v4-flash
+export DEEPSEEK_MODEL=deepseek/deepseek-v4.1-flash   # optional; unset = deepseek-v4-flash
 go run ./examples/01-hello
 ```
 

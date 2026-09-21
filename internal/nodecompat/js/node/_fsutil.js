@@ -39,10 +39,26 @@ export function guard(fn) {
   };
 }
 
-// makeStats builds the Stats shape by hand rather than from a class: the raw
-// object carries isFile as a boolean and the API exposes it as a method, so the
-// two cannot share a name on one object.
-//
+// Stats is what every stat returns. The file's kind lives under a symbol,
+// not beside the data: the host reports isFile as a boolean while the API
+// exposes a method of that name, so the two cannot share a key — and a symbol
+// is also what keeps an instance CLONEABLE. structuredClone copies own
+// enumerable string keys, which here are data only, exactly as Node's (whose
+// methods are on the prototype too). The JSONL session backend posts a stat
+// result from its migration verifier back across a worker boundary; with the
+// methods as own properties that was "a function could not be cloned".
+const KIND = Symbol('nodecompat.stats.kind');
+
+export class Stats {
+  isFile() { return Boolean(this[KIND]?.isFile); }
+  isDirectory() { return Boolean(this[KIND]?.isDirectory); }
+  isSymbolicLink() { return Boolean(this[KIND]?.isSymlink); }
+  isBlockDevice() { return false; }
+  isCharacterDevice() { return false; }
+  isFIFO() { return false; }
+  isSocket() { return false; }
+}
+
 // bigint is not a detail. `stat(path, { bigint: true })` promises BigInt fields,
 // and code that asks for it then does BigInt arithmetic on them — so returning
 // Numbers does not merely lose precision, it makes the next expression throw
@@ -51,8 +67,8 @@ export function guard(fn) {
 export function makeStats(raw, options) {
   const asBigInt = Boolean(options && options.bigint);
   const n = (value) => (asBigInt ? BigInt(Math.trunc(Number(value) || 0)) : value);
-  return {
-    ...raw,
+  const { isFile, isDirectory, isSymlink, ...data } = raw;
+  const stats = Object.assign(new Stats(), data, {
     dev: n(raw.dev),
     ino: n(raw.ino),
     mode: n(raw.mode),
@@ -75,18 +91,13 @@ export function makeStats(raw, options) {
       ctimeNs: BigInt(Math.trunc(raw.ctimeMs)) * 1000000n,
       birthtimeNs: BigInt(Math.trunc(raw.birthtimeMs)) * 1000000n,
     } : {}),
-    isFile: () => raw.isFile,
-    isDirectory: () => raw.isDirectory,
-    isSymbolicLink: () => raw.isSymlink,
-    isBlockDevice: () => false,
-    isCharacterDevice: () => false,
-    isFIFO: () => false,
-    isSocket: () => false,
     mtime: new Date(raw.mtimeMs),
     atime: new Date(raw.atimeMs),
     ctime: new Date(raw.ctimeMs),
     birthtime: new Date(raw.birthtimeMs),
-  };
+  });
+  Object.defineProperty(stats, KIND, { value: { isFile, isDirectory, isSymlink }, enumerable: false });
+  return stats;
 }
 
 export class Dirent {

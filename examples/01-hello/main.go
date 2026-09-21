@@ -69,7 +69,7 @@ func main() {
 }
 
 // model is the model id, which differs by endpoint: "deepseek-v4-flash" at
-// DeepSeek itself, "deepseek/deepseek-v4-flash-0731" through OpenRouter.
+// DeepSeek itself, "deepseek/deepseek-v4.1-flash" through OpenRouter.
 func model() string {
 	if id := os.Getenv("DEEPSEEK_MODEL"); id != "" {
 		return id

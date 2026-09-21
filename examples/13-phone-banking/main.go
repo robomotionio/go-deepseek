@@ -45,7 +45,7 @@
 //
 //	export DEEPSEEK_API_KEY=$OPENROUTER_API_KEY
 //	export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1
-//	export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731
+//	export DEEPSEEK_MODEL=deepseek/deepseek-v4.1-flash
 //	go run ./examples/13-phone-banking
 //
 // Set DSH_EXPLORER_MODEL and DSH_OPERATOR_MODEL to two different ids on your
@@ -408,15 +408,8 @@ func openHarness(ctx context.Context, model, workspace string, line *ivr, m *mem
 	// roots at all — which is also the truth of this deployment: every skill
 	// here is host-registered, not read off disk. Examples 11 and 12 tell the
 	// full story.
-	entries := sdk.Compose(cfg)
-	for i := range entries {
-		if entries[i].ID == "agent-spine" {
-			entries[i].Config["skills"] = map[string]any{
-				"filesystem": map[string]any{"includeDefaultRoots": false},
-			}
-		}
-	}
-	cfg.Composition = entries
+	cfg.Composition = sdk.With(sdk.Compose(cfg), "skill-filesystem",
+		map[string]any{"includeDefaultRoots": false})
 
 	h, err := sdk.Open(ctx, cfg)
 	if err != nil {

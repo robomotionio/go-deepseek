@@ -52,6 +52,7 @@ func Compose(cfg Config) []Entry {
 		Provider:    cfg.Provider,
 		Model:       cfg.Model,
 		BaseURL:     cfg.BaseURL,
+		Protocol:    cfg.Protocol,
 		MaxTokens:   cfg.MaxTokens,
 		CWD:         cfg.CWD,
 		SessionRoot: cfg.SessionRoot,
@@ -76,6 +77,18 @@ func Add(entries []Entry, entry Entry) []Entry {
 // turned off with its configuration intact.
 func Disable(entries []Entry, id string, disabled bool) []Entry {
 	return runtime.Disable(entries, id, disabled)
+}
+
+// SplitSpine translates the config of a pre-0.4.0 `agent-spine` row into the
+// rows that own each of its keys now, for a caller replaying a saved
+// composition. Upstream deleted the spine in harness 0.1.6, so a composition
+// that still names it no longer boots; Compose spells its rows out instead.
+//
+// It returns a config fragment per row id and the ids a `false` switched off.
+// Fragments must be MERGED into the composed rows (see With's warning), and a
+// key with no home in this bundle is an error rather than a setting dropped.
+func SplitSpine(config map[string]any) (map[string]map[string]any, []string, error) {
+	return runtime.SplitSpine(config)
 }
 
 // Plugins lists what the embedded bundle can mount. A composition naming

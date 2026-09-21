@@ -1,3002 +1,85 @@
-// .harness/vendor/cosmokit/src/misc.ts
-function isNullable(value) {
-  return value === null || value === void 0;
-}
-function isPlainObject(data) {
-  return data && typeof data === "object" && !Array.isArray(data);
-}
-function filterKeys(object, filter) {
-  return Object.fromEntries(Object.entries(object).filter(([key, value]) => filter(key, value)));
-}
-function mapValues(object, transform) {
-  return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, transform(value, key)]));
-}
-function pick(source, keys, forced) {
-  if (!keys) return { ...source };
-  const result = {};
-  for (const key of keys) {
-    if (forced || source[key] !== void 0) result[key] = source[key];
-  }
-  return result;
-}
-function defineProperty(object, key, value) {
-  return Object.defineProperty(object, key, { writable: true, value, enumerable: false });
-}
-
-// .harness/vendor/cosmokit/src/types.ts
-function is(type, value) {
-  if (arguments.length === 1) return (value2) => is(type, value2);
-  return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
-}
-function isArrayBufferLike(value) {
-  return is("ArrayBuffer", value) || is("SharedArrayBuffer", value);
-}
-function isArrayBufferSource(value) {
-  return isArrayBufferLike(value) || ArrayBuffer.isView(value);
-}
-var Binary;
-((Binary2) => {
-  Binary2.is = isArrayBufferLike;
-  Binary2.isSource = isArrayBufferSource;
-  function fromSource(source) {
-    if (ArrayBuffer.isView(source)) {
-      return source.buffer.slice(source.byteOffset, source.byteOffset + source.byteLength);
-    } else {
-      return source;
-    }
-  }
-  Binary2.fromSource = fromSource;
-  function toBase64(source) {
-    source = fromSource(source);
-    if (typeof Buffer !== "undefined") {
-      return Buffer.from(source).toString("base64");
-    }
-    let binary = "";
-    const bytes = new Uint8Array(source);
-    for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
-  Binary2.toBase64 = toBase64;
-  function fromBase64(source) {
-    if (typeof Buffer !== "undefined") return fromSource(Buffer.from(source, "base64"));
-    return Uint8Array.from(atob(source), (c) => c.charCodeAt(0));
-  }
-  Binary2.fromBase64 = fromBase64;
-  function toHex(source) {
-    source = fromSource(source);
-    if (typeof Buffer !== "undefined") return Buffer.from(source).toString("hex");
-    return Array.from(new Uint8Array(source), (byte) => byte.toString(16).padStart(2, "0")).join("");
-  }
-  Binary2.toHex = toHex;
-  function fromHex(source) {
-    if (typeof Buffer !== "undefined") return fromSource(Buffer.from(source, "hex"));
-    const hex = source.length % 2 === 0 ? source : source.slice(0, source.length - 1);
-    const buffer = [];
-    for (let i = 0; i < hex.length; i += 2) {
-      buffer.push(parseInt(`${hex[i]}${hex[i + 1]}`, 16));
-    }
-    return Uint8Array.from(buffer).buffer;
-  }
-  Binary2.fromHex = fromHex;
-})(Binary || (Binary = {}));
-var base64ToArrayBuffer = Binary.fromBase64;
-var arrayBufferToBase64 = Binary.toBase64;
-var hexToArrayBuffer = Binary.fromHex;
-var arrayBufferToHex = Binary.toHex;
-function clone(source, refs = /* @__PURE__ */ new Map()) {
-  if (!source || typeof source !== "object") return source;
-  if (is("Date", source)) return new Date(source.valueOf());
-  if (is("RegExp", source)) return new RegExp(source.source, source.flags);
-  if (isArrayBufferLike(source)) return source.slice(0);
-  if (ArrayBuffer.isView(source)) return source.buffer.slice(source.byteOffset, source.byteOffset + source.byteLength);
-  const cached = refs.get(source);
-  if (cached) return cached;
-  if (Array.isArray(source)) {
-    const result2 = [];
-    refs.set(source, result2);
-    source.forEach((value, index) => {
-      result2[index] = Reflect.apply(clone, null, [value, refs]);
-    });
-    return result2;
-  }
-  const result = Object.create(Object.getPrototypeOf(source));
-  refs.set(source, result);
-  for (const key of Reflect.ownKeys(source)) {
-    const descriptor = { ...Reflect.getOwnPropertyDescriptor(source, key) };
-    if ("value" in descriptor) {
-      descriptor.value = Reflect.apply(clone, null, [descriptor.value, refs]);
-    }
-    Reflect.defineProperty(result, key, descriptor);
-  }
-  return result;
-}
-function deepEqual(a, b, strict) {
-  if (a === b) return true;
-  if (!strict && isNullable(a) && isNullable(b)) return true;
-  if (typeof a !== typeof b) return false;
-  if (typeof a !== "object") return false;
-  if (!a || !b) return false;
-  function check(test, then) {
-    return test(a) ? test(b) ? then(a, b) : false : test(b) ? false : void 0;
-  }
-  return check(Array.isArray, (a2, b2) => a2.length === b2.length && a2.every((item, index) => deepEqual(item, b2[index]))) ?? check(is("Date"), (a2, b2) => a2.valueOf() === b2.valueOf()) ?? check(is("RegExp"), (a2, b2) => a2.source === b2.source && a2.flags === b2.flags) ?? check(isArrayBufferLike, (a2, b2) => {
-    if (a2.byteLength !== b2.byteLength) return false;
-    const viewA = new Uint8Array(a2);
-    const viewB = new Uint8Array(b2);
-    for (let i = 0; i < viewA.length; i++) {
-      if (viewA[i] !== viewB[i]) return false;
-    }
-    return true;
-  }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
-}
-
-// .harness/vendor/cosmokit/src/string.ts
-function tokenize(source, delimiters, delimiter) {
-  const output = [];
-  let state = 0 /* DELIM */;
-  for (let i = 0; i < source.length; i++) {
-    const code = source.charCodeAt(i);
-    if (code >= 65 && code <= 90) {
-      if (state === 1 /* UPPER */) {
-        const next = source.charCodeAt(i + 1);
-        if (next >= 97 && next <= 122) {
-          output.push(delimiter);
-        }
-        output.push(code + 32);
-      } else {
-        if (state !== 0 /* DELIM */) {
-          output.push(delimiter);
-        }
-        output.push(code + 32);
-      }
-      state = 1 /* UPPER */;
-    } else if (code >= 97 && code <= 122) {
-      output.push(code);
-      state = 2 /* LOWER */;
-    } else if (delimiters.includes(code)) {
-      if (state !== 0 /* DELIM */) {
-        output.push(delimiter);
-      }
-      state = 0 /* DELIM */;
-    } else {
-      output.push(code);
-    }
-  }
-  return String.fromCharCode(...output);
-}
-function paramCase(source) {
-  return tokenize(source, [45, 95], 45);
-}
-var hyphenate = paramCase;
-
-// .harness/vendor/cosmokit/src/time.ts
-var Time;
-((Time2) => {
-  Time2.millisecond = 1;
-  Time2.second = 1e3;
-  Time2.minute = Time2.second * 60;
-  Time2.hour = Time2.minute * 60;
-  Time2.day = Time2.hour * 24;
-  Time2.week = Time2.day * 7;
-  let timezoneOffset = (/* @__PURE__ */ new Date()).getTimezoneOffset();
-  function setTimezoneOffset(offset) {
-    timezoneOffset = offset;
-  }
-  Time2.setTimezoneOffset = setTimezoneOffset;
-  function getTimezoneOffset() {
-    return timezoneOffset;
-  }
-  Time2.getTimezoneOffset = getTimezoneOffset;
-  function getDateNumber(date2 = /* @__PURE__ */ new Date(), offset) {
-    if (typeof date2 === "number") date2 = new Date(date2);
-    if (offset === void 0) offset = timezoneOffset;
-    return Math.floor((date2.valueOf() / Time2.minute - offset) / 1440);
-  }
-  Time2.getDateNumber = getDateNumber;
-  function fromDateNumber(value, offset) {
-    const date2 = new Date(value * Time2.day);
-    if (offset === void 0) offset = timezoneOffset;
-    return new Date(+date2 + offset * Time2.minute);
-  }
-  Time2.fromDateNumber = fromDateNumber;
-  const numeric = /\d+(?:\.\d+)?/.source;
-  const timeRegExp = new RegExp(`^${[
-    "w(?:eek(?:s)?)?",
-    "d(?:ay(?:s)?)?",
-    "h(?:our(?:s)?)?",
-    "m(?:in(?:ute)?(?:s)?)?",
-    "s(?:ec(?:ond)?(?:s)?)?"
-  ].map((unit) => `(${numeric}${unit})?`).join("")}$`);
-  function parseTime(source) {
-    const capture = timeRegExp.exec(source);
-    if (!capture) return 0;
-    return (parseFloat(capture[1]) * Time2.week || 0) + (parseFloat(capture[2]) * Time2.day || 0) + (parseFloat(capture[3]) * Time2.hour || 0) + (parseFloat(capture[4]) * Time2.minute || 0) + (parseFloat(capture[5]) * Time2.second || 0);
-  }
-  Time2.parseTime = parseTime;
-  function parseDate(date2) {
-    const parsed = parseTime(date2);
-    if (parsed) {
-      date2 = Date.now() + parsed;
-    } else if (/^\d{1,2}(:\d{1,2}){1,2}$/.test(date2)) {
-      date2 = `${(/* @__PURE__ */ new Date()).toLocaleDateString()}-${date2}`;
-    } else if (/^\d{1,2}-\d{1,2}-\d{1,2}(:\d{1,2}){1,2}$/.test(date2)) {
-      date2 = `${(/* @__PURE__ */ new Date()).getFullYear()}-${date2}`;
-    }
-    return date2 ? new Date(date2) : /* @__PURE__ */ new Date();
-  }
-  Time2.parseDate = parseDate;
-  function format(ms) {
-    const abs = Math.abs(ms);
-    if (abs >= Time2.day - Time2.hour / 2) {
-      return Math.round(ms / Time2.day) + "d";
-    } else if (abs >= Time2.hour - Time2.minute / 2) {
-      return Math.round(ms / Time2.hour) + "h";
-    } else if (abs >= Time2.minute - Time2.second / 2) {
-      return Math.round(ms / Time2.minute) + "m";
-    } else if (abs >= Time2.second) {
-      return Math.round(ms / Time2.second) + "s";
-    }
-    return ms + "ms";
-  }
-  Time2.format = format;
-  function toDigits(source, length = 2) {
-    return source.toString().padStart(length, "0");
-  }
-  Time2.toDigits = toDigits;
-  function template(template2, time = /* @__PURE__ */ new Date()) {
-    return template2.replace("yyyy", time.getFullYear().toString()).replace("yy", time.getFullYear().toString().slice(2)).replace("MM", toDigits(time.getMonth() + 1)).replace("dd", toDigits(time.getDate())).replace("hh", toDigits(time.getHours())).replace("mm", toDigits(time.getMinutes())).replace("ss", toDigits(time.getSeconds())).replace("SSS", toDigits(time.getMilliseconds(), 3));
-  }
-  Time2.template = template;
-})(Time || (Time = {}));
-
-// .harness/vendor/cordis/src/utils.ts
-var DisposableList = class {
-  sn = 0;
-  map = /* @__PURE__ */ new Map();
-  weak = /* @__PURE__ */ new WeakMap();
-  get length() {
-    return this.map.size;
-  }
-  push(value) {
-    const sn = ++this.sn;
-    this.map.set(sn, value);
-    this.weak.set(value, sn);
-    return () => this.map.delete(sn);
-  }
-  delete(value) {
-    const sn = this.weak.get(value);
-    if (!sn) return false;
-    return this.map.delete(sn);
-  }
-  clear() {
-    const values = [...this.map.values()];
-    this.map.clear();
-    return values.reverse();
-  }
-  [Symbol.iterator]() {
-    return this.map.values();
-  }
-  [/* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom")]() {
-    return [...this];
-  }
-};
-var symbols = {
-  // internal symbols
-  shadow: /* @__PURE__ */ Symbol.for("cordis.shadow"),
-  receiver: /* @__PURE__ */ Symbol.for("cordis.receiver"),
-  original: /* @__PURE__ */ Symbol.for("cordis.original"),
-  metadata: /* @__PURE__ */ Symbol.for("cordis.metadata"),
-  initHooks: /* @__PURE__ */ Symbol.for("cordis.initHooks"),
-  checkProto: /* @__PURE__ */ Symbol.for("cordis.checkProto"),
-  // context symbols
-  effect: /* @__PURE__ */ Symbol.for("cordis.effect"),
-  filter: /* @__PURE__ */ Symbol.for("cordis.filter"),
-  isolate: /* @__PURE__ */ Symbol.for("cordis.isolate"),
-  intercept: /* @__PURE__ */ Symbol.for("cordis.intercept"),
-  // service symbols
-  init: /* @__PURE__ */ Symbol.for("cordis.init"),
-  check: /* @__PURE__ */ Symbol.for("cordis.check"),
-  config: /* @__PURE__ */ Symbol.for("cordis.config"),
-  invoke: /* @__PURE__ */ Symbol.for("cordis.invoke"),
-  extend: /* @__PURE__ */ Symbol.for("cordis.extend"),
-  tracker: /* @__PURE__ */ Symbol.for("cordis.tracker"),
-  resolveConfig: /* @__PURE__ */ Symbol.for("cordis.resolveConfig")
-};
-var GeneratorFunction = function* () {
-}.constructor;
-var AsyncGeneratorFunction = async function* () {
-}.constructor;
-function isConstructor(func) {
-  if (!func.prototype) return false;
-  if (func instanceof GeneratorFunction) return false;
-  if (AsyncGeneratorFunction !== Function && func instanceof AsyncGeneratorFunction) return false;
-  return true;
-}
-function joinPrototype(proto1, proto2) {
-  if (proto1 === Object.prototype) return proto2;
-  const result = Object.create(joinPrototype(Object.getPrototypeOf(proto1), proto2));
-  for (const key of Reflect.ownKeys(proto1)) {
-    Object.defineProperty(result, key, Object.getOwnPropertyDescriptor(proto1, key));
-  }
-  return result;
-}
-function isObject(value) {
-  return value && (typeof value === "object" || typeof value === "function");
-}
-function getPropertyDescriptor(target, prop) {
-  let proto = target;
-  while (proto) {
-    const desc = Reflect.getOwnPropertyDescriptor(proto, prop);
-    if (desc) return desc;
-    proto = Object.getPrototypeOf(proto);
-  }
-}
-function getTraceable(ctx, value) {
-  if (!isObject(value)) return value;
-  if (Object.hasOwn(value, symbols.shadow)) {
-    return Object.getPrototypeOf(value);
-  }
-  const tracker = value[symbols.tracker];
-  if (!tracker) return value;
-  return createTraceable(ctx, value, tracker);
-}
-function withProps(target, props) {
-  if (!props) return target;
-  return new Proxy(target, {
-    get: (target2, prop, receiver) => {
-      if (prop in props && prop !== "constructor") return Reflect.get(props, prop, receiver);
-      return Reflect.get(target2, prop, receiver);
-    },
-    set: (target2, prop, value, receiver) => {
-      if (prop in props && prop !== "constructor") return Reflect.set(props, prop, value, receiver);
-      return Reflect.set(target2, prop, value, receiver);
-    }
-  });
-}
-function withProp(target, prop, value) {
-  return withProps(target, Object.defineProperty(/* @__PURE__ */ Object.create(null), prop, {
-    value,
-    writable: false
-  }));
-}
-function createShadow(ctx, target, property2, receiver) {
-  if (!property2) return receiver;
-  const origin = Reflect.getOwnPropertyDescriptor(target, property2)?.value;
-  if (!origin) return receiver;
-  return withProp(receiver, property2, ctx.extend({ [symbols.shadow]: origin }));
-}
-function createShadowMethod(ctx, value, outer, shadow) {
-  return new Proxy(value, {
-    apply: (target, thisArg, args) => {
-      if (thisArg === outer) thisArg = shadow;
-      return getTraceable(ctx, Reflect.apply(target, thisArg, args));
-    }
-  });
-}
-function createTraceable(ctx, value, tracker) {
-  if (ctx[symbols.shadow] && !tracker.noShadow) {
-    ctx = Object.getPrototypeOf(ctx);
-  }
-  const proxy = new Proxy(value, {
-    get: (target, prop, receiver) => {
-      if (prop === symbols.original) return target;
-      if (prop === tracker.property) return ctx;
-      if (typeof prop === "symbol") {
-        return Reflect.get(target, prop, receiver);
-      }
-      if (tracker.associate && ctx.reflect.props[`${tracker.associate}.${prop}`]) {
-        return Reflect.get(ctx, `${tracker.associate}.${prop}`, withProp(ctx, symbols.receiver, receiver));
-      }
-      let shadow, innerValue;
-      const desc = getPropertyDescriptor(target, prop);
-      if (desc && "value" in desc) {
-        innerValue = desc.value;
-      } else {
-        shadow = createShadow(ctx, target, tracker.property, receiver);
-        innerValue = Reflect.get(target, prop, shadow);
-      }
-      const innerTracker = innerValue?.[symbols.tracker];
-      if (innerTracker) {
-        return createTraceable(ctx, innerValue, innerTracker);
-      } else if (!tracker.noShadow && typeof innerValue === "function") {
-        shadow ??= createShadow(ctx, target, tracker.property, receiver);
-        return createShadowMethod(ctx, innerValue, receiver, shadow);
-      } else {
-        return innerValue;
-      }
-    },
-    set: (target, prop, value2, receiver) => {
-      if (prop === symbols.original) return false;
-      if (prop === tracker.property) return false;
-      if (typeof prop === "symbol") {
-        return Reflect.set(target, prop, value2, receiver);
-      }
-      if (tracker.associate && ctx.reflect.props[`${tracker.associate}.${prop}`]) {
-        return Reflect.set(ctx, `${tracker.associate}.${prop}`, value2, withProp(ctx, symbols.receiver, receiver));
-      }
-      const shadow = createShadow(ctx, target, tracker.property, receiver);
-      return Reflect.set(target, prop, value2, shadow);
-    },
-    apply: (target, thisArg, args) => {
-      return applyTraceable(proxy, target, thisArg, args);
-    }
-  });
-  return proxy;
-}
-function applyTraceable(proxy, value, thisArg, args) {
-  if (!value[symbols.invoke]) return Reflect.apply(value, thisArg, args);
-  return value[symbols.invoke].apply(proxy, args);
-}
-function createCallable(name, proto, tracker) {
-  const self = function(...args) {
-    const proxy = createTraceable(self["ctx"], self, tracker);
-    return applyTraceable(proxy, self, this, args);
-  };
-  defineProperty(self, "name", name);
-  return Object.setPrototypeOf(self, proto);
-}
-function handleError(info, reason, getOuterStack) {
-  const innerLines = info.error.stack.split("\n");
-  if (typeof reason?.stack !== "string") {
-    const outerError = new Error(reason);
-    const lines2 = outerError.stack.split("\n");
-    lines2.splice(1, Infinity, ...getOuterStack());
-    outerError.stack = lines2.join("\n");
-    throw outerError;
-  }
-  const lines = reason.stack.split("\n");
-  let index = lines.indexOf(innerLines[2]);
-  if (index === -1) throw reason;
-  index -= info.offset;
-  while (index > 0) {
-    if (!lines[index - 1].endsWith(" (<anonymous>)")) break;
-    index -= 1;
-  }
-  lines.splice(index, Infinity, ...getOuterStack());
-  reason.stack = lines.join("\n");
-  throw reason;
-}
-function composeError(callback, getOuterStack = buildOuterStack()) {
-  const info = { offset: 1, error: new Error() };
-  try {
-    const result = callback(info);
-    if (isObject(result) && "then" in result) {
-      return result.then(void 0, (reason) => handleError(info, reason, getOuterStack));
-    } else {
-      return result;
-    }
-  } catch (reason) {
-    handleError(info, reason, getOuterStack);
-  }
-}
-function buildOuterStack(offset = 0) {
-  const outerError = new Error();
-  return () => outerError.stack.split("\n").slice(3 + offset);
-}
-
-// .harness/vendor/cordis/src/events.ts
-function isBailed(value) {
-  return value !== null && value !== false && value !== void 0;
-}
-var EventsService = class {
-  constructor(ctx) {
-    this.ctx = ctx;
-    defineProperty(this, symbols.tracker, {
-      property: "ctx",
-      noShadow: true
-    });
-    this.on("internal/listener", function(name, listener, options) {
-      if (name === "internal/update" && !options.global) {
-        const hooks = this.fiber._hooks["internal/update"] ??= new DisposableList();
-        const method = options.prepend ? "unshift" : "push";
-        return hooks[method](listener);
-      }
-    });
-    this.on("internal/update", function(config, noSave, next) {
-      const cbs = [...this._hooks["internal/update"] || []];
-      const _next = () => {
-        const cb = cbs.shift() ?? next;
-        return cb.call(this, config, noSave, _next);
-      };
-      return _next();
-    }, { global: true, prepend: true });
-  }
-  ctx;
-  _hooks = {};
-  /**
-   * Resolve listeners for one dispatch and apply context filtering.
-   *
-   * @param type — the dispatch mode, reported on `internal/dispatch`.
-   * @param args — the raw dispatch arguments; consumed up to the event name.
-   * @returns the matching listener callbacks, bound to the dispatch `this`.
-   */
-  dispatch(type, args) {
-    const thisArg = typeof args[0] === "object" || typeof args[0] === "function" ? args.shift() : null;
-    const name = args.shift();
-    if (!name.startsWith("internal/")) {
-      this.emit("internal/dispatch", type, name, args, thisArg);
-    }
-    const filter = thisArg?.[Context.filter];
-    return (this._hooks[name] || []).filter((hook) => hook.global || !filter || filter.call(thisArg, hook.ctx)).map((hook) => hook.callback.bind(thisArg));
-  }
-  /**
-   * Run listeners concurrently and wait for all of them.
-   *
-   * @param args — optional `this`, the event name, then listener arguments.
-   * @returns a promise resolving once every listener has settled.
-   */
-  async parallel(...args) {
-    const results = await Promise.allSettled(this.dispatch("emit", args).map(async (cb) => cb(...args)));
-    const errors = results.filter((result) => result.status === "rejected");
-    if (errors.length) throw new AggregateError(errors.map((error) => error.reason));
-  }
-  /**
-   * Run listeners synchronously without waiting for returned promises.
-   *
-   * @param args — optional `this`, the event name, then listener arguments.
-   */
-  emit(...args) {
-    this.dispatch("emit", args).map((cb) => cb(...args));
-  }
-  /**
-   * Run listeners in order, awaiting each, until one returns a bail value.
-   *
-   * @param args — optional `this`, the event name, then listener arguments.
-   * @returns the first bail value (see {@link isBailed}), if any.
-   */
-  async serial(...args) {
-    for (const cb of this.dispatch("serial", args)) {
-      const result = await cb(...args);
-      if (isBailed(result)) return result;
-    }
-  }
-  /**
-   * Run listeners synchronously until one returns a bail value.
-   *
-   * @param args — optional `this`, the event name, then listener arguments.
-   * @returns the first bail value (see {@link isBailed}), if any.
-   */
-  bail(...args) {
-    for (const cb of this.dispatch("bail", args)) {
-      const result = cb(...args);
-      if (isBailed(result)) return result;
-    }
-  }
-  /**
-   * Compose listeners around the final `next` callback.
-   *
-   * The last dispatch argument is treated as the innermost `next`. Listeners
-   * run outermost-first; a listener that does not call `next()` vetoes the
-   * rest of the chain, including the built-in behavior.
-   *
-   * @param args — optional `this`, the event name, listener arguments, then `next`.
-   * @returns the outermost listener's return value.
-   */
-  waterfall(...args) {
-    const cbs = this.dispatch("waterfall", args);
-    const inner = args.pop();
-    const next = () => {
-      const cb = cbs.shift() ?? inner;
-      return cb(...args);
-    };
-    args.push(next);
-    return next();
-  }
-  /**
-   * Store a listener record as an effect on the current fiber.
-   *
-   * @param label — effect label shown in fiber diagnostics.
-   * @param hooks — the listener list for one event.
-   * @param callback — the listener to store.
-   * @param options — placement and filtering options.
-   * @returns a disposer that unregisters the listener.
-   */
-  register(label, hooks, callback, options) {
-    const method = options.prepend ? "unshift" : "push";
-    return this.ctx.fiber.effect(() => {
-      hooks[method]({ ctx: this.ctx, callback, ...options });
-      return () => this.unregister(hooks, callback);
-    }, label);
-  }
-  /**
-   * Remove a stored listener record.
-   *
-   * @param hooks — the listener list for one event.
-   * @param callback — the listener to remove.
-   * @returns `true` if the listener was found and removed.
-   */
-  unregister(hooks, callback) {
-    const index = hooks.findIndex((hook) => hook.callback === callback);
-    if (index >= 0) {
-      hooks.splice(index, 1);
-      return true;
-    }
-  }
-  /**
-   * Register an event listener owned by the current fiber.
-   *
-   * The listener is removed automatically when the fiber unloads. Throws
-   * `CordisError('INACTIVE_EFFECT')` if the fiber is already disposed.
-   *
-   * @param name — the event name to listen for.
-   * @param listener — called with the dispatch arguments.
-   * @param options — listener options; a boolean is shorthand for `prepend`.
-   * @returns a disposer removing the listener; `true` if it was still registered.
-   */
-  on(name, listener, options) {
-    if (typeof options !== "object") {
-      options = { prepend: options };
-    }
-    this.ctx.fiber.assertActive();
-    listener = this.ctx.reflect.bind(listener);
-    const result = this.bail(this.ctx, "internal/listener", name, listener, options);
-    if (result) return result;
-    const hooks = this._hooks[name] ||= [];
-    const label = `ctx.on(${typeof name === "string" ? JSON.stringify(name) : name.toString()})`;
-    return this.register(label, hooks, listener, options);
-  }
-  /**
-   * Register an event listener that disposes itself after the first call.
-   *
-   * @param name — the event name to listen for.
-   * @param listener — called at most once with the dispatch arguments.
-   * @param options — listener options; a boolean is shorthand for `prepend`.
-   * @returns a disposer removing the listener; `true` if it was still registered.
-   */
-  once(name, listener, options) {
-    const dispose = this.on(name, function(...args) {
-      dispose();
-      return listener.apply(this, args);
-    }, options);
-    return dispose;
-  }
-};
-
-// .harness/vendor/cordis/src/logger.ts
-var defaultFormatters = {
-  s: (value) => String(value),
-  d: (value) => Math.trunc(Number(value)),
-  i: (value) => Math.trunc(Number(value)),
-  f: (value) => Number(value),
-  o: (value) => JSON.stringify(value),
-  O: (value) => JSON.stringify(value),
-  c: () => "",
-  C: (value, exporter, message) => {
-    return Logger.color(exporter, Logger.code(message.name, exporter.colors), value);
-  }
-};
-function isAggregateError(error) {
-  return error instanceof Error && Array.isArray(error["errors"]);
-}
-var Logger = class {
-  constructor(options, service) {
-    this.service = service;
-    Object.assign(this, options);
-    this.error = this._method("error", 0 /* ERROR */);
-    this.info = this._method("info", 1 /* INFO */);
-    this.warn = this._method("warn", 2 /* WARN */);
-    this.debug = this._method("debug", 3 /* DEBUG */);
-  }
-  service;
-  static color(exporter, code, value, decoration = "") {
-    if (!exporter.colors) return "" + value;
-    return `\x1B[3${code < 8 ? code : "8;5;" + code}${exporter.colors >= 2 ? decoration : ""}m${value}\x1B[0m`;
-  }
-  static code(name, level) {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = (hash << 3) - hash + name.charCodeAt(i) + 13;
-      hash |= 0;
-    }
-    const colors = !level ? [] : level >= 2 ? c256 : c16;
-    return colors[Math.abs(hash) % colors.length];
-  }
-  static format(exporter, message) {
-    const args = message.args.slice();
-    if (args[0] instanceof Error) {
-      args[0] = args[0].stack || args[0].message;
-      args.unshift("%s");
-    } else if (typeof args[0] !== "string") {
-      args.unshift("%o");
-    }
-    let format = args.shift();
-    format = format.replace(/%([a-zA-Z%])/g, (match, char) => {
-      if (match === "%%") return "%";
-      const formatter = exporter.formatters?.[char] ?? defaultFormatters[char];
-      if (typeof formatter === "function") {
-        const value = args.shift();
-        return formatter(value, exporter, message);
-      }
-      return match;
-    });
-    const oFormatter = exporter.formatters?.o ?? defaultFormatters.o;
-    for (let arg of args) {
-      if (typeof arg === "object" && arg) {
-        arg = oFormatter(arg, exporter, message);
-      }
-      format += " " + arg;
-    }
-    const { maxLength = 10240 } = exporter;
-    return format.split(/\r?\n/g).map((line) => {
-      return line.slice(0, maxLength) + (line.length > maxLength ? "..." : "");
-    }).join("\n");
-  }
-  _method(type, level) {
-    return (...args) => {
-      if (args.length === 1 && args[0] instanceof Error) {
-        if (args[0].cause) {
-          this[type](args[0].cause);
-        } else if (isAggregateError(args[0])) {
-          args[0].errors.forEach((error) => this[type](error));
-          return;
-        }
-      }
-      const sn = ++this.service._snMessage;
-      const ts = Date.now();
-      for (const exporter of this.service.exporters.values()) {
-        const targetLevel = exporter.levels?.[this.name] ?? exporter.levels?.default ?? this.level ?? 1 /* INFO */;
-        if (targetLevel < level) continue;
-        const message = { sn, ts, type, level, name: this.name, ...this.meta, args };
-        exporter.export(message);
-      }
-    };
-  }
-};
-var c16 = [6, 2, 3, 4, 5, 1];
-var c256 = [
-  20,
-  21,
-  26,
-  27,
-  32,
-  33,
-  38,
-  39,
-  40,
-  41,
-  42,
-  43,
-  44,
-  45,
-  56,
-  57,
-  62,
-  63,
-  68,
-  69,
-  74,
-  75,
-  76,
-  77,
-  78,
-  79,
-  80,
-  81,
-  92,
-  93,
-  98,
-  99,
-  112,
-  113,
-  129,
-  134,
-  135,
-  148,
-  149,
-  160,
-  161,
-  162,
-  163,
-  164,
-  165,
-  166,
-  167,
-  168,
-  169,
-  170,
-  171,
-  172,
-  173,
-  178,
-  179,
-  184,
-  185,
-  196,
-  197,
-  198,
-  199,
-  200,
-  201,
-  202,
-  203,
-  204,
-  205,
-  206,
-  207,
-  208,
-  209,
-  214,
-  215,
-  220,
-  221
-];
-var LoggerService = class _LoggerService {
-  bufferSize = 1e3;
-  buffer = [];
-  ctx;
-  _snMessage = 0;
-  _snExporter = 0;
-  exporters = /* @__PURE__ */ new Map();
-  constructor(ctx) {
-    const tracker = {
-      property: "ctx",
-      noShadow: true
-    };
-    const self = createCallable("logger", joinPrototype(Object.getPrototypeOf(this), Function.prototype), tracker);
-    Object.assign(self, this);
-    self.ctx = ctx;
-    defineProperty(self, symbols.tracker, tracker);
-    self.exporter({
-      colors: 3,
-      export: (message) => {
-        self.buffer.push(message);
-        if (self.buffer.length > self.bufferSize) {
-          self.buffer = self.buffer.slice(-self.bufferSize);
-        }
-      }
-    });
-    return self;
-  }
-  /**
-   * Register an exporter and dispose it with the current fiber.
-   *
-   * @param exporter — the sink that receives structured log messages.
-   * @returns a disposer that removes the exporter.
-   */
-  exporter(exporter) {
-    return this.ctx.effect(() => {
-      this.exporters.set(++this._snExporter, exporter);
-      return () => this.exporters.delete(this._snExporter);
-    }, "ctx.logger.exporter()");
-  }
-  _resolveConfig() {
-    let intercept = this.ctx[symbols.intercept];
-    const configs = [];
-    while ("logger" in intercept) {
-      if (Object.hasOwn(intercept, "logger")) {
-        configs.unshift(intercept["logger"]);
-      }
-      intercept = Object.getPrototypeOf(intercept);
-    }
-    return Object.assign({}, ...configs);
-  }
-  [symbols.invoke](name) {
-    const config = this._resolveConfig();
-    const fiber = (this.ctx[symbols.shadow] ?? this.ctx).fiber;
-    name ??= config.name;
-    name ??= hyphenate(fiber.name);
-    return new Logger({
-      name,
-      level: config.level,
-      meta: { fiber: new WeakRef(fiber) }
-    }, this);
-  }
-  static {
-    for (const type of ["error", "info", "warn", "debug"]) {
-      ;
-      _LoggerService.prototype[type] = function(...args) {
-        return this()[type](...args);
-      };
-    }
-  }
-};
-
-// .harness/vendor/cordis/src/fiber.ts
-var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
-var ValidationError = class extends TypeError {
-  name = "ValidationError";
-  /**
-   * Build the aggregated message from schema issues.
-   *
-   * @param issues — the standard-schema issues, one message line each.
-   */
-  constructor(issues) {
-    super(`invalid config:
-` + issues.map((issue) => {
-      if (issue.path) {
-        return `  - ${issue.message} (at ${issue.path.join(".")})`;
-      } else {
-        return `  - ${issue.message}`;
-      }
-    }).join("\n"));
-  }
-};
-Object.defineProperty(ValidationError.prototype, kValidationError, {
-  value: true
-});
-function resolveConfig(runtime, config) {
-  if (!runtime.Config) return config;
-  const result = runtime.Config["~standard"].validate(config);
-  if ("then" in result) {
-    throw new TypeError("Async config validation is not supported");
-  }
-  if (result.issues) {
-    throw new ValidationError(result.issues);
-  } else {
-    return result.value;
-  }
-}
-var effectInertia = /* @__PURE__ */ new WeakMap();
-function runDisposable(dispose) {
-  const result = dispose();
-  return effectInertia.get(dispose)?.() ?? result;
-}
-function emitPluginDisposed(context, fiber) {
-  const args = ["internal/plugin", fiber];
-  let callbacks;
-  try {
-    callbacks = context.events.dispatch("emit", args);
-  } catch (error) {
-    context.logger.error(error);
-    return;
-  }
-  for (const callback of callbacks) {
-    try {
-      const returned = callback(...args);
-      void Promise.resolve(returned).catch((error) => context.logger.error(error));
-    } catch (error) {
-      context.logger.error(error);
-    }
-  }
-}
-var CordisError = class _CordisError extends Error {
-  /**
-   * @param code — the stable error code; also the default message.
-   * @param message — optional human-readable override.
-   */
-  constructor(code, message) {
-    super(message ?? _CordisError.Code[code]);
-    this.code = code;
-  }
-  code;
-};
-((CordisError2) => {
-  CordisError2.Code = {
-    INACTIVE_EFFECT: "cannot create effect on inactive context"
-  };
-})(CordisError || (CordisError = {}));
-var INACTIVE = "__INACTIVE__";
-var Fiber = class {
-  /**
-   * Create a fiber. Plugin authors normally obtain fibers from `ctx.plugin()`
-   * rather than constructing them directly.
-   *
-   * @param parent — the context the plugin was loaded from.
-   * @param config — raw config, validated against the runtime's schema.
-   * @param inject — resolved dependency map (service name → intercept config).
-   * @param runtime — the shared plugin runtime, or `null` for the root fiber.
-   * @param getOuterStack — captures the caller stack for effect diagnostics.
-   */
-  constructor(parent, config, inject, runtime, getOuterStack) {
-    this.parent = parent;
-    this.inject = inject;
-    this.runtime = runtime;
-    this._config = config;
-    const collect = (dispose) => {
-      this._disposables.push(dispose);
-    };
-    if (runtime) {
-      this.uid = parent.registry.counter;
-      this.ctx = this.context = parent.extend({ fiber: this });
-      const injectEntries = Object.entries(this.inject);
-      if (injectEntries.length) {
-        this.ctx[Context.intercept] = Object.create(parent[Context.intercept]);
-        for (const [name, config2] of injectEntries) {
-          if (isNullable(config2)) continue;
-          this.ctx[Context.intercept][name] = config2;
-        }
-      }
-      this._runner = {
-        epoch: INACTIVE,
-        getOuterStack,
-        execute: function() {
-          if (isConstructor(runtime.callback)) {
-            const instance = new runtime.callback(this.ctx, this.config);
-            for (const hook of instance?.[symbols.initHooks] ?? []) {
-              hook();
-            }
-            return instance?.[symbols.init]?.();
-          } else {
-            return runtime.callback(this.ctx, this.config);
-          }
-        },
-        collect
-      };
-      this.dispose = parent.fiber.effect(() => {
-        const remove = runtime.fibers.push(this);
-        return async () => {
-          this.uid = null;
-          emitPluginDisposed(this.context, this);
-          if (this.ctx.registry.has(runtime.callback)) {
-            remove();
-            if (!runtime.fibers.length) {
-              this.ctx.registry.delete(runtime.callback);
-            }
-          }
-          this._setEpoch(INACTIVE);
-          if (!this.inertia) {
-            this._updateState(() => {
-              this.inertia = this._unload();
-              return 5 /* UNLOADING */;
-            });
-          }
-          while (this.inertia) {
-            await this.inertia;
-          }
-        };
-      }, "ctx.plugin()");
-      try {
-        this.context.emit("internal/plugin", this);
-      } catch (error) {
-        void Promise.resolve(this.dispose()).catch((reason) => this.ctx.logger.error(reason));
-        throw error;
-      }
-      if (this.uid !== null && parent.fiber.state !== 5 /* UNLOADING */) {
-        for (const name of Object.keys(this.inject)) {
-          this._checkImpl(name);
-        }
-        this._refresh();
-      }
-    } else {
-      this.uid = 0;
-      this.ctx = this.context = parent;
-      this.state = 2 /* ACTIVE */;
-      this.store = /* @__PURE__ */ Object.create(null);
-      this._runner = {
-        epoch: "",
-        getOuterStack,
-        execute: () => {
-        },
-        collect
-      };
-      this.dispose = () => this.restart();
-    }
-  }
-  parent;
-  inject;
-  runtime;
-  /** Unique id within the registry; 0 for the root fiber, `null` once disposed. */
-  uid;
-  /** The context this fiber's plugin runs in (extends the parent context). */
-  ctx;
-  /** The validated plugin config (updated by `update()`). */
-  config;
-  /** The raw plugin config, re-resolved before each activation. */
-  _config;
-  /** Current lifecycle state; transitions emit `internal/status`. */
-  state = 0 /* PENDING */;
-  /** Dispose this fiber: unload the plugin, then settle once cleanup finished. */
-  dispose;
-  /** Snapshot of required service implementations while loaded; `undefined` otherwise. */
-  store;
-  /** The in-flight load/unload transition, if one is currently running. */
-  inertia;
-  _hooks = /* @__PURE__ */ Object.create(null);
-  _disposables = new DisposableList();
-  // Same as `this.ctx`, but with a more specific type.
-  context;
-  _error;
-  _runner;
-  _store = /* @__PURE__ */ Object.create(null);
-  /** The plugin's display name, inherited from the nearest named ancestor, else `'root'`. */
-  get name() {
-    let fiber = this;
-    do {
-      if (fiber.runtime?.name) return fiber.runtime.name;
-      fiber = fiber.parent.fiber;
-    } while (fiber !== fiber.parent.fiber);
-    return "root";
-  }
-  /**
-   * Throw if the fiber has already been disposed.
-   *
-   * @returns nothing when the fiber is still active.
-   * @throws {CordisError} `INACTIVE_EFFECT` when the fiber's uid has been cleared.
-   */
-  assertActive() {
-    if (this.uid !== null) return;
-    throw new CordisError("INACTIVE_EFFECT");
-  }
-  _execute(runner) {
-    const oldEpoch = runner.epoch;
-    return composeError((info) => {
-      const safeCollect = (dispose) => {
-        if (typeof dispose === "function") {
-          runner.collect(dispose);
-        } else if (!isNullable(dispose)) {
-          throw new TypeError("Invalid effect");
-        }
-      };
-      const effect = runner.execute.call(this);
-      if (typeof effect === "function") {
-        return runner.collect(effect);
-      } else if (isNullable(effect)) {
-      } else if (!isObject(effect)) {
-        throw new TypeError("Invalid effect");
-      } else if ("then" in effect) {
-        return effect.then(safeCollect);
-      } else if (Symbol.iterator in effect) {
-        info.error = new Error();
-        const iter = effect[Symbol.iterator]();
-        while (true) {
-          const result = iter.next();
-          safeCollect(result.value);
-          if (result.done) return;
-        }
-      } else if (Symbol.asyncIterator in effect) {
-        const iter = effect[Symbol.asyncIterator]();
-        return (async () => {
-          await Promise.resolve();
-          info.error = new Error();
-          while (true) {
-            if (runner.epoch !== oldEpoch) return;
-            const result = await iter.next();
-            safeCollect(result.value);
-            if (result.done) return;
-          }
-        })();
-      } else {
-        throw new TypeError("Invalid effect");
-      }
-    }, runner.getOuterStack);
-  }
-  effect(execute, label = "anonymous") {
-    this.assertActive();
-    if (this.state === 5 /* UNLOADING */) {
-      throw new CordisError("INACTIVE_EFFECT");
-    }
-    const disposables = [];
-    let disposing = false;
-    let disposalTask;
-    const dispose = () => {
-      if (disposing) return disposalTask;
-      disposing = true;
-      let task2;
-      for (const disposable of disposables.splice(0).reverse()) {
-        if (task2) {
-          task2 = task2.then(() => runDisposable(disposable));
-        } else {
-          const result = runDisposable(disposable);
-          if (isObject(result) && "then" in result) {
-            task2 = result;
-          }
-        }
-      }
-      return disposalTask = task2;
-    };
-    const meta = { label, children: [] };
-    const runner = {
-      execute,
-      epoch: true,
-      collect: (dispose2) => {
-        disposables.push(dispose2);
-        this._disposables.delete(dispose2);
-        if (dispose2[symbols.effect]) {
-          meta.children.push(dispose2[symbols.effect]);
-        }
-      },
-      getOuterStack: buildOuterStack()
-    };
-    let task;
-    let executing = true;
-    let resolveSetup;
-    let rejectSetup;
-    let setupBarrier;
-    let setupFailed = false;
-    let inFlight;
-    let removeWrapper = () => false;
-    const waitForSetup = () => {
-      setupBarrier ??= new Promise((resolve2, reject) => {
-        resolveSetup = resolve2;
-        rejectSetup = reject;
-      });
-      return setupBarrier;
-    };
-    const disposeAfter = (setup) => {
-      return Promise.resolve(setup).then(
-        () => dispose(),
-        async (reason) => {
-          await dispose();
-          throw reason;
-        }
-      );
-    };
-    const finalizeDisposal = (callback) => {
-      let result;
-      try {
-        result = callback();
-      } catch (error) {
-        removeWrapper();
-        throw error;
-      }
-      if (isObject(result) && "then" in result) {
-        const pending = Promise.resolve(result).finally(() => {
-          removeWrapper();
-          if (inFlight === pending) inFlight = void 0;
-        });
-        return inFlight = pending;
-      }
-      removeWrapper();
-      return result;
-    };
-    const wrapper = defineProperty(() => {
-      if (!runner.epoch) return setupFailed ? inFlight : void 0;
-      runner.epoch = false;
-      return finalizeDisposal(() => {
-        if (executing) return disposeAfter(waitForSetup());
-        return task ? disposeAfter(task) : dispose();
-      });
-    }, symbols.effect, meta);
-    effectInertia.set(wrapper, () => inFlight);
-    removeWrapper = this._disposables.push(wrapper);
-    try {
-      task = this._execute(runner);
-    } catch (reason) {
-      executing = false;
-      setupFailed = true;
-      runner.epoch = false;
-      let cleanup;
-      try {
-        cleanup = finalizeDisposal(dispose);
-      } finally {
-        rejectSetup?.(reason);
-      }
-      if (isObject(cleanup) && "then" in cleanup) {
-        cleanup.catch((error) => this.ctx.logger.error(error));
-      }
-      throw reason;
-    }
-    executing = false;
-    if (setupBarrier) {
-      Promise.resolve(task).then(resolveSetup, rejectSetup);
-    }
-    task?.catch(() => {
-      if (!runner.epoch) return dispose();
-      return finalizeDisposal(dispose);
-    }).catch((error) => this.ctx.logger.error(error));
-    const disposeAsync = () => {
-      if (!runner.epoch) return;
-      runner.epoch = false;
-      return finalizeDisposal(dispose);
-    };
-    wrapper.then = async (onFulfilled, onRejected) => {
-      return Promise.resolve(task).then(() => disposeAsync).then(onFulfilled, onRejected);
-    };
-    return wrapper;
-  }
-  /**
-   * Return metadata for currently registered effects.
-   *
-   * @returns one {@link EffectMeta} tree per labeled live effect.
-   */
-  getEffects() {
-    return [...this._disposables].map((dispose) => dispose[symbols.effect]).filter(Boolean);
-  }
-  _getState() {
-    if (this.uid === null) return 4 /* DISPOSED */;
-    if (this._error) return 3 /* FAILED */;
-    if (this._runner.epoch !== INACTIVE) return 2 /* ACTIVE */;
-    return 0 /* PENDING */;
-  }
-  _updateState(callback) {
-    const oldState = this.state;
-    this.state = callback() ?? this._getState();
-    if (oldState === this.state) return;
-    this.context.emit("internal/status", this, oldState);
-    if (oldState !== 2 /* ACTIVE */ && this.state !== 2 /* ACTIVE */) return;
-    for (const key of Reflect.ownKeys(this.ctx.reflect.store)) {
-      const impl = this.ctx.reflect.store[key];
-      if (impl.fiber !== this) continue;
-      this.ctx.reflect.notify([impl.name]);
-    }
-  }
-  _checkImpl(name) {
-    const impl = this.ctx.reflect._getImpl(name, true);
-    if (!impl) return delete this._store[name];
-    try {
-      if (impl.check && !impl.check.call(getTraceable(this.ctx, impl.value))) {
-        return delete this._store[name];
-      }
-    } catch (error) {
-      impl.fiber.ctx.logger.error(error);
-      return delete this._store[name];
-    }
-    this._store[name] = impl;
-  }
-  _refresh() {
-    let epoch = false;
-    epoch = "";
-    for (const name of Object.keys(this.inject)) {
-      const impl = this._store[name];
-      if (!impl) {
-        epoch = INACTIVE;
-        break;
-      }
-      epoch += ":" + impl.fiber.uid;
-    }
-    this._setEpoch(epoch);
-  }
-  _setEpoch(epoch) {
-    const oldEpoch = this._runner.epoch;
-    if (epoch === oldEpoch) return;
-    this._runner.epoch = epoch;
-    if (this.inertia) return;
-    this._updateState(() => {
-      if (epoch !== INACTIVE && oldEpoch === INACTIVE) {
-        this.inertia = this._reload();
-        return 1 /* LOADING */;
-      } else {
-        this.inertia = this._unload();
-        return 5 /* UNLOADING */;
-      }
-    });
-  }
-  _resolveConfig(config) {
-    config = this.context.waterfall(this, "internal/config", config, () => config);
-    return this.runtime ? resolveConfig(this.runtime, config) : config;
-  }
-  async _reload() {
-    this.store = { ...this._store };
-    const oldEpoch = this._runner.epoch;
-    try {
-      await Promise.resolve();
-      if (this._runner.epoch === oldEpoch) {
-        this.config = this._resolveConfig(this._config);
-        await this._execute(this._runner);
-        this._error = void 0;
-      }
-    } catch (reason) {
-      this.ctx.logger.error(reason);
-      this._error = reason;
-      this._runner.epoch = INACTIVE;
-    }
-    this._updateState(() => {
-      if (this._runner.epoch === oldEpoch) {
-        this.inertia = void 0;
-      } else {
-        this.inertia = this._unload();
-        return 5 /* UNLOADING */;
-      }
-    });
-  }
-  async _unload() {
-    await Promise.all(this._disposables.clear().map(async (dispose) => {
-      try {
-        await composeError(async (info) => {
-          await Promise.resolve();
-          info.error = new Error();
-          await runDisposable(dispose);
-        }, this._runner.getOuterStack);
-      } catch (reason) {
-        this.ctx.logger.error(reason);
-      }
-    }));
-    this.store = void 0;
-    this._updateState(() => {
-      if (this._runner.epoch === INACTIVE) {
-        this.inertia = void 0;
-      } else {
-        this.inertia = this._reload();
-        return 1 /* LOADING */;
-      }
-    });
-  }
-  /**
-   * Wait for current lifecycle work and rethrow startup errors.
-   *
-   * @returns this fiber, once it has settled into a stable state.
-   * @throws the config-validation or plugin-startup error, if any.
-   */
-  async await() {
-    while (this.inertia) {
-      await this.inertia;
-    }
-    if (this._error) throw this._error;
-    return this;
-  }
-  /**
-   * Dispose and immediately reload this plugin with its current config.
-   *
-   * @returns a promise resolving once the reload settled.
-   * @throws {CordisError} `INACTIVE_EFFECT` when the fiber is already disposed.
-   */
-  async restart() {
-    this.assertActive();
-    this._setEpoch(INACTIVE);
-    this._refresh();
-    await this.await();
-  }
-  /**
-   * Validate and apply new config, then restart the plugin.
-   *
-   * Runs the `internal/update` waterfall first, so update hooks (and HMR)
-   * can veto or replace the restart.
-   *
-   * @param config — the new raw config; validated before anything restarts.
-   * @param noSave — hint for persistence hooks not to write the change back.
-   * @returns the update waterfall result; the default restart returns a promise.
-   * @throws when validation, an update listener, or the restarted plugin fails.
-   */
-  update(config, noSave = false) {
-    this.assertActive();
-    this._config = config;
-    if (this.state !== 2 /* ACTIVE */) {
-      this._error = void 0;
-      this._setEpoch(INACTIVE);
-      this._refresh();
-      return;
-    }
-    config = this._resolveConfig(config);
-    return this.context.waterfall(this, "internal/update", config, noSave, () => {
-      this.config = config;
-      this._error = void 0;
-      return this.restart();
-    });
-  }
-};
-
-// .harness/vendor/cordis/src/reflect.ts
-function enhanceError(error) {
-  const lines = error.stack.split("\n");
-  lines.splice(0, 2, `Error: ${error.message}`);
-  error.stack = lines.join("\n");
-  return error;
-}
-var RESERVED_WORDS = ["prototype", "then"];
-function isSpecialProperty(prop) {
-  return typeof prop === "symbol" || RESERVED_WORDS.includes(prop) || parseInt(prop).toString() === prop || prop.startsWith("_");
-}
-var ReflectService = class {
-  constructor(ctx) {
-    this.ctx = ctx;
-    defineProperty(this, symbols.tracker, {
-      property: "ctx",
-      noShadow: true
-    });
-    this.mixin("reflect", ["get", "set", "provide", "accessor", "mixin"]);
-    this.mixin("fiber", ["runtime", "effect"]);
-    this.mixin("registry", ["inject", "plugin"]);
-    this.mixin("events", ["on", "once", "parallel", "emit", "serial", "bail", "waterfall"]);
-  }
-  ctx;
-  /** Proxy traps implementing service resolution for every context object. */
-  static handler = {
-    get: (target, prop, ctx) => {
-      if (isSpecialProperty(prop)) {
-        return Reflect.get(target, prop, ctx);
-      }
-      if (Reflect.has(target, prop)) {
-        return getTraceable(ctx, Reflect.get(target, prop, ctx));
-      }
-      const error = new Error(`cannot get property "${prop}" without inject`);
-      try {
-        const def = target.reflect.props[prop];
-        if (def?.type === "accessor") {
-          return def.get.call(ctx, ctx[symbols.receiver], error);
-        }
-        if (!ctx.fiber.runtime) return ctx.reflect.get(prop, false);
-        return ctx.events.waterfall("internal/get", ctx, prop, error, () => {
-          const key = target[symbols.isolate][prop];
-          let fiber = (ctx[symbols.shadow] ?? ctx).fiber;
-          while (true) {
-            const impl = fiber.store?.[prop];
-            if (impl) return getTraceable(ctx, impl.value);
-            if (prop in fiber.inject) {
-              error.message = `cannot get required service "${prop}" in inactive context`;
-              throw error;
-            }
-            if (!fiber.runtime) throw error;
-            if (fiber.parent[symbols.isolate][prop] !== key) throw error;
-            fiber = fiber.parent.fiber;
-          }
-        });
-      } catch (e) {
-        throw e === error ? enhanceError(e) : e;
-      }
-    },
-    set: (target, prop, value, ctx) => {
-      if (isSpecialProperty(prop)) {
-        return Reflect.set(target, prop, value, ctx);
-      }
-      const error = new Error(`cannot set property "${prop}" without provide`);
-      const def = target.reflect.props[prop];
-      if (!def) {
-        if (!ctx.fiber.runtime) return Reflect.set(target, prop, value, ctx);
-        throw enhanceError(error);
-      }
-      try {
-        if (def.type === "accessor") {
-          if (!def.set) return false;
-          return def.set.call(ctx, value, ctx[symbols.receiver], error);
-        }
-        return ctx.events.waterfall("internal/set", ctx, prop, value, error, () => {
-          return ctx.reflect.set(prop, value, error);
-        });
-      } catch (e) {
-        throw e === error ? enhanceError(e) : e;
-      }
-    },
-    has: (target, prop) => {
-      if (isSpecialProperty(prop)) {
-        return Reflect.has(target, prop);
-      }
-      if (Reflect.has(target, prop)) return true;
-      return !!target.reflect.props[prop];
-    }
-  };
-  /** Service implementations, keyed by isolation label. */
-  store = /* @__PURE__ */ Object.create(null);
-  /** Declared context properties (services and accessors), by name. */
-  props = /* @__PURE__ */ Object.create(null);
-  /**
-   * Read a service from the store without the inject requirement.
-   *
-   * @param name — the service name.
-   * @param strict — when `true`, only return implementations whose providing
-   * fiber is currently active.
-   * @returns the service value, or `undefined` when not (yet) provided.
-   */
-  get(name, strict = true) {
-    return getTraceable(this.ctx, this._getImpl(name, strict)?.value);
-  }
-  _getImpl(name, strict = true) {
-    const key = this.ctx[symbols.isolate][name];
-    const impl = key && this.store[key];
-    if (!impl) return;
-    if (strict && impl.fiber.state !== 2 /* ACTIVE */) return;
-    return impl;
-  }
-  /**
-   * Overwrite a provided service's value.
-   *
-   * @param name — the service name.
-   * @param value — the new service value.
-   * @param error — carrier for the caller stack in diagnostics.
-   * @returns `true` on success.
-   * @throws when `name` was never provided, or was provided by another fiber.
-   */
-  set(name, value, error) {
-    const key = this.ctx[symbols.isolate][name];
-    const impl = this.store[key];
-    if (!impl) {
-      throw new Error(`cannot set property "${name}" without provide`);
-    }
-    if (impl.fiber !== this.ctx.fiber) {
-      throw new Error(`cannot set property "${name}" in multiple fibers`);
-    }
-    impl.value = value;
-    return true;
-  }
-  /**
-   * Register a service implementation owned by the current fiber.
-   *
-   * See the `ctx.provide()` overload above for the full contract.
-   *
-   * @param name — the service name.
-   * @param value — the service value.
-   * @param check — optional availability predicate for dependents.
-   * @returns a disposer that unregisters the service.
-   */
-  provide(name, value, check) {
-    return this.ctx.fiber.effect(() => {
-      if (!this.props[name]) {
-        this.props[name] ??= { type: "service" };
-      } else if (this.props[name].type !== "service") {
-        throw new Error(`property "${name}" is already declared as ${this.props[name].type}`);
-      }
-      this.props[name] = { type: "service" };
-      this.ctx.root[symbols.isolate][name] ??= Symbol(name);
-      const key = this.ctx[symbols.isolate][name];
-      const impl = { name, value, fiber: this.ctx.fiber, check };
-      if (this.store[key]) {
-        throw new Error(`service "${name}" has been registered at <${this.store[key].fiber.name}>`);
-      }
-      this.store[key] = impl;
-      this.ctx.fiber.store[name] = impl;
-      if (this.ctx.fiber.state === 2 /* ACTIVE */) {
-        this.notify([name]);
-      }
-      return async () => {
-        delete this.store[key];
-        const fibers = this.notify([name]);
-        await Promise.allSettled(fibers.map((fiber) => fiber.await()));
-        delete this.ctx.fiber.store[name];
-      };
-    }, `ctx.provide(${JSON.stringify(name)})`);
-  }
-  /**
-   * Re-evaluate every fiber that requires one of the given services.
-   *
-   * @param names — the service names that changed.
-   * @param filter — restricts notification to matching isolation scopes.
-   * @returns the fibers whose dependency state was refreshed.
-   */
-  notify(names, filter = (ctx, name) => ctx[symbols.isolate][name] === this.ctx[symbols.isolate][name]) {
-    const fibers = [];
-    for (const runtime of this.ctx.registry.values()) {
-      for (const fiber of runtime.fibers) {
-        let hasUpdate = false;
-        for (const name of names) {
-          if (!(name in fiber.inject)) continue;
-          if (!filter(fiber.ctx, name)) continue;
-          hasUpdate = true;
-          fiber._checkImpl(name);
-        }
-        if (!hasUpdate) continue;
-        fiber._refresh();
-        fibers.push(fiber);
-      }
-    }
-    for (const name of names) {
-      const self = Object.create(this.ctx);
-      self[symbols.filter] = (target) => filter(target, name);
-      this.ctx.events.emit(self, "internal/service", name, this._getImpl(name, false)?.value);
-    }
-    return fibers;
-  }
-  /**
-   * Define a computed context property backed by get/set hooks.
-   *
-   * @param name — the context property name.
-   * @param options — the `get` hook and optional `set` hook.
-   * @returns a disposer that removes the accessor.
-   */
-  accessor(name, options) {
-    return this.ctx.fiber.effect(() => {
-      if (name in this.props) {
-        throw new Error(`property "${name}" is already declared as ${this.props[name].type}`);
-      }
-      this.props[name] = { type: "accessor", ...options };
-      return () => delete this.props[name];
-    }, `ctx.accessor(${JSON.stringify(name)})`);
-  }
-  /**
-   * Expose selected members of a service directly on `ctx`.
-   *
-   * See the `ctx.mixin()` overload above for the full contract.
-   *
-   * @param source — a context property name or a source object.
-   * @param mixins — keys to forward, or a source-key → ctx-key map.
-   * @returns a disposer that removes all created accessors.
-   */
-  mixin(source, mixins) {
-    const self = this;
-    return this.ctx.fiber.effect(function* () {
-      const entries = Array.isArray(mixins) ? mixins.map((key) => [key, key]) : Object.entries(mixins);
-      const getTarget = (ctx, error) => {
-        return ctx[source];
-      };
-      for (const [key, value] of entries) {
-        yield self.accessor(value, {
-          get(receiver, error) {
-            const service = getTarget(this, error);
-            if (isNullable(service)) return service;
-            const mixin = receiver ? withProps(receiver, service) : service;
-            const value2 = Reflect.get(service, key, mixin);
-            if (typeof value2 !== "function") return value2;
-            return value2.bind(mixin ?? service);
-          },
-          set(value2, receiver, error) {
-            const service = getTarget(this, error);
-            const mixin = receiver ? withProps(receiver, service) : service;
-            return Reflect.set(service, key, value2, mixin);
-          }
-        });
-      }
-    }, `ctx.mixin(${JSON.stringify(source)})`);
-  }
-  /**
-   * Attach this context's tracing wrapper to a value.
-   *
-   * @param value — the value to wrap.
-   * @returns the traceable wrapper (or the value itself when not applicable).
-   */
-  trace(value) {
-    return getTraceable(this.ctx, value);
-  }
-  /**
-   * Wrap a callback so calls trace `this` and arguments to this context.
-   *
-   * @param callback — the function to wrap.
-   * @returns a proxy delegating to `callback` with traced values.
-   */
-  bind(callback) {
-    return new Proxy(callback, {
-      apply: (target, thisArg, args) => {
-        return Reflect.apply(target, this.trace(thisArg), args.map((arg) => this.trace(arg)));
-      },
-      construct: (target, args, newTarget) => {
-        return Reflect.construct(target, args.map((arg) => this.trace(arg)), newTarget);
-      }
-    });
-  }
-};
-
-// .harness/vendor/cordis/src/registry.ts
-function isApplicable(object) {
-  return object && typeof object === "object" && typeof object.apply === "function";
-}
-function Inject(name, config) {
-  return function(value, decorator) {
-    if (decorator.kind === "class") {
-      if (!Object.hasOwn(value, "inject")) {
-        defineProperty(value, "inject", Object.create(Object.getPrototypeOf(value).inject ?? null));
-        defineProperty(value.inject, symbols.checkProto, true);
-      }
-      value.inject[name] = config;
-    } else if (decorator.kind === "method") {
-      const inject = (value[symbols.metadata] ??= {}).inject ??= /* @__PURE__ */ Object.create(null);
-      inject[name] = config;
-      decorator.addInitializer(function() {
-        const property2 = this[symbols.tracker]?.property;
-        (this[symbols.initHooks] ??= []).push(() => {
-          this.ctx.inject(inject, (ctx) => {
-            return value.call(property2 ? withProps(this, { [property2]: ctx }) : this);
-          });
-        });
-      });
-    } else {
-      throw new Error("@Inject() can only be used on class or class methods");
-    }
-  };
-}
-((Inject2) => {
-  function resolve2(inject, result = /* @__PURE__ */ Object.create(null)) {
-    if (!inject) return result;
-    if (Array.isArray(inject)) {
-      for (const name of inject) {
-        result[name] = null;
-      }
-    } else if (Reflect.has(inject, symbols.checkProto)) {
-      Object.assign(result, resolve2(Object.getPrototypeOf(inject)));
-      for (const name of Object.keys(inject)) {
-        result[name] = inject[name] ?? null;
-      }
-    } else {
-      for (const name of Object.keys(inject)) {
-        result[name] = inject[name] ?? null;
-      }
-    }
-    return result;
-  }
-  Inject2.resolve = resolve2;
-})(Inject || (Inject = {}));
-var RegistryService = class {
-  constructor(ctx) {
-    this.ctx = ctx;
-    defineProperty(this, symbols.tracker, {
-      property: "ctx",
-      noShadow: true
-    });
-  }
-  ctx;
-  _counter = 0;
-  _internal = /* @__PURE__ */ new Map();
-  /** Allocate the next fiber uid (increments on every read). */
-  get counter() {
-    return ++this._counter;
-  }
-  /** Number of registered plugin runtimes. */
-  get size() {
-    return this._internal.size;
-  }
-  /**
-   * Resolve a supported plugin shape to its executable callback.
-   *
-   * @param plugin — a function, class, or `{ apply }` object plugin.
-   * @returns the callback identifying the plugin, or `undefined` if invalid.
-   */
-  resolve(plugin) {
-    try {
-      if (typeof plugin === "function") return plugin;
-      if (isApplicable(plugin)) return plugin.apply;
-    } catch {
-    }
-  }
-  /**
-   * Look up the runtime record for a plugin.
-   *
-   * @param plugin — any supported plugin shape.
-   * @returns the runtime, or `undefined` when the plugin is not registered.
-   */
-  get(plugin) {
-    const key = this.resolve(plugin);
-    return key && this._internal.get(key);
-  }
-  /**
-   * Check whether a plugin has a registered runtime.
-   *
-   * @param plugin — any supported plugin shape.
-   * @returns `true` when at least one fiber of the plugin exists.
-   */
-  has(plugin) {
-    const key = this.resolve(plugin);
-    return !!key && this._internal.has(key);
-  }
-  /**
-   * Dispose every running fiber for a plugin and remove its runtime record.
-   *
-   * @param plugin — any supported plugin shape.
-   * @returns the removed runtime, or `undefined` when none was registered.
-   */
-  delete(plugin) {
-    const key = this.resolve(plugin);
-    const runtime = key && this._internal.get(key);
-    if (!runtime) return;
-    this._internal.delete(key);
-    for (const fiber of runtime.fibers) {
-      fiber.dispose();
-    }
-    return runtime;
-  }
-  /** Iterate the registered plugin callbacks. */
-  keys() {
-    return this._internal.keys();
-  }
-  /** Iterate the registered plugin runtimes. */
-  values() {
-    return this._internal.values();
-  }
-  /** Iterate `[callback, runtime]` pairs. */
-  entries() {
-    return this._internal.entries();
-  }
-  /**
-   * Visit every registered runtime.
-   *
-   * @param callback — receives each runtime and its identifying callback.
-   */
-  forEach(callback) {
-    return this._internal.forEach(callback);
-  }
-  /**
-   * Start a callback once the requested dependencies are available.
-   *
-   * @param inject — required services, as an array or a name → config map.
-   * @param callback — plugin body called with `(ctx, config)`.
-   * @returns the fiber; awaiting it settles once loading finished.
-   */
-  inject(inject, callback) {
-    return this.plugin({ inject, apply: callback, name: callback.name });
-  }
-  /**
-   * Start a plugin in the current context and return its fiber.
-   *
-   * Creates (or reuses) the plugin's runtime record, then starts a new fiber
-   * under the current context. Throws if `plugin` is not a supported shape or
-   * if the current fiber is already disposed.
-   *
-   * @param plugin — a function, class, or `{ apply }` object plugin.
-   * @param config — the plugin config, validated against its `Config` schema.
-   * @param getOuterStack — captures the caller stack for effect diagnostics.
-   * @returns the fiber; awaiting it settles once loading finished.
-   */
-  plugin(plugin, config, getOuterStack = buildOuterStack()) {
-    const callback = this.resolve(plugin);
-    if (!callback) throw new Error('invalid plugin, expect function or object with an "apply" method, received ' + typeof plugin);
-    this.ctx.fiber.assertActive();
-    let runtime = this._internal.get(callback);
-    if (!runtime) {
-      let name = plugin.name;
-      if (name === "apply") name = void 0;
-      runtime = { name, callback, fibers: new DisposableList(), Config: plugin.Config };
-      this._internal.set(callback, runtime);
-    }
-    const fiber = new Fiber(this.ctx, config, Inject.resolve(plugin.inject), runtime, getOuterStack);
-    const wrapped = Object.create(fiber);
-    wrapped.then = (onFulfilled, onRejected) => {
-      return fiber.await().then(onFulfilled, onRejected);
-    };
-    return wrapped;
-  }
-};
-
-// .harness/vendor/cordis/src/context.ts
-var Context = class _Context {
-  /** Symbol key under which a disposer exposes its {@link EffectMeta} diagnostics tree. */
-  static effect = symbols.effect;
-  /** Symbol key for a context's listener filter, consulted on every event dispatch. */
-  static filter = symbols.filter;
-  /** Symbol key of the isolation map (see the `Context[symbols.isolate]` property). */
-  static isolate = symbols.isolate;
-  /** Symbol key of the intercept map (see the `Context[symbols.intercept]` property). */
-  static intercept = symbols.intercept;
-  /**
-   * Returns true for Cordis context proxies and context prototypes.
-   *
-   * Works across realms and across multiple copies of cordis, because the
-   * brand is keyed by a global symbol rather than by `instanceof`.
-   *
-   * @param value — the value to test.
-   * @returns `true` if `value` is a Cordis context, narrowing its type.
-   */
-  static is(value) {
-    return !!value?.[_Context.is];
-  }
-  static {
-    _Context.is[Symbol.toPrimitive] = () => /* @__PURE__ */ Symbol.for("cordis.is");
-    _Context.prototype[_Context.is] = true;
-  }
-  /** Create the root context and install the built-in services. */
-  constructor() {
-    this[symbols.isolate] = /* @__PURE__ */ Object.create(null);
-    this[symbols.intercept] = /* @__PURE__ */ Object.create(null);
-    const self = new Proxy(this, ReflectService.handler);
-    this.root = self;
-    this.baseUrl = void 0;
-    this.fiber = new Fiber(self, {}, /* @__PURE__ */ Object.create(null), null, () => []);
-    this.reflect = new ReflectService(self);
-    this.registry = new RegistryService(self);
-    this.events = new EventsService(self);
-    this.logger = new LoggerService(self);
-    this.fiber._disposables.clear();
-    return self;
-  }
-  [/* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom")]() {
-    return `Context <${this.fiber.name}>`;
-  }
-  /**
-   * Create a child context with extra metadata on top of the current scope.
-   *
-   * The child prototypally inherits every property of this context; own
-   * properties of `meta` shadow the inherited ones. The parent is not mutated.
-   *
-   * @param meta — own properties (including symbol keys) to define on the child.
-   * @returns a child context inheriting from this one.
-   */
-  extend(meta = {}) {
-    const shadow = Reflect.getOwnPropertyDescriptor(this, symbols.shadow)?.value;
-    const self = Object.create(getTraceable(this, this));
-    for (const prop of Reflect.ownKeys(meta)) {
-      Object.defineProperty(self, prop, Reflect.getOwnPropertyDescriptor(meta, prop));
-    }
-    if (!shadow) return self;
-    return Object.assign(Object.create(self), { [symbols.shadow]: shadow });
-  }
-  /**
-   * Create a child context with an independent service scope for `name`.
-   *
-   * Below the returned context, reads and writes of the service `name`
-   * resolve against the new label instead of the parent's, so a different
-   * implementation can be provided without affecting the parent scope.
-   * Passing the same `label` to two `isolate()` calls joins their scopes.
-   *
-   * @param name — the service name to isolate.
-   * @param label — scope label to join; defaults to a fresh unique symbol.
-   * @returns a child context whose `name` service resolves in the new scope.
-   */
-  isolate(name, label) {
-    const shadow = Object.create(this[symbols.isolate]);
-    shadow[name] = label ?? Symbol(name);
-    return this.extend({ [symbols.isolate]: shadow });
-  }
-  intercept(name, config) {
-    const intercept = Object.create(this[symbols.intercept]);
-    intercept[name] = config;
-    return this.extend({ [symbols.intercept]: intercept });
-  }
-};
-
-// .harness/vendor/cordis/src/service.ts
-var Service = class _Service {
-  /**
-   * Register this instance as `name` in the current context.
-   *
-   * Calls `ctx.reflect.provide(name, this, this[Service.check])`, so the
-   * service is unregistered automatically when the owning fiber unloads.
-   * Services with a `[Service.invoke]` body return a callable instance.
-   *
-   * @param ctx — the context to register in (stored as `this.ctx`).
-   * @param name — the service name; defaults to the static `provide` field.
-   */
-  constructor(ctx, name) {
-    this.ctx = ctx;
-    name ??= this.constructor["provide"];
-    let self = this;
-    const tracker = {
-      associate: name,
-      property: "ctx"
-    };
-    if (self[symbols.invoke]) {
-      self = createCallable(name, joinPrototype(Object.getPrototypeOf(this), Function.prototype), tracker);
-    }
-    self.ctx = ctx;
-    self.name = name;
-    defineProperty(self, symbols.tracker, tracker);
-    self.ctx.reflect.provide(name, self, this[symbols.check]);
-    return self;
-  }
-  ctx;
-  /** Symbol key of an instance method run after construction (class plugins). */
-  static init = symbols.init;
-  /** Symbol key of the availability predicate passed to `ctx.provide()`. */
-  static check = symbols.check;
-  /** Symbol key of the phantom intercept-config type parameter. */
-  static config = symbols.config;
-  /** Symbol key of the call body making a service callable (e.g. `ctx.logger()`). */
-  static invoke = symbols.invoke;
-  /** Symbol key of the helper deriving an extended service instance. */
-  static extend = symbols.extend;
-  /** Symbol key of the tracker metadata used for context tracing. */
-  static tracker = symbols.tracker;
-  /** Symbol key of the intercept-config resolution helper below. */
-  static resolveConfig = symbols.resolveConfig;
-  /** The service name this instance is registered under. */
-  name;
-  [symbols.filter](ctx) {
-    return ctx[symbols.isolate][this.name] === this.ctx[symbols.isolate][this.name];
-  }
-  [symbols.extend](props) {
-    let self;
-    if (this[_Service.invoke]) {
-      self = createCallable(this.name, this, this[symbols.tracker]);
-    } else {
-      self = Object.create(this);
-    }
-    return Object.assign(self, props);
-  }
-  /**
-   * Merge intercept config from ancestors with optional base and head values.
-   *
-   * Entries added closer to the root apply first; `base` is prepended and
-   * `head` appended. Uses `Config.merge` when the service declares one,
-   * otherwise a shallow `Object.assign`.
-   *
-   * @param base — lowest-precedence config merged before all intercepts.
-   * @param head — highest-precedence config merged after all intercepts.
-   * @returns the merged config.
-   */
-  [symbols.resolveConfig](base, head) {
-    let intercept = this.ctx[Context.intercept];
-    const configs = [];
-    while (this.name in intercept) {
-      if (Object.hasOwn(intercept, this.name)) {
-        configs.unshift(intercept[this.name]);
-      }
-      intercept = Object.getPrototypeOf(intercept);
-    }
-    if (base) configs.unshift(base);
-    if (head) configs.push(head);
-    if (this["Config"]?.merge) {
-      return this["Config"].merge(...configs);
-    } else {
-      return Object.assign({}, ...configs);
-    }
-  }
-  static [Symbol.hasInstance](instance) {
-    if (!instance) return false;
-    let constructor = instance.constructor;
-    while (constructor) {
-      constructor = constructor.prototype?.constructor;
-      if (constructor === this) return true;
-      constructor &&= Object.getPrototypeOf(constructor);
-    }
-    return false;
-  }
-};
-
 // .harness/packages/core/session/lib/index.js
+import { Service } from "@deepseek-ai/cordis";
 import { isAbsolute } from "node:path";
-
-// .harness/packages/llm/llm/src/brand.ts
-function MessageId(id) {
-  return id;
-}
-function CallId(id) {
-  return id;
-}
-
-// .harness/packages/llm/llm/src/call-config.ts
-function callConfigEquals(a, b) {
-  if (a.provider !== b.provider || a.model !== b.model || a.reasoningEffort !== b.reasoningEffort || a.temperature !== b.temperature || a.maxTokens !== b.maxTokens) return false;
-  if (a.stop === void 0 || b.stop === void 0) return a.stop === b.stop;
-  return a.stop.length === b.stop.length && a.stop.every((s, i) => s === b.stop?.[i]);
-}
-function deepFreeze(value) {
-  const seen = /* @__PURE__ */ new WeakSet();
-  const pending = [{ kind: "visit", node: value }];
-  while (pending.length > 0) {
-    const task = pending.pop();
-    if (task === void 0) continue;
-    if (task.kind === "property") {
-      pending.push({ kind: "visit", node: task.source[task.key] });
-      continue;
-    }
-    const node = task.node;
-    if (node === null || typeof node !== "object") continue;
-    if (node instanceof AbortSignal) continue;
-    if (seen.has(node)) continue;
-    seen.add(node);
-    Object.freeze(node);
-    const keys = Object.keys(node);
-    for (let index = keys.length - 1; index >= 0; index--) {
-      const key = keys[index];
-      if (key === void 0) continue;
-      pending.push({ kind: "property", source: node, key });
-    }
-  }
-  return value;
-}
-
-// .harness/packages/llm/llm/src/message.ts
-function freezeMessage(message) {
-  return deepFreeze(structuredClone(message));
-}
-
-// .harness/vendor/schemastery/src/index.ts
-var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
-var kValidationError2 = /* @__PURE__ */ Symbol.for("ValidationError");
-globalThis.__schemastery_index__ ??= 0;
-globalThis.__schemastery_refs__ = void 0;
-var ValidationError2 = class extends TypeError {
-  constructor(message, options) {
-    let prefix = "$";
-    for (const segment of options.path || []) {
-      if (typeof segment === "string") {
-        prefix += "." + segment;
-      } else if (typeof segment === "number") {
-        prefix += "[" + segment + "]";
-      } else if (typeof segment === "symbol") {
-        prefix += `[Symbol(${segment.toString()})]`;
-      }
-    }
-    if (prefix.startsWith(".")) prefix = prefix.slice(1);
-    super((prefix === "$" ? "" : `${prefix} `) + message);
-    this.options = options;
-  }
-  options;
-  name = "ValidationError";
-  static is(error) {
-    return !!error?.[kValidationError2];
-  }
-};
-Object.defineProperty(ValidationError2.prototype, kValidationError2, {
-  value: true
-});
-var Schema = function(options) {
-  const schema = function(data, options2 = {}) {
-    return Schema.resolve(data, schema, options2)[0];
-  };
-  if (options.refs) {
-    const refs = mapValues(options.refs, (options2) => new Schema(options2));
-    const getRef = (uid) => refs[uid];
-    for (const key in refs) {
-      const options2 = refs[key];
-      options2.sKey = getRef(options2.sKey);
-      options2.inner = getRef(options2.inner);
-      options2.list = options2.list && options2.list.map(getRef);
-      options2.dict = options2.dict && mapValues(options2.dict, getRef);
-    }
-    return refs[options.uid];
-  }
-  Object.assign(schema, options);
-  if (typeof schema.callback === "string") {
-    try {
-      schema.callback = new Function("return " + schema.callback)();
-    } catch {
-    }
-  }
-  Object.defineProperty(schema, "uid", { value: globalThis.__schemastery_index__++ });
-  Object.setPrototypeOf(schema, Schema.prototype);
-  schema.meta ||= {};
-  schema.toString = schema.toString.bind(schema);
-  return schema;
-};
-Schema.prototype = Object.create(Function.prototype);
-Schema.prototype[kSchema] = true;
-Object.defineProperty(Schema.prototype, "~standard", {
-  get() {
-    return {
-      version: 1,
-      vendor: "schemastery",
-      validate: (value) => {
-        try {
-          return { value: Schema.resolve(value, this, {})[0] };
-        } catch (error) {
-          if (ValidationError2.is(error)) {
-            return { issues: [{ message: error.message, path: error.options.path }] };
-          }
-          throw error;
-        }
-      }
-    };
-  }
-});
-Schema.ValidationError = ValidationError2;
-Schema.prototype.toJSON = function toJSON() {
-  if (globalThis.__schemastery_refs__) {
-    globalThis.__schemastery_refs__[this.uid] ??= JSON.parse(JSON.stringify({ ...this }));
-    return this.uid;
-  }
-  globalThis.__schemastery_refs__ = { [this.uid]: { ...this } };
-  globalThis.__schemastery_refs__[this.uid] = JSON.parse(JSON.stringify({ ...this }));
-  const result = { uid: this.uid, refs: globalThis.__schemastery_refs__ };
-  globalThis.__schemastery_refs__ = void 0;
-  return result;
-};
-Schema.prototype.set = function set(key, value) {
-  this.dict[key] = value;
-  return this;
-};
-Schema.prototype.push = function push(value) {
-  this.list.push(value);
-  return this;
-};
-function mergeDesc(original, messages) {
-  const result = typeof original === "string" ? { "": original } : { ...original };
-  for (const locale in messages) {
-    const value = messages[locale];
-    if (value?.$description || value?.$desc) {
-      result[locale] = value.$description || value.$desc;
-    } else if (typeof value === "string") {
-      result[locale] = value;
-    }
-  }
-  return result;
-}
-function getInner(value) {
-  return value?.$value ?? value?.$inner;
-}
-function extractKeys(data) {
-  return filterKeys(data ?? {}, (key) => !key.startsWith("$"));
-}
-Schema.prototype.i18n = function i18n(messages) {
-  const schema = Schema(this);
-  const desc = mergeDesc(schema.meta.description, messages);
-  if (Object.keys(desc).length) schema.meta.description = desc;
-  if (schema.dict) {
-    schema.dict = mapValues(schema.dict, (inner, key) => {
-      return inner.i18n(mapValues(messages, (data) => getInner(data)?.[key] ?? data?.[key]));
-    });
-  }
-  if (schema.list) {
-    schema.list = schema.list.map((inner, index) => {
-      return inner.i18n(mapValues(messages, (data = {}) => {
-        if (Array.isArray(getInner(data))) return getInner(data)[index];
-        if (Array.isArray(data)) return data[index];
-        return extractKeys(data);
-      }));
-    });
-  }
-  if (schema.inner) {
-    schema.inner = schema.inner.i18n(mapValues(messages, (data) => {
-      if (getInner(data)) return getInner(data);
-      return extractKeys(data);
-    }));
-  }
-  if (schema.sKey) {
-    schema.sKey = schema.sKey.i18n(mapValues(messages, (data) => data?.$key));
-  }
-  return schema;
-};
-Schema.prototype.extra = function extra(key, value) {
-  const schema = Schema(this);
-  schema.meta = { ...schema.meta, [key]: value };
-  return schema;
-};
-for (const key of ["required", "disabled", "collapse", "hidden", "loose"]) {
-  Object.assign(Schema.prototype, {
-    [key](value = true) {
-      const schema = Schema(this);
-      schema.meta = { ...schema.meta, [key]: value };
-      return schema;
-    }
-  });
-}
-Schema.prototype.deprecated = function deprecated() {
-  const schema = Schema(this);
-  schema.meta.badges ||= [];
-  schema.meta.badges.push({ text: "deprecated", type: "danger" });
-  return schema;
-};
-Schema.prototype.experimental = function experimental() {
-  const schema = Schema(this);
-  schema.meta.badges ||= [];
-  schema.meta.badges.push({ text: "experimental", type: "warning" });
-  return schema;
-};
-Schema.prototype.pattern = function pattern(regexp) {
-  const schema = Schema(this);
-  const pattern2 = pick(regexp, ["source", "flags"]);
-  schema.meta = { ...schema.meta, pattern: pattern2 };
-  return schema;
-};
-Schema.prototype.simplify = function simplify(value) {
-  if (deepEqual(value, this.meta.default, this.type === "dict")) return null;
-  if (isNullable(value)) return value;
-  if (this.type === "object" || this.type === "dict") {
-    const result = {};
-    for (const key in value) {
-      const schema = this.type === "object" ? this.dict[key] : this.inner;
-      const item = schema?.simplify(value[key]);
-      if (this.type === "dict" || !isNullable(item)) result[key] = item;
-    }
-    if (deepEqual(result, this.meta.default, this.type === "dict")) return null;
-    return result;
-  } else if (this.type === "array" || this.type === "tuple") {
-    const result = [];
-    value.forEach((value2, index) => {
-      const schema = this.type === "array" ? this.inner : this.list[index];
-      const item = schema ? schema.simplify(value2) : value2;
-      result.push(item);
-    });
-    return result;
-  } else if (this.type === "intersect") {
-    const result = {};
-    for (const item of this.list) {
-      Object.assign(result, item.simplify(value));
-    }
-    return result;
-  } else if (this.type === "union") {
-    for (const schema of this.list) {
-      try {
-        Schema.resolve(value, schema, {});
-        return schema.simplify(value);
-      } catch {
-      }
-    }
-  }
-  return value;
-};
-Schema.prototype.toString = function toString(inline) {
-  return formatters[this.type]?.(this, inline) ?? `Schema<${this.type}>`;
-};
-Schema.prototype.role = function role(role, extra2) {
-  const schema = Schema(this);
-  schema.meta = { ...schema.meta, role, extra: extra2 };
-  return schema;
-};
-for (const key of ["default", "link", "comment", "description", "max", "min", "step"]) {
-  Object.assign(Schema.prototype, {
-    [key](value) {
-      const schema = Schema(this);
-      schema.meta = { ...schema.meta, [key]: value };
-      return schema;
-    }
-  });
-}
-var resolvers = {};
-Schema.extend = function extend(type, resolve2) {
-  resolvers[type] = resolve2;
-};
-Schema.resolve = function resolve(data, schema, options = {}, strict = false) {
-  if (!schema) return [data];
-  if (options.ignore?.(data, schema)) return [data];
-  if (isNullable(data) && schema.type !== "lazy") {
-    if (schema.meta.required) throw new ValidationError2(`missing required value`, options);
-    let current = schema;
-    let fallback = schema.meta.default;
-    while (current?.type === "intersect" && isNullable(fallback)) {
-      current = current.list[0];
-      fallback = current?.meta.default;
-    }
-    if (isNullable(fallback)) return [data];
-    data = clone(fallback);
-  }
-  const callback = resolvers[schema.type];
-  if (!callback) throw new ValidationError2(`unsupported type "${schema.type}"`, options);
-  try {
-    return callback(data, schema, options, strict);
-  } catch (error) {
-    if (!schema.meta.loose) throw error;
-    return [schema.meta.default];
-  }
-};
-Schema.from = function from(source) {
-  if (isNullable(source)) {
-    return Schema.any();
-  } else if (["string", "number", "boolean"].includes(typeof source)) {
-    return Schema.const(source).required();
-  } else if (source[kSchema]) {
-    return source;
-  } else if (typeof source === "function") {
-    switch (source) {
-      case String:
-        return Schema.string().required();
-      case Number:
-        return Schema.number().required();
-      case Boolean:
-        return Schema.boolean().required();
-      case Function:
-        return Schema.function().required();
-      default:
-        return Schema.is(source).required();
-    }
-  } else {
-    throw new TypeError(`cannot infer schema from ${source}`);
-  }
-};
-Schema.lazy = function lazy(builder) {
-  const toJSON2 = () => {
-    if (!schema.inner[kSchema]) {
-      schema.inner = schema.builder();
-      schema.inner.meta = { ...schema.meta, ...schema.inner.meta };
-    }
-    return schema.inner.toJSON();
-  };
-  const schema = new Schema({ type: "lazy", builder, inner: { toJSON: toJSON2 } });
-  return schema;
-};
-Schema.natural = function natural() {
-  return Schema.number().step(1).min(0);
-};
-Schema.percent = function percent() {
-  return Schema.number().step(0.01).min(0).max(1).role("slider");
-};
-Schema.date = function date() {
-  return Schema.union([
-    Schema.is(Date),
-    Schema.transform(Schema.string().role("datetime"), (value, options) => {
-      const date2 = new Date(value);
-      if (isNaN(+date2)) throw new ValidationError2(`invalid date "${value}"`, options);
-      return date2;
-    }, true)
-  ]);
-};
-Schema.regExp = function regExp(flag = "") {
-  return Schema.union([
-    Schema.is(RegExp),
-    Schema.transform(Schema.string().role("regexp", { flag }), (value, options) => {
-      try {
-        return new RegExp(value, flag);
-      } catch (e) {
-        throw new ValidationError2(e.message, options);
-      }
-    }, true)
-  ]);
-};
-Schema.arrayBuffer = function arrayBuffer(encoding) {
-  return Schema.union([
-    Schema.is(ArrayBuffer),
-    Schema.is(SharedArrayBuffer),
-    Schema.transform(Schema.any(), (value, options) => {
-      if (Binary.isSource(value)) return Binary.fromSource(value);
-      throw new ValidationError2(`expected ArrayBufferSource but got ${value}`, options);
-    }, true),
-    ...encoding ? [Schema.transform(Schema.string(), (value, options) => {
-      try {
-        return encoding === "base64" ? Binary.fromBase64(value) : Binary.fromHex(value);
-      } catch (e) {
-        throw new ValidationError2(e.message, options);
-      }
-    }, true)] : []
-  ]);
-};
-Schema.extend("lazy", (data, schema, options, strict) => {
-  if (!schema.inner[kSchema]) {
-    schema.inner = schema.builder();
-    schema.inner.meta = { ...schema.meta, ...schema.inner.meta };
-  }
-  return Schema.resolve(data, schema.inner, options, strict);
-});
-Schema.extend("any", (data) => {
-  return [data];
-});
-Schema.extend("never", (data, _, options) => {
-  throw new ValidationError2(`expected nullable but got ${data}`, options);
-});
-Schema.extend("const", (data, { value }, options) => {
-  if (deepEqual(data, value)) return [value];
-  throw new ValidationError2(`expected ${value} but got ${data}`, options);
-});
-function checkWithinRange(data, meta, description, options, skipMin = false) {
-  const { max = Infinity, min = -Infinity } = meta;
-  if (data > max) throw new ValidationError2(`expected ${description} <= ${max} but got ${data}`, options);
-  if (data < min && !skipMin) throw new ValidationError2(`expected ${description} >= ${min} but got ${data}`, options);
-}
-Schema.extend("string", (data, { meta }, options) => {
-  if (typeof data !== "string") throw new ValidationError2(`expected string but got ${data}`, options);
-  if (meta.pattern) {
-    const regexp = new RegExp(meta.pattern.source, meta.pattern.flags);
-    if (!regexp.test(data)) throw new ValidationError2(`expect string to match regexp ${regexp}`, options);
-  }
-  checkWithinRange(data.length, meta, "string length", options);
-  return [data];
-});
-function decimalShift(data, digits) {
-  const str = data.toString();
-  if (str.includes("e")) return data * Math.pow(10, digits);
-  const index = str.indexOf(".");
-  if (index === -1) return data * Math.pow(10, digits);
-  const frac = str.slice(index + 1);
-  const integer = str.slice(0, index);
-  if (frac.length <= digits) return +(integer + frac.padEnd(digits, "0"));
-  return +(integer + frac.slice(0, digits) + "." + frac.slice(digits));
-}
-function isMultipleOf(data, min, step) {
-  step = Math.abs(step);
-  if (!/^\d+\.\d+$/.test(step.toString())) {
-    return (data - min) % step === 0;
-  }
-  const index = step.toString().indexOf(".");
-  const digits = step.toString().slice(index + 1).length;
-  return Math.abs(decimalShift(data, digits) - decimalShift(min, digits)) % decimalShift(step, digits) === 0;
-}
-Schema.extend("number", (data, { meta }, options) => {
-  if (typeof data !== "number") throw new ValidationError2(`expected number but got ${data}`, options);
-  checkWithinRange(data, meta, "number", options);
-  const { step } = meta;
-  if (step && !isMultipleOf(data, meta.min ?? 0, step)) {
-    throw new ValidationError2(`expected number multiple of ${step} but got ${data}`, options);
-  }
-  return [data];
-});
-Schema.extend("boolean", (data, _, options) => {
-  if (typeof data === "boolean") return [data];
-  throw new ValidationError2(`expected boolean but got ${data}`, options);
-});
-Schema.extend("bitset", (data, { bits, meta }, options) => {
-  let value = 0, keys = [];
-  if (typeof data === "number") {
-    value = data;
-    for (const key in bits) {
-      if (data & bits[key]) {
-        keys.push(key);
-      }
-    }
-  } else if (Array.isArray(data)) {
-    keys = data;
-    for (const key of keys) {
-      if (typeof key !== "string") throw new ValidationError2(`expected string but got ${key}`, options);
-      if (key in bits) value |= bits[key];
-    }
-  } else {
-    throw new ValidationError2(`expected number or array but got ${data}`, options);
-  }
-  if (value === meta.default) return [value];
-  return [value, keys];
-});
-Schema.extend("function", (data, _, options) => {
-  if (typeof data === "function") return [data];
-  throw new ValidationError2(`expected function but got ${data}`, options);
-});
-Schema.extend("is", (data, { constructor }, options) => {
-  if (typeof constructor === "function") {
-    if (data instanceof constructor) return [data];
-    throw new ValidationError2(`expected ${constructor.name} but got ${data}`, options);
-  } else {
-    if (isNullable(data)) {
-      throw new ValidationError2(`expected ${constructor} but got ${data}`, options);
-    }
-    let prototype = Object.getPrototypeOf(data);
-    while (prototype) {
-      if (prototype.constructor?.name === constructor) return [data];
-      prototype = Object.getPrototypeOf(prototype);
-    }
-    throw new ValidationError2(`expected ${constructor} but got ${data}`, options);
-  }
-});
-function property(data, key, schema, options) {
-  try {
-    const [value, adapted] = Schema.resolve(data[key], schema, {
-      ...options,
-      path: [...options.path || [], key]
-    });
-    if (adapted !== void 0) data[key] = adapted;
-    return value;
-  } catch (e) {
-    if (!options?.autofix) throw e;
-    delete data[key];
-    return schema.meta.default;
-  }
-}
-Schema.extend("array", (data, { inner, meta }, options) => {
-  if (!Array.isArray(data)) throw new ValidationError2(`expected array but got ${data}`, options);
-  checkWithinRange(data.length, meta, "array length", options, !isNullable(inner.meta.default));
-  return [data.map((_, index) => property(data, index, inner, options))];
-});
-Schema.extend("dict", (data, { inner, sKey }, options, strict) => {
-  if (!isPlainObject(data)) throw new ValidationError2(`expected object but got ${data}`, options);
-  const result = {};
-  for (const key in data) {
-    let rKey;
-    try {
-      rKey = Schema.resolve(key, sKey, options)[0];
-    } catch (error) {
-      if (strict) continue;
-      throw error;
-    }
-    result[rKey] = property(data, key, inner, options);
-    data[rKey] = data[key];
-    if (key !== rKey) delete data[key];
-  }
-  return [result];
-});
-Schema.extend("tuple", (data, { list }, options, strict) => {
-  if (!Array.isArray(data)) throw new ValidationError2(`expected array but got ${data}`, options);
-  const result = list.map((inner, index) => property(data, index, inner, options));
-  if (strict) return [result];
-  result.push(...data.slice(list.length));
-  return [result];
-});
-function merge(result, data) {
-  for (const key in data) {
-    if (key in result) continue;
-    result[key] = data[key];
-  }
-}
-Schema.extend("object", (data, { dict }, options, strict) => {
-  if (!isPlainObject(data)) throw new ValidationError2(`expected object but got ${data}`, options);
-  const result = {};
-  for (const key in dict) {
-    const value = property(data, key, dict[key], options);
-    if (!isNullable(value) || key in data) {
-      result[key] = value;
-    }
-  }
-  if (!strict) merge(result, data);
-  return [result];
-});
-Schema.extend("union", (data, { list, toString: toString2 }, options, strict) => {
-  const messages = [];
-  for (const inner of list) {
-    try {
-      return Schema.resolve(data, inner, options, strict);
-    } catch (error) {
-      messages.push(error);
-    }
-  }
-  throw new ValidationError2(`expected ${toString2()} but got ${JSON.stringify(data)}`, options);
-});
-Schema.extend("intersect", (data, { list, toString: toString2 }, options, strict) => {
-  if (!list.length) return [data];
-  let result;
-  for (const inner of list) {
-    const value = Schema.resolve(data, inner, options, true)[0];
-    if (isNullable(value)) continue;
-    if (isNullable(result)) {
-      result = value;
-    } else if (typeof result !== typeof value) {
-      throw new ValidationError2(`expected ${toString2()} but got ${JSON.stringify(data)}`, options);
-    } else if (typeof value === "object") {
-      merge(result ??= {}, value);
-    } else if (result !== value) {
-      throw new ValidationError2(`expected ${toString2()} but got ${JSON.stringify(data)}`, options);
-    }
-  }
-  if (!strict && isPlainObject(data)) merge(result, data);
-  return [result];
-});
-Schema.extend("transform", (data, { inner, callback, preserve }, options) => {
-  const [result, adapted = data] = Schema.resolve(data, inner, options, true);
-  if (preserve) {
-    return [callback(result)];
-  } else {
-    return [callback(result), callback(adapted)];
-  }
-});
-var formatters = {};
-function defineMethod(name, keys, format) {
-  formatters[name] = format;
-  Object.assign(Schema, {
-    [name](...args) {
-      const schema = new Schema({ type: name });
-      keys.forEach((key, index) => {
-        switch (key) {
-          case "sKey":
-            schema.sKey = args[index] ?? Schema.string();
-            break;
-          case "inner":
-            schema.inner = Schema.from(args[index]);
-            break;
-          case "list":
-            schema.list = args[index].map(Schema.from);
-            break;
-          case "dict":
-            schema.dict = mapValues(args[index], Schema.from);
-            break;
-          case "bits": {
-            schema.bits = {};
-            for (const key2 in args[index]) {
-              if (typeof args[index][key2] !== "number") continue;
-              schema.bits[key2] = args[index][key2];
-            }
-            break;
-          }
-          case "callback": {
-            const callback = schema.callback = args[index];
-            callback["toJSON"] ||= () => callback.toString();
-            break;
-          }
-          case "constructor": {
-            const constructor = schema.constructor = args[index];
-            if (typeof constructor === "function") {
-              ;
-              constructor["toJSON"] ||= () => constructor["name"];
-            }
-            break;
-          }
-          default:
-            schema[key] = args[index];
-        }
-      });
-      if (name === "object" || name === "dict") {
-        schema.meta.default = {};
-      } else if (name === "array" || name === "tuple") {
-        schema.meta.default = [];
-      } else if (name === "bitset") {
-        schema.meta.default = 0;
-      }
-      return schema;
-    }
-  });
-}
-defineMethod("is", ["constructor"], ({ constructor }) => {
-  if (typeof constructor === "function") {
-    return constructor.name;
-  } else {
-    return constructor;
-  }
-});
-defineMethod("any", [], () => "any");
-defineMethod("never", [], () => "never");
-defineMethod("const", ["value"], ({ value }) => typeof value === "string" ? JSON.stringify(value) : value);
-defineMethod("string", [], () => "string");
-defineMethod("number", [], () => "number");
-defineMethod("boolean", [], () => "boolean");
-defineMethod("bitset", ["bits"], () => "bitset");
-defineMethod("function", [], () => "function");
-defineMethod("array", ["inner"], ({ inner }) => `${inner.toString(true)}[]`);
-defineMethod("dict", ["inner", "sKey"], ({ inner, sKey }) => `{ [key: ${sKey.toString()}]: ${inner.toString()} }`);
-defineMethod("tuple", ["list"], ({ list }) => `[${list.map((inner) => inner.toString()).join(", ")}]`);
-defineMethod("object", ["dict"], ({ dict }) => {
-  if (Object.keys(dict).length === 0) return "{}";
-  return `{ ${Object.entries(dict).map(([key, inner]) => {
-    return `${key}${inner.meta.required ? "" : "?"}: ${inner.toString()}`;
-  }).join(", ")} }`;
-});
-defineMethod("union", ["list"], ({ list }, inline) => {
-  const result = list.map(({ toString: format }) => format()).join(" | ");
-  return inline ? `(${result})` : result;
-});
-defineMethod("intersect", ["list"], ({ list }) => {
-  return `${list.map((inner) => inner.toString(true)).join(" & ")}`;
-});
-defineMethod("transform", ["inner", "callback", "preserve"], ({ inner }, isInner) => inner.toString(isInner));
-var src_default = Schema;
-
-// .harness/packages/util/timeout/src/index.ts
-var MAX_TIMER_DELAY_MS = 2147483647;
-
-// .harness/packages/llm/llm/src/error.ts
-var EMPTY_RESPONSE_CODE = "EMPTY_RESPONSE";
-var STRUCTURED_CONTEXT_OVERFLOW = new RegExp(
-  String.raw`(?:^|[^a-z0-9])context[\s_-](?:length|window)[\s_-]` + String.raw`(?:exceed(?:ed|s)?|overflow(?:ed)?|limit[\s_-]exceeded)(?:$|[^a-z0-9])`,
-  "i"
-);
-var TOO_LARGE_FOR_CONTEXT = new RegExp(
-  String.raw`\b(?:request|prompt|input|messages?)\s+(?:is\s+|are\s+)?` + String.raw`too\s+(?:large|long)\s+for\s+(?:(?:this|the)\s+)?` + String.raw`(?:model(?:'s)?\s+)?context(?:\s+window)?\b`,
-  "i"
-);
-var EXCEEDS_MODEL_CONTEXT = new RegExp(
-  String.raw`\b(?:input|prompt|request|messages?)\b.{0,40}` + String.raw`\b(?:exceed(?:s|ed)?|overflows?|is\s+larger\s+than)\b.{0,40}` + String.raw`\b(?:the\s+)?(?:model(?:'s)?\s+)?context(?:\s+(?:length|window))?\b`,
-  "i"
-);
-
-// .harness/packages/llm/llm/src/retry-policy.ts
-var DEFAULT_MAX_RETRIES = 5;
-var DEFAULT_INITIAL_DELAY_MS = 500;
-var DEFAULT_MAX_DELAY_MS = 1e4;
-var DEFAULT_JITTER_RATIO = 0.1;
-var DEFAULT_RETRYABLE_CODES = Object.freeze([
-  EMPTY_RESPONSE_CODE,
-  "RATE_LIMIT",
-  "SERVER",
-  "TIMEOUT",
-  "TRANSPORT"
-]);
-var backoffSchema = src_default.object({
-  initialDelayMs: src_default.number().max(MAX_TIMER_DELAY_MS).default(DEFAULT_INITIAL_DELAY_MS),
-  maxDelayMs: src_default.number().max(MAX_TIMER_DELAY_MS).default(DEFAULT_MAX_DELAY_MS),
-  jitterRatio: src_default.number().min(0).max(1).default(DEFAULT_JITTER_RATIO)
-});
-var normalPolicySchema = src_default.object({
-  mode: src_default.const("normal").required(),
-  maxRetries: src_default.number().step(1).min(0).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_MAX_RETRIES),
-  retryableCodes: src_default.array(src_default.string()).default([...DEFAULT_RETRYABLE_CODES]),
-  backoff: backoffSchema
-});
-var alwaysPolicySchema = src_default.object({
-  mode: src_default.const("always").required(),
-  backoff: backoffSchema
-});
-var RetryPolicySchema = src_default.union([
-  normalPolicySchema,
-  alwaysPolicySchema
-]);
-
-// .harness/packages/llm/llm/src/attribution.ts
-import { createRequire } from "node:module";
-var { version } = createRequire(import.meta.url)("../package.json");
-
-// .harness/packages/llm/llm/src/never.ts
-function assertNever(value, context) {
-  const rendered = JSON.stringify(value) ?? String(value);
-  throw new Error(`unreachable variant${context ? ` in ${context}` : ""}: ${rendered}`);
-}
-
-// .harness/packages/core/scope/src/index.ts
-var kScope = /* @__PURE__ */ Symbol("dsh.scope");
-var carrierKeys = /* @__PURE__ */ new WeakMap();
-var scopeParents = /* @__PURE__ */ new WeakMap();
-function scopeOf(ctx) {
-  return ctx[kScope];
-}
-function scopeTarget(base, key) {
-  const baseFilter = base[Context.filter];
-  const carrier = {
-    [Context.filter](ctx) {
-      if (baseFilter !== void 0 && !baseFilter.call(base, ctx)) return false;
-      const tag = scopeOf(ctx);
-      if (tag === void 0) return true;
-      for (let cursor = key; cursor !== void 0; cursor = scopeParents.get(cursor)) {
-        if (cursor === tag) return true;
-      }
-      return false;
-    }
-  };
-  carrierKeys.set(carrier, key);
-  return carrier;
-}
-
-// .harness/packages/core/session/lib/index.js
+import { brandNumber, brandString } from "@deepseek-ai/dsh-brand";
+import { assertNever, deepFreeze, snapshotJsonValue } from "@deepseek-ai/dsh-util-values";
+import { scopeOf, scopeTarget } from "@deepseek-ai/dsh-scope";
+import { callConfigEquals } from "@deepseek-ai/dsh-llm";
 function SessionId(id) {
-  return id;
+  return brandString(id);
 }
-var SESSION_FORMAT_VERSION = 0;
-function hasIntrinsicConstructor(prototype, name) {
-  const constructor = Object.getOwnPropertyDescriptor(prototype, "constructor")?.value;
-  if (typeof constructor !== "function") return false;
-  try {
-    return constructor.name === name && constructor.prototype === prototype && Function.prototype.toString.call(constructor) === `function ${name}() { [native code] }`;
-  } catch {
-    return false;
-  }
+function SessionSeq(value) {
+  if (!Number.isSafeInteger(value) || value < 0 || Object.is(value, -0)) throw new TypeError(`SessionSeq must be a non-negative safe integer, got ${String(value)}`);
+  return brandNumber(value);
 }
-function isIntrinsicObjectPrototype(value) {
-  return Object.getPrototypeOf(value) === null && hasIntrinsicConstructor(value, "Object");
+function SessionLogOffset(value) {
+  if (!Number.isSafeInteger(value) || value < 0 || Object.is(value, -0)) throw new TypeError(`SessionLogOffset must be a non-negative safe integer, got ${String(value)}`);
+  return brandNumber(value);
 }
-function hasPlainArrayPrototype(value) {
-  const prototype = Object.getPrototypeOf(value);
-  if (!Array.isArray(prototype) || !hasIntrinsicConstructor(prototype, "Array")) return false;
-  const objectPrototype = Object.getPrototypeOf(prototype);
-  return typeof objectPrototype === "object" && objectPrototype !== null && isIntrinsicObjectPrototype(objectPrototype);
-}
-function hasPlainObjectPrototype(value) {
-  const prototype = Object.getPrototypeOf(value);
-  return prototype === null || typeof prototype === "object" && isIntrinsicObjectPrototype(prototype);
-}
-function enumerableStringKeys(value) {
-  const keys = Reflect.ownKeys(value);
-  if (keys.some((key) => typeof key !== "string" || !Object.prototype.propertyIsEnumerable.call(value, key))) return void 0;
-  return keys;
-}
-function walkJsonValue(value, detach) {
-  const ancestors = /* @__PURE__ */ new Set();
-  let root;
-  const assign = (destination, item) => {
-    if (destination === void 0) return;
-    if (destination.kind === "root") root = item;
-    else if (destination.kind === "array") destination.target[destination.index] = item;
-    else Object.defineProperty(destination.target, destination.key, {
-      value: item,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  };
-  const tasks = [{
-    kind: "visit",
-    value,
-    ...detach ? { destination: { kind: "root" } } : {}
-  }];
-  for (let task = tasks.pop(); task !== void 0; task = tasks.pop()) {
-    if (task.kind === "leave") {
-      ancestors.delete(task.source);
-      continue;
-    }
-    if (task.kind === "array-item") {
-      if (!Object.prototype.hasOwnProperty.call(task.source, task.index)) return void 0;
-      tasks.push({
-        kind: "visit",
-        value: task.source[task.index],
-        ...task.target === void 0 ? {} : { destination: {
-          kind: "array",
-          target: task.target,
-          index: task.index
-        } }
-      });
-      continue;
-    }
-    if (task.kind === "object-property") {
-      tasks.push({
-        kind: "visit",
-        value: task.source[task.key],
-        ...task.target === void 0 ? {} : { destination: {
-          kind: "object",
-          target: task.target,
-          key: task.key
-        } }
-      });
-      continue;
-    }
-    const current = task.value;
-    if (current === null) {
-      assign(task.destination, null);
-      continue;
-    }
-    if (typeof current === "boolean" || typeof current === "string") {
-      assign(task.destination, current);
-      continue;
-    }
-    if (typeof current === "number") {
-      if (!Number.isFinite(current) || Object.is(current, -0)) return void 0;
-      assign(task.destination, current);
-      continue;
-    }
-    if (typeof current !== "object") return void 0;
-    if (ancestors.has(current)) return void 0;
-    if (Array.isArray(current)) {
-      if (!hasPlainArrayPrototype(current)) return void 0;
-      const length = current.length;
-      if (Reflect.ownKeys(current).length !== length + 1) return void 0;
-      const target2 = detach ? [] : void 0;
-      if (target2 !== void 0) assign(task.destination, target2);
-      ancestors.add(current);
-      tasks.push({
-        kind: "leave",
-        source: current
-      });
-      for (let index = length - 1; index >= 0; index--) tasks.push({
-        kind: "array-item",
-        source: current,
-        index,
-        ...target2 === void 0 ? {} : { target: target2 }
-      });
-      continue;
-    }
-    if (!hasPlainObjectPrototype(current)) return void 0;
-    const keys = enumerableStringKeys(current);
-    if (keys === void 0) return void 0;
-    const target = detach ? {} : void 0;
-    if (target !== void 0) assign(task.destination, target);
-    ancestors.add(current);
-    tasks.push({
-      kind: "leave",
-      source: current
-    });
-    for (let index = keys.length - 1; index >= 0; index--) {
-      const key = keys[index];
-      if (key === void 0) return void 0;
-      tasks.push({
-        kind: "object-property",
-        source: current,
-        key,
-        ...target === void 0 ? {} : { target }
-      });
-    }
-  }
-  return detach ? root : true;
-}
-function snapshotJsonValue(value) {
-  return walkJsonValue(value, true);
-}
-function isJsonValue(value) {
-  return walkJsonValue(value, false) === true;
-}
+var SESSION_FORMAT_VERSION = 3;
+var KNOWN_SESSION_EVENT_TYPES = /* @__PURE__ */ new Set([
+  "agent-preset/selected",
+  "agent/inbox/spliced",
+  "approval/asked",
+  "approval/decided",
+  "approval/policy",
+  "assistant/attempt",
+  "assistant/message",
+  "command/done",
+  "command/run",
+  "compaction/end",
+  "compaction/prune",
+  "compaction/start",
+  "compaction/summary",
+  "deliverables/presented",
+  "feedback/message-delete",
+  "feedback/message-put",
+  "feedback/record",
+  "goal/change",
+  "hook/invoked",
+  "hook/result",
+  "image/offload",
+  "llm/retry",
+  "llm/retry-started",
+  "model/selection",
+  "permission/preset",
+  "plan/mode",
+  "request/context",
+  "request/header",
+  "sandbox/mode",
+  "schedule/change",
+  "session-log-deepseek/delivery-accepted",
+  "session/end-seed",
+  "session/title",
+  "session/title-llm-request",
+  "step/end",
+  "step/start",
+  "subagent/catalog",
+  "subagent/descriptor",
+  "subagent/model-selection-policy",
+  "system/message",
+  "team/member",
+  "team/message/delivered",
+  "team/message/queued",
+  "team/task",
+  "todo/write",
+  "tool-workflow/agent-end",
+  "tool-workflow/agent-start",
+  "tool-workflow/run-end",
+  "tool-workflow/run-start",
+  "tool/call",
+  "tool/ptc-dispatch",
+  "tool/ptc-dispatch-start",
+  "tool/result",
+  "turn/end",
+  "turn/start",
+  "user/message",
+  "web/deepseek-search-llm-request",
+  "workspace/changes"
+]);
+var MESSAGE_PROJECTION_EVENT_TYPES = /* @__PURE__ */ new Set(["image/offload"]);
 var SURFACE_EVENT_TYPES = /* @__PURE__ */ new Set([
+  "system/message",
   "user/message",
   "assistant/message",
   "tool/result"
@@ -3014,10 +97,13 @@ function isAppendSurfaceEvent(event) {
 function isReplacementSurfaceEvent(event) {
   return isSurfaceEvent(event) && event.surfaceOp !== "append";
 }
-function deriveEventMessage(event) {
+function deriveEventMessage(event, projectedMessages) {
+  const projected = projectedMessages?.get(event.seq);
+  if (projected !== void 0) return projected;
   switch (event.type) {
     case "user/message":
       return event.data;
+    case "system/message":
     case "assistant/message":
       if (event.data.message.content.length === 0) return null;
       return event.data.message;
@@ -3027,22 +113,48 @@ function deriveEventMessage(event) {
       return null;
   }
 }
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function validateSessionEventData(event, subject) {
+  const data = event.data;
+  if (event.type === "request/header") {
+    if (!isRecord(data)) throw new Error(`${subject} data must be an object`);
+    const header = data["header"];
+    if (!isRecord(header)) throw new Error(`${subject} header must be an object`);
+    if (Object.hasOwn(header, "system")) throw new Error(`${subject} must omit header.system; use system/message`);
+    if (Array.isArray(header["tools"]) && header["tools"].length === 0) throw new Error(`${subject} must omit empty tools`);
+    const defaults = header["adapterDefaults"];
+    if (isRecord(defaults) && Object.keys(defaults).length === 0) throw new Error(`${subject} must omit empty adapterDefaults`);
+  } else if (event.type === "tool/result") {
+    if (!isRecord(data)) throw new Error(`${subject} data must be an object`);
+    if (data["error"] === void 0) return;
+    const message = data["message"];
+    const content = isRecord(message) ? message["content"] : void 0;
+    const block = Array.isArray(content) ? content[0] : void 0;
+    if (!isRecord(block) || block["isError"] !== true) throw new Error(`${subject} error requires message content[0].isError === true`);
+  }
+}
 function createFoldState() {
   return {
     nodes: [],
-    replaceGeneration: 0
+    replaceGeneration: 0,
+    contentGeneration: 0,
+    projectedMessages: /* @__PURE__ */ new Map(),
+    projections: /* @__PURE__ */ new Set()
   };
 }
 function isEventSeq(value) {
-  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 && !Object.is(value, -0);
 }
 function isReplaceOp(value) {
   const op = value;
-  return Object.keys(op).length === 3 && Object.hasOwn(op, "op") && Object.hasOwn(op, "start") && Object.hasOwn(op, "end") && op["op"] === "replace" && isEventSeq(op["start"]) && isEventSeq(op["end"]);
+  return Object.keys(op).length === 3 && Object.hasOwn(op, "op") && Object.hasOwn(op, "startSeq") && Object.hasOwn(op, "endSeq") && op["op"] === "replace" && isEventSeq(op["startSeq"]) && isEventSeq(op["endSeq"]);
 }
 function surfaceOpOf(event) {
   const raw = event;
   if (!isSurfaceEligibleType(event.type)) {
+    if (!KNOWN_SESSION_EVENT_TYPES.has(event.type) && event.ignorable === true) return;
     if (raw.surfaceOp !== void 0) throw new Error(`session event "${event.type}" is not surface-eligible and cannot carry surfaceOp`);
     if (raw.sourceEventSeqs !== void 0) throw new Error(`session event "${event.type}" is not surface-eligible and cannot carry sourceEventSeqs`);
     return;
@@ -3054,12 +166,13 @@ function surfaceOpOf(event) {
   if (!isReplaceOp(op)) throw new Error(`session event "${event.type}" carries an invalid replace surfaceOp`);
   return op;
 }
-function assertProvenance(event, shadowedSeqs) {
+function assertSourceEventReferences(event, shadowedSeqs) {
   const raw = event.sourceEventSeqs;
+  if (event.type === "assistant/message" && raw !== void 0) throw new Error("assistant/message embeds its source stream and cannot carry sourceEventSeqs");
   const sources = /* @__PURE__ */ new Set();
   if (raw !== void 0) {
     if (!Array.isArray(raw)) throw new Error(`sourceEventSeqs on event at seq ${event.seq} must be an array when present`);
-    if (raw.length === 0 && event.type !== "assistant/message") throw new Error("sourceEventSeqs must not be empty except on assistant/message");
+    if (raw.length === 0) throw new Error("sourceEventSeqs must not be empty");
     let nonEarlierSource;
     for (const source of raw) {
       if (!isEventSeq(source)) throw new Error(`session event "${event.type}" sourceEventSeqs must densely contain non-negative safe integers`);
@@ -3072,12 +185,18 @@ function assertProvenance(event, shadowedSeqs) {
   const missing = shadowedSeqs.filter((seq) => !sources.has(seq));
   if (missing.length > 0) throw new Error(`surface replace: sourceEventSeqs must include every shadowed surface node; missing ${missing.join(", ")}`);
 }
+function validateSurfaceMetadata(event) {
+  const op = surfaceOpOf(event);
+  if (op !== void 0 && op !== "append" && (op.startSeq >= event.seq || op.endSeq >= event.seq)) throw new Error(`surface replace at seq ${event.seq}: startSeq and endSeq must reference earlier events`);
+  if (op !== void 0) assertSourceEventReferences(event, []);
+  return op;
+}
 function replacementRange(state, op) {
-  const startIdx = state.nodes.indexOf(op.start);
-  if (startIdx === -1) throw new Error(`surface replace: start seq ${op.start} not found in surface`);
-  const endIdx = state.nodes.indexOf(op.end);
-  if (endIdx === -1) throw new Error(`surface replace: end seq ${op.end} not found in surface`);
-  if (startIdx > endIdx) throw new Error(`surface replace: start seq ${op.start} (index ${startIdx}) is after end seq ${op.end} (index ${endIdx})`);
+  const startIdx = state.nodes.indexOf(op.startSeq);
+  if (startIdx === -1) throw new Error(`surface replace: start seq ${op.startSeq} not found in surface`);
+  const endIdx = state.nodes.indexOf(op.endSeq);
+  if (endIdx === -1) throw new Error(`surface replace: end seq ${op.endSeq} not found in surface`);
+  if (startIdx > endIdx) throw new Error(`surface replace: start seq ${op.startSeq} (index ${startIdx}) is after end seq ${op.endSeq} (index ${endIdx})`);
   return {
     startIdx,
     endIdx,
@@ -3123,36 +242,56 @@ function assertToolResultRewrite(event, shadowedSeqs, events, baseSeq) {
     if (!isDeepEqualJson(originalRest, replacementRest)) throw new Error("tool/result surface replacement may change only content");
   }
 }
-function planSurfaceEvent(state, event, expectedSeq, events, baseSeq) {
+function assertSystemHeadRewrite(event, state, startIdx, shadowedSeqs, events, baseSeq) {
+  if (startIdx !== 0) return;
+  if (events[state.nodes[0] - baseSeq]?.type !== "system/message") return;
+  if (event.type !== "system/message" || shadowedSeqs.length !== 1) throw new Error("surface replace: node 0 holds the system prompt and may be rewritten only by a system/message over exactly that node");
+}
+function planSurfaceEvent(state, event, expectedSeq, events, baseSeq, projections) {
   if (event.seq !== expectedSeq) throw new Error(`session event seq ${event.seq} is not contiguous; expected ${expectedSeq}`);
-  const surfaceOp = surfaceOpOf(event);
+  const surfaceOp = validateSurfaceMetadata(event);
+  const projection = projections.find((item) => item.type === event.type);
+  if (projection !== void 0) return {
+    kind: "project",
+    projection,
+    messages: projection.project(event, {
+      nodes: state.nodes,
+      events,
+      baseSeq,
+      messages: state.projectedMessages
+    })
+  };
+  if (MESSAGE_PROJECTION_EVENT_TYPES.has(event.type)) throw new Error(`session event "${event.type}" requires a message projection; load its owning plugin or supply its projection definition`);
   if (surfaceOp === void 0) return;
-  if (surfaceOp === "append") {
-    assertProvenance(event, []);
-    return {
-      kind: "append",
-      seq: event.seq
-    };
-  }
+  if (surfaceOp === "append") return {
+    kind: "append",
+    seq: event.seq
+  };
   const range = replacementRange(state, surfaceOp);
-  assertProvenance(event, range.shadowedSeqs);
+  assertSourceEventReferences(event, range.shadowedSeqs);
   assertToolResultRewrite(event, range.shadowedSeqs, events, baseSeq);
+  assertSystemHeadRewrite(event, state, range.startIdx, range.shadowedSeqs, events, baseSeq);
   return {
     kind: "replace",
     seq: event.seq,
-    start: surfaceOp.start,
-    end: surfaceOp.end,
+    start: surfaceOp.startSeq,
+    end: surfaceOp.endSeq,
     ...range
   };
 }
-function applySurfaceEvent(state, event, expectedSeq, events, baseSeq) {
-  return applySurfacePlan(state, planSurfaceEvent(state, event, expectedSeq, events, baseSeq));
+function applySurfaceEvent(state, event, expectedSeq, events, baseSeq, projections) {
+  return applySurfacePlan(state, planSurfaceEvent(state, event, expectedSeq, events, baseSeq, projections));
 }
 function applySurfacePlan(state, plan) {
   if (plan?.kind === "append") state.nodes.push(plan.seq);
   else if (plan?.kind === "replace") {
     state.nodes.splice(plan.startIdx, plan.endIdx - plan.startIdx + 1, plan.seq);
     state.replaceGeneration += 1;
+    state.contentGeneration += 1;
+  } else if (plan?.kind === "project") {
+    for (const [seq, message] of plan.messages) state.projectedMessages.set(seq, message);
+    state.projections.add(plan.projection);
+    state.contentGeneration += 1;
   }
   if (plan?.kind !== "replace") return;
   return {
@@ -3162,21 +301,23 @@ function applySurfacePlan(state, plan) {
     shadowedSeqs: plan.shadowedSeqs
   };
 }
-function foldSurface(events) {
+function foldSurface(events, projections = []) {
   const state = createFoldState();
   const replacements = [];
   for (const [index, event] of events.entries()) {
-    const replacement = applySurfaceEvent(state, event, index, events, 0);
+    const replacement = applySurfaceEvent(state, event, SessionSeq(index), events, SessionLogOffset(0), projections);
     if (replacement !== void 0) replacements.push(replacement);
   }
   return {
     nodes: [...state.nodes],
-    replacements
+    replacements,
+    projectedMessages: new Map(state.projectedMessages)
   };
 }
 var SurfaceManager = class {
   log;
   baseSeq;
+  projections;
   /** Shared transition state; replacement history is not retained. */
   _state = createFoldState();
   /** Last processed absolute seq. */
@@ -3186,32 +327,53 @@ var SurfaceManager = class {
   /**
   * @param log - Contiguous complete log or loaded event window.
   * @param baseSeq - Absolute sequence of the window's first event.
+  * @param projections - live borrowed definitions; removing a used definition invalidates further reads.
   */
-  constructor(log, baseSeq = 0) {
+  constructor(log, baseSeq = SessionLogOffset(0), projections = []) {
     this.log = log;
     this.baseSeq = baseSeq;
-    this._lastProcessedSeq = baseSeq - 1;
+    this.projections = projections;
+    this._lastProcessedSeq = baseSeq === 0 ? -1 : SessionSeq(baseSeq - 1);
   }
   /**
   * Validate the next candidate without mutating the committed surface.
   * @param event - candidate event that has not entered the log yet.
   */
   validateNext(event) {
+    this._assertProjections();
     if (this._lastProcessedSeq < this.baseSeq + this.log.length - 1) this._processDelta();
-    const expectedSeq = this.baseSeq + this.log.length;
+    const expectedSeq = SessionSeq(this.baseSeq + this.log.length);
     this._pendingPlan = {
       event,
       expectedSeq,
-      plan: planSurfaceEvent(this._state, event, expectedSeq, this.log, this.baseSeq)
+      plan: planSurfaceEvent(this._state, event, expectedSeq, this.log, this.baseSeq, this.projections)
     };
   }
   /** Monotonic count of folded positional replacements. */
   get replaceGeneration() {
+    this._assertProjections();
     if (this._lastProcessedSeq < this.baseSeq + this.log.length - 1) this._processDelta();
     return this._state.replaceGeneration;
   }
+  /** Monotonic count of committed changes to existing model-visible content. */
+  get contentGeneration() {
+    this._assertProjections();
+    if (this._lastProcessedSeq < this.baseSeq + this.log.length - 1) this._processDelta();
+    return this._state.contentGeneration;
+  }
+  /**
+  * Project one message with every committed message projection applied.
+  * @param event - message-producing or log-only event.
+  * @returns its immutable projected message, or null when it produces none.
+  */
+  deriveEventMessage(event) {
+    this._assertProjections();
+    if (this._lastProcessedSeq < this.baseSeq + this.log.length - 1) this._processDelta();
+    return deriveEventMessage(event, this._state.projectedMessages);
+  }
   /** Surface event sequences in model-visible order. */
   get nodes() {
+    this._assertProjections();
     if (this._lastProcessedSeq < this.baseSeq + this.log.length - 1) this._processDelta();
     return this._state.nodes;
   }
@@ -3223,10 +385,17 @@ var SurfaceManager = class {
       const event = this.log[index];
       const pending = this._pendingPlan;
       if (pending?.event === event && pending.expectedSeq === seq) applySurfacePlan(this._state, pending.plan);
-      else applySurfaceEvent(this._state, event, seq, this.log, this.baseSeq);
+      else applySurfaceEvent(this._state, event, SessionSeq(seq), this.log, this.baseSeq, this.projections);
       if (pending !== void 0 && pending.expectedSeq <= seq) this._pendingPlan = void 0;
-      this._lastProcessedSeq = seq;
+      this._lastProcessedSeq = SessionSeq(seq);
     }
+  }
+  /** Cached messages cannot outlive the definitions that interpreted their log. */
+  _assertProjections() {
+    const candidate = this._pendingPlan;
+    const pending = candidate !== void 0 && this.log[candidate.expectedSeq - this.baseSeq] === candidate.event ? candidate.plan : void 0;
+    const required = pending?.kind === "project" ? [...this._state.projections, pending.projection] : this._state.projections;
+    for (const projection of required) if (!this.projections.includes(projection)) throw new Error(`session message projection "${projection.type}" was removed or replaced; restore the session with its owning plugin`);
   }
 };
 function canonicalHeader(header) {
@@ -3234,7 +403,6 @@ function canonicalHeader(header) {
   return {
     config: header.config,
     ...adapterDefaults?.reasoningEffort === true || adapterDefaults?.maxTokens === true ? { adapterDefaults } : {},
-    ...header.system !== void 0 && header.system.length > 0 ? { system: header.system } : {},
     ...header.tools !== void 0 && header.tools.length > 0 ? { tools: header.tools } : {}
   };
 }
@@ -3242,13 +410,13 @@ function sameSchema(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 function headerEquals(a, b) {
-  if (!callConfigEquals(a.config, b.config) || a.adapterDefaults?.reasoningEffort !== b.adapterDefaults?.reasoningEffort || a.adapterDefaults?.maxTokens !== b.adapterDefaults?.maxTokens || a.system !== b.system) return false;
+  if (!callConfigEquals(a.config, b.config) || a.adapterDefaults?.reasoningEffort !== b.adapterDefaults?.reasoningEffort || a.adapterDefaults?.maxTokens !== b.adapterDefaults?.maxTokens) return false;
   const at = a.tools ?? [];
   const bt = b.tools ?? [];
   return at.length === bt.length && at.every((tool, i) => sameSchema(tool, bt[i]));
 }
-function foldRequestHeader(events, from2) {
-  let state = from2;
+function foldRequestHeader(events, from) {
+  let state = from;
   for (const event of events) if (event.type === "request/header") state = canonicalHeader(event.data.header);
   return state;
 }
@@ -3323,8 +491,8 @@ function interruptedTurnClosers(events) {
   const closers = [];
   for (const [callId, { step, callSeq }] of pendingCalls) {
     const started = callSeq !== void 0;
-    const message = freezeMessage({
-      id: MessageId(`interrupted-tool-result-${callId}-${seq}`),
+    const message = deepFreeze({
+      id: brandString(`interrupted-tool-result-${callId}-${seq}`),
       role: "user",
       source: {
         kind: "tool",
@@ -3342,7 +510,7 @@ function interruptedTurnClosers(events) {
     });
     closers.push({
       type: "tool/result",
-      seq: seq++,
+      seq: SessionSeq(seq++),
       time,
       data: {
         turn: openTurn,
@@ -3362,7 +530,7 @@ function interruptedTurnClosers(events) {
   }
   if (openStep !== null) closers.push({
     type: "step/end",
-    seq: seq++,
+    seq: SessionSeq(seq++),
     time,
     data: {
       turn: openTurn,
@@ -3371,7 +539,7 @@ function interruptedTurnClosers(events) {
   });
   closers.push({
     type: "turn/end",
-    seq: seq++,
+    seq: SessionSeq(seq++),
     time,
     data: {
       turn: openTurn,
@@ -3380,311 +548,53 @@ function interruptedTurnClosers(events) {
   });
   return closers;
 }
-var MIN_RUN = 3;
-function isRecord(value) {
-  return typeof value === "object" && value !== null;
+function isStrictlyIncreasing(values) {
+  return values.every((value, index) => index === 0 || value > values[index - 1]);
 }
-function hasExactKeys(value, keys) {
-  return Object.keys(value).length === keys.length && keys.every((k) => Object.hasOwn(value, k));
-}
-function classify(event) {
-  if (event.type !== "assistant/chunk") return void 0;
-  if (!hasExactKeys(event, [
-    "type",
-    "seq",
-    "time",
-    "data"
-  ])) return void 0;
-  if (!Number.isSafeInteger(event.seq) || event.seq < 0 || !Number.isSafeInteger(event.time)) return void 0;
-  const data = event.data;
-  if (!isRecord(data) || !hasExactKeys(data, [
-    "turn",
-    "step",
-    "chunk"
-  ])) return void 0;
-  if (typeof data.turn !== "number" || typeof data.step !== "number") return void 0;
-  const chunk = data.chunk;
-  if (!isRecord(chunk) || typeof chunk.index !== "number") return void 0;
-  switch (chunk.type) {
-    case "text-delta":
-    case "reasoning-delta":
-      return hasExactKeys(chunk, [
-        "type",
-        "index",
-        "text"
-      ]) && typeof chunk.text === "string" ? chunk.type : void 0;
-    case "tool-call-delta":
-      return (hasExactKeys(chunk, [
-        "type",
-        "index",
-        "id",
-        "argumentsDelta"
-      ]) || hasExactKeys(chunk, [
-        "type",
-        "index",
-        "id",
-        "name",
-        "argumentsDelta"
-      ]) && typeof chunk.name === "string") && typeof chunk.id === "string" && typeof chunk.argumentsDelta === "string" ? chunk.type : void 0;
-    default:
-      return;
+function encodeSeqRanges(values) {
+  if (!isStrictlyIncreasing(values)) return [...values];
+  const encoded = [];
+  for (let start = 0; start < values.length; ) {
+    let end = start;
+    while (end + 1 < values.length && values[end + 1] === values[end] + 1) end += 1;
+    if (end - start >= 2) encoded.push([values[start], values[end]]);
+    else for (let index = start; index <= end; index += 1) encoded.push(values[index]);
+    start = end + 1;
   }
+  return encoded;
 }
-function toolCallOf(event) {
-  return event.data.chunk;
-}
-function indexOf(event) {
-  return event.data.chunk.index;
-}
-function continues(prev, next, kind) {
-  if (next.seq !== prev.seq + 1) return false;
-  if (!Number.isSafeInteger(next.time - prev.time)) return false;
-  if (next.data.turn !== prev.data.turn || next.data.step !== prev.data.step) return false;
-  if (indexOf(next) !== indexOf(prev)) return false;
-  if (kind !== "tool-call-delta") return true;
-  const a = toolCallOf(prev);
-  const b = toolCallOf(next);
-  return a.id === b.id && Object.hasOwn(a, "name") === Object.hasOwn(b, "name") && a.name === b.name;
-}
-function buildRow(kind, run) {
-  const first = run[0];
-  const base = {
-    turn: first.data.turn,
-    step: first.data.step,
-    index: indexOf(first),
-    dt: run.slice(1).map((event, i) => event.time - run[i].time)
-  };
-  const envelope = {
-    seq0: first.seq,
-    time0: first.time
-  };
-  if (kind === "tool-call-delta") {
-    const call = toolCallOf(first);
-    return {
-      type: "tool-call-chunks",
-      ...envelope,
-      data: {
-        ...base,
-        id: CallId(call.id),
-        ...Object.hasOwn(call, "name") ? { name: call.name } : {},
-        args: run.map((event) => event.data.chunk.argumentsDelta)
-      }
-    };
-  }
-  const data = {
-    ...base,
-    texts: run.map((event) => event.data.chunk.text)
-  };
-  return kind === "text-delta" ? {
-    type: "text-chunks",
-    ...envelope,
-    data
-  } : {
-    type: "reasoning-chunks",
-    ...envelope,
-    data
-  };
-}
-function packChunkRuns(events) {
-  const out = [];
-  let kind;
-  let run = [];
-  const flush = () => {
-    if (kind !== void 0 && run.length >= MIN_RUN) out.push(buildRow(kind, run));
-    else out.push(...run);
-    kind = void 0;
-    run = [];
-  };
-  for (const event of events) {
-    const k = classify(event);
-    if (k === void 0) {
-      flush();
-      out.push(event);
+function decodeSeqRanges(value, maxEntries = Number.MAX_SAFE_INTEGER) {
+  if (!Array.isArray(value)) throw new TypeError("sourceEventSeqs must be an array");
+  const decoded = [];
+  let hasRange = false;
+  for (const entry of value) {
+    if (typeof entry === "number") {
+      assertSeq(entry);
+      if (decoded.length >= maxEntries) throw new TypeError("sourceEventSeqs exceeds its event sequence");
+      decoded.push(SessionSeq(entry));
       continue;
     }
-    const delta = event;
-    const last = run[run.length - 1];
-    if (k === kind && last !== void 0 && continues(last, delta, k)) {
-      run.push(delta);
-      continue;
-    }
-    flush();
-    kind = k;
-    run = [delta];
+    if (!Array.isArray(entry) || entry.length !== 2) throw new TypeError("sourceEventSeqs range entries must be [start, end] pairs");
+    const start = entry[0];
+    const end = entry[1];
+    assertSeq(start);
+    assertSeq(end);
+    if (end < start) throw new TypeError("sourceEventSeqs ranges require start <= end");
+    if (end - start + 1 > maxEntries - decoded.length) throw new TypeError("sourceEventSeqs range exceeds its event sequence");
+    for (let seq = start; seq <= end; seq += 1) decoded.push(SessionSeq(seq));
+    hasRange = true;
   }
-  flush();
-  return out;
+  if (hasRange && !isStrictlyIncreasing(decoded)) throw new TypeError("sourceEventSeqs ranges must be strictly increasing");
+  return decoded;
 }
-function malformed(tag, why) {
-  throw new Error(`malformed ${tag} storage row: ${why}`);
+function assertSeq(value) {
+  if (!Number.isSafeInteger(value) || value < 0) throw new TypeError("sourceEventSeqs must contain non-negative safe integers");
 }
-function validateRunData(tag, data, payloadKey) {
-  if (typeof data.turn !== "number" || typeof data.step !== "number" || typeof data.index !== "number") malformed(tag, "turn/step/index must be numbers");
-  const payload = data[payloadKey];
-  if (!Array.isArray(payload) || payload.length === 0 || payload.some((entry) => typeof entry !== "string")) malformed(tag, `${payloadKey} must be a non-empty string array`);
-  const dt = data.dt;
-  if (!Array.isArray(dt) || dt.some((gap) => !Number.isSafeInteger(gap))) malformed(tag, "dt must be an array of safe integers");
-  if (dt.length !== payload.length - 1) malformed(tag, `dt length ${dt.length} does not match ${payload.length} members`);
-  return payload;
-}
-function validateRow(value, tag) {
-  if (!hasExactKeys(value, [
-    "type",
-    "seq0",
-    "time0",
-    "data"
-  ])) malformed(tag, "envelope must be exactly {type, seq0, time0, data}");
-  if (!Number.isSafeInteger(value.seq0) || value.seq0 < 0) malformed(tag, "seq0 must be a non-negative safe integer");
-  if (!Number.isSafeInteger(value.time0)) malformed(tag, "time0 must be a safe integer");
-  const data = value.data;
-  if (!isRecord(data)) malformed(tag, "data must be an object");
-  let payload;
-  if (tag === "tool-call-chunks") {
-    const withName = hasExactKeys(data, [
-      "turn",
-      "step",
-      "index",
-      "id",
-      "name",
-      "dt",
-      "args"
-    ]);
-    if (!withName && !hasExactKeys(data, [
-      "turn",
-      "step",
-      "index",
-      "id",
-      "dt",
-      "args"
-    ])) malformed(tag, "data must be exactly {turn, step, index, id, name?, dt, args}");
-    if (typeof data.id !== "string" || withName && typeof data.name !== "string") malformed(tag, "id (and name when present) must be strings");
-    payload = validateRunData(tag, data, "args");
-  } else {
-    if (!hasExactKeys(data, [
-      "turn",
-      "step",
-      "index",
-      "dt",
-      "texts"
-    ])) malformed(tag, "data must be exactly {turn, step, index, dt, texts}");
-    payload = validateRunData(tag, data, "texts");
-  }
-  if (!Number.isSafeInteger(value.seq0 + payload.length - 1)) malformed(tag, "member seqs must stay safe integers");
-  let time = value.time0;
-  for (const gap of data.dt) {
-    time += gap;
-    if (!Number.isSafeInteger(time)) malformed(tag, "member times must stay safe integers");
-  }
-  return value;
-}
-function expandRow(row) {
-  const members = row.type === "tool-call-chunks" ? row.data.args : row.data.texts;
-  const events = [];
-  let time = row.time0;
-  for (let k = 0; k < members.length; k++) {
-    if (k > 0) time += row.data.dt[k - 1];
-    let chunk;
-    switch (row.type) {
-      case "text-chunks":
-        chunk = {
-          type: "text-delta",
-          index: row.data.index,
-          text: members[k]
-        };
-        break;
-      case "reasoning-chunks":
-        chunk = {
-          type: "reasoning-delta",
-          index: row.data.index,
-          text: members[k]
-        };
-        break;
-      case "tool-call-chunks":
-        chunk = {
-          type: "tool-call-delta",
-          index: row.data.index,
-          id: row.data.id,
-          ...Object.hasOwn(row.data, "name") ? { name: row.data.name } : {},
-          argumentsDelta: members[k]
-        };
-        break;
-      /* v8 ignore next 2 -- validateRow only returns the three row tags */
-      default:
-        return assertNever(row, "chunk-rows expandRow");
-    }
-    events.push({
-      type: "assistant/chunk",
-      seq: row.seq0 + k,
-      time,
-      data: {
-        turn: row.data.turn,
-        step: row.data.step,
-        chunk
-      }
-    });
-  }
-  return events;
-}
-function decodeStorageRecord(value) {
-  if (!isRecord(value)) return [value];
-  const tag = value.type;
-  if (tag !== "text-chunks" && tag !== "reasoning-chunks" && tag !== "tool-call-chunks") return [value];
-  return expandRow(validateRow(value, tag));
-}
-var KNOWN_SESSION_EVENT_TYPES = /* @__PURE__ */ new Set([
-  "agent-preset/selected",
-  "agent/inbox/spliced",
-  "approval/asked",
-  "approval/decided",
-  "approval/policy",
-  "assistant/chunk",
-  "assistant/message",
-  "command/done",
-  "command/run",
-  "compaction/end",
-  "compaction/prune",
-  "compaction/start",
-  "compaction/summary",
-  "feedback/record",
-  "goal/change",
-  "hook/invoked",
-  "hook/result",
-  "llm/retry",
-  "llm/retry-started",
-  "permission/preset",
-  "plan/mode",
-  "request/context",
-  "request/header",
-  "sandbox/mode",
-  "schedule/change",
-  "session/end-seed",
-  "session/title",
-  "session/title-llm-request",
-  "step/end",
-  "step/start",
-  "subagent/descriptor",
-  "team/member",
-  "team/message/delivered",
-  "team/message/queued",
-  "team/task",
-  "todo/write",
-  "tool-workflow/agent-end",
-  "tool-workflow/agent-start",
-  "tool-workflow/run-end",
-  "tool-workflow/run-start",
-  "tool/call",
-  "tool/code-dispatch",
-  "tool/code-dispatch-start",
-  "tool/result",
-  "turn/end",
-  "turn/start",
-  "user/message",
-  "web/deepseek-search-llm-request"
-]);
 function validateSessionHeader(id, input) {
   if (input === null || typeof input !== "object" || Array.isArray(input)) throw new Error("session header is not a plain JSON record");
   const record = input;
-  if (record.version !== 0) throw new Error(`session header version must be 0, got ${String(record.version)}`);
+  if (Object.hasOwn(record, "seedLength")) throw new Error('session header has invalid field "seedLength"');
+  if (record.version !== 3) throw new Error(`session header version must be 3, got ${String(record.version)}`);
   if (record.id !== id) throw new Error(`session header id "${String(record.id)}" does not match session id "${id}"`);
   if (typeof record.createdAt !== "number" || !Number.isSafeInteger(record.createdAt) || record.createdAt < 0) throw new Error("session header createdAt must be a non-negative safe integer");
   if (record.cwd !== void 0) {
@@ -3692,7 +602,7 @@ function validateSessionHeader(id, input) {
     if (!isAbsolute(record.cwd)) throw new Error(`session header cwd must be an absolute path, got "${record.cwd}"`);
   }
   if (record.parentSession !== void 0 && typeof record.parentSession !== "string") throw new Error("session header parentSession must be a string");
-  if (record.seedLength !== void 0 && (typeof record.seedLength !== "number" || !Number.isSafeInteger(record.seedLength) || record.seedLength < 0)) throw new Error("session header seedLength must be a non-negative safe integer");
+  if (typeof record.isSeeded !== "boolean") throw new Error("session header isSeeded must be a boolean");
   if (record.origin !== void 0 && record.origin !== "subagent") throw new Error('session header origin must be "subagent"');
   if (record.delegationDepth !== void 0 && (typeof record.delegationDepth !== "number" || !Number.isSafeInteger(record.delegationDepth) || record.delegationDepth < 0)) throw new Error("session header delegationDepth must be a non-negative safe integer");
   if (record.agentPreset !== void 0 && typeof record.agentPreset !== "string") throw new Error("session header agentPreset must be a string");
@@ -3707,19 +617,23 @@ function validateRestoredSessionHeader(id, input) {
 }
 function snapshotSessionHeader(id, source) {
   const snapshot = snapshotJsonValue(source === void 0 ? {
-    version: 0,
+    version: 3,
     id,
-    createdAt: Date.now()
+    createdAt: Date.now(),
+    isSeeded: false
   } : source);
   if (snapshot === void 0) throw new Error("session header is not losslessly JSON-serializable");
   return validateSessionHeader(id, snapshot);
 }
 function adoptSessionEvent(event) {
+  validateSessionEventData(event, `session event at seq ${event.seq}`);
+  validateSurfaceMetadata(event);
   assertMessageEventShape(event, `session event at seq ${event.seq}`);
   switch (event.type) {
     case "user/message":
       deepFreeze(event.data);
       break;
+    case "system/message":
     case "assistant/message":
     case "tool/result":
       deepFreeze(event.data.message);
@@ -3732,21 +646,9 @@ function adoptSessionEvent(event) {
 function snapshotSessionEvent(event) {
   return adoptSessionEvent(structuredClone(event));
 }
-function freezeRestoredObject(value) {
-  const pending = [value];
-  while (pending.length > 0) {
-    const current = pending.pop();
-    Object.freeze(current);
-    for (const key in current) {
-      const child = current[key];
-      if (child !== null && typeof child === "object") pending.push(child);
-    }
-  }
-  return value;
-}
 function assertSessionEventEnvelope(value, index) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new Error(`seed event at index ${index} has an invalid event envelope`);
   const event = value;
-  if (event["type"] === "request/header-delta") throw new Error(`seed event at index ${index} uses unsupported legacy request/header-delta format`);
   for (const key in event) switch (key) {
     case "type":
     case "seq":
@@ -3762,10 +664,13 @@ function assertSessionEventEnvelope(value, index) {
   const type = event["type"];
   const seq = event["seq"];
   const time = event["time"];
-  if (typeof type !== "string" || typeof seq !== "number" || !Number.isSafeInteger(seq) || seq < 0 || typeof time !== "number" || !Number.isSafeInteger(time) || event["data"] === void 0 || event["ignorable"] !== void 0 && event["ignorable"] !== true) throw new Error(`seed event at index ${index} has an invalid event envelope`);
+  if (typeof type !== "string" || typeof seq !== "number" || !Number.isSafeInteger(seq) || seq < 0 || Object.is(seq, -0) || typeof time !== "number" || !Number.isSafeInteger(time) || event["data"] === void 0 || event["ignorable"] !== void 0 && event["ignorable"] !== true) throw new Error(`seed event at index ${index} has an invalid event envelope`);
+  validateSessionEventData(event, `seed ${type} at index ${index}`);
   switch (type) {
     case "request/header":
+    case "system/message":
     case "user/message":
+    case "assistant/attempt":
     case "assistant/message":
     case "tool/result":
       assertCurrentLlmShape(event, index);
@@ -3776,18 +681,30 @@ function assertCurrentLlmShape(event, index) {
   const data = event["data"];
   const record = typeof data === "object" && data !== null ? data : void 0;
   if (event["type"] === "request/header") {
-    const header = record?.["header"];
-    const headerRecord = typeof header === "object" && header !== null && !Array.isArray(header) ? header : void 0;
-    const config = headerRecord?.["config"];
+    const headerRecord = record?.["header"];
+    const config = headerRecord["config"];
     if (!hasProviderModel(config)) throw new Error(`seed request/header at index ${index} lacks provider/model`);
     const configRecord = config;
     const reasoningEffort = configRecord["reasoningEffort"];
     if (reasoningEffort !== void 0 && (typeof reasoningEffort !== "string" || reasoningEffort.length === 0)) throw new Error(`seed request/header at index ${index} has an invalid reasoningEffort`);
-    assertAdapterDefaults(headerRecord?.["adapterDefaults"], configRecord, index);
+    assertAdapterDefaults(headerRecord["adapterDefaults"], configRecord, index);
+    const reason = record?.["reason"];
+    if (reason !== "initial" && reason !== "resume" && reason !== "change" && reason !== "series") throw new Error(`seed request/header at index ${index} has an invalid reason`);
+    if (record?.["startsSeries"] !== void 0 && record["startsSeries"] !== true) throw new Error(`seed request/header at index ${index} has an invalid startsSeries marker`);
   }
   const type = event["type"];
-  if (type !== "user/message" && type !== "assistant/message" && type !== "tool/result") return;
+  if (type === "assistant/attempt") {
+    assertAssistantSettlementShape(record, type, index);
+    return;
+  }
+  if (!isMessageEventType(type)) return;
   assertMessageEventShape(event, `seed ${type} at index ${index}`);
+  if (type === "assistant/message") assertAssistantSettlementShape(record, type, index);
+}
+function assertAssistantSettlementShape(data, type, index) {
+  const turn = data?.["turn"];
+  const step = data?.["step"];
+  if (typeof turn !== "number" || !Number.isSafeInteger(turn) || turn < 0 || Object.is(turn, -0) || typeof step !== "number" || !Number.isSafeInteger(step) || step < 0 || Object.is(step, -0) || !Array.isArray(data?.["stream"])) throw new Error(`seed ${type} at index ${index} has invalid settlement fields`);
 }
 var allowedAdapterKeys = /* @__PURE__ */ new Set(["reasoningEffort", "maxTokens"]);
 function assertAdapterDefaults(value, config, index) {
@@ -3796,20 +713,33 @@ function assertAdapterDefaults(value, config, index) {
   const defaults = value;
   if (Object.keys(defaults).some((key) => !allowedAdapterKeys.has(key)) || Object.values(defaults).some((marker) => marker !== true) || defaults["reasoningEffort"] === true && config["reasoningEffort"] === void 0 || defaults["maxTokens"] === true && config["maxTokens"] === void 0) throw new Error(`seed request/header at index ${index} has invalid adapterDefaults`);
 }
+function isMessageEventType(type) {
+  return type === "system/message" || type === "user/message" || type === "assistant/message" || type === "tool/result";
+}
+var MESSAGE_ROLE_BY_TYPE = {
+  "system/message": "system",
+  "user/message": "user",
+  "assistant/message": "assistant",
+  "tool/result": "user"
+};
 function assertMessageEventShape(event, subject) {
   const type = event["type"];
-  if (type !== "user/message" && type !== "assistant/message" && type !== "tool/result") return;
+  if (!isMessageEventType(type)) return;
   const data = event["data"];
   const record = typeof data === "object" && data !== null ? data : void 0;
   const message = type === "user/message" ? record : record?.["message"];
   if (typeof message !== "object" || message === null || typeof message["id"] !== "string" || message["id"] === "") throw new Error(`${subject} lacks an identified message`);
   const messageRecord = message;
-  const expectedRole = type === "assistant/message" ? "assistant" : "user";
+  const expectedRole = MESSAGE_ROLE_BY_TYPE[type];
   if (messageRecord["role"] !== expectedRole) throw new Error(`${subject} message must have role "${expectedRole}"`);
   const source = messageRecord["source"];
   if (typeof source !== "object" || source === null || typeof source["kind"] !== "string" || source["kind"] === "") throw new Error(`${subject} message has invalid source`);
   if (!Array.isArray(messageRecord["content"])) throw new Error(`${subject} message has invalid content`);
   const sourceRecord = source;
+  if (type === "system/message") {
+    if (sourceRecord["kind"] !== "plugin" || typeof sourceRecord["plugin"] !== "string" || sourceRecord["plugin"] === "") throw new Error(`${subject} message must have plugin source`);
+    return;
+  }
   if (type === "assistant/message") {
     if (sourceRecord["kind"] !== "model" || !hasProviderModel(sourceRecord)) throw new Error(`${subject} message must have model source`);
     return;
@@ -3825,10 +755,6 @@ function hasProviderModel(value) {
   if (typeof value !== "object" || value === null) return false;
   const pair = value;
   return typeof pair["provider"] === "string" && pair["provider"].length > 0 && typeof pair["model"] === "string" && pair["model"].length > 0;
-}
-function assertSupportedRequestHeader(type, data, location) {
-  if (type === "request/header-delta") throw new Error(`${location} uses unsupported legacy request/header-delta format`);
-  if (type === "request/header" && data !== null && typeof data === "object" && !Array.isArray(data) && data["reason"] === "fallback") throw new Error(`${location} uses unsupported legacy request/header reason "fallback"`);
 }
 function collectSessionCallbacks(ctx, args) {
   return [...ctx.events.dispatch("emit", args)];
@@ -3847,20 +773,22 @@ var attachments = /* @__PURE__ */ new WeakMap();
 var Session = class Session2 {
   log = [];
   /** Single incremental owner of surface acceptance and projection state. */
-  surfaceManager = new SurfaceManager(this.log);
+  surfaceManager;
   /** The ordered surface over this session's event log. */
   get surface() {
     return this.surfaceManager;
   }
   /**
   * Detached, deep-frozen creation metadata (format version, cwd, lineage,
-  * seed boundary). Supplied by the store via `ctx.sessions.create()`. When a
+  * and whether fork history exists). Supplied by the store via `ctx.sessions.create()`. When a
   * `Session` is created without a store-owned header, a minimal header is
   * synthesized (stamped with the current {@link SESSION_FORMAT_VERSION}) so
   * `session.header` is always present. Kept out of the event log — it is a
   * storage concern, not replayable conversation state.
   */
   header;
+  /** Number of leading events inherited from this Session's fork parent. */
+  inheritedEventCount;
   /** The session identity, derived from its durable header's single copy. */
   get id() {
     return this.header.id;
@@ -3869,11 +797,12 @@ var Session = class Session2 {
   * The first seq appended IN THIS PROCESS: the length of the constructor
   * seed (0 without one). Events with smaller seq values entered through
   * construction — replay, fork, or resume — and were never published on the
-  * `session/event` firehose (constructor seeds do not emit), so consumers
-  * that replay the log as a publication substitute (telemetry adoption)
-  * start here. Distinct from `header.seedLength`, the DURABLE fork-lineage
-  * boundary: a resumed session's constructor seed is its full stored log,
-  * while its header keeps the original fork value — this field is the
+  * `session/event` firehose (constructor seeds do not emit). This offset marks
+  * the constructor-input boundary for lifecycle ownership and persistence
+  * adoption; consumers that need complete canonical history still start at
+  * seq 0. Distinct from {@link inheritedEventCount}, the DURABLE
+  * fork-lineage cut: a resumed session's constructor seed is its full stored
+  * log, while the inherited count keeps the original fork value — this field is the
   * in-process construction fact.
   *
   * Not persisted itself: a seeded session projects it into the log as the
@@ -3894,57 +823,108 @@ var Session = class Session2 {
   * @param id - session identity.
   * @param seed - optional borrowed replay or fork events.
   * @param header - optional borrowed storage metadata.
+  * @param inheritedEventCount - exact fork-inherited prefix length for a seeded header.
+  * @param projections - pure interpreters for plugin-owned message changes.
   * @returns a detached session.
+  * @throws when a seed event requires a missing message interpreter or fails validation.
   */
-  static create(id, seed, header) {
-    return new Session2(id, seed, header);
+  static create(id, seed, header, inheritedEventCount, projections) {
+    return new Session2(id, seed, header, "snapshot", inheritedEventCount, projections);
   }
   /**
-  * Restore a detached session by taking ownership of fresh persistence values.
-  * The storage format, event envelopes, sequence continuity, surface transitions,
-  * and header fields are validated before the restored objects are frozen.
+  * Restore a detached session by adopting an independently owned or deeply frozen seed.
+  * Runtime-required event fields, event envelopes, sequence continuity, surface
+  * transitions, and header fields are validated without copying or freezing events.
+  * Embedded Assistant streams remain opaque until a stream consumer or storage
+  * verifier reads them.
   * @param id - restored session identity.
-  * @param seed - fresh detached events whose ownership is transferred.
-  * @param header - fresh detached metadata whose ownership is transferred.
+  * @param seed - independently owned or deeply frozen events.
+  * @param header - independently owned storage metadata.
+  * @param inheritedEventCount - exact fork-inherited prefix length decoded from storage.
+  * @param eventState - aliasing state carried from the operation that produced the seed.
+  * @param projections - pure interpreters for plugin-owned message changes.
   * @returns a restored detached session.
+  * @throws when a seed event requires a missing message interpreter or fails validation.
   */
-  static fromRestore(id, seed, header) {
-    return new Session2(id, seed, header, "restore");
+  static fromRestore(id, seed, header, inheritedEventCount, eventState, projections) {
+    return new Session2(id, seed, header, eventState, inheritedEventCount, projections);
   }
-  constructor(id, seed, header, mode = "snapshot") {
-    const restoredHeader = mode === "restore" ? validateRestoredSessionHeader(id, header) : void 0;
+  constructor(id, seed, header, mode = "snapshot", suppliedInheritedEventCount, projections = []) {
+    this.surfaceManager = new SurfaceManager(this.log, SessionLogOffset(0), projections);
+    const restoredHeader = mode === "snapshot" ? void 0 : validateRestoredSessionHeader(id, header);
     if (seed !== void 0) for (const [index, source] of seed.entries()) {
-      const snapshot = mode === "restore" ? source : snapshotJsonValue(source);
+      const snapshot = mode === "snapshot" ? snapshotJsonValue(source) : source;
       if (snapshot === void 0) throw new Error(`seed event at index ${index} is not losslessly JSON-serializable`);
       assertSessionEventEnvelope(snapshot, index);
-      assertSupportedRequestHeader(snapshot.type, snapshot.data, `seed event at index ${index}`);
       if (snapshot.seq !== index) throw new Error(`seed event at index ${index} has seq ${snapshot.seq} (expected ${index}); seed must be contiguous from 0`);
       try {
         this.surfaceManager.validateNext(snapshot);
       } catch (error) {
         throw new Error(`invalid seed event at index ${index}: ${error instanceof Error ? error.message : "invalid surface metadata"}`);
       }
-      this.log.push(mode === "restore" ? freezeRestoredObject(snapshot) : deepFreeze(snapshot));
+      this.log.push(mode === "snapshot" ? deepFreeze(snapshot) : snapshot);
     }
-    this.firstLiveSeq = this.log.length;
+    this.firstLiveSeq = SessionLogOffset(this.log.length);
     this.header = restoredHeader ?? snapshotSessionHeader(id, header);
-    if (seed !== void 0 && this.log.at(-1)?.type !== "session/end-seed") this.append("session/end-seed", {});
+    if (this.header.isSeeded && seed === void 0) throw new Error("seeded session requires an explicit constructor seed");
+    if (this.header.isSeeded && suppliedInheritedEventCount === void 0) throw new Error("seeded session requires an inherited event count");
+    const inheritedEventCount = SessionLogOffset(suppliedInheritedEventCount ?? 0);
+    if (!this.header.isSeeded && inheritedEventCount !== 0) throw new Error("unseeded session inherited event count must be 0");
+    if (inheritedEventCount > this.log.length) throw new Error("session inherited event count exceeds its event log");
+    if (mode === "snapshot" && this.header.isSeeded && inheritedEventCount !== this.log.length) throw new Error("seeded session constructor seed must equal its inherited prefix");
+    this.inheritedEventCount = inheritedEventCount;
+    if (seed !== void 0 && mode === "snapshot" && this.header.isSeeded) this.append("session/end-seed", { inherited: true });
+    else if (seed !== void 0 && this.log.at(-1)?.type !== "session/end-seed") this.append("session/end-seed", {});
   }
-  /** Cached immutable public snapshot of the private append-only log. */
+  /** Cached immutable full snapshot of the private append-only log. */
   eventsSnapshot;
   /**
-  * An immutable snapshot of the append-only event log. The snapshot is reused
-  * until the next append; a previously returned array does not grow later.
-  * Events and their nested data are deep-frozen at acceptance, so neither a
-  * cast nor ordinary JavaScript can rewrite durable history.
+  * Return the immutable event stored at one exact sequence number.
+  * @deprecated Existing logic may remain unmigrated for now, but new calls are prohibited.
+  * See the [Agent Note](../../../../.agents/notes/implemented/architecture/2026-09-09-deprecate-synchronous-session-event-reads.md).
+  * @param seq - event sequence number.
+  * @returns the accepted event, or undefined when the log does not contain it.
   */
-  get events() {
-    this.eventsSnapshot ??= Object.freeze([...this.log]);
-    return this.eventsSnapshot;
+  eventAt(seq) {
+    return this.log[seq];
+  }
+  /**
+  * Materialize an immutable snapshot of a half-open event sequence range.
+  * A full current snapshot is reused until the next append; every previously
+  * returned snapshot remains stable after later appends.
+  * @deprecated Existing logic may remain unmigrated for now, but new calls are prohibited.
+  * See the [Agent Note](../../../../.agents/notes/implemented/architecture/2026-09-09-deprecate-synchronous-session-event-reads.md).
+  * @param fromSeq - non-negative inclusive sequence number; defaults to the log start.
+  * @param toSeqExclusive - non-negative exclusive sequence number; defaults to the current end.
+  * @returns a frozen array of the selected deeply frozen events.
+  */
+  snapshotEvents(fromSeq = SessionLogOffset(0), toSeqExclusive = this.seq) {
+    if (fromSeq === 0 && toSeqExclusive === this.log.length) {
+      this.eventsSnapshot ??= Object.freeze([...this.log]);
+      return this.eventsSnapshot;
+    }
+    return Object.freeze(this.log.slice(fromSeq, toSeqExclusive));
+  }
+  /**
+  * Return this Session's events after its fork-inherited prefix.
+  * @deprecated Existing logic may remain unmigrated for now, but new calls are prohibited.
+  * See the [Agent Note](../../../../.agents/notes/implemented/architecture/2026-09-09-deprecate-synchronous-session-event-reads.md).
+  * @returns a fresh array containing child-owned events in log order.
+  */
+  ownEvents() {
+    return this.snapshotEvents(this.inheritedEventCount);
+  }
+  /**
+  * Whether one existing event position is outside the fork-inherited prefix.
+  * @param seq - event position in this Session.
+  * @returns true when the event belongs to this Session rather than its parent.
+  */
+  isOwnSeq(seq) {
+    return seq >= this.inheritedEventCount && seq < this.seq;
   }
   /** The next event's sequence number — always the log length (the `seq = log.length` contiguity contract). */
   get seq() {
-    return this.log.length;
+    return SessionLogOffset(this.log.length);
   }
   /**
   * Append one typed event to the log and synchronously notify observers via
@@ -3963,7 +943,8 @@ var Session = class Session2 {
   *   declare how it joins the surface, the sole source of derived model
   *   history) and
   *   rejected by the compiler for non-surface types like `turn/start` or
-  *   `assistant/chunk`.
+  *   `assistant/attempt`. Assistant messages embed their exact provider
+  *   stream and cannot cite top-level source events.
   * @returns the logged event — its assigned `seq`/`time` plus the SNAPSHOT of
   *   `data` that entered the log, so reading `event.data` back sees the logged
   *   value, never the caller's still-mutable input.
@@ -3971,9 +952,10 @@ var Session = class Session2 {
   *   (BigInt, function, symbol, undefined, negative zero, non-finite number,
   *   circular reference, sparse array, or an exotic object such as
   *   Map/Set/Date/class instance), or when the candidate violates the
+  *   request-header empty-field or tool-error consistency rules, or the
   *   canonical surface contract (marker shape and eligibility, unique
   *   earlier source-event references, positional replacement validity, and complete
-  *   shadowed-node coverage). One recursive pass reads, validates, and
+  *   shadowed-node coverage). One iterative pass reads, validates, and
   *   copies each nested value once, so a stateful getter cannot supply one value
   *   to validation and another to storage. The event log is the durable source
   *   of truth, so a bad event fails at the append site rather than later during
@@ -3989,18 +971,18 @@ var Session = class Session2 {
     };
     const dataSnapshot = snapshotJsonValue(data);
     if (dataSnapshot === void 0) throw new Error(`session event "${type}" carries non-JSON-serializable data`);
-    assertSupportedRequestHeader(type, dataSnapshot, `session event "${type}"`);
     const surfaceMetadataSnapshot = snapshotJsonValue(surfaceMetadata);
     if (surfaceMetadataSnapshot === void 0) throw new Error(`session event "${type}" carries non-JSON-serializable surface metadata`);
     const entry = attachments.get(this);
     if (entry?.appending) throw new Error("session append cannot reenter while another append is being published");
     const event = deepFreeze({
       type,
-      seq: this.log.length,
+      seq: SessionSeq(this.log.length),
       time: Date.now(),
       data: dataSnapshot,
       ...surfaceMetadataSnapshot
     });
+    validateSessionEventData(event, `session event "${type}" at seq ${event.seq}`);
     this.surfaceManager.validateNext(event);
     if (entry !== void 0) entry.appending = true;
     try {
@@ -4030,7 +1012,7 @@ var Session = class Session2 {
   * The {@link EpochHeader} in force after the log's last header event — the
   * header the NEXT request will be compared against — or undefined before
   * the first `request/header` snapshot. The live, incrementally-maintained
-  * form of `foldRequestHeader(session.events)`: each header event is folded
+  * form of `foldRequestHeader(session.snapshotEvents())`: each header event is folded
   * once, when first seen, so a per-step read costs O(new events).
   * @returns the folded header, or undefined when no header event exists yet.
   */
@@ -4060,7 +1042,7 @@ var Session = class Session2 {
   derived = [];
   /** Surface position (nodes projected) the cache has reached. */
   derivedNodes = 0;
-  /** {@link SurfaceManager.replaceGeneration} the cache was built under. */
+  /** {@link SurfaceManager.contentGeneration} the cache was built under. */
   derivedGeneration = 0;
   /**
   * Derive the LLM message history by walking the ordered sequences of
@@ -4069,21 +1051,21 @@ var Session = class Session2 {
   * append records its `surfaceOp`, so a raw event with no marker (a chunk, a
   * turn boundary) is correctly absent, and a compaction `replace` deletes the
   * shadowed nodes from the derivation. The projection rules are
-  * {@link deriveEventMessage}, folded per node.
+  * {@link deriveEventMessage}, with logged message projections applied
+  * without changing node membership or message identity.
   *
-  * CACHED: each surface node is projected exactly once, when first seen — a
-  * call costs O(new nodes), and a surface rewrite (a `replace`;
-  * {@link SessionSurface.replaceGeneration}) rebuilds. The returned array is
+  * CACHED: pure tail growth costs O(new nodes); a replacement or message projection
+  * ({@link SessionSurface.contentGeneration}) rebuilds. The returned array is
   * a fresh snapshot per call (later appends never grow an array a caller
   * already holds); the `Message` objects in it are SHARED and **deep-frozen**.
-  * Their content reuses the already frozen durable event data, so the cache
-  * needs no second deep clone and consumers still cannot mutate the log.
+  * Unchanged content reuses frozen event data; projected blocks are frozen
+  * derived copies. Consumers cannot mutate the log through either form.
   * @returns a fresh array of the shared, frozen derived history.
   */
   deriveMessages() {
     const surface = this.surface;
     const nodes = surface.nodes;
-    const generation = surface.replaceGeneration;
+    const generation = surface.contentGeneration;
     if (generation !== this.derivedGeneration) {
       this.derived = [];
       this.derivedNodes = 0;
@@ -4097,13 +1079,13 @@ var Session = class Session2 {
     return [...this.derived];
   }
   /**
-  * Instance face of the pure per-node `deriveEventMessage` export from
-  * `surface.ts`.
+  * Project one event with all committed message projections applied.
+  * The original durable event remains unchanged.
   * @param event - the event to project.
   * @returns the derived message, or null when the event produces none.
   */
   deriveEventMessage(event) {
-    return deriveEventMessage(event);
+    return this.surfaceManager.deriveEventMessage(event);
   }
 };
 var SessionForkError = class extends Error {
@@ -4117,6 +1099,27 @@ var SessionForkError = class extends Error {
 var SessionStore = class extends Service {
   store = /* @__PURE__ */ new Map();
   counter = 0;
+  projections = [];
+  /** Borrowed definitions for detached replay; contributions live until their registering fibers unload. */
+  get messageProjections() {
+    return this.projections;
+  }
+  /**
+  * Register one event interpreter for live creation, restore, and fork.
+  * Disposing the contribution makes sessions that used it refuse further derivation.
+  * @param projection - pure definition owned by the event's plugin.
+  * @returns the fiber-owned disposer.
+  * @throws when another definition already owns this event type.
+  */
+  registerMessageProjection(projection) {
+    if (this.projections.some((item) => item.type === projection.type)) throw new Error(`session message projection "${projection.type}" is already registered`);
+    return this.ctx.effect(() => {
+      this.projections.push(projection);
+      return () => {
+        this.projections.splice(this.projections.indexOf(projection), 1);
+      };
+    }, "sessions.registerMessageProjection()");
+  }
   constructor(ctx) {
     super(ctx, "sessions");
     ctx.inject(["typert"], (typeCtx) => {
@@ -4169,10 +1172,9 @@ var SessionStore = class extends Service {
   *
   * @param id - the session id; omitted, the store mints `session-<n>`.
   * @param options - seed events and/or creation metadata for the header. With
-  *   `seedSource: 'persistence'`, metadata and events must be fresh detached
-  *   graphs whose ownership transfers to this call: they are validated and
-  *   frozen in place through {@link Session.fromRestore}, so the caller must
-  *   retain no mutable aliases.
+  *   `eventState`, every seed event is either independently owned or any
+  *   shared value is deeply frozen; {@link Session.fromRestore} validates and
+  *   adopts those values without copying or freezing them.
   * @returns the constructed session, NOT yet in the store.
   * @throws if a session with `id` already exists, metadata is not a plain
   *   lossless-JSON record with valid scalar fields, or `meta.cwd` is a
@@ -4181,25 +1183,37 @@ var SessionStore = class extends Service {
   prepare(id, options) {
     let sessionId;
     if (id === void 0) do
-      sessionId = SessionId(`session-${++this.counter}`);
+      sessionId = brandString(`session-${++this.counter}`);
     while (this.store.has(sessionId));
-    else sessionId = SessionId(id);
+    else sessionId = brandString(id);
     if (this.store.has(sessionId)) throw new Error(`session "${sessionId}" already exists`);
-    if (options?.seedSource === "persistence") return Session.fromRestore(sessionId, options.seed, options.meta);
+    if (options !== void 0) {
+      const { eventState } = options;
+      switch (eventState) {
+        case "detached":
+        case "shared-frozen":
+          return Session.fromRestore(sessionId, options.seed, options.meta, options.inheritedEventCount, eventState, this.projections);
+        case void 0:
+          break;
+        /* v8 ignore next -- closed-union exhaustiveness guard */
+        default:
+          assertNever(eventState, "SessionStore.prepare event state");
+      }
+    }
     const seed = options?.seed;
     const meta = options?.meta;
     const header = {
-      version: 0,
+      version: 3,
       id: sessionId,
       createdAt: meta?.createdAt ?? Date.now(),
       ...meta?.cwd === void 0 ? {} : { cwd: meta.cwd },
       ...meta?.parentSession === void 0 ? {} : { parentSession: meta.parentSession },
-      ...meta?.seedLength === void 0 ? {} : { seedLength: meta.seedLength },
+      isSeeded: meta?.isSeeded ?? false,
       ...meta?.origin === void 0 ? {} : { origin: meta.origin },
       ...meta?.delegationDepth === void 0 ? {} : { delegationDepth: meta.delegationDepth },
       ...meta?.agentPreset === void 0 ? {} : { agentPreset: meta.agentPreset }
     };
-    return Session.create(sessionId, seed, header);
+    return Session.create(sessionId, seed, header, options?.inheritedEventCount, this.projections);
   }
   /**
   * Enter a {@link prepare}d session into the store: install the module-private
@@ -4379,16 +1393,16 @@ var SessionStore = class extends Service {
     const seed = this._forkSeed(liveSource, boundary);
     return this.create(childSessionId, {
       seed,
+      inheritedEventCount: SessionLogOffset(seed.length),
       meta: {
         ...liveSource.header.cwd !== void 0 ? { cwd: liveSource.header.cwd } : {},
         parentSession: liveSource.id,
-        seedLength: seed.length
+        isSeeded: true
       }
     });
   }
   _forkSeed(session, requestedBoundary) {
-    const events = session.events;
-    const lastEvent = events.at(-1);
+    const lastEvent = session.snapshotEvents().at(-1);
     let boundary;
     if (requestedBoundary !== void 0) boundary = requestedBoundary;
     else {
@@ -4396,15 +1410,16 @@ var SessionStore = class extends Service {
       boundary = lastEvent.seq;
     }
     if (!Number.isSafeInteger(boundary) || boundary < 0) throw new SessionForkError(`fork boundary for session "${session.id}" must be a non-negative safe integer, got ${String(boundary)}`, "INVALID_BOUNDARY");
-    if (boundary >= events.length) {
-      const lastSeq = events.at(-1)?.seq;
+    if (boundary >= session.seq) {
+      const lastSeq = lastEvent?.seq;
       throw new SessionForkError(`fork boundary ${boundary} does not exist in session "${session.id}" (last seq: ${lastSeq ?? "none"})`, "INVALID_BOUNDARY");
     }
-    const boundaryEvent = events[boundary];
+    const boundaryEvent = session.eventAt(boundary);
     if (boundaryEvent === void 0 || boundaryEvent.seq !== boundary) throw new SessionForkError(`fork boundary ${boundary} does not match a contiguous event seq in session "${session.id}"`, "INVALID_BOUNDARY");
-    const lastTurnBoundary = events.slice(0, boundary + 1).findLast((event) => event.type === "turn/start" || event.type === "turn/end");
+    const events = session.snapshotEvents(SessionLogOffset(0), SessionLogOffset(boundary + 1));
+    const lastTurnBoundary = events.findLast((event) => event.type === "turn/start" || event.type === "turn/end");
     if (lastTurnBoundary?.type === "turn/start") throw new SessionForkError(`fork boundary ${boundary} in session "${session.id}" ends inside open turn ${lastTurnBoundary.data.turn}`, "OPEN_TURN");
-    return events.slice(0, boundary + 1);
+    return events;
   }
   _resolveForkSource(source) {
     if (typeof source === "string") {
@@ -4424,25 +1439,25 @@ export {
   Session,
   SessionForkError,
   SessionId,
+  SessionLogOffset,
   SessionPreparation,
+  SessionSeq,
   SessionStore,
   TOOL_NOT_STARTED,
   TOOL_OUTCOME_UNKNOWN,
   adoptSessionEvent,
   canonicalHeader,
-  decodeStorageRecord,
+  decodeSeqRanges,
   SessionStore as default,
   deriveEventMessage,
+  encodeSeqRanges,
   foldRequestHeader,
   foldSurface,
   headerEquals,
   interruptedTurnClosers,
   isAppendSurfaceEvent,
-  isJsonValue,
   isReplacementSurfaceEvent,
   isSurfaceEligibleType,
   isSurfaceEvent,
-  packChunkRuns,
-  snapshotJsonValue,
   snapshotSessionEvent
 };

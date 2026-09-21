@@ -227,6 +227,12 @@ export class Duplex extends Readable {
     this._writable = writable;
     this.write = writable.write.bind(writable);
     this.end = writable.end.bind(writable);
+    // ...and so are its events. A failed _transform destroys the writable
+    // half; unless the error surfaces on the stream a caller holds, a
+    // pipeline through it waits forever for an 'end' that is never coming.
+    writable.on('error', (error) => this.emit('error', error));
+    writable.on('drain', () => this.emit('drain'));
+    writable.on('finish', () => this.emit('finish'));
   }
 }
 
@@ -261,20 +267,68 @@ export class Transform extends Duplex {
 
 export class PassThrough extends Transform {}
 
+// pipeline chains stages the way Node's does. A stage is a stream, or a
+// function: the first may return any iterable to read from, a later one is
+// handed the previous stage as an async iterable and may return another (an
+// async generator — a transform) or a promise (a consumer, which ends the
+// chain). The callback form takes a trailing callback; the promise form, in
+// `stream/promises`, takes none, so a trailing function there is a stage.
+function runPipeline(stages) {
+  const streams = [];
+  let current = stages[0];
+  if (typeof current === 'function') current = current();
+  let settle = null;
+  for (let i = 1; i < stages.length; i += 1) {
+    const stage = stages[i];
+    if (typeof stage === 'function') {
+      const source = current;
+      const out = stage(isStream(source) ? source : Readable.from(source));
+      if (i === stages.length - 1 && out && typeof out.then === 'function' && !out[Symbol.asyncIterator]) {
+        settle = out;
+        break;
+      }
+      current = out;
+      continue;
+    }
+    const source = isStream(current) ? current : Readable.from(current);
+    streams.push(source);
+    current = source.pipe(stage);
+  }
+  if (isStream(current)) streams.push(current);
+  const failure = new Promise((_, reject) => {
+    for (const stream of streams) stream.on('error', reject);
+  });
+  if (settle === null) {
+    if (isStream(current)) {
+      settle = new Promise((resolve) => {
+        current.on('finish', resolve);
+        current.on('end', resolve);
+      });
+    } else {
+      // A trailing async iterable nobody consumes: drain it, which is what
+      // running the chain to completion means for one.
+      settle = (async () => { for await (const _ of current) { /* drained */ } })();
+    }
+  }
+  return Promise.race([settle, failure]).catch((error) => {
+    for (const stream of streams) {
+      try { stream.destroy?.(error); } catch { /* already torn down */ }
+    }
+    throw error;
+  });
+}
+
+function isStream(value) {
+  return value !== null && typeof value === 'object' && typeof value.pipe === 'function';
+}
+
 export function pipeline(...args) {
   const cb = typeof args[args.length - 1] === 'function' ? args.pop() : null;
-  const [source, ...rest] = args;
-  let current = source;
-  for (const next of rest) current = current.pipe(next);
-  const done = new Promise((resolve, reject) => {
-    current.on('finish', resolve);
-    current.on('end', resolve);
-    current.on('error', reject);
-    source.on('error', reject);
-  });
+  const done = runPipeline(args);
   if (cb) {
-    done.then(() => cb(null), cb);
-    return current;
+    done.then(() => cb(null), (error) => cb(error));
+    const last = args[args.length - 1];
+    return isStream(last) ? last : undefined;
   }
   return done;
 }
@@ -290,7 +344,7 @@ export function finished(stream, cb) {
   return done;
 }
 
-export const promises = { pipeline, finished };
+export const promises = { pipeline: (...stages) => runPipeline(stages), finished };
 
 const __ns = {
   Stream, Readable, Writable, Duplex, Transform, PassThrough,

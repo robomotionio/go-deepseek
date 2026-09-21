@@ -134,7 +134,7 @@ real tool-call stream and invents nothing.
 ```sh
 export DEEPSEEK_API_KEY=...
 export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1   # optional; unset = DeepSeek
-export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731   # optional
+export DEEPSEEK_MODEL=deepseek/deepseek-v4.1-flash   # optional
 go run ./examples/13-phone-banking
 ```
 
@@ -153,7 +153,7 @@ go run ./examples/13-phone-banking/web
 ```
 
 With only the OpenRouter key set, the demo uses `https://openrouter.ai/api/v1`
-and that endpoint's model id (`deepseek/deepseek-v4-flash-0731`) on its own;
+and that endpoint's model id (`deepseek/deepseek-v4.1-flash`) on its own;
 `DEEPSEEK_MODEL` and the `DSH_*_MODEL` variables still override the model.
 The startup banner says which credential it chose and where it is aimed.
 
