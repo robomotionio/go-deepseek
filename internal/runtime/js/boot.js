@@ -388,9 +388,35 @@ async function dispose() {
   }
 }
 
+// Turns in flight, held here rather than by the Go side's handle to them.
+// goant's collector does not root a Value that only Go holds, so a turn's
+// promise has to be reachable from JavaScript for as long as Go is awaiting
+// it; see harness.turn. begin() starts a turn and names it, held() hands Go the
+// promise, release() lets it go once Go has read the outcome.
+const inFlight = new Map();
+let lastTurn = 0;
+
+function begin(sessionId, text, agentOptions) {
+  const id = ++lastTurn;
+  const promise = run(sessionId, text, agentOptions);
+  // Observed so a turn Go abandoned (a cancelled context) is not reported as
+  // an unhandled rejection; Go still sees the rejection through held().
+  promise.catch(() => {});
+  inFlight.set(id, promise);
+  return id;
+}
+
+function held(id) {
+  return inFlight.get(id);
+}
+
+function release(id) {
+  inFlight.delete(id);
+}
+
 // The control surface Go calls. Assigned to the global rather than exported
 // because the Go side reaches it by name after the module has evaluated.
-globalThis.__dsh = { boot, run, tools, dispose };
+globalThis.__dsh = { boot, run, begin, held, release, tools, dispose };
 
 // Booting is part of evaluating this module, so a composition that will not
 // mount fails at Start rather than at the first turn.
