@@ -96,7 +96,7 @@ func TestLiveGoPlugin(t *testing.T) {
 	h, err := sdk.Open(ctx, sdk.Config{
 		BaseURL: "https://openrouter.ai/api/v1",
 		APIKey:  key,
-		Model:   "deepseek/deepseek-v4-flash-0731",
+		Model:   openRouterModel(),
 		CWD:     dir,
 		Env:     map[string]string{"HOME": dir},
 		Plugins: []sdk.Plugin{{
@@ -279,7 +279,7 @@ func TestLiveComponentSeesToolCalls(t *testing.T) {
 	h, err := sdk.Open(ctx, sdk.Config{
 		BaseURL: "https://openrouter.ai/api/v1",
 		APIKey:  key,
-		Model:   "deepseek/deepseek-v4-flash-0731",
+		Model:   openRouterModel(),
 		CWD:     dir,
 		Env:     map[string]string{"HOME": dir},
 		Plugins: []sdk.Plugin{{

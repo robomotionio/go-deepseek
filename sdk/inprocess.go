@@ -55,6 +55,7 @@ func (p *inProcess) Start(ctx context.Context) error {
 		Provider:    p.cfg.Provider,
 		Model:       p.cfg.Model,
 		BaseURL:     p.cfg.BaseURL,
+		Protocol:    p.cfg.Protocol,
 		APIKey:      p.cfg.APIKey,
 		MaxTokens:   p.cfg.MaxTokens,
 		CWD:         p.cfg.CWD,

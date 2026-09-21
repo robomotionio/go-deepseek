@@ -150,10 +150,22 @@ export const stripVTControlCharacters = (s) => String(s).replace(/\x1b\[[0-9;]*[
 
 export const parseArgs = () => { throw new Error('util.parseArgs is not implemented'); };
 
+// Node takes the NEGATIVE errno libuv uses and returns its symbolic name —
+// getSystemErrorName(-11) is 'EAGAIN' on Linux. The table is the host's,
+// because the numbers are the platform's.
+export function getSystemErrorName(err) {
+  if (typeof err !== 'number' || !Number.isInteger(err) || err >= 0) {
+    throw Object.assign(new RangeError(`The value of "err" must be a negative integer. Received ${err}`), {
+      code: 'ERR_OUT_OF_RANGE',
+    });
+  }
+  return globalThis.__nodeHost.native.errnoName(-err) || `Unknown system error ${err}`;
+}
+
 const __ns = {
   types, inspect, format, formatWithOptions, promisify, callbackify, inherits,
   deprecate, isDeepStrictEqual, TextEncoder, TextDecoder, debuglog, debug,
-  stripVTControlCharacters, parseArgs,
+  stripVTControlCharacters, parseArgs, getSystemErrorName,
 };
 export default __ns;
 

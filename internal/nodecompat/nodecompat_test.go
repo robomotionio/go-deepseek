@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	goruntime "runtime"
 	"strings"
 	"testing"
 
@@ -571,12 +572,49 @@ func TestHomedirIsTheComposedHome(t *testing.T) {
 // should say so where the mistake was made.
 func TestAbsentBuiltinsAreNamed(t *testing.T) {
 	rt, _ := newRuntime(t, nodecompat.Options{})
-	_, err := rt.RunModule("test:/main.mjs", `import cp from 'node:child_process';`)
+	_, err := rt.RunModule("test:/main.mjs", `import vm from 'node:vm';`)
 	if err == nil {
-		t.Fatal("expected child_process to be refused")
+		t.Fatal("expected vm to be refused")
 	}
 	if !strings.Contains(err.Error(), "deliberately not implemented") {
 		t.Fatalf("refusal did not explain itself: %v", err)
+	}
+}
+
+// child_process imports — a bundled SDK imports it statically for a path
+// nothing here takes — but nothing it offers runs. The refusal is at the call,
+// and it names the seam.
+func TestChildProcessImportsButRefusesToSpawn(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import * as cp from 'node:child_process';
+		import { promisify } from 'node:util';
+		const execFileAsync = promisify(cp.execFile);
+		const outcomes = [];
+		for (const call of [() => cp.spawn('/bin/sh'), () => cp.execFileSync('ls'), () => execFileAsync('ls')]) {
+			try { await call(); outcomes.push('ran'); } catch (error) { outcomes.push(error.code + ':' + /subprocess seam/.test(error.message)); }
+		}
+		globalThis.result = outcomes.join(',');
+	`)
+	want := "ERR_NOT_AVAILABLE:true,ERR_NOT_AVAILABLE:true,ERR_NOT_AVAILABLE:true"
+	if got != want {
+		t.Fatalf("child_process: got %q, want %q", got, want)
+	}
+}
+
+// fs.realpath.native exists, because dsh-fs-local promisifies it at module
+// scope and a missing one fails the whole plugin before it mounts.
+func TestRealpathNative(t *testing.T) {
+	dir := t.TempDir()
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: dir, Roots: []string{dir}})
+	got := run(t, rt, `
+		import { realpath, realpathSync } from 'node:fs';
+		import { promisify } from 'node:util';
+		const native = await promisify(realpath.native)('.');
+		globalThis.result = String(native === realpathSync.native('.') && native.length > 0);
+	`)
+	if got != "true" {
+		t.Fatalf("realpath.native: got %q", got)
 	}
 }
 
@@ -661,5 +699,230 @@ func TestOpenFlagsAreCompleteAndRefuseNonsense(t *testing.T) {
 	want := "created=first|second=EEXIST|nonsense=EINVAL|plain=ok"
 	if got != want {
 		t.Fatalf("open flags:\n got %s\nwant %s", got, want)
+	}
+}
+
+// The session backend's write lock, end to end through the path its loader
+// takes: process.report for the C library, require.resolve for the addon's
+// package, require of the .node binary, then tryLock on a real descriptor.
+// Two descriptors on one file conflict — flock(2) locks an open file
+// description, not a process — and closing the holder frees it.
+func TestSystemAddonFlock(t *testing.T) {
+	if goruntime.GOOS == "windows" {
+		t.Skip("the flock addon is POSIX-only; its loader refuses win32 before asking")
+	}
+	dir := t.TempDir()
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: dir, Roots: []string{dir}})
+	got := run(t, rt, `
+		import { createRequire } from 'node:module';
+		import { open } from 'node:fs/promises';
+		import { getSystemErrorName } from 'node:util';
+		import { join, dirname } from 'node:path';
+		const report = process.report.getReport();
+		const filename = join(report.header.glibcVersionRuntime ? 'glibc' : 'musl', 'system.node');
+		const require = createRequire(import.meta.url);
+		const manifest = require.resolve('@deepseek-ai/node-addon-system-' + process.platform + '-' + process.arch + '/package.json');
+		const addon = require(join(dirname(manifest), 'bin', filename));
+		const lock = (fd) => new Promise((resolve) => addon.tryLock(fd, resolve));
+		const first = await open('session.lock', 'w');
+		const second = await open('session.lock', 'w');
+		const taken = await lock(first.fd);
+		const contended = await lock(second.fd);
+		await first.close();
+		const retaken = await lock(second.fd);
+		await second.close();
+		globalThis.result = [taken, getSystemErrorName(-contended), retaken].join(',');
+	`)
+	if got != "0,EAGAIN,0" && got != "0,EWOULDBLOCK,0" {
+		t.Fatalf("flock through the addon: got %q, want 0,EAGAIN,0", got)
+	}
+}
+
+// Any other native addon is refused by name, not loaded and not guessed at.
+func TestOtherNativeAddonsAreRefused(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { createRequire } from 'node:module';
+		try { createRequire(import.meta.url)('some-package/build/Release/thing.node'); globalThis.result = 'loaded'; }
+		catch (error) { globalThis.result = error.code; }
+	`)
+	if got != "ERR_DLOPEN_FAILED" {
+		t.Fatalf("a foreign addon: got %q", got)
+	}
+}
+
+// readline splits a stream into lines, as events and as an iterator.
+func TestReadlineSplitsLines(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { createInterface } from 'node:readline';
+		import { Readable } from 'node:stream';
+		const input = Readable.from(['alpha\nbe', 'ta\r\ngamma']);
+		const lines = [];
+		for await (const line of createInterface({ input, crlfDelay: Infinity })) lines.push(line);
+		globalThis.result = lines.join('|');
+	`)
+	if got != "alpha|beta|gamma" {
+		t.Fatalf("readline: got %q", got)
+	}
+}
+
+// A Worker runs its CommonJS script with its own workerData and parentPort,
+// answers through a cloned message, and exits once its port closes — the
+// whole contract dsh-session-persistence-jsonl's migration verifier relies on.
+func TestWorkerRunsAScriptOnThisLoop(t *testing.T) {
+	script := `
+		const { parentPort, workerData, isMainThread } = require('node:worker_threads');
+		const { join } = require('node:path');
+		parentPort.postMessage({ ok: !isMainThread, sum: workerData.a + workerData.b, path: join('a', 'b') });
+		parentPort.close();
+	`
+	rt, _ := newRuntime(t, nodecompat.Options{Virtual: map[string]string{"dsh:/modules/x/worker.cjs": script}})
+	got := run(t, rt, `
+		import { Worker, isMainThread } from 'node:worker_threads';
+		const worker = new Worker(new URL('./x/worker.cjs', 'dsh:/modules/x.mjs'), { workerData: { a: 2, b: 3 } });
+		const message = await new Promise((resolve, reject) => { worker.once('message', resolve); worker.once('error', reject); });
+		const code = await new Promise((resolve) => worker.once('exit', resolve));
+		globalThis.result = JSON.stringify({ main: isMainThread, message, code });
+	`)
+	want := `{"main":true,"message":{"ok":true,"sum":5,"path":"a/b"},"code":0}`
+	if got != want {
+		t.Fatalf("worker: got %s, want %s", got, want)
+	}
+}
+
+// A worker whose script throws reports it as 'error' and exits non-zero, which
+// is how the verifier's caller tells a crash from an answer.
+func TestWorkerFailureIsReported(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{Virtual: map[string]string{"dsh:/w.cjs": `throw new Error('boom')`}})
+	got := run(t, rt, `
+		import { Worker } from 'node:worker_threads';
+		const worker = new Worker('dsh:/w.cjs');
+		const error = await new Promise((resolve) => worker.once('error', resolve));
+		const code = await new Promise((resolve) => worker.once('exit', resolve));
+		globalThis.result = error.message + ':' + code;
+	`)
+	if got != "boom:1" {
+		t.Fatalf("worker failure: got %q", got)
+	}
+}
+
+// DOMException is a global, and the reasons AbortSignal invents are instances
+// of it — the shape code that tells a cancellation from a failure checks for.
+func TestDOMException(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		const plain = new DOMException('gone', 'AbortError');
+		const aborted = AbortSignal.abort().reason;
+		const controller = new AbortController();
+		controller.abort();
+		globalThis.result = [
+			plain instanceof Error, plain.name, plain.code, plain.message,
+			aborted instanceof DOMException, aborted.name,
+			controller.signal.reason instanceof DOMException,
+			DOMException.ABORT_ERR, Object.prototype.toString.call(plain),
+		].join(',');
+	`)
+	want := "true,AbortError,20,gone,true,AbortError,true,20,[object DOMException]"
+	if got != want {
+		t.Fatalf("DOMException: got %q, want %q", got, want)
+	}
+}
+
+// The shape the session backend migrates a log through: rows from a generator,
+// a streaming zstd compressor with the checksum on, and an async function that
+// consumes the compressed bytes. What comes out is one checksummed frame that
+// decodes to exactly what went in.
+func TestZstdStreamThroughAPipeline(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { createZstdCompress, zstdDecompressSync, constants } from 'node:zlib';
+		import { Readable, pipeline } from 'node:stream';
+		function* rows() { for (let i = 0; i < 2000; i += 1) yield Buffer.from('{"seq":' + i + '}\n'); }
+		const chunks = [];
+		await new Promise((resolve, reject) => {
+			pipeline(Readable.from(rows()), createZstdCompress({ params: { [constants.ZSTD_c_checksumFlag]: 1 } }),
+				async (source) => { for await (const chunk of source) chunks.push(chunk); },
+				(error) => (error ? reject(error) : resolve()));
+		});
+		const compressed = Buffer.concat(chunks);
+		const text = zstdDecompressSync(compressed).toString();
+		const descriptor = compressed.readUInt8(4);
+		globalThis.result = [text.split('\n').length - 1, text.endsWith('{"seq":1999}\n'), (descriptor & 4) !== 0].join(',');
+	`)
+	if got != "2000,true,true" {
+		t.Fatalf("zstd stream: got %q, want 2000 rows, the last intact, checksum flag set", got)
+	}
+}
+
+// A stage that fails rejects the pipeline instead of leaving it waiting for an
+// end that never comes, and the promise form treats a trailing function as a
+// stage rather than a callback.
+func TestPipelineFailureAndPromiseForm(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { Readable, Transform } from 'node:stream';
+		import { pipeline } from 'node:stream/promises';
+		const failing = new Transform({ transform(chunk, enc, cb) { cb(new Error('stage broke')); } });
+		let first;
+		try { await pipeline(Readable.from(['a']), failing, async (source) => { for await (const _ of source) {} }); first = 'resolved'; }
+		catch (error) { first = error.message; }
+		let total = 0;
+		await pipeline(Readable.from([Buffer.from('ab'), Buffer.from('cde')]), async (source) => { for await (const c of source) total += c.length; });
+		globalThis.result = first + ',' + total;
+	`)
+	if got != "stage broke,5" {
+		t.Fatalf("pipeline: got %q", got)
+	}
+}
+
+// A frame the writer never finished decodes as far as it goes when asked with
+// finishFlush: ZSTD_e_flush, and is an error otherwise. "As far as it goes" is
+// whole blocks: the decoder withholds a frame's last block until the frame
+// ends, so what comes back is always a clean prefix of the original — possibly
+// empty for a small frame, which crash recovery reads as "nothing salvageable
+// in the torn tail" rather than as half a record.
+func TestZstdTornFrame(t *testing.T) {
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, `
+		import { zstdCompressSync, zstdDecompressSync, constants } from 'node:zlib';
+		const original = Buffer.from('x'.repeat(100000) + 'abcdefghij'.repeat(50000));
+		const whole = zstdCompressSync(original);
+		const torn = whole.subarray(0, whole.length - 50);
+		let strict;
+		try { zstdDecompressSync(torn); strict = 'decoded'; } catch { strict = 'refused'; }
+		const salvaged = zstdDecompressSync(torn, { finishFlush: constants.ZSTD_e_flush });
+		const prefix = original.subarray(0, salvaged.length).equals(salvaged);
+		globalThis.result = [strict, salvaged.length > 0, salvaged.length < original.length, prefix].join(',');
+	`)
+	if got != "refused,true,true,true" {
+		t.Fatalf("torn frame: got %q", got)
+	}
+}
+
+// A stat result crosses a structured clone with its data intact, as Node's
+// does — the session backend posts one back from its migration verifier — and
+// is an instance of fs.Stats with its methods on the prototype.
+func TestStatsAreCloneable(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "f.txt"), []byte("hello"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: dir, Roots: []string{dir}})
+	got := run(t, rt, `
+		import { statSync, Stats } from 'node:fs';
+		import { stat } from 'node:fs/promises';
+		const plain = statSync('f.txt');
+		const big = await stat('f.txt', { bigint: true });
+		const copy = structuredClone({ identity: big });
+		globalThis.result = [
+			plain instanceof Stats, plain.isFile(), plain.isDirectory(), plain.size,
+			typeof copy.identity.ino, copy.identity.size === 5n, typeof copy.identity.mtimeNs,
+			'isFile' in copy.identity, Object.keys(plain).includes('isFile'),
+		].join(',');
+	`)
+	want := "true,true,false,5,bigint,true,bigint,false,false"
+	if got != want {
+		t.Fatalf("stats: got %q, want %q", got, want)
 	}
 }

@@ -70,6 +70,22 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 	e.rt = rt
 
 	version, commit := b.Version()
+	virtual, err := b.Assets()
+	if err != nil {
+		rt.Close()
+		return nil, err
+	}
+	// Every bundled package reads its own version out of a package.json beside
+	// it — `createRequire(import.meta.url)('../package.json')`, which tsdown
+	// puts in each one. A bundled module has no directory, so this serves the
+	// one file they are all reaching for.
+	//
+	// Twice: a module at dsh:/modules/<slug>.mjs reaches dsh:/package.json, and
+	// an asset one directory deeper — a worker script at
+	// dsh:/modules/<slug>/worker.cjs — reaches dsh:/modules/package.json.
+	pkg := fmt.Sprintf(`{"name":"@deepseek-ai/dsh","version":%q,"commit":%q,"type":"module"}`, version, commit)
+	virtual[bundle.Namespace+"package.json"] = pkg
+	virtual[bundle.Namespace+"modules/package.json"] = pkg
 	compat, err := nodecompat.Install(rt, nodecompat.Options{
 		CWD:         cfg.CWD,
 		Env:         cfg.Env,
@@ -80,14 +96,9 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 		Platform:    cfg.Platform,
 		TraceTimers: cfg.TraceTimers,
 		TraceHTTP:   cfg.TraceHTTP,
-		// Every bundled package reads its own version out of a package.json
-		// beside it — `createRequire(import.meta.url)('../package.json')`, which
-		// tsdown puts in each one. A bundled module has no directory, so this
-		// serves the one file they are all reaching for.
-		Virtual: map[string]string{
-			bundle.Namespace + "package.json": fmt.Sprintf(
-				`{"name":"@deepseek-ai/dsh","version":%q,"commit":%q,"type":"module"}`, version, commit),
-		},
+		// The package.json above, and the files bundled modules carry beside
+		// themselves (a worker script), served read-only.
+		Virtual: virtual,
 	})
 	if err != nil {
 		rt.Close()
@@ -102,6 +113,15 @@ func newEngine(cfg Config, extra Resolver) (*engine, error) {
 func (e *engine) resolve(specifier, referrer string) (source, path string, err error) {
 	if src, ok := e.plugins[specifier]; ok {
 		return src, specifier, nil
+	}
+	// Ahead of the bundle, whose koffi is a refusing stub: this one serves the
+	// Win32 calls the harness makes, from Go. See js/koffi.js.
+	if specifier == "koffi" {
+		src, err := jsFS.ReadFile("js/koffi.js")
+		if err != nil {
+			return "", "", err
+		}
+		return string(src), "go-deepseek:/koffi.js", nil
 	}
 	if src, p, ok, err := e.bundle.Resolve(specifier, referrer); err != nil {
 		return "", "", err

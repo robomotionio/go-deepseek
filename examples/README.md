@@ -28,13 +28,13 @@ outlives both processes in a file the agents cannot reach.
 ```sh
 export DEEPSEEK_API_KEY=...                             # read by the SDK itself
 export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1   # or leave unset for DeepSeek
-export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731   # read by the examples
+export DEEPSEEK_MODEL=deepseek/deepseek-v4.1-flash   # read by the examples
 ```
 
 `DEEPSEEK_API_KEY` and `DEEPSEEK_BASE_URL` are read by `sdk.Open` when the
 matching `Config` fields are empty, so the examples never mention them.
 `DEEPSEEK_MODEL` is the examples' own, because the model id differs by endpoint:
-`deepseek-v4-flash` at DeepSeek, `deepseek/deepseek-v4-flash-0731` through
+`deepseek-v4-flash` at DeepSeek, `deepseek/deepseek-v4.1-flash` through
 OpenRouter. Unset, they use the DeepSeek id.
 
 Everything below was captured from a real run against the OpenRouter gateway,
@@ -88,7 +88,7 @@ There is no service to start, no runtime to install and no subprocess. The
 harness is in the binary, on a pure-Go JavaScript engine.
 
 ```
-DeepSeek Harness 0.1.1-rc.2 (b150a551b8d4), embedded
+DeepSeek Harness 0.1.6-alpha.2 (ddefc45fbc7f), embedded
 
 A pure-Go JavaScript engine lets you embed and run JavaScript inside Go
 applications without CGO or external dependencies, making it trivially
@@ -253,17 +253,39 @@ right shape for it: what the bundle can serve, what a config would mount, and
 what two adjusted lists actually did mount.
 
 ```
---- the bundle serves 64 modules; 29 of them are dsh plugins ---
-  @deepseek-ai/dsh-agent @deepseek-ai/dsh-agent-loop
-  @deepseek-ai/dsh-agent-spine-demo @deepseek-ai/dsh-bash-local
+--- the bundle serves 91 modules; 60 of them are dsh plugins ---
+  @deepseek-ai/dsh-agent @deepseek-ai/dsh-agent-instructions
+  @deepseek-ai/dsh-agent-loop @deepseek-ai/dsh-agent-loop/invariant
   …
-  @deepseek-ai/dsh-tool-bash @deepseek-ai/dsh-tool-fs
-  @deepseek-ai/dsh-tool-skill @deepseek-ai/dsh-tool-str-replace-editor
-  @deepseek-ai/dsh-tool-todo @deepseek-ai/dsh-tool-web @deepseek-ai/dsh-tools
+  @deepseek-ai/dsh-tool-web @deepseek-ai/dsh-tools
+  @deepseek-ai/dsh-typert-protocol @deepseek-ai/dsh-util-crypto
+  @deepseek-ai/dsh-util-values
 
 --- the default composition ---
   llm-deepseek             @deepseek-ai/dsh-llm-deepseek
-  agent-spine              @deepseek-ai/dsh-agent-spine-demo
+  timer                    @deepseek-ai/cordis-plugin-timer
+  llm                      @deepseek-ai/dsh-llm
+  session                  @deepseek-ai/dsh-session
+  session-projection       @deepseek-ai/dsh-session-projection
+  session-title            @deepseek-ai/dsh-session-title
+  system-prompt            @deepseek-ai/dsh-system-prompt
+  tools                    @deepseek-ai/dsh-tools
+  skill                    @deepseek-ai/dsh-skill
+  skill-filesystem         @deepseek-ai/dsh-skill-filesystem
+  agent                    @deepseek-ai/dsh-agent
+  llm-retry                @deepseek-ai/dsh-llm-retry
+  jobs                     @deepseek-ai/dsh-jobs-local
+  invariants               @deepseek-ai/dsh-invariants
+  session-invariant        @deepseek-ai/dsh-session/invariant
+  agent-invariant          @deepseek-ai/dsh-agent/invariant
+  scope-invariant          @deepseek-ai/dsh-scope/invariant
+  agent-loop-invariant     @deepseek-ai/dsh-agent-loop/invariant
+  shell-env                @deepseek-ai/dsh-shell-env
+  tool-bash                @deepseek-ai/dsh-tool-bash
+  agent-instructions       @deepseek-ai/dsh-agent-instructions
+  tool-skill               @deepseek-ai/dsh-tool-skill
+  tool-jobs                @deepseek-ai/dsh-tool-jobs
+  agent-loop               @deepseek-ai/dsh-agent-loop
   persistence              @deepseek-ai/dsh-session-persistence-jsonl
   checkpoint-policy        @deepseek-ai/dsh-session-checkpoint-policy
   fs-local                 @deepseek-ai/dsh-fs-local
@@ -584,7 +606,7 @@ cost time:
   here"). One incomplete provider suppresses the whole catalog, silently. A
   model told "load your skill" then guesses a plausible name, misses, and
   falls back to not knowing — so both 11 and 12 point that provider at no
-  roots on the spine's composition entry, which is also the truth of this
+  roots on the `skill-filesystem` entry, which is also the truth of this
   deployment: every skill in it is host-registered.
 
 From a captured run:

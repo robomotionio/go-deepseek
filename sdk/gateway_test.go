@@ -27,7 +27,7 @@ func TestLiveGateway(t *testing.T) {
 	h, err := sdk.Open(ctx, sdk.Config{
 		BaseURL: "https://openrouter.ai/api/v1",
 		APIKey:  key,
-		Model:   "deepseek/deepseek-v4-flash-0731",
+		Model:   openRouterModel(),
 		CWD:     dir,
 		Env:     map[string]string{"HOME": dir},
 	})
@@ -44,4 +44,15 @@ func TestLiveGateway(t *testing.T) {
 	if !strings.Contains(strings.ToUpper(result.FinalResponse), "GATEWAY-OK") {
 		t.Errorf("unexpected answer: %q", result.FinalResponse)
 	}
+}
+
+// openRouterModel is the model the gateway tests ask OpenRouter for: DeepSeek's
+// current flash model unless OPENROUTER_MODEL names another. One place, because
+// a gateway's model ids move and a test pinned to a retired one fails as
+// "no endpoints found", which reads like an outage.
+func openRouterModel() string {
+	if model := os.Getenv("OPENROUTER_MODEL"); model != "" {
+		return model
+	}
+	return "deepseek/deepseek-v4.1-flash"
 }

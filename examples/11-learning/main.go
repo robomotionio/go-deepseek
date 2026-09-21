@@ -40,9 +40,8 @@
 // because its runner needs exactly that. What the model gains here is a named,
 // loadable procedure; see 12 for a plugin the model authors.
 //
-// Seam: ctx.skills — @deepseek-ai/dsh-skill's registry, mounted by the default
-// composition through agent-spine-demo, and read by the harness's own `skill`
-// tool.
+// Seam: ctx.skills — @deepseek-ai/dsh-skill's registry, a row of the default
+// composition, and read by the harness's own `skill` tool.
 //
 // Upstream: docs/capability-seams.md, packages/skill/skill/README.md.
 //
@@ -489,15 +488,8 @@ func open(ctx context.Context, workspace string, m *mentor) *sdk.Harness {
 	// deployment rather than a workaround: every skill here is host-registered,
 	// so a filesystem scan has nothing to find and asking for one only makes
 	// act three wait for an answer that is always empty.
-	entries := sdk.Compose(cfg)
-	for i := range entries {
-		if entries[i].ID == "agent-spine" {
-			entries[i].Config["skills"] = map[string]any{
-				"filesystem": map[string]any{"includeDefaultRoots": false},
-			}
-		}
-	}
-	cfg.Composition = entries
+	cfg.Composition = sdk.With(sdk.Compose(cfg), "skill-filesystem",
+		map[string]any{"includeDefaultRoots": false})
 
 	h, err := sdk.Open(ctx, cfg)
 	if err != nil {

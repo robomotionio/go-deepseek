@@ -31,6 +31,15 @@ type Config struct {
 	// local server. Empty uses the provider's own.
 	BaseURL string
 
+	// Protocol is the wire the adapter speaks: "chat-completions" or
+	// "messages". Empty means "chat-completions", which is what BaseURL has
+	// always meant — an OpenAI-compatible endpoint. Upstream's own default
+	// became "messages" in harness 0.1.5, the Anthropic-shaped API, which
+	// resolves BaseURL to <BaseURL>/v1/messages (or <BaseURL>/messages when it
+	// already ends in /v1) and the official endpoint to
+	// https://api.deepseek.com/anthropic.
+	Protocol string
+
 	// APIKey is the credential. Empty reads DEEPSEEK_API_KEY from Env, and then
 	// from the process environment.
 	APIKey string

@@ -1,215 +1,5 @@
-// .harness/vendor/cosmokit/src/misc.ts
-function isNullable(value) {
-  return value === null || value === void 0;
-}
-function isPlainObject(data) {
-  return data && typeof data === "object" && !Array.isArray(data);
-}
-function filterKeys(object, filter) {
-  return Object.fromEntries(Object.entries(object).filter(([key, value]) => filter(key, value)));
-}
-function mapValues(object, transform) {
-  return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, transform(value, key)]));
-}
-function pick(source, keys, forced) {
-  if (!keys) return { ...source };
-  const result = {};
-  for (const key of keys) {
-    if (forced || source[key] !== void 0) result[key] = source[key];
-  }
-  return result;
-}
-
-// .harness/vendor/cosmokit/src/types.ts
-function is(type, value) {
-  if (arguments.length === 1) return (value2) => is(type, value2);
-  return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
-}
-function isArrayBufferLike(value) {
-  return is("ArrayBuffer", value) || is("SharedArrayBuffer", value);
-}
-function isArrayBufferSource(value) {
-  return isArrayBufferLike(value) || ArrayBuffer.isView(value);
-}
-var Binary;
-((Binary2) => {
-  Binary2.is = isArrayBufferLike;
-  Binary2.isSource = isArrayBufferSource;
-  function fromSource(source) {
-    if (ArrayBuffer.isView(source)) {
-      return source.buffer.slice(source.byteOffset, source.byteOffset + source.byteLength);
-    } else {
-      return source;
-    }
-  }
-  Binary2.fromSource = fromSource;
-  function toBase64(source) {
-    source = fromSource(source);
-    if (typeof Buffer !== "undefined") {
-      return Buffer.from(source).toString("base64");
-    }
-    let binary = "";
-    const bytes = new Uint8Array(source);
-    for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
-  Binary2.toBase64 = toBase64;
-  function fromBase64(source) {
-    if (typeof Buffer !== "undefined") return fromSource(Buffer.from(source, "base64"));
-    return Uint8Array.from(atob(source), (c) => c.charCodeAt(0));
-  }
-  Binary2.fromBase64 = fromBase64;
-  function toHex(source) {
-    source = fromSource(source);
-    if (typeof Buffer !== "undefined") return Buffer.from(source).toString("hex");
-    return Array.from(new Uint8Array(source), (byte) => byte.toString(16).padStart(2, "0")).join("");
-  }
-  Binary2.toHex = toHex;
-  function fromHex(source) {
-    if (typeof Buffer !== "undefined") return fromSource(Buffer.from(source, "hex"));
-    const hex = source.length % 2 === 0 ? source : source.slice(0, source.length - 1);
-    const buffer = [];
-    for (let i = 0; i < hex.length; i += 2) {
-      buffer.push(parseInt(`${hex[i]}${hex[i + 1]}`, 16));
-    }
-    return Uint8Array.from(buffer).buffer;
-  }
-  Binary2.fromHex = fromHex;
-})(Binary || (Binary = {}));
-var base64ToArrayBuffer = Binary.fromBase64;
-var arrayBufferToBase64 = Binary.toBase64;
-var hexToArrayBuffer = Binary.fromHex;
-var arrayBufferToHex = Binary.toHex;
-function clone(source, refs = /* @__PURE__ */ new Map()) {
-  if (!source || typeof source !== "object") return source;
-  if (is("Date", source)) return new Date(source.valueOf());
-  if (is("RegExp", source)) return new RegExp(source.source, source.flags);
-  if (isArrayBufferLike(source)) return source.slice(0);
-  if (ArrayBuffer.isView(source)) return source.buffer.slice(source.byteOffset, source.byteOffset + source.byteLength);
-  const cached = refs.get(source);
-  if (cached) return cached;
-  if (Array.isArray(source)) {
-    const result2 = [];
-    refs.set(source, result2);
-    source.forEach((value, index) => {
-      result2[index] = Reflect.apply(clone, null, [value, refs]);
-    });
-    return result2;
-  }
-  const result = Object.create(Object.getPrototypeOf(source));
-  refs.set(source, result);
-  for (const key of Reflect.ownKeys(source)) {
-    const descriptor = { ...Reflect.getOwnPropertyDescriptor(source, key) };
-    if ("value" in descriptor) {
-      descriptor.value = Reflect.apply(clone, null, [descriptor.value, refs]);
-    }
-    Reflect.defineProperty(result, key, descriptor);
-  }
-  return result;
-}
-function deepEqual(a, b, strict) {
-  if (a === b) return true;
-  if (!strict && isNullable(a) && isNullable(b)) return true;
-  if (typeof a !== typeof b) return false;
-  if (typeof a !== "object") return false;
-  if (!a || !b) return false;
-  function check(test, then) {
-    return test(a) ? test(b) ? then(a, b) : false : test(b) ? false : void 0;
-  }
-  return check(Array.isArray, (a2, b2) => a2.length === b2.length && a2.every((item, index) => deepEqual(item, b2[index]))) ?? check(is("Date"), (a2, b2) => a2.valueOf() === b2.valueOf()) ?? check(is("RegExp"), (a2, b2) => a2.source === b2.source && a2.flags === b2.flags) ?? check(isArrayBufferLike, (a2, b2) => {
-    if (a2.byteLength !== b2.byteLength) return false;
-    const viewA = new Uint8Array(a2);
-    const viewB = new Uint8Array(b2);
-    for (let i = 0; i < viewA.length; i++) {
-      if (viewA[i] !== viewB[i]) return false;
-    }
-    return true;
-  }) ?? Object.keys({ ...a, ...b }).every((key) => deepEqual(a[key], b[key], strict));
-}
-
-// .harness/vendor/cosmokit/src/time.ts
-var Time;
-((Time2) => {
-  Time2.millisecond = 1;
-  Time2.second = 1e3;
-  Time2.minute = Time2.second * 60;
-  Time2.hour = Time2.minute * 60;
-  Time2.day = Time2.hour * 24;
-  Time2.week = Time2.day * 7;
-  let timezoneOffset = (/* @__PURE__ */ new Date()).getTimezoneOffset();
-  function setTimezoneOffset(offset) {
-    timezoneOffset = offset;
-  }
-  Time2.setTimezoneOffset = setTimezoneOffset;
-  function getTimezoneOffset() {
-    return timezoneOffset;
-  }
-  Time2.getTimezoneOffset = getTimezoneOffset;
-  function getDateNumber(date2 = /* @__PURE__ */ new Date(), offset) {
-    if (typeof date2 === "number") date2 = new Date(date2);
-    if (offset === void 0) offset = timezoneOffset;
-    return Math.floor((date2.valueOf() / Time2.minute - offset) / 1440);
-  }
-  Time2.getDateNumber = getDateNumber;
-  function fromDateNumber(value, offset) {
-    const date2 = new Date(value * Time2.day);
-    if (offset === void 0) offset = timezoneOffset;
-    return new Date(+date2 + offset * Time2.minute);
-  }
-  Time2.fromDateNumber = fromDateNumber;
-  const numeric = /\d+(?:\.\d+)?/.source;
-  const timeRegExp = new RegExp(`^${[
-    "w(?:eek(?:s)?)?",
-    "d(?:ay(?:s)?)?",
-    "h(?:our(?:s)?)?",
-    "m(?:in(?:ute)?(?:s)?)?",
-    "s(?:ec(?:ond)?(?:s)?)?"
-  ].map((unit) => `(${numeric}${unit})?`).join("")}$`);
-  function parseTime(source) {
-    const capture = timeRegExp.exec(source);
-    if (!capture) return 0;
-    return (parseFloat(capture[1]) * Time2.week || 0) + (parseFloat(capture[2]) * Time2.day || 0) + (parseFloat(capture[3]) * Time2.hour || 0) + (parseFloat(capture[4]) * Time2.minute || 0) + (parseFloat(capture[5]) * Time2.second || 0);
-  }
-  Time2.parseTime = parseTime;
-  function parseDate(date2) {
-    const parsed = parseTime(date2);
-    if (parsed) {
-      date2 = Date.now() + parsed;
-    } else if (/^\d{1,2}(:\d{1,2}){1,2}$/.test(date2)) {
-      date2 = `${(/* @__PURE__ */ new Date()).toLocaleDateString()}-${date2}`;
-    } else if (/^\d{1,2}-\d{1,2}-\d{1,2}(:\d{1,2}){1,2}$/.test(date2)) {
-      date2 = `${(/* @__PURE__ */ new Date()).getFullYear()}-${date2}`;
-    }
-    return date2 ? new Date(date2) : /* @__PURE__ */ new Date();
-  }
-  Time2.parseDate = parseDate;
-  function format(ms) {
-    const abs = Math.abs(ms);
-    if (abs >= Time2.day - Time2.hour / 2) {
-      return Math.round(ms / Time2.day) + "d";
-    } else if (abs >= Time2.hour - Time2.minute / 2) {
-      return Math.round(ms / Time2.hour) + "h";
-    } else if (abs >= Time2.minute - Time2.second / 2) {
-      return Math.round(ms / Time2.minute) + "m";
-    } else if (abs >= Time2.second) {
-      return Math.round(ms / Time2.second) + "s";
-    }
-    return ms + "ms";
-  }
-  Time2.format = format;
-  function toDigits(source, length = 2) {
-    return source.toString().padStart(length, "0");
-  }
-  Time2.toDigits = toDigits;
-  function template(template2, time = /* @__PURE__ */ new Date()) {
-    return template2.replace("yyyy", time.getFullYear().toString()).replace("yy", time.getFullYear().toString().slice(2)).replace("MM", toDigits(time.getMonth() + 1)).replace("dd", toDigits(time.getDate())).replace("hh", toDigits(time.getHours())).replace("mm", toDigits(time.getMinutes())).replace("ss", toDigits(time.getSeconds())).replace("SSS", toDigits(time.getMilliseconds(), 3));
-  }
-  Time2.template = template;
-})(Time || (Time = {}));
-
 // .harness/vendor/schemastery/lib/index.mjs
+import { Binary, clone, deepEqual, filterKeys, isNullable, isPlainObject, pick, valueMap } from "@deepseek-ai/cosmokit";
 var kSchema = /* @__PURE__ */ Symbol.for("schemastery");
 var kValidationError = /* @__PURE__ */ Symbol.for("ValidationError");
 globalThis.__schemastery_index__ ??= 0;
@@ -236,14 +26,14 @@ var Schema = function(options) {
     return Schema.resolve(data, schema, options2)[0];
   };
   if (options.refs) {
-    const refs = mapValues(options.refs, (options2) => new Schema(options2));
+    const refs = valueMap(options.refs, (options2) => new Schema(options2));
     const getRef = (uid) => refs[uid];
     for (const key in refs) {
       const options2 = refs[key];
       options2.sKey = getRef(options2.sKey);
       options2.inner = getRef(options2.inner);
       options2.list = options2.list && options2.list.map(getRef);
-      options2.dict = options2.dict && mapValues(options2.dict, getRef);
+      options2.dict = options2.dict && valueMap(options2.dict, getRef);
     }
     return refs[options.uid];
   }
@@ -319,21 +109,21 @@ Schema.prototype.i18n = function i18n(messages) {
   const schema = Schema(this);
   const desc = mergeDesc(schema.meta.description, messages);
   if (Object.keys(desc).length) schema.meta.description = desc;
-  if (schema.dict) schema.dict = mapValues(schema.dict, (inner, key) => {
-    return inner.i18n(mapValues(messages, (data) => getInner(data)?.[key] ?? data?.[key]));
+  if (schema.dict) schema.dict = valueMap(schema.dict, (inner, key) => {
+    return inner.i18n(valueMap(messages, (data) => getInner(data)?.[key] ?? data?.[key]));
   });
   if (schema.list) schema.list = schema.list.map((inner, index) => {
-    return inner.i18n(mapValues(messages, (data = {}) => {
+    return inner.i18n(valueMap(messages, (data = {}) => {
       if (Array.isArray(getInner(data))) return getInner(data)[index];
       if (Array.isArray(data)) return data[index];
       return extractKeys(data);
     }));
   });
-  if (schema.inner) schema.inner = schema.inner.i18n(mapValues(messages, (data) => {
+  if (schema.inner) schema.inner = schema.inner.i18n(valueMap(messages, (data) => {
     if (getInner(data)) return getInner(data);
     return extractKeys(data);
   }));
-  if (schema.sKey) schema.sKey = schema.sKey.i18n(mapValues(messages, (data) => data?.$key));
+  if (schema.sKey) schema.sKey = schema.sKey.i18n(valueMap(messages, (data) => data?.$key));
   return schema;
 };
 Schema.prototype.extra = function extra(key, value) {
@@ -748,7 +538,7 @@ function defineMethod(name, keys, format) {
           schema.list = args[index].map(Schema.from);
           break;
         case "dict":
-          schema.dict = mapValues(args[index], Schema.from);
+          schema.dict = valueMap(args[index], Schema.from);
           break;
         case "bits":
           schema.bits = {};

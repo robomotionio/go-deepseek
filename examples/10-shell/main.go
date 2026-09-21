@@ -133,7 +133,7 @@ func main() {
 		fmt.Println("The seam was provided but tool-bash did not mount — so this")
 		fmt.Println("example is a demonstration of ctx.Provide against a real seam,")
 		fmt.Println("not of a tool that materialised. Check that the composition")
-		fmt.Println("still carries agent-spine-demo, which is what mounts tool-bash.")
+		fmt.Println("still carries the tool-bash and shell-env rows.")
 		os.Exit(1)
 	}
 	fmt.Println("\n`bash` is in that list, and this program never registered it.")

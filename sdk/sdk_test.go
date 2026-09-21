@@ -353,7 +353,9 @@ func readSessionLog(t *testing.T, root string) string {
 	t.Helper()
 	var path string
 	if err := filepath.WalkDir(root, func(at string, d fs.DirEntry, err error) error {
-		if err != nil || d.IsDir() || !strings.HasPrefix(d.Name(), "session.jsonl") {
+		// session.jsonl until harness 0.1.5; session.v<N>.jsonl for format N
+		// since — a log is named for the format generation it holds.
+		if err != nil || d.IsDir() || !strings.HasPrefix(d.Name(), "session.") || !strings.Contains(d.Name(), ".jsonl") {
 			return err
 		}
 		path = at
@@ -465,9 +467,9 @@ func TestComposeAppliesTheSameDefaultsAsOpen(t *testing.T) {
 
 	// And the working directory, which is the same trap wearing a different
 	// hat: an agent configured with an empty cwd refuses every relative path.
-	agents, ok := find("agent-spine")["agents"].([]map[string]any)
+	agents, ok := find("agent-loop")["agents"].([]map[string]any)
 	if !ok || len(agents) == 0 {
-		t.Fatalf("the spine entry carries no agents: %#v", find("agent-spine"))
+		t.Fatalf("the agent-loop entry carries no agents: %#v", find("agent-loop"))
 	}
 	cwd, _ := agents[0]["cwd"].(string)
 	if cwd == "" || !filepath.IsAbs(cwd) {

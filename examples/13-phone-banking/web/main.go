@@ -31,7 +31,7 @@
 //
 //	export DEEPSEEK_API_KEY=...
 //	export DEEPSEEK_BASE_URL=https://openrouter.ai/api/v1   # or your gateway
-//	export DEEPSEEK_MODEL=deepseek/deepseek-v4-flash-0731
+//	export DEEPSEEK_MODEL=deepseek/deepseek-v4.1-flash
 //	go run ./examples/13-phone-banking/web
 //
 // One binary: the page is embedded, the phone system is a Go struct, and the
@@ -194,11 +194,11 @@ func resolveCreds() creds {
 		c.source = ""
 	}
 	// The default model follows the endpoint: deepseek-v4-flash at DeepSeek,
-	// deepseek/deepseek-v4-flash-0731 through OpenRouter. DEEPSEEK_MODEL and
+	// deepseek/deepseek-v4.1-flash through OpenRouter. DEEPSEEK_MODEL and
 	// the DSH_*_MODEL variables still override either.
 	c.model = "deepseek-v4-flash"
 	if strings.Contains(c.base, "openrouter") {
-		c.model = "deepseek/deepseek-v4-flash-0731"
+		c.model = "deepseek/deepseek-v4.1-flash"
 	}
 	return c
 }

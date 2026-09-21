@@ -27,7 +27,10 @@ import (
 	"sync"
 )
 
-//go:embed manifest.json modules/*.mjs
+// The whole modules directory, not modules/*.mjs: a package's assets (see
+// Assets) live in a directory named after its module.
+//
+//go:embed manifest.json modules
 var files embed.FS
 
 // Module is one bundled package.
@@ -50,6 +53,17 @@ type Manifest struct {
 	} `json:"harness"`
 	Entries []string          `json:"entries"`
 	Modules map[string]Module `json:"modules"`
+	// Assets are files a bundled module locates beside itself at run time —
+	// `new URL('./worker.cjs', import.meta.url)` — keyed by their path in the
+	// embedded filesystem. They are not modules: nothing imports them.
+	Assets map[string]Asset `json:"assets,omitempty"`
+}
+
+// Asset is a file carried alongside a bundled module.
+type Asset struct {
+	Bytes int `json:"bytes"`
+	// Of is the module slug the asset belongs to.
+	Of string `json:"of"`
 }
 
 // Bundle serves the harness's modules to a module resolver.
@@ -111,6 +125,23 @@ func (b *Bundle) Specifiers() []string {
 		out = append(out, spec)
 	}
 	return out
+}
+
+// Assets returns every carried file keyed by the URL a module computes for it
+// — Namespace plus its embedded path, which is what `new URL('./x',
+// import.meta.url)` yields for a module served at Namespace+"modules/…". The
+// runtime hands them to nodecompat as read-only virtual files; see
+// node:worker_threads, which reads a worker script that way.
+func (b *Bundle) Assets() (map[string]string, error) {
+	out := make(map[string]string, len(b.manifest.Assets))
+	for file := range b.manifest.Assets {
+		src, err := b.source(file)
+		if err != nil {
+			return nil, err
+		}
+		out[Namespace+file] = src
+	}
+	return out, nil
 }
 
 // Has reports whether a specifier is in the bundle.

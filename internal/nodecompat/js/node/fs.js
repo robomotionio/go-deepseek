@@ -6,7 +6,7 @@ import { EventEmitter } from 'node:events';
 import { Buffer } from 'node:buffer';
 import * as promisesAPI from 'node:fs/promises';
 import {
-  host, constants, asFsError, guard, makeStats, Dirent,
+  host, constants, asFsError, guard, makeStats, Dirent, Stats,
   decode, encodeData, pathOf, fdOf, modeOf, flagOf, toMs,
 } from './_fsutil.js';
 
@@ -108,6 +108,13 @@ export const rename = callbackify(renameSync, 2);
 export const copyFile = callbackify(copyFileSync, 2);
 export const readdir = callbackify(readdirSync, 2);
 export const realpath = callbackify(realpathSync, 1);
+// Node's `.native` variants use the platform's realpath(3) instead of its own
+// JavaScript walk. The host binding already IS the platform's, so the two are
+// the same function here — and code that promisifies `realpath.native` at
+// module scope (dsh-fs-local does, since 0.1.5) otherwise dies on
+// promisify(undefined) before it can mount.
+realpath.native = realpath;
+realpathSync.native = realpathSync;
 export const readlink = callbackify(readlinkSync, 1);
 export const symlink = callbackify(symlinkSync, 2);
 export const link = callbackify(linkSync, 2);
@@ -180,19 +187,9 @@ export function createWriteStream(path, options = {}) {
   });
 }
 
-// The classes callers import by name. They are constructors so that
-// `instanceof` and `import { Stats } from 'node:fs'` both work; the instances
-// this module returns are built by makeStats, which is a plain object with the
-// same shape (see _fsutil.js for why the two cannot be one thing).
-export class Stats {
-  isFile() { return Boolean(this._isFile); }
-  isDirectory() { return Boolean(this._isDirectory); }
-  isSymbolicLink() { return Boolean(this._isSymlink); }
-  isBlockDevice() { return false; }
-  isCharacterDevice() { return false; }
-  isFIFO() { return false; }
-  isSocket() { return false; }
-}
+// The class callers import by name, and the one every stat here returns an
+// instance of (see _fsutil.js), so `instanceof Stats` holds.
+export { Stats };
 
 export class Dir {
   constructor(path, entries) { this.path = path; this._entries = entries; this._at = 0; }

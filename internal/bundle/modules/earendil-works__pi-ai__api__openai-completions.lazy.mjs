@@ -1,3 +1,4 @@
+import "node:fs";
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
@@ -19,10 +20,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
 var EventStream, AssistantMessageEventStream;
 var init_event_stream = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
     EventStream = class {
       queue = [];
       waiting = [];
@@ -95,7 +96,7 @@ var init_event_stream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
 function createSetupErrorMessage(model, error) {
   return {
     role: "assistant",
@@ -134,19 +135,36 @@ function lazyStream(model, setup) {
   });
   return outer;
 }
-function lazyApi(load) {
-  return {
+function lazyApi(load, capabilities) {
+  const api = {
     stream: (model, context, options) => lazyStream(model, async () => (await load()).stream(model, context, options)),
     streamSimple: (model, context, options) => lazyStream(model, async () => (await load()).streamSimple(model, context, options))
   };
+  if (capabilities?.fetchDeferred) {
+    api.fetchDeferred = (model, handle, options) => lazyStream(model, async () => {
+      const implementation = await load();
+      if (!implementation.fetchDeferred)
+        throw new Error("API does not support deferred responses");
+      return implementation.fetchDeferred(model, handle, options);
+    });
+  }
+  if (capabilities?.cancelDeferred) {
+    api.cancelDeferred = async (model, handle, options) => {
+      const implementation = await load();
+      if (!implementation.cancelDeferred)
+        throw new Error("API cannot cancel deferred responses");
+      await implementation.cancelDeferred(model, handle, options);
+    };
+  }
+  return api;
 }
 var init_lazy = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
     init_event_stream();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
 function calculateCost(model, usage) {
   const inputTokens = usage.input + usage.cacheRead + usage.cacheWrite;
   let rates = model.cost;
@@ -199,12 +217,12 @@ function clampThinkingLevel(model, level) {
 }
 var EXTENDED_THINKING_LEVELS;
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
     EXTENDED_THINKING_LEVELS = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
 function normalizeProviderError(error) {
   if (!(error instanceof Error)) {
     return { message: safeJsonStringify(error), messageCarriesBody: false };
@@ -243,22 +261,27 @@ function extractBody(error) {
 function pickBodyText(error) {
   if (typeof error.body === "string")
     return error.body;
-  if (isNonEmptyObject(error.error))
+  if (isPlainNonEmptyObject(error.error))
     return safeJsonStringify(error.error);
   const responseBody = error.$response?.body;
   if (typeof responseBody === "string")
     return responseBody;
   if (isReadableStreamLike(responseBody))
     return void 0;
-  if (isNonEmptyObject(responseBody))
+  if (isPlainNonEmptyObject(responseBody))
     return safeJsonStringify(responseBody);
   return void 0;
 }
 function isReadableStreamLike(value) {
   return typeof value === "object" && value !== null && "pipe" in value && typeof value.pipe === "function";
 }
-function isNonEmptyObject(value) {
-  return typeof value === "object" && value !== null && Object.keys(value).length > 0;
+function isPlainNonEmptyObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto !== Object.prototype && proto !== null)
+    return false;
+  return Object.keys(value).length > 0;
 }
 function formatProviderError(norm, prefix) {
   if (norm.messageCarriesBody || norm.status === void 0 || norm.body === void 0) {
@@ -281,12 +304,12 @@ function safeJsonStringify(value) {
 }
 var MAX_PROVIDER_ERROR_BODY_CHARS;
 var init_error_body = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
     MAX_PROVIDER_ERROR_BODY_CHARS = 4e3;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
 function shortHash(str) {
   let h1 = 3735928559;
   let h2 = 1103547991;
@@ -300,11 +323,11 @@ function shortHash(str) {
   return (h2 >>> 0).toString(36) + (h1 >>> 0).toString(36);
 }
 var init_hash = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
 function headersToRecord(headers) {
   const result = {};
   for (const [key, value] of headers.entries()) {
@@ -313,11 +336,11 @@ function headersToRecord(headers) {
   return result;
 }
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
 import { parse as partialParse } from "partial-json";
 function isControlCharacter(char) {
   const codePoint = char.codePointAt(0);
@@ -415,12 +438,29 @@ function parseStreamingJson(partialJson) {
 }
 var VALID_JSON_ESCAPES;
 var init_json_parse = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
     VALID_JSON_ESCAPES = /* @__PURE__ */ new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
+function loadNodeOs() {
+  if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
+    return null;
+  }
+  return process.getBuiltinModule?.("node:os") ?? null;
+}
+function getPiUserAgent() {
+  return nodeOs ? `pi (${nodeOs.platform()} ${nodeOs.release()}; ${nodeOs.arch()})` : "pi (browser)";
+}
+var nodeOs;
+var init_pi_user_agent = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
+    nodeOs = loadNodeOs();
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
 function getBunSandboxEnvValue(name) {
   if (typeof process === "undefined" || !process.versions?.bun || Object.keys(process.env).length > 0) {
     return void 0;
@@ -446,12 +486,12 @@ function getProviderEnvValue(name, env) {
 }
 var procEnvCache;
 var init_provider_env = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
     procEnvCache = null;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
 function isProviderError(error) {
   if (!(error instanceof Error) || !("status" in error) || !("headers" in error))
     return false;
@@ -531,21 +571,109 @@ async function retryProviderRequest(request, options = {}) {
 }
 var DEFAULT_MAX_RETRY_DELAY_MS;
 var init_provider_retry = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
     DEFAULT_MAX_RETRY_DELAY_MS = 6e4;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
 function sanitizeSurrogates(text) {
   return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 var init_sanitize_unicode = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+function isJsonSchemaObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function isStructuredSchema(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  const types = typeof schema.type === "string" ? [schema.type] : Array.isArray(schema.type) ? schema.type : [];
+  return types.includes("object") || types.includes("array") || schema.properties !== void 0 || schema.items !== void 0;
+}
+function schemaAllowsNull(schema) {
+  if (!isJsonSchemaObject(schema))
+    return false;
+  if (schema.type === "null" || Array.isArray(schema.type) && schema.type.includes("null"))
+    return true;
+  if (schema.const === null || Array.isArray(schema.enum) && schema.enum.includes(null))
+    return true;
+  return Array.isArray(schema.anyOf) && schema.anyOf.some((variant) => schemaAllowsNull(variant));
+}
+function makeJsonSchemaNodeStrict(schema) {
+  if (!isJsonSchemaObject(schema)) {
+    throw new UnsupportedStrictJsonSchemaError("boolean schemas are unsupported");
+  }
+  for (const key of UNSUPPORTED_STRICT_SCHEMA_KEYS) {
+    if (schema[key] !== void 0) {
+      throw new UnsupportedStrictJsonSchemaError(`${key} schemas are unsupported`);
+    }
+  }
+  if (schema.anyOf !== void 0) {
+    if (!Array.isArray(schema.anyOf) || schema.anyOf.length === 0) {
+      throw new UnsupportedStrictJsonSchemaError("anyOf must contain at least one schema");
+    }
+    for (const variant of schema.anyOf) {
+      if (isStructuredSchema(variant)) {
+        throw new UnsupportedStrictJsonSchemaError("object and array unions are unsupported");
+      }
+      makeJsonSchemaNodeStrict(variant);
+    }
+  }
+  if (schema.items !== void 0) {
+    if (Array.isArray(schema.items)) {
+      throw new UnsupportedStrictJsonSchemaError("tuple schemas are unsupported");
+    }
+    makeJsonSchemaNodeStrict(schema.items);
+  }
+  const isObjectSchema = schema.type === "object";
+  if (schema.properties !== void 0 && !isObjectSchema) {
+    throw new UnsupportedStrictJsonSchemaError("properties require type object");
+  }
+  if (!isObjectSchema)
+    return;
+  if (schema.additionalProperties !== void 0 && schema.additionalProperties !== false) {
+    throw new UnsupportedStrictJsonSchemaError("schema-valued or true additionalProperties is unsupported");
+  }
+  if (schema.properties !== void 0 && !isJsonSchemaObject(schema.properties)) {
+    throw new UnsupportedStrictJsonSchemaError("object properties must be a schema map");
+  }
+  if (schema.required !== void 0 && (!Array.isArray(schema.required) || schema.required.some((key) => typeof key !== "string"))) {
+    throw new UnsupportedStrictJsonSchemaError("object required must be a string array");
+  }
+  const properties = schema.properties ?? {};
+  const propertyNames = Object.keys(properties);
+  const required = new Set(Array.isArray(schema.required) ? schema.required : []);
+  if ([...required].some((key) => !propertyNames.includes(key))) {
+    throw new UnsupportedStrictJsonSchemaError("required contains an unknown property");
+  }
+  for (const [key, property] of Object.entries(properties)) {
+    makeJsonSchemaNodeStrict(property);
+    if (!required.has(key) && !schemaAllowsNull(property)) {
+      properties[key] = { anyOf: [property, { type: "null" }] };
+    }
+  }
+  schema.required = propertyNames;
+  schema.additionalProperties = false;
+}
+function makeStrictJsonSchema(schema) {
+  const cloned = structuredClone(schema);
+  if (!isJsonSchemaObject(cloned)) {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  makeJsonSchemaNodeStrict(cloned);
+  if (cloned.type !== "object") {
+    throw new UnsupportedStrictJsonSchemaError("root schema must have type object");
+  }
+  return cloned;
+}
+function getJsonSchemaToolParameters(tool, strict) {
+  return strict === true ? makeStrictJsonSchema(tool.parameters) : tool.parameters;
+}
 function getGrammarToolInput(toolName, arguments_, inputProperty) {
   const input = arguments_[inputProperty];
   if (typeof input !== "string") {
@@ -597,11 +725,19 @@ function inferGrammarInputProperty(tool) {
 }
 function resolveJsonSchemaStrictSampling(tool, supportsStrictMode) {
   const config = tool.constrainedSampling;
-  if (!config || config.type !== "json_schema") {
+  if (!config || config.type !== "json_schema")
     return void 0;
-  }
   if (supportsStrictMode) {
-    return true;
+    try {
+      makeStrictJsonSchema(tool.parameters);
+      return true;
+    } catch (error) {
+      if (!(error instanceof UnsupportedStrictJsonSchemaError))
+        throw error;
+      if (config.strict !== "require")
+        return void 0;
+      throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but ${error.message}.`);
+    }
   }
   if (config.strict === "require") {
     throw new Error(`Tool "${tool.name}" requires JSON-schema constrained sampling, but strict tools are unsupported.`);
@@ -644,12 +780,33 @@ function createGrammarToolInputProperties(tools, supportsOpenAIGrammarTools) {
   }
   return properties;
 }
+var UnsupportedStrictJsonSchemaError, UNSUPPORTED_STRICT_SCHEMA_KEYS;
 var init_constrained_sampling = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+    UnsupportedStrictJsonSchemaError = class extends Error {
+    };
+    UNSUPPORTED_STRICT_SCHEMA_KEYS = [
+      "$ref",
+      "$defs",
+      "definitions",
+      "allOf",
+      "oneOf",
+      "patternProperties",
+      "dependentSchemas",
+      "dependencies",
+      "unevaluatedProperties",
+      "propertyNames",
+      "contains",
+      "prefixItems",
+      "not",
+      "if",
+      "then",
+      "else"
+    ];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
 function inferCopilotInitiator(messages) {
   const last = messages[messages.length - 1];
   return last && last.role !== "user" ? "agent" : "user";
@@ -676,11 +833,11 @@ function buildCopilotDynamicHeaders(params) {
   return headers;
 }
 var init_github_copilot_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
 function clampOpenAIPromptCacheKey(key) {
   if (key === void 0)
     return void 0;
@@ -691,12 +848,12 @@ function clampOpenAIPromptCacheKey(key) {
 }
 var OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH;
 var init_openai_prompt_cache = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
     OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH = 64;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
 function calculateContextTokens(usage) {
   return usage.totalTokens || usage.input + usage.output + usage.cacheRead + usage.cacheWrite;
 }
@@ -801,13 +958,13 @@ function estimateContextTokens(context) {
 }
 var CHARS_PER_TOKEN, ESTIMATED_IMAGE_CHARS;
 var init_estimate = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
     CHARS_PER_TOKEN = 4;
     ESTIMATED_IMAGE_CHARS = 4800;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
 function clampMaxTokensToContext(model, context, maxTokens) {
   if (model.contextWindow <= 0)
     return Math.max(MIN_MAX_TOKENS, maxTokens);
@@ -815,11 +972,15 @@ function clampMaxTokensToContext(model, context, maxTokens) {
   return Math.min(maxTokens, Math.max(MIN_MAX_TOKENS, available));
 }
 function buildBaseOptions(model, context, options, apiKey) {
+  const samplingParams = model.samplingParams || options?.samplingParams ? { ...model.samplingParams, ...options?.samplingParams } : void 0;
   return {
     temperature: options?.temperature,
+    samplingParams,
     maxTokens: clampMaxTokensToContext(model, context, options?.maxTokens ?? model.maxTokens),
     signal: options?.signal,
+    telemetryContext: options?.telemetryContext,
     apiKey: apiKey || options?.apiKey,
+    fetch: options?.fetch,
     transport: options?.transport,
     cacheRetention: options?.cacheRetention,
     sessionId: options?.sessionId,
@@ -834,16 +995,34 @@ function buildBaseOptions(model, context, options, apiKey) {
     env: options?.env
   };
 }
-var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS;
+function clampReasoning(effort) {
+  return effort === "xhigh" || effort === "max" ? "high" : effort;
+}
+function thinkingBudgetForLevel(reasoningLevel, customBudgets) {
+  const budgets = { ...DEFAULT_THINKING_BUDGETS, ...customBudgets };
+  const level = clampReasoning(reasoningLevel);
+  return budgets[level];
+}
+function clampThinkingBudgetToAnswerRoom(thinkingBudget, ceiling) {
+  return Math.min(thinkingBudget, Math.max(0, ceiling - MIN_ANSWER_TOKENS));
+}
+var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS, MIN_ANSWER_TOKENS, DEFAULT_THINKING_BUDGETS;
 var init_simple_options = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
     init_estimate();
     CONTEXT_SAFETY_TOKENS = 4096;
     MIN_MAX_TOKENS = 1;
+    MIN_ANSWER_TOKENS = 1024;
+    DEFAULT_THINKING_BUDGETS = {
+      minimal: 1024,
+      low: 2048,
+      medium: 8192,
+      high: 16384
+    };
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
 function replaceImagesWithPlaceholder(content, placeholder) {
   const result = [];
   let previousWasPlaceholder = false;
@@ -997,13 +1176,13 @@ function transformMessages(messages, model, normalizeToolCallId) {
 }
 var NON_VISION_USER_IMAGE_PLACEHOLDER, NON_VISION_TOOL_IMAGE_PLACEHOLDER;
 var init_transform_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
     NON_VISION_USER_IMAGE_PLACEHOLDER = "(image omitted: model does not support images)";
     NON_VISION_TOOL_IMAGE_PLACEHOLDER = "(tool image omitted: model does not support images)";
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js
 var openai_completions_exports = {};
 __export(openai_completions_exports, {
   convertMessages: () => convertMessages,
@@ -1070,12 +1249,69 @@ function isToolCallBlock(block) {
 function isImageContentBlock(block) {
   return block.type === "image";
 }
-function isEncryptedReasoningDetail(detail) {
-  if (typeof detail !== "object" || detail === null) {
+function isReasoningDetailObject(detail) {
+  return typeof detail === "object" && detail !== null && !Array.isArray(detail);
+}
+function hasValidCommonReasoningDetailFields(candidate) {
+  return (candidate.id === void 0 || candidate.id === null || typeof candidate.id === "string") && (candidate.format === void 0 || typeof candidate.format === "string") && (candidate.index === void 0 || typeof candidate.index === "number");
+}
+function isOpenAIReasoningDetail(detail) {
+  if (!isReasoningDetailObject(detail) || !hasValidCommonReasoningDetailFields(detail)) {
     return false;
   }
-  const candidate = detail;
-  return candidate.type === "reasoning.encrypted" && typeof candidate.id === "string" && candidate.id.length > 0 && typeof candidate.data === "string" && candidate.data.length > 0;
+  switch (detail.type) {
+    case "reasoning.summary":
+      return typeof detail.summary === "string";
+    case "reasoning.encrypted":
+      return typeof detail.data === "string";
+    case "reasoning.text":
+      return typeof detail.text === "string" && (detail.signature === void 0 || detail.signature === null || typeof detail.signature === "string");
+    default:
+      return false;
+  }
+}
+function parseOpenAIReasoningDetails(signature) {
+  if (!signature)
+    return void 0;
+  try {
+    const parsed = JSON.parse(signature);
+    return Array.isArray(parsed) && parsed.length > 0 && parsed.every(isOpenAIReasoningDetail) ? parsed : void 0;
+  } catch {
+    return void 0;
+  }
+}
+function parseLegacyEncryptedReasoningDetail(signature) {
+  if (!signature)
+    return void 0;
+  try {
+    const parsed = JSON.parse(signature);
+    return isOpenAIReasoningDetail(parsed) && parsed.type === "reasoning.encrypted" && typeof parsed.id === "string" && parsed.id.length > 0 && parsed.data.length > 0 ? parsed : void 0;
+  } catch {
+    return void 0;
+  }
+}
+function fillMissingCommonReasoningDetailFields(target, source) {
+  target.id ??= source.id;
+  target.format ||= source.format;
+  target.index ??= source.index;
+}
+function appendOpenAIReasoningDetail(details, detail) {
+  const lastDetail = details[details.length - 1];
+  if (detail.type === "reasoning.text" && lastDetail?.type === "reasoning.text") {
+    lastDetail.text += detail.text;
+    lastDetail.signature ||= detail.signature;
+    fillMissingCommonReasoningDetailFields(lastDetail, detail);
+    return;
+  }
+  if (detail.type === "reasoning.summary" && lastDetail?.type === "reasoning.summary") {
+    lastDetail.summary += detail.summary;
+    fillMissingCommonReasoningDetailFields(lastDetail, detail);
+    return;
+  }
+  details.push({ ...detail });
+}
+function isOpenAICompletionsReasoningField(field) {
+  return OPENAI_COMPLETIONS_REASONING_FIELDS.includes(field);
 }
 function resolveCacheRetention(cacheRetention, env) {
   if (cacheRetention) {
@@ -1086,8 +1322,8 @@ function resolveCacheRetention(cacheRetention, env) {
   }
   return "short";
 }
-function createClient(model, context, apiKey, optionsHeaders, sessionId, compat = getCompat(model)) {
-  const headers = { ...model.headers };
+function createClient(model, context, apiKey, optionsHeaders, fetch, sessionId, compat = getCompat(model)) {
+  const headers = { "User-Agent": getPiUserAgent(), ...model.headers };
   if (model.provider === "github-copilot") {
     const hasImages = hasCopilotVisionInput(context.messages);
     const copilotHeaders = buildCopilotDynamicHeaders({
@@ -1114,6 +1350,7 @@ function createClient(model, context, apiKey, optionsHeaders, sessionId, compat 
     apiKey,
     baseURL: model.baseUrl,
     dangerouslyAllowBrowser: true,
+    fetch,
     defaultHeaders: headers
   });
 }
@@ -1159,6 +1396,11 @@ function buildParams(model, context, options, compat = getCompat(model), cacheRe
   if (options?.toolChoice) {
     params.tool_choice = options.toolChoice;
   }
+  if (compat.vllmPriority !== void 0) {
+    params.priority = compat.vllmPriority;
+  }
+  const thinkingTokenBudgetField = resolveThinkingTokenBudgetField(compat);
+  const thinkingBudget = resolveClampedThinkingBudget(model, options, params);
   if (compat.thinkingFormat === "zai" && model.reasoning) {
     const zaiParams = params;
     zaiParams.thinking = options?.reasoningEffort ? { type: "enabled", clear_thinking: false } : { type: "disabled" };
@@ -1171,15 +1413,35 @@ function buildParams(model, context, options, compat = getCompat(model), cacheRe
     }
   } else if (compat.thinkingFormat === "qwen" && model.reasoning) {
     params.enable_thinking = !!options?.reasoningEffort;
+    if (options?.reasoningEffort && compat.supportsReasoningEffort) {
+      const effort = model.thinkingLevelMap?.[options.reasoningEffort] ?? options.reasoningEffort;
+      if (typeof effort === "string") {
+        params.reasoning_effort = effort;
+      }
+    }
   } else if (compat.thinkingFormat === "qwen-chat-template" && model.reasoning) {
     params.chat_template_kwargs = {
       enable_thinking: !!options?.reasoningEffort,
       preserve_thinking: true
     };
   } else if (compat.thinkingFormat === "chat-template" && model.reasoning) {
-    const chatTemplateKwargs = buildChatTemplateKwargs(model, options, compat);
+    const chatTemplateKwargs = buildChatTemplateValues(model, options, compat.chatTemplateKwargs, thinkingBudget);
     if (chatTemplateKwargs) {
       params.chat_template_kwargs = chatTemplateKwargs;
+    }
+  } else if (compat.thinkingFormat === "baseten" && model.reasoning) {
+    const basetenParams = params;
+    const chatTemplateArgs = buildChatTemplateValues(model, options, compat.chatTemplateArgs, thinkingBudget);
+    if (chatTemplateArgs) {
+      basetenParams.chat_template_args = chatTemplateArgs;
+    }
+    if (compat.supportsReasoningEffort) {
+      const requestedEffort = options?.reasoningEffort;
+      const mappedEffort = requestedEffort ? model.thinkingLevelMap?.[requestedEffort] : model.thinkingLevelMap?.off;
+      const effort = mappedEffort === void 0 ? requestedEffort : mappedEffort;
+      if (typeof effort === "string") {
+        basetenParams.reasoning_effort = effort;
+      }
     }
   } else if (compat.thinkingFormat === "deepseek" && model.reasoning) {
     if (options?.reasoningEffort) {
@@ -1225,6 +1487,9 @@ function buildParams(model, context, options, compat = getCompat(model), cacheRe
       params.reasoning_effort = offValue;
     }
   }
+  if (thinkingTokenBudgetField && thinkingBudget !== void 0) {
+    Object.assign(params, { [thinkingTokenBudgetField]: thinkingBudget });
+  }
   if (model.compat?.openRouterRouting) {
     params.provider = model.compat.openRouterRouting;
   }
@@ -1239,19 +1504,36 @@ function buildParams(model, context, options, compat = getCompat(model), cacheRe
       params.providerOptions = { gateway: gatewayOptions };
     }
   }
+  if (options?.samplingParams) {
+    Object.assign(params, options.samplingParams);
+  }
   return params;
 }
-function buildChatTemplateKwargs(model, options, compat) {
-  const kwargs = {};
-  for (const [key, value] of Object.entries(compat.chatTemplateKwargs)) {
-    const resolved = resolveChatTemplateKwargValue(model, options, value);
+function resolveThinkingTokenBudgetField(compat) {
+  if (compat.thinkingTokenBudgetField)
+    return compat.thinkingTokenBudgetField;
+  if (compat.supportsThinkingTokenBudget)
+    return "thinking_token_budget";
+  return void 0;
+}
+function resolveClampedThinkingBudget(model, options, params) {
+  if (!options?.reasoningEffort || !model.reasoning)
+    return void 0;
+  const ceiling = params.max_tokens ?? params.max_completion_tokens ?? model.maxTokens;
+  const budget = clampThinkingBudgetToAnswerRoom(thinkingBudgetForLevel(options.reasoningEffort, options.thinkingBudgets), ceiling);
+  return budget > 0 ? budget : void 0;
+}
+function buildChatTemplateValues(model, options, values, thinkingBudget) {
+  const resolvedValues = {};
+  for (const [key, value] of Object.entries(values)) {
+    const resolved = resolveChatTemplateKwargValue(model, options, value, thinkingBudget);
     if (resolved !== void 0) {
-      kwargs[key] = resolved;
+      resolvedValues[key] = resolved;
     }
   }
-  return Object.keys(kwargs).length > 0 ? kwargs : void 0;
+  return Object.keys(resolvedValues).length > 0 ? resolvedValues : void 0;
 }
-function resolveChatTemplateKwargValue(model, options, value) {
+function resolveChatTemplateKwargValue(model, options, value, thinkingBudget) {
   if (typeof value !== "object" || value === null) {
     return value;
   }
@@ -1261,6 +1543,9 @@ function resolveChatTemplateKwargValue(model, options, value) {
   }
   if (value.$var === "thinking.enabled") {
     return !!reasoningEffort;
+  }
+  if (value.$var === "thinking.budget") {
+    return thinkingBudget;
   }
   const mappedValue = reasoningEffort ? model.thinkingLevelMap?.[reasoningEffort] : model.thinkingLevelMap?.off;
   return mappedValue === void 0 ? reasoningEffort : typeof mappedValue === "string" ? mappedValue : void 0;
@@ -1412,7 +1697,12 @@ function convertMessages(model, context, compat, options) {
         text: sanitizeSurrogates(block.text)
       }));
       const assistantText = assistantTextParts.map((part) => part.text).join("");
-      const nonEmptyThinkingBlocks = msg.content.filter(isThinkingContentBlock).filter((block) => block.thinking.trim().length > 0);
+      const thinkingBlocks = msg.content.filter(isThinkingContentBlock);
+      const toolCalls = msg.content.filter(isToolCallBlock);
+      const signedReasoningDetails = thinkingBlocks.map((block) => parseOpenAIReasoningDetails(block.thinkingSignature)).find((details) => details !== void 0);
+      const legacyReasoningDetails = toolCalls.map((toolCall) => parseLegacyEncryptedReasoningDetail(toolCall.thoughtSignature)).filter((detail) => detail !== void 0);
+      const preservedReasoningDetails = signedReasoningDetails ?? (legacyReasoningDetails.length > 0 ? legacyReasoningDetails : void 0);
+      const nonEmptyThinkingBlocks = thinkingBlocks.filter((block) => block.thinking.trim().length > 0);
       if (nonEmptyThinkingBlocks.length > 0) {
         if (compat.requiresThinkingAsText) {
           const thinkingText = nonEmptyThinkingBlocks.map((block) => sanitizeSurrogates(block.thinking)).join("\n\n");
@@ -1421,18 +1711,19 @@ function convertMessages(model, context, compat, options) {
           if (assistantText.length > 0) {
             assistantMsg.content = assistantText;
           }
-          let signature = nonEmptyThinkingBlocks[0].thinkingSignature;
-          if (model.provider === "opencode-go" && signature === "reasoning") {
-            signature = "reasoning_content";
-          }
-          if (signature && signature.length > 0) {
-            assistantMsg[signature] = nonEmptyThinkingBlocks.map((block) => block.thinking).join("\n");
+          if (!preservedReasoningDetails) {
+            let signature = nonEmptyThinkingBlocks[0].thinkingSignature;
+            if (model.provider === "opencode-go" && signature === "reasoning") {
+              signature = "reasoning_content";
+            }
+            if (signature && isOpenAICompletionsReasoningField(signature)) {
+              assistantMsg[signature] = nonEmptyThinkingBlocks.map((block) => block.thinking).join("\n");
+            }
           }
         }
       } else if (assistantText.length > 0) {
         assistantMsg.content = assistantText;
       }
-      const toolCalls = msg.content.filter(isToolCallBlock);
       if (toolCalls.length > 0) {
         assistantMsg.tool_calls = toolCalls.map((tc) => {
           const customInputProperty = options?.grammarToolInputProperties?.get(tc.name);
@@ -1455,16 +1746,9 @@ function convertMessages(model, context, compat, options) {
             }
           };
         });
-        const reasoningDetails = toolCalls.filter((tc) => tc.thoughtSignature).map((tc) => {
-          try {
-            return JSON.parse(tc.thoughtSignature);
-          } catch {
-            return null;
-          }
-        }).filter(Boolean);
-        if (reasoningDetails.length > 0) {
-          assistantMsg.reasoning_details = reasoningDetails;
-        }
+      }
+      if (preservedReasoningDetails) {
+        assistantMsg.reasoning_details = preservedReasoningDetails;
       }
       if (compat.requiresReasoningContentOnAssistantMessages && model.reasoning && assistantMsg.reasoning_content === void 0) {
         assistantMsg.reasoning_content = "";
@@ -1575,8 +1859,7 @@ function convertTools(tools, compat) {
       function: {
         name: tool.name,
         description: tool.description,
-        parameters: tool.parameters,
-        // TypeBox already generates JSON Schema
+        parameters: getJsonSchemaToolParameters(tool, strict),
         // Only include strict if provider supports it. Some reject unknown fields.
         ...compat.supportsStrictMode !== false && { strict: strict ?? false }
       }
@@ -1585,7 +1868,7 @@ function convertTools(tools, compat) {
 }
 function parseChunkUsage(rawUsage, model) {
   const promptTokens = rawUsage.prompt_tokens || 0;
-  const cacheReadTokens = rawUsage.prompt_tokens_details?.cached_tokens ?? rawUsage.prompt_cache_hit_tokens ?? 0;
+  const cacheReadTokens = rawUsage.prompt_tokens_details?.cached_tokens ?? rawUsage.prompt_cache_hit_tokens ?? rawUsage.cached_tokens ?? 0;
   const cacheWriteTokens = rawUsage.prompt_tokens_details?.cache_write_tokens || 0;
   const input = Math.max(0, promptTokens - cacheReadTokens - cacheWriteTokens);
   const outputTokens = rawUsage.completion_tokens || 0;
@@ -1635,10 +1918,10 @@ function detectCompat(model) {
   const isCloudflareAiGateway = provider === "cloudflare-ai-gateway" || baseUrl.includes("gateway.ai.cloudflare.com");
   const isNvidia = provider === "nvidia" || baseUrl.includes("integrate.api.nvidia.com");
   const isAntLing = provider === "ant-ling" || baseUrl.includes("api.ant-ling.com");
-  const isNonStandard = isNvidia || provider === "cerebras" || baseUrl.includes("cerebras.ai") || provider === "xai" || baseUrl.includes("api.x.ai") || isTogether || baseUrl.includes("chutes.ai") || baseUrl.includes("deepseek.com") || isZai || isMoonshot || provider === "opencode" || baseUrl.includes("opencode.ai") || isCloudflareWorkersAI || isCloudflareAiGateway || isAntLing;
-  const useMaxTokens = baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isTogether || isNvidia || isAntLing;
+  const isDeepSeek = provider === "deepseek" || baseUrl.toLowerCase().includes("deepseek.com");
+  const isNonStandard = isNvidia || provider === "cerebras" || baseUrl.includes("cerebras.ai") || provider === "xai" || baseUrl.includes("api.x.ai") || isTogether || baseUrl.includes("chutes.ai") || isDeepSeek || isZai || isMoonshot || provider === "opencode" || baseUrl.includes("opencode.ai") || isCloudflareWorkersAI || isCloudflareAiGateway || isAntLing;
+  const useMaxTokens = baseUrl.includes("chutes.ai") || isDeepSeek || isMoonshot || isCloudflareAiGateway || isTogether || isNvidia || isAntLing || isZai;
   const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
-  const isDeepSeek = provider === "deepseek" || baseUrl.includes("deepseek.com");
   const isOpenRouterDeveloperRoleModel = isOpenRouter && (model.id.startsWith("anthropic/") || model.id.startsWith("openai/"));
   const cacheControlFormat = provider === "openrouter" && model.id.startsWith("anthropic/") ? "anthropic" : void 0;
   return {
@@ -1646,6 +1929,7 @@ function detectCompat(model) {
     supportsDeveloperRole: isOpenRouterDeveloperRoleModel || !isNonStandard && !isOpenRouter,
     supportsReasoningEffort: !isGrok && !isZai && !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia && !isAntLing,
     supportsUsageInStreaming: true,
+    supportsFinishReason: true,
     maxTokensField: useMaxTokens ? "max_tokens" : "max_completion_tokens",
     requiresToolResultName: false,
     requiresAssistantAfterToolResult: false,
@@ -1655,7 +1939,10 @@ function detectCompat(model) {
     openRouterRouting: {},
     vercelGatewayRouting: {},
     chatTemplateKwargs: {},
+    chatTemplateArgs: {},
     zaiToolStream: false,
+    supportsThinkingTokenBudget: false,
+    thinkingTokenBudgetField: void 0,
     supportsStrictMode: !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia,
     supportsOpenAIGrammarTools: false,
     cacheControlFormat,
@@ -1674,6 +1961,7 @@ function getCompat(model) {
     supportsDeveloperRole: model.compat.supportsDeveloperRole ?? detected.supportsDeveloperRole,
     supportsReasoningEffort: model.compat.supportsReasoningEffort ?? detected.supportsReasoningEffort,
     supportsUsageInStreaming: model.compat.supportsUsageInStreaming ?? detected.supportsUsageInStreaming,
+    supportsFinishReason: model.compat.supportsFinishReason ?? detected.supportsFinishReason,
     maxTokensField: model.compat.maxTokensField ?? detected.maxTokensField,
     requiresToolResultName: model.compat.requiresToolResultName ?? detected.requiresToolResultName,
     requiresAssistantAfterToolResult: model.compat.requiresAssistantAfterToolResult ?? detected.requiresAssistantAfterToolResult,
@@ -1683,25 +1971,30 @@ function getCompat(model) {
     openRouterRouting: model.compat.openRouterRouting ?? {},
     vercelGatewayRouting: model.compat.vercelGatewayRouting ?? detected.vercelGatewayRouting,
     chatTemplateKwargs: model.compat.chatTemplateKwargs ?? detected.chatTemplateKwargs,
+    chatTemplateArgs: model.compat.chatTemplateArgs ?? detected.chatTemplateArgs,
     zaiToolStream: model.compat.zaiToolStream ?? detected.zaiToolStream,
+    supportsThinkingTokenBudget: model.compat.supportsThinkingTokenBudget ?? detected.supportsThinkingTokenBudget,
+    thinkingTokenBudgetField: model.compat.thinkingTokenBudgetField ?? detected.thinkingTokenBudgetField,
     supportsStrictMode: model.compat.supportsStrictMode ?? detected.supportsStrictMode,
     supportsOpenAIGrammarTools: model.compat.supportsOpenAIGrammarTools ?? detected.supportsOpenAIGrammarTools,
     cacheControlFormat: model.compat.cacheControlFormat ?? detected.cacheControlFormat,
     sendSessionAffinityHeaders: model.compat.sendSessionAffinityHeaders ?? detected.sendSessionAffinityHeaders,
     deferredToolsMode: model.compat.deferredToolsMode ?? detected.deferredToolsMode,
     sessionAffinityFormat: model.compat.sessionAffinityFormat ?? detected.sessionAffinityFormat,
-    supportsLongCacheRetention: model.compat.supportsLongCacheRetention ?? detected.supportsLongCacheRetention
+    supportsLongCacheRetention: model.compat.supportsLongCacheRetention ?? detected.supportsLongCacheRetention,
+    vllmPriority: model.compat.vllmPriority
   };
 }
-var stream, streamSimple;
+var OPENAI_COMPLETIONS_REASONING_FIELDS, stream, streamSimple;
 var init_openai_completions = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js"() {
     init_models();
     init_error_body();
     init_event_stream();
     init_hash();
     init_headers();
     init_json_parse();
+    init_pi_user_agent();
     init_provider_env();
     init_provider_retry();
     init_sanitize_unicode();
@@ -1710,6 +2003,7 @@ var init_openai_completions = __esm({
     init_openai_prompt_cache();
     init_simple_options();
     init_transform_messages();
+    OPENAI_COMPLETIONS_REASONING_FIELDS = ["reasoning", "reasoning_content", "reasoning_text"];
     stream = (model, context, options) => {
       const stream2 = new AssistantMessageEventStream();
       (async () => {
@@ -1727,8 +2021,14 @@ var init_openai_completions = __esm({
             totalTokens: 0,
             cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 }
           },
-          stopReason: "stop",
+          stopReason: "pending",
           timestamp: Date.now()
+        };
+        let streamedReasoningDetails;
+        const applyStreamedReasoningDetails = (block) => {
+          if (streamedReasoningDetails !== void 0) {
+            block.thinkingSignature = JSON.stringify(streamedReasoningDetails);
+          }
         };
         try {
           const apiKey = getClientApiKey(model.provider, options?.apiKey, options?.headers);
@@ -1736,7 +2036,7 @@ var init_openai_completions = __esm({
           const grammarToolInputProperties = createGrammarToolInputProperties(context.tools, compat.supportsOpenAIGrammarTools);
           const cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env);
           const cacheSessionId = cacheRetention === "none" ? void 0 : options?.sessionId;
-          const client = createClient(model, context, apiKey, options?.headers, cacheSessionId, compat);
+          const client = createClient(model, context, apiKey, options?.headers, options?.fetch, cacheSessionId, compat);
           let params = buildParams(model, context, options, compat, cacheRetention, grammarToolInputProperties);
           const nextParams = await options?.onPayload?.(params, model);
           if (nextParams !== void 0) {
@@ -1759,7 +2059,6 @@ var init_openai_completions = __esm({
           let hasFinishReason = false;
           const toolCallBlocksByIndex = /* @__PURE__ */ new Map();
           const toolCallBlocksById = /* @__PURE__ */ new Map();
-          const pendingReasoningDetailsByToolCallId = /* @__PURE__ */ new Map();
           const blocks = output.content;
           const getContentIndex = (block) => blocks.indexOf(block);
           const getCustomToolCallInput = (block) => {
@@ -1790,6 +2089,7 @@ var init_openai_completions = __esm({
                 partial: output
               });
             } else if (block.type === "thinking") {
+              applyStreamedReasoningDetails(block);
               stream2.push({
                 type: "thinking_end",
                 contentIndex,
@@ -1841,16 +2141,6 @@ var init_openai_completions = __esm({
             }
             return thinkingBlock;
           };
-          const applyPendingReasoningDetail = (block) => {
-            if (!block.id) {
-              return;
-            }
-            const pendingReasoningDetail = pendingReasoningDetailsByToolCallId.get(block.id);
-            if (pendingReasoningDetail) {
-              block.thoughtSignature = pendingReasoningDetail;
-              pendingReasoningDetailsByToolCallId.delete(block.id);
-            }
-          };
           const ensureToolCallBlock = (toolCall) => {
             const streamIndex = typeof toolCall.index === "number" ? toolCall.index : void 0;
             const name = toolCall.function?.name ?? toolCall.custom?.name ?? "";
@@ -1859,7 +2149,7 @@ var init_openai_completions = __esm({
               block = toolCallBlocksById.get(toolCall.id);
             }
             if (!block) {
-              const customInputProperty = toolCall.custom ? grammarToolInputProperties.get(name) ?? "input" : void 0;
+              const customInputProperty = toolCall.custom && !toolCall.function ? grammarToolInputProperties.get(name) ?? "input" : void 0;
               const hasCustomInput = customInputProperty !== void 0;
               block = {
                 type: "toolCall",
@@ -1893,7 +2183,7 @@ var init_openai_completions = __esm({
             if (!block.name && name) {
               block.name = name;
             }
-            if (toolCall.custom && !block.customInput) {
+            if (toolCall.custom && !toolCall.function && !block.customInput) {
               const customInputProperty = grammarToolInputProperties.get(block.name) ?? "input";
               block.arguments = { [customInputProperty]: "" };
               block.customInput = {
@@ -1902,7 +2192,6 @@ var init_openai_completions = __esm({
               };
               delete block.partialArgs;
             }
-            applyPendingReasoningDetail(block);
             return block;
           };
           for await (const chunk of openaiStream) {
@@ -1922,6 +2211,7 @@ var init_openai_completions = __esm({
               output.usage = parseChunkUsage(choice.usage, model);
             }
             if (choice.finish_reason) {
+              output.rawStopReason = choice.finish_reason;
               const finishReasonResult = mapStopReason(choice.finish_reason);
               output.stopReason = finishReasonResult.stopReason;
               if (finishReasonResult.errorMessage) {
@@ -1995,15 +2285,11 @@ var init_openai_completions = __esm({
               const reasoningDetails = choice.delta.reasoning_details;
               if (Array.isArray(reasoningDetails)) {
                 for (const detail of reasoningDetails) {
-                  if (isEncryptedReasoningDetail(detail)) {
-                    const serializedDetail = JSON.stringify(detail);
-                    const matchingToolCall = toolCallBlocksById.get(detail.id);
-                    if (matchingToolCall) {
-                      matchingToolCall.thoughtSignature = serializedDetail;
-                    } else {
-                      pendingReasoningDetailsByToolCallId.set(detail.id, serializedDetail);
-                    }
-                  }
+                  if (!isOpenAIReasoningDetail(detail))
+                    continue;
+                  ensureThinkingBlock("");
+                  streamedReasoningDetails ??= [];
+                  appendOpenAIReasoningDetail(streamedReasoningDetails, detail);
                 }
               }
             }
@@ -2017,16 +2303,22 @@ var init_openai_completions = __esm({
           if (output.stopReason === "aborted") {
             throw new Error("Request was aborted");
           }
+          if (!hasFinishReason && !compat.supportsFinishReason) {
+            output.stopReason = output.content.some((block) => block.type === "toolCall") ? "toolUse" : "stop";
+          }
           if (output.stopReason === "error") {
             throw new Error(output.errorMessage || "Provider returned an error stop reason");
           }
-          if (!hasFinishReason) {
+          if (compat.supportsFinishReason && !hasFinishReason || output.stopReason === "pending") {
             throw new Error("Stream ended without finish_reason");
           }
           stream2.push({ type: "done", reason: output.stopReason, message: output });
           stream2.end();
         } catch (error) {
           for (const block of output.content) {
+            if (block.type === "thinking") {
+              applyStreamedReasoningDetails(block);
+            }
             delete block.index;
             delete block.partialArgs;
             delete block.customInput;
@@ -2047,20 +2339,22 @@ ${rawMetadata}`;
     };
     streamSimple = (model, context, options) => {
       getClientApiKey(model.provider, options?.apiKey, options?.headers);
-      const base = buildBaseOptions(model, context, options, options?.apiKey);
+      const base = {
+        ...buildBaseOptions(model, context, options, options?.apiKey),
+        toolChoice: options?.toolChoice
+      };
       const clampedReasoning = options?.reasoning ? clampThinkingLevel(model, options.reasoning) : void 0;
       const reasoningEffort = clampedReasoning === "off" ? void 0 : clampedReasoning;
-      const toolChoice = options?.toolChoice;
       return stream(model, context, {
         ...base,
         reasoningEffort,
-        toolChoice
+        thinkingBudgets: options?.thinkingBudgets
       });
     };
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.82.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.lazy.js
 init_lazy();
 var openAICompletionsApi = () => lazyApi(() => Promise.resolve().then(() => (init_openai_completions(), openai_completions_exports)));
 export {

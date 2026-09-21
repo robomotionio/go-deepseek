@@ -74,14 +74,27 @@ const ENTRIES = [
   '@deepseek-ai/cordis-plugin-loader',
   '@deepseek-ai/cosmokit',
   '@deepseek-ai/schemastery',
-  // the agent spine
-  '@deepseek-ai/dsh-agent-spine-demo',
+  // the agent core — every row upstream's agent-spine-demo used to mount from
+  // one merged config, until 0.1.6 deleted it. Each is its own row now (see
+  // Compose), so each has to be servable by its own name.
+  '@deepseek-ai/cordis-plugin-timer',
   '@deepseek-ai/dsh-agent',
+  '@deepseek-ai/dsh-agent/invariant',
   '@deepseek-ai/dsh-agent-loop',
+  '@deepseek-ai/dsh-agent-loop/invariant',
   '@deepseek-ai/dsh-session',
+  '@deepseek-ai/dsh-session/invariant',
+  '@deepseek-ai/dsh-session-projection',
+  '@deepseek-ai/dsh-session-title',
   '@deepseek-ai/dsh-scope',
+  '@deepseek-ai/dsh-scope/invariant',
   '@deepseek-ai/dsh-system-prompt',
   '@deepseek-ai/dsh-tools',
+  '@deepseek-ai/dsh-invariants',
+  '@deepseek-ai/dsh-jobs-local',
+  '@deepseek-ai/dsh-tool-jobs',
+  '@deepseek-ai/dsh-agent-instructions',
+  '@deepseek-ai/dsh-shell-env',
   // models
   '@deepseek-ai/dsh-llm',
   '@deepseek-ai/dsh-llm-deepseek',
@@ -109,18 +122,34 @@ const ENTRIES = [
   '@deepseek-ai/dsh-credentials',
 ];
 
+// The node: builtins the runtime implements, read from the table that decides
+// it (internal/nodecompat/host.go) rather than restated here to drift.
+const IMPLEMENTED_BUILTINS = new Set(
+  [...fs.readFileSync(new URL('../../internal/nodecompat/host.go', import.meta.url), 'utf8')
+    .matchAll(/^\t"([a-z_/]+)":\s+"node\/[a-z_]+\.js",$/gm)].map((m) => m[1]),
+);
+if (!IMPLEMENTED_BUILTINS.has('fs')) fail('could not read the builtin table out of internal/nodecompat/host.go');
+
 // Specifiers that must NOT be bundled. Each is a capability this runtime reaches
 // through a seam instead, or a native addon that cannot exist here — and each is
 // stubbed so the import fails with a sentence rather than a resolution error.
 const REFUSED = new Map([
+  // The stub is shadowed at run time by internal/runtime/js/koffi.js, which
+  // serves the Win32 calls the harness makes from Go. It stays refused here so
+  // nothing reaches the real package.
   ['koffi', 'native FFI; the Windows paths that use it are reached through Go instead'],
   ['node-pty', 'a native pseudo-terminal; use the subprocess seam'],
+  // dsh-http-proxy imports it lazily to install a global proxy dispatcher, a
+  // path nothing in this bundle's compositions takes. It cannot evaluate here
+  // anyway: its module scope requires node:net and node:tls.
+  ['undici', "Node's socket-level HTTP stack; this runtime's HTTP is fetch, and a proxy is the host's to configure"],
 ]);
 
 fs.rmSync(modulesDir, { recursive: true, force: true });
 fs.mkdirSync(modulesDir, { recursive: true });
 
 const manifest = new Map();   // specifier -> { file, bytes }
+const assets = new Map();     // file -> { bytes, of } — see carryAssets
 const refusedNames = new Map();   // refused specifier -> Set of imported names
 const queue = ENTRIES.map((spec) => ({ spec, from: harness }));
 const done = new Set();
@@ -153,6 +182,18 @@ while (queue.length) {
     // node: builtins alike. Relative files are inlined, which is what makes one
     // package one module.
     packages: 'external',
+    // No tsconfig. The harness's tsconfig.base.json maps `@deepseek-ai/*` onto
+    // each workspace package's src/, and esbuild applies `paths` to .js files
+    // too — so an import `packages: 'external'` should have left alone was
+    // resolved to TypeScript source and inlined instead. Every module carried
+    // its own copy of cordis, dsh-scope, dsh-llm and the rest, and identity
+    // stopped surviving exactly where it matters: dsh-scope keeps its carriers
+    // in a module-local WeakMap, so a carrier minted by one copy was invisible
+    // to another. The agent spine hid that by holding the loop, the scope
+    // and their invariants in one file; with the spine gone the scope
+    // invariant rejected every session. The lib/ files are already compiled —
+    // there is nothing for a tsconfig to do here but that.
+    tsconfigRaw: {},
     outfile: outFile,
     write: true,
     legalComments: 'none',
@@ -163,7 +204,8 @@ while (queue.length) {
   });
   if (!result) continue;
 
-  const code = fs.readFileSync(outFile, 'utf8');
+  const code = carryAssets(fs.readFileSync(outFile, 'utf8'), entryFile, slug);
+  fs.writeFileSync(outFile, code);
   manifest.set(spec, { file: `modules/${slug}.mjs`, bytes: code.length });
   bundled++;
 
@@ -206,21 +248,37 @@ function registerRuntimeRequires() {
     if (!fs.existsSync(full)) continue;
     const code = fs.readFileSync(full, 'utf8');
     const wanted = new Set();
+    const builtins = new Set();
     for (const m of code.matchAll(/\b__?require\(\s*["']([^"']+)["']\s*\)/g)) {
       const dep = m[1];
       if (dep.startsWith('.') || dep.startsWith('/')) continue;
-      if (dep.startsWith('node:') || isNodeBuiltin(dep)) continue;   // the prelude serves those
+      if (dep.startsWith('node:') || isNodeBuiltin(dep)) {
+        // A builtin is served by the require shim only once its module has
+        // been evaluated — which boot.js arranges for the common ones, and
+        // which nothing arranged for a module evaluated on its own (undici's
+        // top-level require('node:assert')). Import the ones the runtime
+        // implements; one it refuses on purpose stays a require, so it fails
+        // where it is used rather than wherever the module is loaded.
+        const name = dep.replace(/^node:/, '');
+        if (IMPLEMENTED_BUILTINS.has(name)) builtins.add(name);
+        continue;
+      }
       if (!manifest.has(dep)) continue;
       wanted.add(dep);
     }
-    if (wanted.size === 0) continue;
-    const header = [...wanted].map((dep, i) => [
-      `import * as __req${i} from ${JSON.stringify(dep)};`,
-      `(globalThis.__nodeRegistry ??= {})[${JSON.stringify(dep)}] = __req${i}.default ?? __req${i};`,
-    ].join('\n')).join('\n');
+    if (wanted.size === 0 && builtins.size === 0) continue;
+    const header = [
+      ...[...builtins].sort().map((name) => `import ${JSON.stringify(`node:${name}`)};`),
+      ...[...wanted].map((dep, i) => [
+        `import * as __req${i} from ${JSON.stringify(dep)};`,
+        `(globalThis.__nodeRegistry ??= {})[${JSON.stringify(dep)}] = __req${i}.default ?? __req${i};`,
+      ].join('\n')),
+    ].join('\n');
     fs.writeFileSync(full, `${header}\n${code}`);
     entry.bytes += header.length + 1;
-    console.log(`  = ${spec}: pre-imported ${wanted.size} runtime require(s): ${[...wanted].join(', ')}`);
+    if (wanted.size > 0) {
+      console.log(`  = ${spec}: pre-imported ${wanted.size} runtime require(s): ${[...wanted].join(', ')}`);
+    }
   }
 }
 
@@ -320,6 +378,7 @@ const meta = {
   },
   entries: ENTRIES,
   modules: Object.fromEntries([...manifest].sort(([a], [b]) => (a < b ? -1 : 1))),
+  assets: Object.fromEntries([...assets].sort(([a], [b]) => (a < b ? -1 : 1))),
 };
 fs.writeFileSync(path.join(outDir, 'manifest.json'), `${JSON.stringify(meta, null, 2)}\n`);
 
@@ -332,6 +391,37 @@ console.log(`bundled ${bundled} modules, ${refused.size} refused, ${(total / 102
 console.log(`harness ${meta.harness.version} @ ${meta.harness.commit.slice(0, 12)}`);
 
 // --- helpers -----------------------------------------------------------------
+
+// carryAssets brings along the files a module finds BESIDE itself at run time.
+//
+// `new URL('./worker.cjs', import.meta.url)` is how a package names a file it
+// ships next to its entry — a worker script, a wasm blob — without importing
+// it. Bundling cannot see that: the file is not a dependency, so it is left
+// behind, and the URL resolves against the bundled module's own location
+// (dsh:/modules/<slug>.mjs), where a sibling of that name is somebody else's
+// file or nothing. dsh-session-persistence-jsonl is the case that forced this:
+// since 0.1.5 it verifies every migrated session log in a Worker loaded that
+// way, and every session written before 0.1.5 needs migrating.
+//
+// So a file that exists beside the package's entry is copied under the
+// module's own directory, and the reference is rewritten to point there. The
+// runtime serves assets as read-only virtual files (see engine.go), which is
+// what node:worker_threads reads a script through. A reference to a file the
+// package does not ship — worker.ts, which only exists in a source checkout —
+// is left exactly as it was.
+function carryAssets(code, entryFile, slug) {
+  const pattern = /new URL\((["'])\.\/([\w.-]+)\1,\s*import\.meta\.url\)/g;
+  return code.replace(pattern, (match, quote, file) => {
+    const source = path.join(path.dirname(entryFile), file);
+    if (!fs.existsSync(source) || !fs.statSync(source).isFile()) return match;
+    const target = `${slug}/${file}`;
+    fs.mkdirSync(path.join(modulesDir, slug), { recursive: true });
+    fs.copyFileSync(source, path.join(modulesDir, target));
+    assets.set(`modules/${target}`, { bytes: fs.statSync(source).size, of: slug });
+    console.log(`      + asset modules/${target}`);
+    return `new URL(${quote}./${target}${quote}, import.meta.url)`;
+  });
+}
 
 // findEsbuild locates a bundler in the harness checkout. It is usually a
 // transitive dependency rather than a direct one, so it is not linked at the top

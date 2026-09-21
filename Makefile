@@ -17,14 +17,14 @@
 #   make bundle HARNESS_DIR=../deepseek-harness
 #
 # Move to a different upstream revision:
-#   make update HARNESS_REF=v0.1.0-rc.8
+#   make update HARNESS_REF=dsh-v0.1.6-alpha.3
 
 HARNESS_REPO ?= https://github.com/deepseek-ai/deepseek-harness.git
 # The revision to build. Pinned by default, because dsh is a developer preview
-# that says breaking changes will happen and its session format is still version
-# zero — "latest" is a decision to take deliberately, not one to inherit from
-# whenever the last build happened to run.
-HARNESS_REF  ?= dsh-v0.1.1-rc.2
+# that says breaking changes will happen — its session format went from 0 to 3
+# between two of our pins — and "latest" is a decision to take deliberately, not
+# one to inherit from whenever the last build happened to run.
+HARNESS_REF  ?= dsh-v0.1.6-alpha.2
 HARNESS_DIR  ?= .harness
 # Where the generated bundle lands. This must stay pointed at the directory
 # that bundle.go actually embeds. It read `bundle` until 0.3.0, which is where
@@ -69,6 +69,18 @@ sync:
 	@$(GIT) -C "$(HARNESS_DIR)" -c advice.detachedHead=false checkout --force "$(HARNESS_REF)" \
 		|| $(GIT) -C "$(HARNESS_DIR)" -c advice.detachedHead=false checkout --force "origin/$(HARNESS_REF)"
 	@$(GIT) -C "$(HARNESS_DIR)" --no-pager log -1 --format='    %h %d %s'
+	@# A checkout does not remove a package upstream DELETED: its lib/ and
+	@# node_modules/ are ignored files, so the directory survives without its
+	@# package.json. tsdown's workspace glob still matches it, walks up to the
+	@# root manifest, and the whole build fails on "@deepseek-ai/dsh-root cannot
+	@# find entry" — which names neither the directory nor the deletion. The
+	@# 0.1.6 refresh met eleven of these; any workspace directory with nothing
+	@# tracked in it is one.
+	@cd "$(HARNESS_DIR)" && for dir in examples native/* packages/* packages/*/*; do \
+		if [ -d "$$dir" ] && [ -z "$$($(GIT) ls-files -- "$$dir" | head -n 1)" ]; then \
+			echo "    pruning $$dir (deleted upstream)"; rm -rf "$$dir"; \
+		fi; \
+	done
 
 # build produces each package's lib/*.js, which is what the bundler reads. Only
 # the host face: the web frontend is a separate build and nothing here loads it.
