@@ -56,3 +56,45 @@ func openRouterModel() string {
 	}
 	return "deepseek/deepseek-v4.1-flash"
 }
+
+// Two turns on one session of one long-lived harness — the way a robot node
+// runs. The first turn is too short to trigger a collection; the second was
+// long enough, and until 0.4.1 the collector swept the promise Go was awaiting
+// (see runtime.TestATurnSurvivesACollection). The second answer also proves
+// the history carried.
+func TestLiveTwoTurnsOneHarness(t *testing.T) {
+	key := os.Getenv("OPENROUTER_API_KEY")
+	if key == "" {
+		t.Skip("set OPENROUTER_API_KEY to run the two-turn session")
+	}
+	dir := t.TempDir()
+	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
+	defer cancel()
+	h, err := sdk.Open(ctx, sdk.Config{
+		BaseURL:     "https://openrouter.ai/api/v1",
+		APIKey:      key,
+		Model:       openRouterModel(),
+		CWD:         dir,
+		Env:         map[string]string{"HOME": dir},
+		MemoryLimit: 512 << 20,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+	session := h.Session("two-turns")
+	for i, prompt := range []string{
+		"Remember this number: 4271. Just acknowledge.",
+		"What number did I ask you to remember? Answer with digits only.",
+		"And that number plus one? Digits only.",
+	} {
+		result, err := session.Run(ctx, sdk.Text(prompt))
+		if err != nil {
+			t.Fatalf("turn %d: %v", i+1, err)
+		}
+		t.Logf("turn %d said %q", i+1, result.FinalResponse)
+		if i == 1 && !strings.Contains(result.FinalResponse, "4271") {
+			t.Errorf("the session did not carry history: %q", result.FinalResponse)
+		}
+	}
+}

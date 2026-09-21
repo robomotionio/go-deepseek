@@ -267,6 +267,11 @@ type harness struct {
 	// bridge carries everything between Go plugins and their cordis contexts.
 	// Nil when the composition has no Go plugins.
 	bridge *bridge
+
+	// collectAfterBegin forces a garbage collection between starting a turn
+	// and awaiting it. Tests only: it is the moment a promise held by nobody
+	// but Go used to be swept (see turn).
+	collectAfterBegin bool
 }
 
 // request is one unit of work for the owning goroutine.
@@ -545,11 +550,37 @@ func (h *harness) turn(eng *engine, reqCtx context.Context, sessionID string, in
 	if err != nil {
 		return nil, err
 	}
-	run, err := call.Object().Get("run")
+	// The turn's promise is held by JavaScript, not by this Value.
+	//
+	// goant's collector does not count a Value a Go caller is holding as a
+	// root. The promise run() returns is referenced by nothing in JavaScript,
+	// so a collection during the await — which a turn long enough to allocate
+	// will trigger — swept it, and this Value went on naming whatever object
+	// was allocated into its slot next. The answer then read back as "",
+	// "cannot convert object to primitive value": every second turn on a
+	// long-lived harness, and never the first, which is too short to collect.
+	// begin() keeps the promise in a map under an id until release().
+	begin, err := call.Object().Get("begin")
 	if err != nil {
 		return nil, err
 	}
-	promise, err := run.Function().Call(sessionID, text, agentOptions)
+	id, err := begin.Function().Call(sessionID, text, agentOptions)
+	if err != nil {
+		return nil, fmt.Errorf("deepseek: run: %w", err)
+	}
+	defer func() {
+		if release, err := call.Object().Get("release"); err == nil {
+			_, _ = release.Function().Call(id)
+		}
+	}()
+	if h.collectAfterBegin {
+		eng.rt.Collect()
+	}
+	held, err := call.Object().Get("held")
+	if err != nil {
+		return nil, err
+	}
+	promise, err := held.Function().Call(id)
 	if err != nil {
 		return nil, fmt.Errorf("deepseek: run: %w", err)
 	}
