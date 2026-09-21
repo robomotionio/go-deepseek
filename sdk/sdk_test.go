@@ -93,7 +93,9 @@ func TestRunReadsTheInterval(t *testing.T) {
 	if result.SessionID != "s1" {
 		t.Errorf("SessionID = %q", result.SessionID)
 	}
-	if result.Duration <= 0 {
+	// Windows' monotonic clock advances in ticks of up to ~15ms, and this fake
+	// carrier answers within one, so zero is a correct reading there.
+	if result.Duration < 0 || (result.Duration == 0 && goruntime.GOOS != "windows") {
 		t.Error("Duration was not measured")
 	}
 }

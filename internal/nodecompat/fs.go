@@ -185,7 +185,7 @@ func (c *Compat) fsReaddir(path string, withTypes bool) (any, error) {
 }
 
 func (c *Compat) fsStat(path string, follow bool) (map[string]any, error) {
-	p, err := c.resolvePath(path)
+	p, err := c.resolveForMetadata(path)
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +207,7 @@ func (c *Compat) fsExists(path string) bool {
 	if _, ok := c.virtual(path); ok {
 		return true
 	}
-	p, err := c.resolvePath(path)
+	p, err := c.resolveForMetadata(path)
 	if err != nil {
 		return false
 	}

@@ -59,6 +59,9 @@ func run(t *testing.T, rt *goant.Runtime, src string) string {
 }
 
 func TestPath(t *testing.T) {
+	if goruntime.GOOS == "windows" {
+		t.Skip("asserts node:path's POSIX answers; on Windows node:path is path.win32")
+	}
 	rt, _ := newRuntime(t, nodecompat.Options{CWD: "/work"})
 	got := run(t, rt, `
 		import path from 'node:path';
@@ -508,6 +511,9 @@ func TestFetchAbort(t *testing.T) {
 }
 
 func TestProcessAndOS(t *testing.T) {
+	if goruntime.GOOS == "windows" {
+		t.Skip("asserts the POSIX answers: process.platform linux and a slash-rooted cwd")
+	}
 	rt, _ := newRuntime(t, nodecompat.Options{
 		CWD: "/somewhere",
 		Env: map[string]string{"DEEPSEEK_API_KEY": "sk-test", "HOME": "/home/agent"},
@@ -774,7 +780,7 @@ func TestWorkerRunsAScriptOnThisLoop(t *testing.T) {
 	script := `
 		const { parentPort, workerData, isMainThread } = require('node:worker_threads');
 		const { join } = require('node:path');
-		parentPort.postMessage({ ok: !isMainThread, sum: workerData.a + workerData.b, path: join('a', 'b') });
+		parentPort.postMessage({ ok: !isMainThread, sum: workerData.a + workerData.b, path: join('a', 'b') === require('node:path').join('a', 'b') });
 		parentPort.close();
 	`
 	rt, _ := newRuntime(t, nodecompat.Options{Virtual: map[string]string{"dsh:/modules/x/worker.cjs": script}})
@@ -785,7 +791,7 @@ func TestWorkerRunsAScriptOnThisLoop(t *testing.T) {
 		const code = await new Promise((resolve) => worker.once('exit', resolve));
 		globalThis.result = JSON.stringify({ main: isMainThread, message, code });
 	`)
-	want := `{"main":true,"message":{"ok":true,"sum":5,"path":"a/b"},"code":0}`
+	want := `{"main":true,"message":{"ok":true,"sum":5,"path":true},"code":0}`
 	if got != want {
 		t.Fatalf("worker: got %s, want %s", got, want)
 	}
@@ -924,5 +930,41 @@ func TestStatsAreCloneable(t *testing.T) {
 	want := "true,true,false,5,bigint,true,bigint,false,false"
 	if got != want {
 		t.Fatalf("stats: got %q, want %q", got, want)
+	}
+}
+
+// The directories above a root answer stat — the Windows session backend walks
+// from the drive root down to create a session directory durably — and nothing
+// else: listing them, reading beside the root and statting a sibling stay
+// refused.
+func TestAncestorsOfARootAnswerStatOnly(t *testing.T) {
+	outer := t.TempDir()
+	inner := filepath.Join(outer, "fenced")
+	if err := os.MkdirAll(inner, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(outer, "secret.txt"), []byte("no"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(outer, "sibling"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	rt, _ := newRuntime(t, nodecompat.Options{CWD: inner, Roots: []string{inner}})
+	src := fmt.Sprintf(`
+		import fs from 'node:fs';
+		const outer = %q, sep = %q, root = outer.slice(0, outer.indexOf(sep) + 1) || sep;
+		const attempt = (fn) => { try { fn(); return 'ok'; } catch (error) { return error.message.startsWith('EACCES') ? 'EACCES' : error.message; } };
+		globalThis.result = [
+			fs.statSync(outer).isDirectory(),
+			fs.statSync(root).isDirectory(),
+			fs.existsSync(outer),
+			attempt(() => fs.readdirSync(outer)),
+			attempt(() => fs.readFileSync(outer + sep + 'secret.txt')),
+			attempt(() => fs.statSync(outer + sep + 'sibling')),
+		].join(',');
+	`, outer, string(filepath.Separator))
+	got := run(t, rt, src)
+	if got != "true,true,true,EACCES,EACCES,EACCES" {
+		t.Fatalf("ancestor metadata: got %q", got)
 	}
 }
