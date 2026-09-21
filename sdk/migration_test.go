@@ -2,6 +2,7 @@ package sdk_test
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -44,7 +45,14 @@ func TestResumesAFormat0Log(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	log := strings.ReplaceAll(string(fixture), "__CWD__", dir)
+	// Spliced into JSON, so escaped as JSON: a Windows path is all
+	// backslashes, and C:\Users read raw is an invalid \U escape — a header
+	// the backend cannot parse, and so a log it does not count as a session.
+	quoted, err := json.Marshal(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	log := strings.ReplaceAll(string(fixture), "__CWD__", string(quoted[1:len(quoted)-1]))
 	sessionDir := filepath.Join(root, projectKey(dir), "legacy")
 	if err := os.MkdirAll(sessionDir, 0o700); err != nil {
 		t.Fatal(err)

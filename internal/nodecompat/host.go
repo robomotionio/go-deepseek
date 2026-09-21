@@ -364,5 +364,43 @@ func (c *Compat) resolvePath(p string) (string, error) {
 	return "", fmt.Errorf("EACCES: path is outside the permitted roots: %s", p)
 }
 
+// resolveForMetadata is resolvePath widened by one thing: the directories
+// that CONTAIN a permitted root may be stat'ed. Nothing is read, listed or
+// written through this — it answers "does this directory exist, and is it a
+// directory", about a path every root's own spelling already discloses.
+//
+// It exists because of Windows. The JSONL session backend creates a session
+// directory durably by walking from the drive root down — assertDirectory on
+// C:\, then C:\Users, and so on to the fence — and a refusal on the first
+// step failed every turn with "EACCES: path is outside the permitted roots:
+// C:\" before the model was reached. Found under Wine; POSIX takes a
+// different path through the same code.
+func (c *Compat) resolveForMetadata(path string) (string, error) {
+	p, err := c.resolvePath(path)
+	if err == nil {
+		return p, nil
+	}
+	candidate := path
+	if !filepath.IsAbs(candidate) {
+		candidate = filepath.Join(c.opts.CWD, candidate)
+	}
+	candidate = filepath.Clean(candidate)
+	for _, root := range c.opts.Roots {
+		if containsRoot(candidate, filepath.Clean(root)) {
+			return candidate, nil
+		}
+	}
+	return "", err
+}
+
+// containsRoot reports whether dir is a proper ancestor of root.
+func containsRoot(dir, root string) bool {
+	rel, err := filepath.Rel(dir, root)
+	if err != nil || rel == "." || filepath.IsAbs(rel) {
+		return false
+	}
+	return rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator))
+}
+
 // now is the clock, overridable so a test does not have to wait for one.
 func (c *Compat) now() time.Time { return time.Now() }
