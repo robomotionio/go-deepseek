@@ -7,7 +7,7 @@ function hasIntrinsicConstructor(prototype, name) {
   const constructor = Object.getOwnPropertyDescriptor(prototype, "constructor")?.value;
   if (typeof constructor !== "function") return false;
   try {
-    return constructor.name === name && constructor.prototype === prototype && Function.prototype.toString.call(constructor) === `function ${name}() { [native code] }`;
+    return constructor.name === name && constructor.prototype === prototype && Function.prototype.toString.call(constructor) === Function.prototype.toString.call(name === "Array" ? Array : Object);
   } catch {
     return false;
   }

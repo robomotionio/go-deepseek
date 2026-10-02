@@ -462,9 +462,9 @@ func TestComposeAppliesTheSameDefaultsAsOpen(t *testing.T) {
 		return nil
 	}
 
-	// The endpoint the environment named, on the adapter that will use it.
-	if got := find("llm-deepseek")["baseURL"]; got != "https://gateway.example/v1" {
-		t.Errorf("the adapter's baseURL is %v, so the gateway was lost between Compose and Open", got)
+	// The endpoint the environment named, on the route that will use it.
+	if _, route := modelRoute(t, entries); route["baseURL"] != "https://gateway.example/v1" {
+		t.Errorf("the model route's baseURL is %v, so the gateway was lost between Compose and Open", route["baseURL"])
 	}
 
 	// And the working directory, which is the same trap wearing a different
@@ -480,10 +480,8 @@ func TestComposeAppliesTheSameDefaultsAsOpen(t *testing.T) {
 
 	// An explicit field still wins over the ambient one.
 	named := sdk.Compose(sdk.Config{BaseURL: "https://explicit.example/v1", CWD: t.TempDir()})
-	for _, entry := range named {
-		if entry.ID == "llm-deepseek" && entry.Config["baseURL"] != "https://explicit.example/v1" {
-			t.Errorf("an explicit BaseURL was overridden by the environment: %v", entry.Config["baseURL"])
-		}
+	if _, route := modelRoute(t, named); route["baseURL"] != "https://explicit.example/v1" {
+		t.Errorf("an explicit BaseURL was overridden by the environment: %v", route["baseURL"])
 	}
 }
 
@@ -514,21 +512,14 @@ func TestComposeKeepsTheEndpointWhenTheDirectoryCannotBeNamed(t *testing.T) {
 	t.Setenv("DEEPSEEK_BASE_URL", "https://gateway.example/v1")
 	t.Setenv("DEEPSEEK_API_KEY", "sk-from-the-environment")
 
-	entries := sdk.Compose(sdk.Config{})
-	for _, entry := range entries {
-		if entry.ID != "llm-deepseek" {
-			continue
-		}
-		if got := entry.Config["baseURL"]; got != "https://gateway.example/v1" {
-			t.Fatalf("the adapter's baseURL is %v; an unnameable directory took the endpoint with it", got)
-		}
-		models, ok := entry.Config["models"].([]map[string]any)
-		if !ok || len(models) == 0 || models[0]["id"] != "deepseek-v4-flash" {
-			t.Errorf("the model default went too: %#v", entry.Config["models"])
-		}
-		return
+	_, route := modelRoute(t, sdk.Compose(sdk.Config{}))
+	if got := route["baseURL"]; got != "https://gateway.example/v1" {
+		t.Fatalf("the model route's baseURL is %v; an unnameable directory took the endpoint with it", got)
 	}
-	t.Fatal("the composition has no llm-deepseek entry")
+	models, ok := route["models"].([]map[string]any)
+	if !ok || len(models) == 0 || models[0]["id"] != "deepseek-v4-flash" {
+		t.Errorf("the model default went too: %#v", route["models"])
+	}
 }
 
 func TestComposeIsAdjustable(t *testing.T) {
@@ -638,38 +629,80 @@ func min(a, b int) int {
 // boots either way, and the difference only shows up as a slower failure under
 // a condition tests do not reproduce.
 func TestComposePinsTheRetryBudget(t *testing.T) {
-	entries := sdk.Compose(sdk.Config{CWD: t.TempDir(), APIKey: "x"})
+	// On both wires: they are different plugins since harness 0.1.7, and each
+	// has upstream's default of its own to inherit.
+	for _, protocol := range []string{"chat-completions", "messages"} {
+		entries := sdk.Compose(sdk.Config{CWD: t.TempDir(), APIKey: "x", Protocol: protocol})
 
-	var found bool
-	for _, entry := range entries {
-		if entry.ID != "llm-deepseek" {
-			continue
-		}
-		found = true
-		policy, ok := entry.Config["retryPolicy"].(map[string]any)
+		_, route := modelRoute(t, entries)
+		policy, ok := route["retryPolicy"].(map[string]any)
 		if !ok {
-			t.Fatalf("llm-deepseek has no pinned retryPolicy: %#v", entry.Config)
+			t.Fatalf("%s: the model route has no pinned retryPolicy: %#v", protocol, route)
 		}
 		if policy["mode"] != "normal" {
-			t.Errorf("retry mode is %v, want normal", policy["mode"])
+			t.Errorf("%s: retry mode is %v, want normal", protocol, policy["mode"])
 		}
 		if policy["maxRetries"] != 2 {
-			t.Errorf("maxRetries is %v, want 2 — upstream's default is 5, and inheriting it "+
-				"makes a failing provider hang about two and a half times longer", policy["maxRetries"])
+			t.Errorf("%s: maxRetries is %v, want 2 — upstream's default is 5, and inheriting it "+
+				"makes a failing provider hang about two and a half times longer", protocol, policy["maxRetries"])
 		}
-	}
-	if !found {
-		t.Fatal("the default composition has no llm-deepseek entry")
-	}
 
-	// And it stays scoped to the model adapter rather than leaking onto every
-	// entry, which is how a config key that looks harmless spreads.
-	for _, entry := range entries {
-		if entry.ID == "llm-deepseek" {
-			continue
+		// And it stays scoped to the model row rather than leaking onto every
+		// entry, which is how a config key that looks harmless spreads.
+		for _, entry := range entries {
+			if entry.ID == sdk.ModelRowID {
+				continue
+			}
+			if _, present := entry.Config["retryPolicy"]; present {
+				t.Errorf("%s: entry %q also carries retryPolicy; it belongs to the provider", protocol, entry.ID)
+			}
 		}
-		if _, present := entry.Config["retryPolicy"]; present {
-			t.Errorf("entry %q also carries retryPolicy; it belongs to the provider", entry.ID)
+	}
+}
+
+// Two defaults moved under the composition in harness 0.1.7, and both are
+// pinned to what they were: nothing fails either way, so nothing else would
+// notice them going.
+//
+//   - tool-bash gained promoteOnTimeout, on by default: a foreground command
+//     that reaches its timeout keeps running as a background job. Before, the
+//     timeout killed it.
+//   - tool-jobs lost its default cap of 3 on consecutive completion wakes, so
+//     an idle agent is woken by every finished job without limit.
+func TestComposePinsWhatATimeoutAndAWakeMean(t *testing.T) {
+	entries := sdk.Compose(sdk.Config{CWD: t.TempDir(), APIKey: "x"})
+	for _, pin := range []struct {
+		id, key string
+		want    any
+	}{
+		{"tool-bash", "promoteOnTimeout", false},
+		{"tool-jobs", "maxConsecutiveWakes", 3},
+	} {
+		var found bool
+		for _, entry := range entries {
+			if entry.ID != pin.id {
+				continue
+			}
+			found = true
+			if got, stated := entry.Config[pin.key]; !stated || got != pin.want {
+				t.Errorf("%s.%s is %v (stated: %v), want %v", pin.id, pin.key, got, stated, pin.want)
+			}
+		}
+		if !found {
+			t.Errorf("the default composition has no %s row", pin.id)
+		}
+	}
+	// A pin is only one if the plugin still reads the key it is written under.
+	for specifier, key := range map[string]string{
+		"@deepseek-ai/dsh-tool-bash": "promoteOnTimeout",
+		"@deepseek-ai/dsh-tool-jobs": "maxConsecutiveWakes",
+	} {
+		source, err := sdk.PluginSource(specifier)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(source, key) {
+			t.Errorf("%s no longer mentions %s — renamed upstream, and the pin is writing a key nothing reads", specifier, key)
 		}
 	}
 }

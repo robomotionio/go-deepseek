@@ -1,15 +1,15 @@
-// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
-import { EventEmitter } from "node:events";
-import { stat as statcb, Stats } from "node:fs";
-import { readdir, stat as stat2 } from "node:fs/promises";
-import * as sp2 from "node:path";
-import { readdirp, ReaddirpStream } from "readdirp";
+// .harness/node_modules/.pnpm/chokidar@4.0.3/node_modules/chokidar/esm/index.js
+import { stat as statcb } from "fs";
+import { stat as stat2, readdir } from "fs/promises";
+import { EventEmitter } from "events";
+import * as sysPath2 from "path";
+import { readdirp } from "readdirp";
 
-// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/handler.js
-import { watch as fs_watch, unwatchFile, watchFile } from "node:fs";
-import { realpath as fsrealpath, lstat, open, stat } from "node:fs/promises";
-import { type as osType } from "node:os";
-import * as sp from "node:path";
+// .harness/node_modules/.pnpm/chokidar@4.0.3/node_modules/chokidar/esm/handler.js
+import { watchFile, unwatchFile, watch as fs_watch } from "fs";
+import { open, stat, lstat, realpath as fsrealpath } from "fs/promises";
+import * as sysPath from "path";
+import { type as osType } from "os";
 var STR_DATA = "data";
 var STR_END = "end";
 var STR_CLOSE = "close";
@@ -302,7 +302,7 @@ var binaryExtensions = /* @__PURE__ */ new Set([
   "zip",
   "zipx"
 ]);
-var isBinaryPath = (filePath) => binaryExtensions.has(sp.extname(filePath).slice(1).toLowerCase());
+var isBinaryPath = (filePath) => binaryExtensions.has(sysPath.extname(filePath).slice(1).toLowerCase());
 var foreach = (val, fn) => {
   if (val instanceof Set) {
     val.forEach(fn);
@@ -340,7 +340,7 @@ function createFsWatchInstance(path, options, listener, errHandler, emitRaw) {
     listener(path);
     emitRaw(rawEvent, evPath, { watchedPath: path });
     if (evPath && path !== evPath) {
-      fsWatchBroadcast(sp.resolve(path, evPath), KEY_LISTENERS, sp.join(path, evPath));
+      fsWatchBroadcast(sysPath.resolve(path, evPath), KEY_LISTENERS, sysPath.join(path, evPath));
     }
   };
   try {
@@ -462,8 +462,6 @@ var setFsWatchFileListener = (path, fullPath, options, handlers) => {
   };
 };
 var NodeFsHandler = class {
-  fsw;
-  _boundHandleError;
   constructor(fsW) {
     this.fsw = fsW;
     this._boundHandleError = (error) => fsW._handleError(error);
@@ -476,11 +474,11 @@ var NodeFsHandler = class {
    */
   _watchWithNodeFs(path, listener) {
     const opts = this.fsw.options;
-    const directory = sp.dirname(path);
-    const basename3 = sp.basename(path);
+    const directory = sysPath.dirname(path);
+    const basename3 = sysPath.basename(path);
     const parent = this.fsw._getWatchedDir(directory);
     parent.add(basename3);
-    const absolutePath = sp.resolve(path);
+    const absolutePath = sysPath.resolve(path);
     const options = {
       persistent: opts.persistent
     };
@@ -511,8 +509,8 @@ var NodeFsHandler = class {
     if (this.fsw.closed) {
       return;
     }
-    const dirname3 = sp.dirname(file);
-    const basename3 = sp.basename(file);
+    const dirname3 = sysPath.dirname(file);
+    const basename3 = sysPath.basename(file);
     const parent = this.fsw._getWatchedDir(dirname3);
     let prevStats = stats;
     if (parent.has(basename3))
@@ -603,9 +601,8 @@ var NodeFsHandler = class {
     this.fsw._symlinkPaths.set(full, true);
   }
   _handleRead(directory, initialAdd, wh, target, dir, depth, throttler) {
-    directory = sp.join(directory, "");
-    const throttleKey = target ? `${directory}:${target}` : directory;
-    throttler = this.fsw._throttle("readdir", throttleKey, 1e3);
+    directory = sysPath.join(directory, "");
+    throttler = this.fsw._throttle("readdir", directory, 1e3);
     if (!throttler)
       return;
     const previous = this.fsw._getWatchedDir(wh.path);
@@ -622,7 +619,7 @@ var NodeFsHandler = class {
         return;
       }
       const item = entry.path;
-      let path = sp.join(directory, item);
+      let path = sysPath.join(directory, item);
       current.add(item);
       if (entry.stats.isSymbolicLink() && await this._handleSymlink(entry, directory, path, item)) {
         return;
@@ -633,7 +630,7 @@ var NodeFsHandler = class {
       }
       if (item === target || !target && !previous.has(item)) {
         this.fsw._incrReadyCount();
-        path = sp.join(dir, sp.relative(dir, path));
+        path = sysPath.join(dir, sysPath.relative(dir, path));
         this._addToNodeFs(path, initialAdd, wh, depth + 1);
       }
     }).on(EV.ERROR, this._boundHandleError);
@@ -670,12 +667,12 @@ var NodeFsHandler = class {
    * @returns closer for the watcher instance.
    */
   async _handleDir(dir, stats, initialAdd, depth, target, wh, realpath) {
-    const parentDir = this.fsw._getWatchedDir(sp.dirname(dir));
-    const tracked = parentDir.has(sp.basename(dir));
+    const parentDir = this.fsw._getWatchedDir(sysPath.dirname(dir));
+    const tracked = parentDir.has(sysPath.basename(dir));
     if (!(initialAdd && this.fsw.options.ignoreInitial) && !target && !tracked) {
       this.fsw._emit(EV.ADD_DIR, dir, stats);
     }
-    parentDir.add(sp.basename(dir));
+    parentDir.add(sysPath.basename(dir));
     this.fsw._getWatchedDir(dir);
     let throttler;
     let closer;
@@ -725,7 +722,7 @@ var NodeFsHandler = class {
       const follow = this.fsw.options.followSymlinks;
       let closer;
       if (stats.isDirectory()) {
-        const absPath = sp.resolve(path);
+        const absPath = sysPath.resolve(path);
         const targetPath = follow ? await fsrealpath(path) : path;
         if (this.fsw.closed)
           return;
@@ -739,14 +736,14 @@ var NodeFsHandler = class {
         const targetPath = follow ? await fsrealpath(path) : path;
         if (this.fsw.closed)
           return;
-        const parent = sp.dirname(wh.watchPath);
+        const parent = sysPath.dirname(wh.watchPath);
         this.fsw._getWatchedDir(parent).add(wh.watchPath);
         this.fsw._emit(EV.ADD, wh.watchPath, stats);
         closer = await this._handleDir(parent, stats, initialAdd, depth, path, wh, targetPath);
         if (this.fsw.closed)
           return;
         if (targetPath !== void 0) {
-          this.fsw._symlinkPaths.set(sp.resolve(path), targetPath);
+          this.fsw._symlinkPaths.set(sysPath.resolve(path), targetPath);
         }
       } else {
         closer = this._handleFile(wh.watchPath, stats, initialAdd);
@@ -764,14 +761,14 @@ var NodeFsHandler = class {
   }
 };
 
-// .harness/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar/index.js
+// .harness/node_modules/.pnpm/chokidar@4.0.3/node_modules/chokidar/esm/index.js
 var SLASH = "/";
 var SLASH_SLASH = "//";
 var ONE_DOT = ".";
 var TWO_DOTS = "..";
 var STRING_TYPE = "string";
 var BACK_SLASH_RE = /\\/g;
-var DOUBLE_SLASH_RE = /\/\//g;
+var DOUBLE_SLASH_RE = /\/\//;
 var DOT_RE = /\..*\.(sw[px])$|~$|\.subl.*\.tmp/;
 var REPLACER_RE = /^\.[/\\]/;
 function arrify(item) {
@@ -790,11 +787,11 @@ function createPattern(matcher) {
       if (matcher.path === string)
         return true;
       if (matcher.recursive) {
-        const relative3 = sp2.relative(matcher.path, string);
+        const relative3 = sysPath2.relative(matcher.path, string);
         if (!relative3) {
           return false;
         }
-        return !relative3.startsWith("..") && !sp2.isAbsolute(relative3);
+        return !relative3.startsWith("..") && !sysPath2.isAbsolute(relative3);
       }
       return false;
     };
@@ -804,12 +801,14 @@ function createPattern(matcher) {
 function normalizePath(path) {
   if (typeof path !== "string")
     throw new Error("string expected");
-  path = sp2.normalize(path);
+  path = sysPath2.normalize(path);
   path = path.replace(/\\/g, "/");
   let prepend = false;
   if (path.startsWith("//"))
     prepend = true;
-  path = path.replace(DOUBLE_SLASH_RE, "/");
+  const DOUBLE_SLASH_RE2 = /\/\//;
+  while (path.match(DOUBLE_SLASH_RE2))
+    path = path.replace(DOUBLE_SLASH_RE2, "/");
   if (prepend)
     path = "/" + path;
   return path;
@@ -850,31 +849,30 @@ var toUnix = (string) => {
   if (str.startsWith(SLASH_SLASH)) {
     prepend = true;
   }
-  str = str.replace(DOUBLE_SLASH_RE, SLASH);
+  while (str.match(DOUBLE_SLASH_RE)) {
+    str = str.replace(DOUBLE_SLASH_RE, SLASH);
+  }
   if (prepend) {
     str = SLASH + str;
   }
   return str;
 };
-var normalizePathToUnix = (path) => toUnix(sp2.normalize(toUnix(path)));
+var normalizePathToUnix = (path) => toUnix(sysPath2.normalize(toUnix(path)));
 var normalizeIgnored = (cwd = "") => (path) => {
   if (typeof path === "string") {
-    return normalizePathToUnix(sp2.isAbsolute(path) ? path : sp2.join(cwd, path));
+    return normalizePathToUnix(sysPath2.isAbsolute(path) ? path : sysPath2.join(cwd, path));
   } else {
     return path;
   }
 };
 var getAbsolutePath = (path, cwd) => {
-  if (sp2.isAbsolute(path)) {
+  if (sysPath2.isAbsolute(path)) {
     return path;
   }
-  return sp2.join(cwd, path);
+  return sysPath2.join(cwd, path);
 };
 var EMPTY_SET = Object.freeze(/* @__PURE__ */ new Set());
 var DirEntry = class {
-  path;
-  _removeWatcher;
-  items;
   constructor(dir, removeWatcher) {
     this.path = dir;
     this._removeWatcher = removeWatcher;
@@ -899,7 +897,7 @@ var DirEntry = class {
       await readdir(dir);
     } catch (err) {
       if (this._removeWatcher) {
-        this._removeWatcher(sp2.dirname(dir), sp2.basename(dir));
+        this._removeWatcher(sysPath2.dirname(dir), sysPath2.basename(dir));
       }
     }
   }
@@ -926,19 +924,12 @@ var DirEntry = class {
 var STAT_METHOD_F = "stat";
 var STAT_METHOD_L = "lstat";
 var WatchHelper = class {
-  fsw;
-  path;
-  watchPath;
-  fullWatchPath;
-  dirParts;
-  followSymlinks;
-  statMethod;
   constructor(path, follow, fsw) {
     this.fsw = fsw;
     const watchPath = path;
     this.path = path = path.replace(REPLACER_RE, "");
     this.watchPath = watchPath;
-    this.fullWatchPath = sp2.resolve(watchPath);
+    this.fullWatchPath = sysPath2.resolve(watchPath);
     this.dirParts = [];
     this.dirParts.forEach((parts) => {
       if (parts.length > 1)
@@ -948,7 +939,7 @@ var WatchHelper = class {
     this.statMethod = follow ? STAT_METHOD_F : STAT_METHOD_L;
   }
   entryPath(entry) {
-    return sp2.join(this.watchPath, sp2.relative(this.watchPath, entry.fullPath));
+    return sysPath2.join(this.watchPath, sysPath2.relative(this.watchPath, entry.fullPath));
   }
   filterPath(entry) {
     const { stats } = entry;
@@ -962,24 +953,6 @@ var WatchHelper = class {
   }
 };
 var FSWatcher = class extends EventEmitter {
-  closed;
-  options;
-  _closers;
-  _ignoredPaths;
-  _throttled;
-  _streams;
-  _symlinkPaths;
-  _watched;
-  _pendingWrites;
-  _pendingUnlinks;
-  _readyCount;
-  _emitReady;
-  _closePromise;
-  _userIgnored;
-  _readyEmitted;
-  _emitRaw;
-  _boundRemove;
-  _nodeFsHandler;
   // Not indenting methods for history sake; for now.
   constructor(_opts = {}) {
     super();
@@ -1098,7 +1071,7 @@ var FSWatcher = class extends EventEmitter {
         return;
       results.forEach((item) => {
         if (item)
-          this.add(sp2.dirname(item), sp2.basename(_origAdd || item));
+          this.add(sysPath2.dirname(item), sysPath2.basename(_origAdd || item));
       });
     });
     return this;
@@ -1112,10 +1085,10 @@ var FSWatcher = class extends EventEmitter {
     const paths = unifyPaths(paths_);
     const { cwd } = this.options;
     paths.forEach((path) => {
-      if (!sp2.isAbsolute(path) && !this._closers.has(path)) {
+      if (!sysPath2.isAbsolute(path) && !this._closers.has(path)) {
         if (cwd)
-          path = sp2.join(cwd, path);
-        path = sp2.resolve(path);
+          path = sysPath2.join(cwd, path);
+        path = sysPath2.resolve(path);
       }
       this._closePath(path);
       this._addIgnoredPath(path);
@@ -1164,7 +1137,7 @@ var FSWatcher = class extends EventEmitter {
   getWatched() {
     const watchList = {};
     this._watched.forEach((entry, dir) => {
-      const key = this.options.cwd ? sp2.relative(this.options.cwd, dir) : dir;
+      const key = this.options.cwd ? sysPath2.relative(this.options.cwd, dir) : dir;
       const index = key || ONE_DOT;
       watchList[index] = entry.getChildren().sort();
     });
@@ -1190,9 +1163,9 @@ var FSWatcher = class extends EventEmitter {
       return;
     const opts = this.options;
     if (isWindows)
-      path = sp2.normalize(path);
+      path = sysPath2.normalize(path);
     if (opts.cwd)
-      path = sp2.relative(opts.cwd, path);
+      path = sysPath2.relative(opts.cwd, path);
     const args = [path];
     if (stats != null)
       args.push(stats);
@@ -1243,7 +1216,7 @@ var FSWatcher = class extends EventEmitter {
         return this;
     }
     if (opts.alwaysStat && stats === void 0 && (event === EVENTS.ADD || event === EVENTS.ADD_DIR || event === EVENTS.CHANGE)) {
-      const fullPath = opts.cwd ? sp2.join(opts.cwd, path) : path;
+      const fullPath = opts.cwd ? sysPath2.join(opts.cwd, path) : path;
       let stats2;
       try {
         stats2 = await stat2(fullPath);
@@ -1319,8 +1292,8 @@ var FSWatcher = class extends EventEmitter {
     const pollInterval = awf.pollInterval;
     let timeoutHandler;
     let fullPath = path;
-    if (this.options.cwd && !sp2.isAbsolute(path)) {
-      fullPath = sp2.join(this.options.cwd, path);
+    if (this.options.cwd && !sysPath2.isAbsolute(path)) {
+      fullPath = sysPath2.join(this.options.cwd, path);
     }
     const now = /* @__PURE__ */ new Date();
     const writes = this._pendingWrites;
@@ -1390,7 +1363,7 @@ var FSWatcher = class extends EventEmitter {
    * @param directory path of the directory
    */
   _getWatchedDir(directory) {
-    const dir = sp2.resolve(directory);
+    const dir = sysPath2.resolve(directory);
     if (!this._watched.has(dir))
       this._watched.set(dir, new DirEntry(dir, this._boundRemove));
     return this._watched.get(dir);
@@ -1413,8 +1386,8 @@ var FSWatcher = class extends EventEmitter {
    * @param item      base path of item/directory
    */
   _remove(directory, item, isDirectory) {
-    const path = sp2.join(directory, item);
-    const fullPath = sp2.resolve(path);
+    const path = sysPath2.join(directory, item);
+    const fullPath = sysPath2.resolve(path);
     isDirectory = isDirectory != null ? isDirectory : this._watched.has(path) || this._watched.has(fullPath);
     if (!this._throttle("remove", path, 100))
       return;
@@ -1432,7 +1405,7 @@ var FSWatcher = class extends EventEmitter {
     }
     let relPath = path;
     if (this.options.cwd)
-      relPath = sp2.relative(this.options.cwd, path);
+      relPath = sysPath2.relative(this.options.cwd, path);
     if (this.options.awaitWriteFinish && this._pendingWrites.has(relPath)) {
       const event = this._pendingWrites.get(relPath).cancelWait();
       if (event === EVENTS.ADD)
@@ -1450,8 +1423,8 @@ var FSWatcher = class extends EventEmitter {
    */
   _closePath(path) {
     this._closeFile(path);
-    const dir = sp2.dirname(path);
-    this._getWatchedDir(dir).remove(sp2.basename(path));
+    const dir = sysPath2.dirname(path);
+    this._getWatchedDir(dir).remove(sysPath2.basename(path));
   }
   /**
    * Closes only file-specific watchers

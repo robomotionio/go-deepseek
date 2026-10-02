@@ -1,5 +1,5 @@
 // .harness/packages/typert/protocol/lib/index.js
-import { Service } from "@deepseek-ai/cordis";
+import { Context, Service } from "@deepseek-ai/cordis";
 var RemoteError = class extends Error {
   code;
   details;
@@ -37,6 +37,35 @@ function typertOwnedValue(value, release) {
 function isTypertOwnedValue(value) {
   return typeof value === "object" && value !== null && TYPERT_OWNED_VALUE in value && value[TYPERT_OWNED_VALUE] === true;
 }
+function isRemoteJsonValue(value) {
+  return visitJsonValue(value, /* @__PURE__ */ new Set());
+}
+function isRemoteUplinkItem(value) {
+  return value === void 0 || isRemoteJsonValue(value);
+}
+function visitJsonValue(value, ancestors) {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return true;
+  if (typeof value === "number") return Number.isFinite(value) && !Object.is(value, -0);
+  if (typeof value !== "object") return false;
+  if (ancestors.has(value)) return false;
+  ancestors.add(value);
+  try {
+    if (Array.isArray(value)) {
+      if (Object.getPrototypeOf(value) !== Array.prototype || Reflect.ownKeys(value).length !== value.length + 1) return false;
+      for (let index = 0; index < value.length; index++) if (!Object.hasOwn(value, index) || !visitJsonValue(value[index], ancestors)) return false;
+      return true;
+    }
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) return false;
+    for (const key of Reflect.ownKeys(value)) {
+      if (typeof key !== "string") return false;
+      if (Object.getOwnPropertyDescriptor(value, key)?.enumerable !== true || !visitJsonValue(Reflect.get(value, key), ancestors)) return false;
+    }
+    return true;
+  } finally {
+    ancestors.delete(value);
+  }
+}
 var TYPERT_REMOTE_SEGMENT_PATTERN = /^[A-Za-z0-9_$.-]+$/;
 function isTypertRemoteSegment(value) {
   return value !== "." && value !== ".." && TYPERT_REMOTE_SEGMENT_PATTERN.test(value);
@@ -46,6 +75,8 @@ function bindTypertRemote(service, serviceKey, options = {}) {
   validateName("service key", serviceKey);
   const namespace = options.namespace ?? serviceKey;
   validateName("namespace", namespace);
+  const ctx = Reflect.get(service, "ctx");
+  if (ctx instanceof Context) provideInvocationAccessor(ctx);
   return Object.freeze({
     service,
     serviceKey,
@@ -66,6 +97,10 @@ var TypertRemoteService = class extends Service {
     this.typertRemote = bindTypertRemote(this, this.name, options);
   }
 };
+function provideInvocationAccessor(ctx) {
+  if (Object.hasOwn(ctx.root.reflect.props, "invocation")) return;
+  ctx.root.accessor("invocation", { get: () => void 0 });
+}
 function Remote(methodExportOrOptions, context) {
   if (typeof methodExportOrOptions === "string") {
     validateName("Remote export name", methodExportOrOptions);
@@ -155,6 +190,8 @@ export {
   TYPERT_OWNED_VALUE,
   TypertRemoteService,
   bindTypertRemote,
+  isRemoteJsonValue,
+  isRemoteUplinkItem,
   isTypertOwnedValue,
   isTypertRemoteSegment,
   remoteErrorOf,

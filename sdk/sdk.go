@@ -31,13 +31,20 @@ type Config struct {
 	// local server. Empty uses the provider's own.
 	BaseURL string
 
-	// Protocol is the wire the adapter speaks: "chat-completions" or
+	// Protocol is the wire the model is reached over: "chat-completions" or
 	// "messages". Empty means "chat-completions", which is what BaseURL has
-	// always meant — an OpenAI-compatible endpoint. Upstream's own default
-	// became "messages" in harness 0.1.5, the Anthropic-shaped API, which
+	// always meant — an OpenAI-compatible endpoint, https://api.deepseek.com
+	// when none is given. "messages" is DeepSeek's Anthropic-shaped API, which
 	// resolves BaseURL to <BaseURL>/v1/messages (or <BaseURL>/messages when it
 	// already ends in /v1) and the official endpoint to
 	// https://api.deepseek.com/anthropic.
+	//
+	// Since harness 0.1.7 the two are different plugins, not one adapter with
+	// a switch: upstream's DeepSeek adapter speaks Messages only, and chat
+	// completions is served by llm-pi-ai. Compose mounts the right one under
+	// the same row id (ModelRowID) and pins DeepSeek's chat-completions
+	// dialect on the latter, so a request to a gateway reads as it always has.
+	// Anything else is refused by Open.
 	Protocol string
 
 	// APIKey is the credential. Empty reads DEEPSEEK_API_KEY from Env, and then
@@ -224,6 +231,15 @@ func (cfg *Config) resolve() error {
 	cfg.CWD = abs
 	if cfg.SessionRoot == "" {
 		cfg.SessionRoot = filepath.Join(cfg.CWD, ".sessions")
+	}
+	// Last, so that everything above is resolved whatever this says. The
+	// protocol used to be a key the adapter validated for itself; it now picks
+	// which plugin serves the model, and a misspelled one would otherwise be
+	// taken for the default without a word.
+	switch cfg.Protocol {
+	case "", "chat-completions", "messages":
+	default:
+		return fmt.Errorf("sdk: Protocol %q is neither \"chat-completions\" nor \"messages\"", cfg.Protocol)
 	}
 	return nil
 }

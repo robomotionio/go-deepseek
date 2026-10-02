@@ -731,6 +731,63 @@
     _flat() { return this.#entries.flat(); }
   }
 
+  // FormData exists because the openai SDK asks `body instanceof FormData` of
+  // every request it sends, a JSON one included — so without the name, a chat
+  // completion through llm-pi-ai dies with "FormData is not defined" before
+  // anything leaves. It is a working one rather than a bare class: something
+  // that could be filled but not sent would fail an upload far from here, with
+  // a body fetch could not read.
+  class FormData {
+    #entries = [];
+    static #entry(name, value, filename) {
+      if (value instanceof Blob) {
+        return [String(name), value, filename !== undefined ? String(filename) : value.name || 'blob'];
+      }
+      return [String(name), String(value)];
+    }
+    append(name, value, filename) { this.#entries.push(FormData.#entry(name, value, filename)); }
+    set(name, value, filename) {
+      const entry = FormData.#entry(name, value, filename);
+      const at = this.#entries.findIndex((e) => e[0] === entry[0]);
+      if (at < 0) { this.#entries.push(entry); return; }
+      // The first of that name is replaced where it stands; the rest go.
+      this.#entries = this.#entries.filter((e, i) => i === at || e[0] !== entry[0]);
+      this.#entries[at] = entry;
+    }
+    get(name) {
+      const hit = this.#entries.find((e) => e[0] === String(name));
+      return hit ? hit[1] : null;
+    }
+    getAll(name) { return this.#entries.filter((e) => e[0] === String(name)).map((e) => e[1]); }
+    has(name) { return this.#entries.some((e) => e[0] === String(name)); }
+    delete(name) { this.#entries = this.#entries.filter((e) => e[0] !== String(name)); }
+    forEach(fn, thisArg) { for (const [k, v] of this) fn.call(thisArg, v, k, this); }
+    *entries() { for (const [k, v] of this.#entries) yield [k, v]; }
+    *keys() { for (const [k] of this.#entries) yield k; }
+    *values() { for (const [, v] of this.#entries) yield v; }
+    [Symbol.iterator]() { return this.entries(); }
+
+    // _multipart is the form as fetch sends it: the bytes, and the content
+    // type that names their boundary.
+    async _multipart() {
+      const boundary = `----dshFormBoundary${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+      // A quote or a line break in a name would end the header it sits in.
+      const quoted = (s) => s.replace(/\r/g, '%0D').replace(/\n/g, '%0A').replace(/"/g, '%22');
+      const chunks = [];
+      for (const [name, value, filename] of this.#entries) {
+        let head = `--${boundary}\r\nContent-Disposition: form-data; name="${quoted(name)}"`;
+        if (value instanceof Blob) {
+          head += `; filename="${quoted(filename)}"\r\nContent-Type: ${value.type || 'application/octet-stream'}`;
+        }
+        chunks.push(host.text.encode(`${head}\r\n\r\n`));
+        chunks.push(value instanceof Blob ? await value.bytes() : host.text.encode(value));
+        chunks.push(host.text.encode('\r\n'));
+      }
+      chunks.push(host.text.encode(`--${boundary}--\r\n`));
+      return { bytes: Buffer.concat(chunks), type: `multipart/form-data; boundary=${boundary}` };
+    }
+  }
+
   // Body is what Request and Response share: one source, read once, in whatever
   // shape the caller asks for.
   class Body {
@@ -810,7 +867,13 @@
       if (raw !== null && raw !== undefined) {
         if (typeof raw === 'string') bodyBytes = host.text.encode(raw);
         else if (raw instanceof Blob) bodyBytes = await raw.bytes();
-        else if (raw instanceof g.ReadableStream) {
+        else if (raw instanceof FormData) {
+          const form = await raw._multipart();
+          bodyBytes = form.bytes;
+          // The boundary is only knowable here, so a caller cannot have named
+          // it; one that set a content type anyway is left with what it set.
+          if (!request.headers.has('content-type')) request.headers.set('content-type', form.type);
+        } else if (raw instanceof g.ReadableStream) {
           // Sending a stream means buffering it: the binding takes bytes, and
           // an upload that streams is not something anything here does.
           const chunks = [];
@@ -866,6 +929,7 @@
   }
 
   g.Headers = Headers;
+  g.FormData = FormData;
   g.Request = Request;
   g.Response = Response;
   g.fetch = fetch;

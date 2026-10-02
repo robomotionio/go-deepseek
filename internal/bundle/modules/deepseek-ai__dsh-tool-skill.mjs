@@ -31,7 +31,7 @@ function apply(ctx, config = {}) {
   assertPositiveInteger("catalogDescriptionMaxLength", catalogDescriptionMaxLength, 3);
   const skillTool = defineTool({
     name: "skill",
-    description: "Load the full instructions for an available skill. Call this with the exact skill name from the session skill catalog before acting on a task that names or clearly matches that skill.",
+    description: "Load the full instructions for a skill. Call it before acting on a task that names or clearly matches a skill in the session skill catalog.",
     parameters: { name: {
       type: "string",
       required: true,

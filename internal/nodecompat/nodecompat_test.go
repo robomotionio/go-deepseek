@@ -510,6 +510,60 @@ func TestFetchAbort(t *testing.T) {
 	}
 }
 
+// FormData is a global here because the openai SDK asks `body instanceof
+// FormData` of every request it builds — without the name, a plain JSON chat
+// completion through llm-pi-ai fails before anything is sent. It is a working
+// one, so the other end is Go's own multipart parser rather than a string
+// comparison: what matters is that a server can read what fetch sent.
+func TestFormData(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		file, header, err := r.FormFile("upload")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+		content := make([]byte, header.Size)
+		file.Read(content)
+		fmt.Fprintf(w, "%s|%s|%s|%s|%s",
+			strings.Join(r.MultipartForm.Value["purpose"], ","),
+			// A quote in a name is sent as %22, the way a browser sends it —
+			// raw, it would end the header parameter it sits in — and a server
+			// sees it that way.
+			r.FormValue("a %22quoted%22 name"),
+			header.Filename, header.Header.Get("Content-Type"), content)
+	}))
+	defer server.Close()
+
+	rt, _ := newRuntime(t, nodecompat.Options{})
+	got := run(t, rt, fmt.Sprintf(`
+		const form = new FormData();
+		form.append('purpose', 'first');
+		form.append('purpose', 'second');
+		form.set('a "quoted" name', 'kept');
+		form.append('upload', new Blob(['line one\r\n--not a boundary'], { type: 'text/plain' }), 'note.txt');
+
+		const out = [];
+		out.push(String(form.has('purpose')), form.get('purpose'), String(form.getAll('purpose').length));
+		form.set('purpose', 'only');
+		out.push(String(form.getAll('purpose').length), [...form.keys()].join(','));
+		form.delete('missing');
+
+		const res = await fetch(%q, { method: 'POST', body: form });
+		out.push(String(res.status), await res.text());
+		globalThis.result = out.join(';');
+	`, server.URL))
+
+	want := `true;first;2;1;purpose,a "quoted" name,upload;200;only|kept|note.txt|text/plain|line one` + "\r\n" + `--not a boundary`
+	if got != want {
+		t.Fatalf("got  %q\nwant %q", got, want)
+	}
+}
+
 func TestProcessAndOS(t *testing.T) {
 	if goruntime.GOOS == "windows" {
 		t.Skip("asserts the POSIX answers: process.platform linux and a slash-rooted cwd")

@@ -13,7 +13,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs
 function __classPrivateFieldSet(receiver, state, value, kind, f) {
   if (kind === "m")
     throw new TypeError("Private method is not writable");
@@ -31,14 +31,14 @@ function __classPrivateFieldGet(receiver, state, kind, f) {
   return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 }
 var init_tslib = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/tslib.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs
 var uuid4;
 var init_uuid = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/uuid.mjs"() {
     uuid4 = function() {
       const { crypto: crypto3 } = globalThis;
       if (crypto3?.randomUUID) {
@@ -52,7 +52,7 @@ var init_uuid = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs
 function isAbortError(err) {
   return typeof err === "object" && err !== null && // Spec-compliant fetch implementations
   ("name" in err && err.name === "AbortError" || // Expo fetch
@@ -60,7 +60,7 @@ function isAbortError(err) {
 }
 var castToError;
 var init_errors = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/errors.mjs"() {
     castToError = (err) => {
       if (err instanceof Error)
         return err;
@@ -89,10 +89,10 @@ var init_errors = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs
 var AnthropicError, APIError, APIUserAbortError, APIConnectionError, APIConnectionTimeoutError, RetryableError, BadRequestError, AuthenticationError, PermissionDeniedError, NotFoundError, ConflictError, UnprocessableEntityError, RateLimitError, InternalServerError;
 var init_error = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/error.mjs"() {
     init_errors();
     AnthropicError = class extends Error {
     };
@@ -195,7 +195,7 @@ var init_error = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs
 function maybeObj(x) {
   if (typeof x !== "object") {
     return {};
@@ -219,7 +219,7 @@ function checkNever(_value) {
 }
 var startsWithSchemeRegexp, isAbsoluteURL, isArray, isReadonlyArray, validatePositiveInteger, safeJSON;
 var init_values = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/values.mjs"() {
     init_error();
     startsWithSchemeRegexp = /^[a-z][a-z0-9+.-]*:/i;
     isAbsoluteURL = (url) => {
@@ -246,10 +246,10 @@ var init_values = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs
 var sleep;
 var init_sleep = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/sleep.mjs"() {
     sleep = (ms, signal) => new Promise((resolve2) => {
       if (signal?.aborted)
         return resolve2();
@@ -266,15 +266,15 @@ var init_sleep = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs
 var VERSION;
 var init_version = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs"() {
-    VERSION = "0.123.0";
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/version.mjs"() {
+    VERSION = "0.124.0";
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs
 function getDetectedPlatform() {
   if (typeof Deno !== "undefined" && Deno.build != null) {
     return "deno";
@@ -312,7 +312,7 @@ function getBrowserInfo() {
 }
 var isRunningInBrowser, getPlatformProperties, normalizeArch, normalizePlatform, _platformHeaders, getPlatformHeaders;
 var init_detect_platform = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/detect-platform.mjs"() {
     init_version();
     isRunningInBrowser = () => {
       return (
@@ -413,7 +413,7 @@ var init_detect_platform = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-signal.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-signal.mjs
 function makeCleanup(signal, listener) {
   return () => signal.removeEventListener("abort", listener);
 }
@@ -434,13 +434,13 @@ function releaseRequestSignal(controller) {
 }
 var cleanups, registry;
 var init_request_signal = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-signal.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-signal.mjs"() {
     cleanups = /* @__PURE__ */ new WeakMap();
     registry = typeof globalThis.FinalizationRegistry === "function" ? new globalThis.FinalizationRegistry((controller) => releaseRequestSignal(controller)) : null;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs
 function getDefaultFetch() {
   if (typeof fetch !== "undefined") {
     return fetch;
@@ -512,14 +512,14 @@ async function CancelReadableStream(stream2) {
   await cancelPromise;
 }
 var init_shims = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/shims.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs
 var BetaFallbackState, FallbackEncoder;
 var init_request_options = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/request-options.mjs"() {
     BetaFallbackState = class {
     };
     FallbackEncoder = ({ headers, body }) => {
@@ -533,10 +533,10 @@ var init_request_options = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/formats.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/formats.mjs
 var default_format, default_formatter, formatters, RFC1738;
 var init_formats = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/formats.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/formats.mjs"() {
     default_format = "RFC3986";
     default_formatter = (v) => String(v);
     formatters = {
@@ -547,7 +547,7 @@ var init_formats = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/utils.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/utils.mjs
 function is_buffer(obj) {
   if (!obj || typeof obj !== "object") {
     return false;
@@ -566,7 +566,7 @@ function maybe_map(val, fn) {
 }
 var has, hex_table, limit, encode;
 var init_utils = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/utils.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/utils.mjs"() {
     init_formats();
     init_values();
     has = (obj, key) => (has = Object.hasOwn ?? Function.prototype.call.bind(Object.prototype.hasOwnProperty), has(obj, key));
@@ -633,7 +633,7 @@ var init_utils = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/stringify.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/stringify.mjs
 function is_non_nullish_primitive(v) {
   return typeof v === "string" || typeof v === "number" || typeof v === "boolean" || typeof v === "symbol" || typeof v === "bigint";
 }
@@ -873,7 +873,7 @@ function stringify(object, opts = {}) {
 }
 var array_prefix_generators, push_to_array, toISOString, defaults, sentinel;
 var init_stringify = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/stringify.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/qs/stringify.mjs"() {
     init_utils();
     init_formats();
     init_values();
@@ -918,17 +918,17 @@ var init_stringify = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs
 function stringifyQuery(query) {
   return stringify(query, { arrayFormat: "brackets" });
 }
 var init_query = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/query.mjs"() {
     init_stringify();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/node.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/node.mjs
 var node_exports = {};
 __export(node_exports, {
   child_process: () => child_process,
@@ -947,11 +947,11 @@ import * as path from "node:path";
 import * as stream from "node:stream";
 import * as util from "node:util";
 var init_node = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/node.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/node.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/types.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/types.mjs
 function requireSecureTokenEndpoint(baseURL) {
   if (!baseURL)
     return;
@@ -1097,7 +1097,7 @@ async function readLimitedText(resp) {
 }
 var GRANT_TYPE_JWT_BEARER, GRANT_TYPE_REFRESH_TOKEN, TOKEN_ENDPOINT, OAUTH_API_BETA_HEADER, FEDERATION_BETA_HEADER, ADVISORY_REFRESH_THRESHOLD_IN_SECONDS, MANDATORY_REFRESH_THRESHOLD_IN_SECONDS, ADVISORY_REFRESH_BACKOFF_IN_SECONDS, MAX_TOKEN_RESPONSE_BYTES, MAX_ERROR_BODY_CHARS, SAFE_ERROR_KEYS, WorkloadIdentityError;
 var init_types = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/types.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/types.mjs"() {
     init_error();
     GRANT_TYPE_JWT_BEARER = "urn:ietf:params:oauth:grant-type:jwt-bearer";
     GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
@@ -1121,19 +1121,19 @@ var init_types = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/time.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/time.mjs
 function nowAsSeconds() {
   return Math.floor(Date.now() / 1e3);
 }
 var init_time = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/time.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/time.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/token-cache.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/token-cache.mjs
 var TokenCache;
 var init_token_cache = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/token-cache.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/token-cache.mjs"() {
     init_types();
     init_time();
     TokenCache = class {
@@ -1226,10 +1226,10 @@ var init_token_cache = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs
 var readEnv;
 var init_env = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/env.mjs"() {
     readEnv = (env) => {
       if (typeof globalThis.process !== "undefined") {
         return globalThis.process.env?.[env]?.trim() || void 0;
@@ -1242,7 +1242,7 @@ var init_env = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs
 function concatBytes(buffers) {
   let length = 0;
   for (const buffer of buffers) {
@@ -1266,14 +1266,14 @@ function decodeUTF8(bytes) {
 }
 var encodeUTF8_, decodeUTF8_;
 var init_bytes = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/bytes.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/base64.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/base64.mjs
 var fromBase64;
 var init_base64 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/base64.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/base64.mjs"() {
     init_error();
     init_bytes();
     fromBase64 = (str) => {
@@ -1294,7 +1294,7 @@ var init_base64 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs
 function noop() {
 }
 function makeLogFn(fnLevel, logger, logLevel) {
@@ -1336,7 +1336,7 @@ function defaultLogger() {
 }
 var defaultLogLevel, levelNumbers, parseLogLevel, noopLogger, cachedLoggers, lastEnvLevel, cachedDefaultLogger, formatRequestDetails;
 var init_log = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/log.mjs"() {
     init_values();
     init_env();
     defaultLogLevel = "warn";
@@ -1386,9 +1386,9 @@ var init_log = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils.mjs
 var init_utils2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils.mjs"() {
     init_values();
     init_base64();
     init_env();
@@ -1399,7 +1399,7 @@ var init_utils2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/credentials.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/credentials.mjs
 function validateProfileName(name) {
   if (!name) {
     throw new Error("profile name is empty");
@@ -1416,7 +1416,7 @@ function validateProfileName(name) {
 }
 var CREDENTIALS_FILE_VERSION, PROFILE_NAME_PATTERN, loadConfigWithSource, getCredentialsPath, getRootConfigPath, supportsLocalConfigFiles, getActiveProfileName;
 var init_credentials = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/credentials.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/credentials.mjs"() {
     init_detect_platform();
     init_utils2();
     CREDENTIALS_FILE_VERSION = "1.0";
@@ -1578,7 +1578,7 @@ var init_credentials = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/identity-token.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/identity-token.mjs
 function identityTokenFromFile(path4) {
   if (!path4) {
     throw new AnthropicError("Identity token file path is empty");
@@ -1605,12 +1605,12 @@ function identityTokenFromValue(token) {
   return () => token;
 }
 var init_identity_token = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/identity-token.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/identity-token.mjs"() {
     init_error();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/oidc-federation.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/oidc-federation.mjs
 function oidcFederationProvider(config) {
   return async () => {
     requireSecureTokenEndpoint(config.baseURL);
@@ -1668,14 +1668,14 @@ function oidcFederationProvider(config) {
   };
 }
 var init_oidc_federation = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/oidc-federation.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/oidc-federation.mjs"() {
     init_types();
     init_time();
     init_version();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/user-oauth.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/user-oauth.mjs
 function userOAuthProvider(config) {
   return async (opts) => {
     const { fs: fs5 } = await Promise.resolve().then(() => (init_node(), node_exports));
@@ -1749,7 +1749,7 @@ function userOAuthProvider(config) {
   };
 }
 var init_user_oauth = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/user-oauth.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/user-oauth.mjs"() {
     init_credentials();
     init_types();
     init_time();
@@ -1757,7 +1757,7 @@ var init_user_oauth = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/credential-chain.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/credential-chain.mjs
 function resolveCredentialsFromConfig(config, options) {
   const credentialsPath = config.authentication.credentials_path ?? null;
   const effectiveBaseURL = (config.base_url || options.baseURL).replace(/\/+$/, "");
@@ -1889,7 +1889,7 @@ function cachedExchangeProvider(exchange, credentialsPath, onCacheWriteError, on
   };
 }
 var init_credential_chain = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/credential-chain.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/credentials/credential-chain.mjs"() {
     init_env();
     init_credentials();
     init_types();
@@ -1900,7 +1900,7 @@ var init_credential_chain = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs
 function findNewlineIndex(buffer, startIndex) {
   const newline = 10;
   const carriage = 13;
@@ -1932,7 +1932,7 @@ function findDoubleNewlineIndex(buffer) {
 }
 var _LineDecoder_buffer, _LineDecoder_carriageReturnIndex, LineDecoder;
 var init_line = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/line.mjs"() {
     init_tslib();
     init_bytes();
     LineDecoder = class {
@@ -1982,7 +1982,7 @@ var init_line = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs
 async function* _iterSSEMessages(response, controller) {
   if (!response.body) {
     controller.abort();
@@ -2020,8 +2020,8 @@ async function* iterSSEChunks(iterator) {
     data = newData;
     let patternIndex;
     while ((patternIndex = findDoubleNewlineIndex(data)) !== -1) {
-      yield data.slice(0, patternIndex);
-      data = data.slice(patternIndex);
+      yield data.subarray(0, patternIndex);
+      data = data.subarray(patternIndex);
     }
   }
   if (data.length > 0) {
@@ -2037,7 +2037,7 @@ function partition(str, delimiter2) {
 }
 var _Stream_client, Stream, SSEDecoder;
 var init_streaming = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/streaming.mjs"() {
     init_tslib();
     init_error();
     init_shims();
@@ -2261,7 +2261,7 @@ var init_streaming = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs
 async function defaultParseResponse(client, props) {
   const { response, requestLogID, retryOfRequestLogID, startTime } = props;
   const body = await (async () => {
@@ -2312,14 +2312,14 @@ function addResponseIDs(value, response) {
   });
 }
 var init_parse = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/parse.mjs"() {
     init_streaming();
     init_log();
     init_request_signal();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/middleware.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/middleware.mjs
 function isFetchOriginError(err) {
   return typeof err === "object" && err !== null && fetchOriginErrors.has(err);
 }
@@ -2415,7 +2415,7 @@ function applyMiddleware(fetchFn, middleware, options, client) {
 }
 var fetchOriginErrors;
 var init_middleware = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/middleware.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/middleware.mjs"() {
     init_errors();
     init_parse();
     init_log();
@@ -2425,10 +2425,10 @@ var init_middleware = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs
 var _APIPromise_client, APIPromise;
 var init_api_promise = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/api-promise.mjs"() {
     init_tslib();
     init_parse();
     APIPromise = class _APIPromise extends Promise {
@@ -2499,10 +2499,10 @@ var init_api_promise = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs
 var _AbstractPage_client, AbstractPage, PagePromise, Page, PageCursor, BidirectionalPageCursor;
 var init_pagination = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/pagination.mjs"() {
     init_tslib();
     init_error();
     init_parse();
@@ -2657,7 +2657,7 @@ var init_pagination = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs
 function makeFile(fileBits, fileName, options) {
   checkFileSupport();
   return new File(fileBits, fileName ?? "unknown_file", options);
@@ -2688,7 +2688,7 @@ function supportsFormData(fetchObject) {
 }
 var checkFileSupport, isAsyncIterable, multipartFormRequestOptions, supportsFormDataMap, createForm, addFormValue;
 var init_uploads = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/uploads.mjs"() {
     init_shims();
     checkFileSupport = () => {
       if (typeof File === "undefined") {
@@ -2744,7 +2744,7 @@ var init_uploads = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs
 async function toFile(value, name, options) {
   checkFileSupport();
   value = await value;
@@ -2798,7 +2798,7 @@ function propsForError(value) {
 }
 var isBlobLike, isFileLike, isResponseLike;
 var init_to_file = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/to-file.mjs"() {
     init_uploads();
     init_uploads();
     isBlobLike = (value) => value != null && typeof value === "object" && typeof value.size === "number" && typeof value.type === "string" && typeof value.text === "function" && typeof value.slice === "function" && typeof value.arrayBuffer === "function";
@@ -2807,23 +2807,23 @@ var init_to_file = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/uploads.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/uploads.mjs
 var init_uploads2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/uploads.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/uploads.mjs"() {
     init_to_file();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/shared.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/shared.mjs
 var init_shared = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/shared.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/shared.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs
 var APIResource;
 var init_resource = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/core/resource.mjs"() {
     APIResource = class {
       constructor(client) {
         this._client = client;
@@ -2832,7 +2832,7 @@ var init_resource = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs
 function* iterateHeaders(headers) {
   if (!headers)
     return;
@@ -2873,7 +2873,7 @@ function* iterateHeaders(headers) {
 }
 var brand_privateNullableHeaders, clearSentinel, APPEND_HEADERS, appendHeaderValue, buildHeaders;
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/headers.mjs"() {
     init_values();
     brand_privateNullableHeaders = /* @__PURE__ */ Symbol.for("brand.privateNullableHeaders");
     clearSentinel = /* @__PURE__ */ Symbol("clear");
@@ -2925,13 +2925,13 @@ var init_headers = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs
 function encodeURIPath(str) {
   return str.replace(/[^A-Za-z0-9\-._~!$&'()*+,;=:@]+/g, encodeURIComponent);
 }
 var EMPTY, createPathTagFunction, path2;
 var init_path = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/path.mjs"() {
     init_error();
     EMPTY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.create(null));
     createPathTagFunction = (pathEncoder = encodeURIPath) => function path4(statics, ...params) {
@@ -2986,10 +2986,10 @@ ${underline}`);
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployment-runs.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployment-runs.mjs
 var DeploymentRuns;
 var init_deployment_runs = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployment-runs.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployment-runs.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3007,11 +3007,14 @@ var init_deployment_runs = __esm({
        * ```
        */
       retrieve(deploymentRunID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/deployment_runs/${deploymentRunID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3028,12 +3031,15 @@ var init_deployment_runs = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/deployment_runs?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3042,10 +3048,10 @@ var init_deployment_runs = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployments.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployments.mjs
 var Deployments;
 var init_deployments = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployments.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/deployments.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3076,12 +3082,15 @@ var init_deployments = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/deployments?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3098,11 +3107,14 @@ var init_deployments = __esm({
        * ```
        */
       retrieve(deploymentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/deployments/${deploymentID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3119,12 +3131,15 @@ var init_deployments = __esm({
        * ```
        */
       update(deploymentID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/deployments/${deploymentID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3141,12 +3156,15 @@ var init_deployments = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/deployments?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3163,11 +3181,14 @@ var init_deployments = __esm({
        * ```
        */
       archive(deploymentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/deployments/${deploymentID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3184,11 +3205,14 @@ var init_deployments = __esm({
        * ```
        */
       pause(deploymentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/deployments/${deploymentID}/pause?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3205,11 +3229,14 @@ var init_deployments = __esm({
        * ```
        */
       run(deploymentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/deployments/${deploymentID}/run?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3226,11 +3253,14 @@ var init_deployments = __esm({
        * ```
        */
       unpause(deploymentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/deployments/${deploymentID}/unpause?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3239,10 +3269,10 @@ var init_deployments = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/dreams.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/dreams.mjs
 var Dreams;
 var init_dreams = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/dreams.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/dreams.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3260,12 +3290,15 @@ var init_dreams = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/dreams?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3281,11 +3314,14 @@ var init_dreams = __esm({
        * ```
        */
       retrieve(dreamID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/dreams/${dreamID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3302,12 +3338,15 @@ var init_dreams = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/dreams?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3323,11 +3362,14 @@ var init_dreams = __esm({
        * ```
        */
       archive(dreamID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/dreams/${dreamID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3343,11 +3385,14 @@ var init_dreams = __esm({
        * ```
        */
       cancel(dreamID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/dreams/${dreamID}/cancel?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "dreaming-2026-04-21"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3356,7 +3401,7 @@ var init_dreams = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/stainless-helper-header.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/stainless-helper-header.mjs
 function helperHeader(value) {
   return { [STAINLESS_HELPER_HEADER]: value };
 }
@@ -3403,17 +3448,17 @@ function stainlessHelperHeaderFromFile(file) {
 }
 var STAINLESS_HELPER_HEADER, STAINLESS_HELPER_METHOD_HEADER, SDK_HELPER_SYMBOL;
 var init_stainless_helper_header = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/stainless-helper-header.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/stainless-helper-header.mjs"() {
     STAINLESS_HELPER_HEADER = "x-stainless-helper";
     STAINLESS_HELPER_METHOD_HEADER = "x-stainless-helper-method";
     SDK_HELPER_SYMBOL = /* @__PURE__ */ Symbol("anthropic.sdk.stainlessHelper");
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs
 var Files;
 var init_files = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/files.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3433,12 +3478,15 @@ var init_files = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/files?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3454,11 +3502,14 @@ var init_files = __esm({
        * ```
        */
       delete(fileID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/files/${fileID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3477,13 +3528,14 @@ var init_files = __esm({
        * ```
        */
       download(fileID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/files/${fileID}/content?beta=true`, {
           ...options,
           headers: buildHeaders([
             {
               Accept: "application/binary",
-              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             options?.headers
           ]),
@@ -3500,11 +3552,14 @@ var init_files = __esm({
        * ```
        */
       retrieveMetadata(fileID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/files/${fileID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3520,12 +3575,15 @@ var init_files = __esm({
        * ```
        */
       upload(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/files?beta=true", multipartFormRequestOptions({
           body,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             stainlessHelperHeaderFromFile(body.file),
             options?.headers
           ])
@@ -3535,10 +3593,10 @@ var init_files = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs
 var Models;
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/models.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3558,11 +3616,14 @@ var init_models = __esm({
        * ```
        */
       retrieve(modelID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/models/${modelID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3582,12 +3643,15 @@ var init_models = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/models?beta=true", Page, {
           query,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3596,10 +3660,10 @@ var init_models = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs
 var UserProfiles;
 var init_user_profiles = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/user-profiles.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3715,11 +3779,11 @@ var init_user_profiles = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/webhooks.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/webhooks.mjs
 import { Webhook } from "standardwebhooks";
 var Webhooks;
 var init_webhooks = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/webhooks.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/webhooks.mjs"() {
     init_resource();
     Webhooks = class extends APIResource {
       /**
@@ -3749,10 +3813,10 @@ var init_webhooks = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs
 var Versions;
 var init_versions = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/versions.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -3772,12 +3836,15 @@ var init_versions = __esm({
        * ```
        */
       list(agentID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/agents/${agentID}/versions?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3786,10 +3853,10 @@ var init_versions = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs
 var Agents;
 var init_agents = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/agents/agents.mjs"() {
     init_resource();
     init_versions();
     init_versions();
@@ -3814,12 +3881,15 @@ var init_agents = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/agents?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3836,12 +3906,15 @@ var init_agents = __esm({
        * ```
        */
       retrieve(agentID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.get(path2`/v1/agents/${agentID}?beta=true`, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3859,12 +3932,15 @@ var init_agents = __esm({
        * ```
        */
       update(agentID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/agents/${agentID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3881,12 +3957,15 @@ var init_agents = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/agents?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3903,11 +3982,14 @@ var init_agents = __esm({
        * ```
        */
       archive(agentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/agents/${agentID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -3917,7 +3999,7 @@ var init_agents = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/abort.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/abort.mjs
 function linkAbort(external, controller) {
   if (!external)
     return () => {
@@ -3932,11 +4014,11 @@ function linkAbort(external, controller) {
   return () => external.removeEventListener("abort", onAbort);
 }
 var init_abort = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/abort.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/abort.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/backoff.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/backoff.mjs
 function isStatus(e, code) {
   return e instanceof APIError && e.status === code;
 }
@@ -3956,12 +4038,12 @@ function applyJitter(ms) {
   return ms * (1 - Math.random() * 0.25);
 }
 var init_backoff = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/backoff.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/backoff.mjs"() {
     init_error();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/helper-client.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/helper-client.mjs
 function copyClientForHelper(client, { authToken, helper }) {
   if (!authToken) {
     throw new AnthropicError(`copyClientForHelper: expected a non-empty authToken but received ${JSON.stringify(authToken)}`);
@@ -3987,14 +4069,14 @@ function copyClientForHelper(client, { authToken, helper }) {
   });
 }
 var init_helper_client = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/helper-client.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/helper-client.mjs"() {
     init_error();
     init_headers();
     init_stainless_helper_header();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/poller.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/poller.mjs
 function backoff2(attempt) {
   return backoff(attempt, POLL_BACKOFF_BASE_MS, POLL_BACKOFF_CAP_MS);
 }
@@ -4005,7 +4087,7 @@ function defaultWorkerId() {
 }
 var _WorkPoller_runnerClient, _WorkPoller_consumed, _WorkPoller_controller, _WorkPoller_detachExternal, _WorkPoller_autoStop, _WorkPoller_drain, _WorkPoller_blockMs, _WorkPoller_reclaimOlderThanMs, _WorkPoller_requestOpts, _IdleLog_log, _IdleLog_environmentId, _IdleLog_idleSince, _IdleLog_lastReport, POLL_BLOCK_MS, POLL_BACKOFF_BASE_MS, POLL_BACKOFF_CAP_MS, IDLE_REPORT_INTERVAL_MS, WorkPoller, IdleLog;
 var init_poller = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/poller.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/poller.mjs"() {
     init_tslib();
     init_error();
     init_log();
@@ -4158,10 +4240,10 @@ var init_poller = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/async-queue.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/async-queue.mjs
 var _AsyncQueue_items, _AsyncQueue_waiters, _AsyncQueue_closed, AsyncQueue;
 var init_async_queue = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/async-queue.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/async-queue.mjs"() {
     init_tslib();
     AsyncQueue = class {
       constructor() {
@@ -4227,10 +4309,10 @@ var init_async_queue = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs
 var ToolError;
 var init_ToolError = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/ToolError.mjs"() {
     ToolError = class extends Error {
       constructor(content) {
         const message = typeof content === "string" ? content : content.map((block) => {
@@ -4246,7 +4328,7 @@ var init_ToolError = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaRunnableTool.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaRunnableTool.mjs
 function toolName(tool) {
   return "name" in tool ? tool.name : "mcp_server_name" in tool ? tool.mcp_server_name : tool.type;
 }
@@ -4263,12 +4345,12 @@ async function runRunnableTool(tool, rawInput, context) {
   }
 }
 var init_BetaRunnableTool = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaRunnableTool.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaRunnableTool.mjs"() {
     init_ToolError();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/SessionToolRunner.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/SessionToolRunner.mjs
 function isEndTurnIdle(ev) {
   return ev.type === "session.status_idle" && ev.stop_reason?.type === "end_turn";
 }
@@ -4301,7 +4383,7 @@ function toSessionContent(content) {
 }
 var _IdleClock_maxIdleMs, _IdleClock_onExpire, _IdleClock_blockers, _IdleClock_armPending, _IdleClock_timer, _SessionToolRunner_instances, _SessionToolRunner_consumed, _SessionToolRunner_controller, _SessionToolRunner_detachExternal, _SessionToolRunner_requestOpts, _SessionToolRunner_toolByName, _SessionToolRunner_logger, _SessionToolRunner_seen, _SessionToolRunner_answered, _SessionToolRunner_confirmationVerdicts, _SessionToolRunner_awaitingConfirmation, _SessionToolRunner_results, _SessionToolRunner_inFlightCount, _SessionToolRunner_sendRetryWindowMs, _SessionToolRunner_onIdle, _SessionToolRunner_idleClock, _SessionToolRunner_requestOptions, _SessionToolRunner_streamLoop, _SessionToolRunner_reconcile, _SessionToolRunner_ingestHistory, _SessionToolRunner_handleStreamEvent, _SessionToolRunner_routeToolEvent, _SessionToolRunner_noteConfirmation, _SessionToolRunner_applyVerdict, _SessionToolRunner_surfaceCall, _SessionToolRunner_execute, _SessionToolRunner_sendResult, _SessionToolRunner_drain, STREAM_BACKOFF_START_MS, STREAM_BACKOFF_CAP_MS, TOOL_TIMEOUT_MS, DRAIN_TIMEOUT_MS, SEND_BACKOFF_START_MS, SEND_BACKOFF_CAP_MS, SEND_RETRY_WINDOW_MS, DEFAULT_MAX_IDLE_MS, IdleClock, SessionToolRunner;
 var init_SessionToolRunner = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/SessionToolRunner.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/SessionToolRunner.mjs"() {
     init_tslib();
     init_error();
     init_log();
@@ -4800,7 +4882,7 @@ var init_SessionToolRunner = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/sync-interval.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/sync-interval.mjs
 function checkMemorySyncInterval(ms, option) {
   if (!(ms >= MIN_MEMORY_SYNC_INTERVAL_MS)) {
     throw new AnthropicError(`${option} must be at least ${MIN_MEMORY_SYNC_INTERVAL_MS}ms (got ${ms}); to run without memory sync, pass \`memorySyncIntervalMs: null\` to the worker instead`);
@@ -4808,21 +4890,21 @@ function checkMemorySyncInterval(ms, option) {
 }
 var DEFAULT_MEMORY_SYNC_INTERVAL_MS, MIN_MEMORY_SYNC_INTERVAL_MS;
 var init_sync_interval = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/sync-interval.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/sync-interval.mjs"() {
     init_error();
     DEFAULT_MEMORY_SYNC_INTERVAL_MS = 15e3;
     MIN_MEMORY_SYNC_INTERVAL_MS = 5e3;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/transform-json-schema.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/transform-json-schema.mjs
 var init_transform_json_schema = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/transform-json-schema.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/transform-json-schema.mjs"() {
     init_utils2();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/helpers/beta/json-schema.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/helpers/beta/json-schema.mjs
 function betaTool(options) {
   if (options.inputSchema.type !== "object") {
     throw new Error(`JSON schema for tool "${options.name}" must be an object, but got ${options.inputSchema.type}`);
@@ -4838,13 +4920,13 @@ function betaTool(options) {
   };
 }
 var init_json_schema = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/helpers/beta/json-schema.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/helpers/beta/json-schema.mjs"() {
     init_index();
     init_transform_json_schema();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/promise.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/promise.mjs
 function promiseWithResolvers() {
   let resolve2;
   let reject;
@@ -4855,11 +4937,11 @@ function promiseWithResolvers() {
   return { promise, resolve: resolve2, reject };
 }
 var init_promise = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/promise.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/utils/promise.mjs"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/fs-util.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/fs-util.mjs
 function isWithin(root, p) {
   const rel = path.relative(root, p);
   return rel === "" || !rel.startsWith(".." + path.sep) && rel !== ".." && !path.isAbsolute(rel);
@@ -4927,9 +5009,12 @@ async function confineToRoot(root, p, opts) {
 async function atomicWriteFile(targetPath, content) {
   const dir = path.dirname(targetPath);
   const tempPath = path.join(dir, `.tmp-${process.pid}-${crypto.randomUUID()}`);
+  const existingMode = await fs2.stat(targetPath).then((st) => st.mode & 511, () => void 0);
   let handle;
   try {
     handle = await fs2.open(tempPath, "wx", FILE_CREATE_MODE);
+    if (existingMode !== void 0)
+      await handle.chmod(existingMode);
     await handle.writeFile(content, "utf-8");
     await handle.sync();
     await handle.close();
@@ -4971,17 +5056,17 @@ function fsErrorMessage(err, file) {
 }
 var fs2, DIR_CREATE_MODE, FILE_CREATE_MODE, MAX_SYMLINK_HOPS;
 var init_fs_util = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/fs-util.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/fs-util.mjs"() {
     init_node();
     init_ToolError();
     fs2 = fs.promises;
-    DIR_CREATE_MODE = 493;
-    FILE_CREATE_MODE = 420;
+    DIR_CREATE_MODE = 448;
+    FILE_CREATE_MODE = 384;
     MAX_SYMLINK_HOPS = 40;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/skills.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/skills.mjs
 async function setupSkills(ctx) {
   const { client, sessionId } = ctx;
   if (!client)
@@ -5170,7 +5255,7 @@ async function readHead(file, n) {
 }
 var fs3, execFileAsync, INCONSISTENT_LISTING, PLAIN_TYPE_CHARS;
 var init_skills = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/skills.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/skills.mjs"() {
     init_node();
     init_error();
     init_log();
@@ -5182,7 +5267,7 @@ var init_skills = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/file-store.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/file-store.mjs
 function isPathLegal(p) {
   return p.startsWith("/") && !p.split("/").includes("..");
 }
@@ -5364,7 +5449,7 @@ function oldEnoughToCache(st, walkStartNs) {
 }
 var fsp, C, OWNER_ONLY_DIR_MODE, OWNER_ONLY_FILE_MODE, OWNER_ONLY_EXEC_MODE, O_NOFOLLOW, O_NONBLOCK, FileStoreError, FileStore, TIMESTAMP_TRUST_MARGIN_NS, _internals, LocalFileStore, asyncDispose;
 var init_file_store = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/file-store.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/file-store.mjs"() {
     init_node();
     init_bytes();
     fsp = fs.promises;
@@ -5624,7 +5709,7 @@ var init_file_store = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/memories.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/memories.mjs
 function markerSha(memoryStoreId) {
   return crypto.createHash("sha256").update(`version ${MARKER_VERSION}
 ${memoryStoreId}`, "utf-8").digest("hex");
@@ -5652,7 +5737,7 @@ async function settledOrAborted(p, signal) {
 }
 var _SessionMemoryStores_instances, _SessionMemoryStores_client, _SessionMemoryStores_workdir, _SessionMemoryStores_syncIntervalMs, _SessionMemoryStores_syncDeletions, _SessionMemoryStores_log, _SessionMemoryStores_lastSyncAt, _SessionMemoryStores_finished, _SessionMemoryStores_stores, _SessionMemoryStores_storeRoot, _SessionMemoryStores_scanMarker, _SessionMemoryStores_syncStore, _SessionMemoryStores_flushStore, _SessionMemoryStores_recover, _SessionMemoryStores_stampAndPull, _SessionMemoryStores_syncPath, _SessionMemoryStores_removeLocal, _SessionMemoryStores_write, _SessionMemoryStores_pullAll, _SessionMemoryStores_uploadAll, _SessionMemoryStores_listMemories, _SessionMemoryStores_upload, _SessionMemoryStores_corroboratedDelete, _SessionMemoryStores_deleteRemote, MEMORY_FLUSH_TIMEOUT_MS, MARKER_PATH, MARKER_VERSION, DELETE_CORROBORATION_MS, LIST_PAGE_SIZE, FULL_LIST_PAGE_SIZE, FETCH_CONCURRENCY, UPLOAD_CONCURRENCY, DELETE_CAP_FLOOR, DELETE_CAP_CEILING, SessionMemoryError, DeletePass, SessionMemoryStores;
 var init_memories = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/memories.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/memories.mjs"() {
     init_tslib();
     init_node();
     init_error();
@@ -6338,7 +6423,7 @@ ${store.memoryStoreId}`);
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/node.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/node.mjs
 var node_exports2 = {};
 __export(node_exports2, {
   BashSession: () => BashSession,
@@ -6837,7 +6922,7 @@ async function findRg() {
 }
 var _BashSession_instances, _BashSession_proc, _BashSession_buf, _BashSession_truncated, _BashSession_closed, _BashSession_waiting, _BashSession_append, _LineRangeCollector_instances, _LineRangeCollector_filePath, _LineRangeCollector_startLine, _LineRangeCollector_endLine, _LineRangeCollector_start, _LineRangeCollector_end, _LineRangeCollector_limit, _LineRangeCollector_line, _LineRangeCollector_collected, _LineRangeCollector_collectedBytes, _LineRangeCollector_collect, _LineRangeCollector_overLimitError, BASH_OUTPUT_LIMIT, BASH_DEFAULT_TIMEOUT_MS, DEFAULT_MAX_FILE_BYTES, READ_STREAM_CHUNK_BYTES, NEWLINE, GREP_OUTPUT_LIMIT, GREP_MAX_LINE_LENGTH, GLOB_RESULT_LIMIT, BashTimeoutError, ANSI_RE, fsGlob, BashSession, LineRangeCollector, WALK_MAX_DEPTH, WALK_MAX_ENTRIES;
 var init_node2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/node.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/tools/agent-toolset/node.mjs"() {
     init_tslib();
     init_error();
     init_ToolError();
@@ -7046,7 +7131,7 @@ ${out}`;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/worker.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/worker.mjs
 function hasMemoryStore(session) {
   return session.resources.some((r) => r.type === "memory_store");
 }
@@ -7173,7 +7258,7 @@ async function heartbeatLoop(client, work, lease, logger, requestOptions, onLeas
 }
 var _EnvironmentWorker_instances, _EnvironmentWorker_signal, _EnvironmentWorker_handleItem, _Lease_ctrl, _Lease_endReason, HEARTBEAT_DEFAULT_MS, HEARTBEAT_TTL_DEFAULT_MS, NO_HEARTBEAT_SENTINEL, EnvironmentWorker, Lease;
 var init_worker = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/worker.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/environments/worker.mjs"() {
     init_tslib();
     init_error();
     init_log();
@@ -7457,10 +7542,10 @@ var init_worker = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/work.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/work.mjs
 var Work;
 var init_work = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/work.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/work.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -7487,11 +7572,14 @@ var init_work = __esm({
        * ```
        */
       retrieve(workID, params, options) {
-        const { environment_id, betas } = params;
+        const { environment_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/environments/${environment_id}/work/${workID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7514,12 +7602,15 @@ var init_work = __esm({
        * ```
        */
       update(workID, params, options) {
-        const { environment_id, betas, ...body } = params;
+        const { environment_id, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/environments/${environment_id}/work/${workID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7649,11 +7740,14 @@ var init_work = __esm({
        * ```
        */
       stats(environmentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/environments/${environmentID}/work/stats?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7675,12 +7769,15 @@ var init_work = __esm({
        * ```
        */
       stop(workID, params, options) {
-        const { environment_id, betas, ...body } = params;
+        const { environment_id, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/environments/${environment_id}/work/${workID}/stop?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7713,10 +7810,10 @@ var init_work = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/environments.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/environments.mjs
 var Environments;
 var init_environments = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/environments.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/environments/environments.mjs"() {
     init_resource();
     init_work();
     init_work();
@@ -7740,12 +7837,15 @@ var init_environments = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/environments?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7762,11 +7862,14 @@ var init_environments = __esm({
        * ```
        */
       retrieve(environmentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/environments/${environmentID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7783,12 +7886,15 @@ var init_environments = __esm({
        * ```
        */
       update(environmentID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/environments/${environmentID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7805,12 +7911,15 @@ var init_environments = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/environments?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7827,11 +7936,14 @@ var init_environments = __esm({
        * ```
        */
       delete(environmentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/environments/${environmentID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7849,11 +7961,14 @@ var init_environments = __esm({
        * ```
        */
       archive(environmentID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/environments/${environmentID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7863,10 +7978,10 @@ var init_environments = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs
 var Memories;
 var init_memories2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memories.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -7885,13 +8000,16 @@ var init_memories2 = __esm({
        * ```
        */
       create(memoryStoreID, params, options) {
-        const { view, betas, ...body } = params;
+        const { view, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/memory_stores/${memoryStoreID}/memories?beta=true`, {
           query: { view },
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7909,12 +8027,15 @@ var init_memories2 = __esm({
        * ```
        */
       retrieve(memoryID, params, options) {
-        const { memory_store_id, betas, ...query } = params;
+        const { memory_store_id, betas, workspace_id, ...query } = params;
         return this._client.get(path2`/v1/memory_stores/${memory_store_id}/memories/${memoryID}?beta=true`, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7932,13 +8053,16 @@ var init_memories2 = __esm({
        * ```
        */
       update(memoryID, params, options) {
-        const { memory_store_id, view, betas, ...body } = params;
+        const { memory_store_id, view, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/memory_stores/${memory_store_id}/memories/${memoryID}?beta=true`, {
           query: { view },
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7957,12 +8081,15 @@ var init_memories2 = __esm({
        * ```
        */
       list(memoryStoreID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/memory_stores/${memoryStoreID}/memories?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7980,12 +8107,15 @@ var init_memories2 = __esm({
        * ```
        */
       delete(memoryID, params, options) {
-        const { memory_store_id, expected_content_sha256, betas } = params;
+        const { memory_store_id, expected_content_sha256, betas, workspace_id } = params;
         return this._client.delete(path2`/v1/memory_stores/${memory_store_id}/memories/${memoryID}?beta=true`, {
           query: { expected_content_sha256 },
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -7994,10 +8124,10 @@ var init_memories2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs
 var MemoryVersions;
 var init_memory_versions = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-versions.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -8016,12 +8146,15 @@ var init_memory_versions = __esm({
        * ```
        */
       retrieve(memoryVersionID, params, options) {
-        const { memory_store_id, betas, ...query } = params;
+        const { memory_store_id, betas, workspace_id, ...query } = params;
         return this._client.get(path2`/v1/memory_stores/${memory_store_id}/memory_versions/${memoryVersionID}?beta=true`, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8040,12 +8173,15 @@ var init_memory_versions = __esm({
        * ```
        */
       list(memoryStoreID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/memory_stores/${memoryStoreID}/memory_versions?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8063,11 +8199,14 @@ var init_memory_versions = __esm({
        * ```
        */
       redact(memoryVersionID, params, options) {
-        const { memory_store_id, betas } = params;
+        const { memory_store_id, betas, workspace_id } = params;
         return this._client.post(path2`/v1/memory_stores/${memory_store_id}/memory_versions/${memoryVersionID}/redact?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8076,10 +8215,10 @@ var init_memory_versions = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs
 var MemoryStores;
 var init_memory_stores = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/memory-stores/memory-stores.mjs"() {
     init_resource();
     init_memories2();
     init_memories2();
@@ -8104,12 +8243,15 @@ var init_memory_stores = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/memory_stores?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8126,11 +8268,14 @@ var init_memory_stores = __esm({
        * ```
        */
       retrieve(memoryStoreID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/memory_stores/${memoryStoreID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8145,12 +8290,15 @@ var init_memory_stores = __esm({
        * ```
        */
       update(memoryStoreID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/memory_stores/${memoryStoreID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8167,12 +8315,15 @@ var init_memory_stores = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/memory_stores?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8187,11 +8338,14 @@ var init_memory_stores = __esm({
        * ```
        */
       delete(memoryStoreID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/memory_stores/${memoryStoreID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8206,11 +8360,14 @@ var init_memory_stores = __esm({
        * ```
        */
       archive(memoryStoreID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/memory_stores/${memoryStoreID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "agent-memory-2026-07-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8221,17 +8378,17 @@ var init_memory_stores = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/error.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/error.mjs
 var init_error2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/error.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/error.mjs"() {
     init_error();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs
 var JSONLDecoder;
 var init_jsonl = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/decoders/jsonl.mjs"() {
     init_error();
     init_shims();
     init_line();
@@ -8268,10 +8425,10 @@ var init_jsonl = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs
 var Batches;
 var init_batches = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/batches.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -8309,14 +8466,15 @@ var init_batches = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, user_profile_id, ...body } = params;
+        const { betas, user_profile_id, workspace_id, ...body } = params;
         return this._client.post("/v1/messages/batches?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
             {
               "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
-              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             options?.headers
           ])
@@ -8339,11 +8497,14 @@ var init_batches = __esm({
        * ```
        */
       retrieve(messageBatchID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/messages/batches/${messageBatchID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8364,12 +8525,15 @@ var init_batches = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/messages/batches?beta=true", Page, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8392,11 +8556,14 @@ var init_batches = __esm({
        * ```
        */
       delete(messageBatchID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/messages/batches/${messageBatchID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8424,11 +8591,14 @@ var init_batches = __esm({
        * ```
        */
       cancel(messageBatchID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/messages/batches/${messageBatchID}/cancel?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -8452,17 +8622,18 @@ var init_batches = __esm({
        * ```
        */
       async results(messageBatchID, params = {}, options) {
-        const batch = await this.retrieve(messageBatchID);
+        const batch = await this.retrieve(messageBatchID, params, options);
         if (!batch.results_url) {
           throw new AnthropicError(`No batch \`results_url\`; Has it finished processing? ${batch.processing_status} - ${batch.id}`);
         }
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(batch.results_url, {
           ...options,
           headers: buildHeaders([
             {
               "anthropic-beta": [...betas ?? [], "message-batches-2024-09-24"].toString(),
-              Accept: "application/binary"
+              Accept: "application/binary",
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             options?.headers
           ]),
@@ -8474,10 +8645,10 @@ var init_batches = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs
 var MODEL_NONSTREAMING_TOKENS;
 var init_constants = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/constants.mjs"() {
     MODEL_NONSTREAMING_TOKENS = {
       "claude-opus-4@20250514": 8192,
       "anthropic.claude-opus-4-1-20250805-v1:0": 8192,
@@ -8486,7 +8657,7 @@ var init_constants = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs
 function getOutputFormat(params) {
   return params?.output_format ?? params?.output_config?.format;
 }
@@ -8559,22 +8730,22 @@ function parseBetaOutputFormat(params, content) {
   }
 }
 var init_beta_parser = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/beta-parser.mjs"() {
     init_error();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/streaming.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/streaming.mjs
 var init_streaming2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/streaming.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/streaming.mjs"() {
     init_streaming();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs
 var tokenize, strip, unstrip, generate, partialParse;
 var init_parser = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/_vendor/partial-json-parser/parser.mjs"() {
     tokenize = (input) => {
       let current = 0;
       let tokens = [];
@@ -8798,7 +8969,7 @@ var init_parser = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/message-stream-utils.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/message-stream-utils.mjs
 function withLazyInput(prev, jsonBuf) {
   const next = {};
   for (const key of Object.keys(prev)) {
@@ -8823,19 +8994,19 @@ function withLazyInput(prev, jsonBuf) {
 }
 var JSON_BUF_PROPERTY;
 var init_message_stream_utils = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/message-stream-utils.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/internal/message-stream-utils.mjs"() {
     init_parser();
     JSON_BUF_PROPERTY = "__json_buf";
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs
 function tracksToolInput(content) {
   return content.type === "tool_use" || content.type === "server_tool_use" || content.type === "mcp_tool_use";
 }
 var _BetaMessageStream_instances, _BetaMessageStream_currentMessageSnapshot, _BetaMessageStream_params, _BetaMessageStream_connectedPromise, _BetaMessageStream_resolveConnectedPromise, _BetaMessageStream_rejectConnectedPromise, _BetaMessageStream_endPromise, _BetaMessageStream_resolveEndPromise, _BetaMessageStream_rejectEndPromise, _BetaMessageStream_listeners, _BetaMessageStream_ended, _BetaMessageStream_errored, _BetaMessageStream_aborted, _BetaMessageStream_catchingPromiseCreated, _BetaMessageStream_response, _BetaMessageStream_request_id, _BetaMessageStream_workspace_id, _BetaMessageStream_logger, _BetaMessageStream_getFinalMessage, _BetaMessageStream_getFinalText, _BetaMessageStream_handleError, _BetaMessageStream_beginRequest, _BetaMessageStream_addStreamEvent, _BetaMessageStream_endRequest, _BetaMessageStream_accumulateMessage, _BetaMessageStream_toolInputParseError, BetaMessageStream;
 var init_BetaMessageStream = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/BetaMessageStream.mjs"() {
     init_tslib();
     init_stainless_helper_header();
     init_error2();
@@ -9466,10 +9637,10 @@ var init_BetaMessageStream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs
 var DEFAULT_TOKEN_THRESHOLD, DEFAULT_SUMMARY_PROMPT;
 var init_CompactionControl = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/CompactionControl.mjs"() {
     DEFAULT_TOKEN_THRESHOLD = 1e5;
     DEFAULT_SUMMARY_PROMPT = `You have been working on the task described above but have not yet completed it. Write a continuation summary that will allow you (or another instance of yourself) to resume work efficiently in a future context window where the conversation history will be replaced with this summary. Your summary should be structured, concise, and actionable. Include:
 1. Task Overview
@@ -9497,7 +9668,7 @@ Wrap your summary in <summary></summary> tags.`;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs
 async function generateToolResponse(params, lastMessage = params.messages.at(-1), requestOptions) {
   if (!lastMessage || lastMessage.role !== "assistant" || !lastMessage.content || typeof lastMessage.content === "string") {
     return null;
@@ -9616,7 +9787,7 @@ function determineNextStepFromStopReason(stopReason) {
 }
 var _BetaToolRunner_instances, _BetaToolRunner_consumed, _BetaToolRunner_mutated, _BetaToolRunner_state, _BetaToolRunner_options, _BetaToolRunner_message, _BetaToolRunner_toolResponse, _BetaToolRunner_completion, _BetaToolRunner_iterationCount, _BetaToolRunner_checkAndCompact, _BetaToolRunner_generateToolResponse, BetaToolRunner;
 var init_BetaToolRunner = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/tools/BetaToolRunner.mjs"() {
     init_tslib();
     init_ToolError();
     init_error();
@@ -9930,7 +10101,7 @@ var init_BetaToolRunner = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs
 function transformOutputFormat(params) {
   if (!params.output_format) {
     return params;
@@ -9949,7 +10120,7 @@ function transformOutputFormat(params) {
 }
 var DEPRECATED_MODELS, MODELS_TO_WARN_WITH_THINKING_ENABLED, Messages;
 var init_messages = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/messages/messages.mjs"() {
     init_error2();
     init_batches();
     init_resource();
@@ -9972,7 +10143,7 @@ var init_messages = __esm({
       }
       create(params, options) {
         const modifiedParams = transformOutputFormat(params);
-        const { betas, user_profile_id, ...body } = modifiedParams;
+        const { betas, user_profile_id, workspace_id, ...body } = modifiedParams;
         if (body.model in DEPRECATED_MODELS) {
           console.warn(`The model '${body.model}' is deprecated and will reach end-of-life on ${DEPRECATED_MODELS[body.model]}
 Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resources/model-deprecations for more information.`);
@@ -9993,7 +10164,8 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
           headers: buildHeaders([
             {
               ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
-              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             helperHeader2,
             options?.headers
@@ -10053,14 +10225,15 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
        */
       countTokens(params, options) {
         const modifiedParams = transformOutputFormat(params);
-        const { betas, user_profile_id, ...body } = modifiedParams;
+        const { betas, user_profile_id, workspace_id, ...body } = modifiedParams;
         return this._client.post("/v1/messages/count_tokens?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
             {
               "anthropic-beta": [...betas ?? [], "token-counting-2024-11-01"].toString(),
-              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             options?.headers
           ])
@@ -10076,10 +10249,10 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/api-keys.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/api-keys.mjs
 var APIKeys;
 var init_api_keys = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/api-keys.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/api-keys.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -10133,10 +10306,10 @@ var init_api_keys = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/compliance-settings.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/compliance-settings.mjs
 var ComplianceSettings;
 var init_compliance_settings = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/compliance-settings.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/compliance-settings.mjs"() {
     init_resource();
     ComplianceSettings = class extends APIResource {
       /**
@@ -10186,10 +10359,10 @@ var init_compliance_settings = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/external-keys.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/external-keys.mjs
 var ExternalKeys;
 var init_external_keys = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/external-keys.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/external-keys.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -10306,10 +10479,10 @@ var init_external_keys = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/invites.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/invites.mjs
 var Invites;
 var init_invites = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/invites.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/invites.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -10383,10 +10556,10 @@ var init_invites = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/rate-limits.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/rate-limits.mjs
 var RateLimits;
 var init_rate_limits = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/rate-limits.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/rate-limits.mjs"() {
     init_resource();
     init_pagination();
     RateLimits = class extends APIResource {
@@ -10415,10 +10588,10 @@ var init_rate_limits = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/users.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/users.mjs
 var Users;
 var init_users = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/users.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/users.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -10483,10 +10656,10 @@ var init_users = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/issuers.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/issuers.mjs
 var Issuers;
 var init_issuers = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/issuers.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/issuers.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -10653,10 +10826,10 @@ var init_issuers = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/workspaces.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/workspaces.mjs
 var Workspaces;
 var init_workspaces = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/workspaces.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/workspaces.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -10768,10 +10941,10 @@ var init_workspaces = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/rules.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/rules.mjs
 var Rules;
 var init_rules = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/rules.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/rules/rules.mjs"() {
     init_resource();
     init_workspaces();
     init_workspaces();
@@ -10966,10 +11139,10 @@ var init_rules = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/federation.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/federation.mjs
 var Federation;
 var init_federation = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/federation.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/federation/federation.mjs"() {
     init_resource();
     init_issuers();
     init_issuers();
@@ -10987,10 +11160,10 @@ var init_federation = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/workspaces.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/workspaces.mjs
 var Workspaces2;
 var init_workspaces2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/workspaces.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/workspaces.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -11113,10 +11286,10 @@ var init_workspaces2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/service-accounts.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/service-accounts.mjs
 var ServiceAccounts;
 var init_service_accounts = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/service-accounts.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/service-accounts/service-accounts.mjs"() {
     init_resource();
     init_workspaces2();
     init_workspaces2();
@@ -11287,10 +11460,10 @@ var init_service_accounts = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/members.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/members.mjs
 var Members;
 var init_members = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/members.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/members.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -11390,10 +11563,10 @@ var init_members = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/rate-limits.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/rate-limits.mjs
 var RateLimits2;
 var init_rate_limits2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/rate-limits.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/rate-limits.mjs"() {
     init_resource();
     init_pagination();
     init_path();
@@ -11425,10 +11598,10 @@ var init_rate_limits2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/service-accounts.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/service-accounts.mjs
 var ServiceAccounts2;
 var init_service_accounts2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/service-accounts.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/service-accounts.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -11615,10 +11788,10 @@ var init_service_accounts2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/workspaces.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/workspaces.mjs
 var Workspaces3;
 var init_workspaces3 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/workspaces.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/workspaces/workspaces.mjs"() {
     init_resource();
     init_members();
     init_members();
@@ -11727,10 +11900,10 @@ var init_workspaces3 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/organization.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/organization.mjs
 var Organization;
 var init_organization = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/organization.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/organization/organization.mjs"() {
     init_resource();
     init_api_keys();
     init_api_keys();
@@ -11789,10 +11962,10 @@ var init_organization = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs
 var Events;
 var init_events = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/events.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -11814,12 +11987,15 @@ var init_events = __esm({
        * ```
        */
       list(sessionID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/sessions/${sessionID}/events?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -11849,12 +12025,15 @@ var init_events = __esm({
        * ```
        */
       send(sessionID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/sessions/${sessionID}/events?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -11871,12 +12050,15 @@ var init_events = __esm({
        * ```
        */
       stream(sessionID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.get(path2`/v1/sessions/${sessionID}/events/stream?beta=true`, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ]),
           stream: true
@@ -11909,10 +12091,10 @@ var init_events = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs
 var Resources;
 var init_resources = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/resources.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -11931,11 +12113,14 @@ var init_resources = __esm({
        * ```
        */
       retrieve(resourceID, params, options) {
-        const { session_id, betas } = params;
+        const { session_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/sessions/${session_id}/resources/${resourceID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -11956,12 +12141,15 @@ var init_resources = __esm({
        * ```
        */
       update(resourceID, params, options) {
-        const { session_id, betas, ...body } = params;
+        const { session_id, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/sessions/${session_id}/resources/${resourceID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -11980,12 +12168,15 @@ var init_resources = __esm({
        * ```
        */
       list(sessionID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/sessions/${sessionID}/resources?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12003,11 +12194,14 @@ var init_resources = __esm({
        * ```
        */
       delete(resourceID, params, options) {
-        const { session_id, betas } = params;
+        const { session_id, betas, workspace_id } = params;
         return this._client.delete(path2`/v1/sessions/${session_id}/resources/${resourceID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12028,12 +12222,15 @@ var init_resources = __esm({
        * ```
        */
       add(sessionID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/sessions/${sessionID}/resources?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12042,10 +12239,10 @@ var init_resources = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/events.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/events.mjs
 var Events2;
 var init_events2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/events.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/events.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -12066,12 +12263,15 @@ var init_events2 = __esm({
        * ```
        */
       list(threadID, params, options) {
-        const { session_id, betas, ...query } = params;
+        const { session_id, betas, workspace_id, ...query } = params;
         return this._client.getAPIList(path2`/v1/sessions/${session_id}/threads/${threadID}/events?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12089,12 +12289,15 @@ var init_events2 = __esm({
        * ```
        */
       stream(threadID, params, options) {
-        const { session_id, betas, ...query } = params;
+        const { session_id, betas, workspace_id, ...query } = params;
         return this._client.get(path2`/v1/sessions/${session_id}/threads/${threadID}/stream?beta=true`, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ]),
           stream: true
@@ -12104,10 +12307,10 @@ var init_events2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/threads.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/threads.mjs
 var Threads;
 var init_threads = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/threads.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/threads/threads.mjs"() {
     init_resource();
     init_events2();
     init_events2();
@@ -12132,11 +12335,14 @@ var init_threads = __esm({
        * ```
        */
       retrieve(threadID, params, options) {
-        const { session_id, betas } = params;
+        const { session_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/sessions/${session_id}/threads/${threadID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12155,12 +12361,15 @@ var init_threads = __esm({
        * ```
        */
       list(sessionID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/sessions/${sessionID}/threads?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12178,11 +12387,14 @@ var init_threads = __esm({
        * ```
        */
       archive(threadID, params, options) {
-        const { session_id, betas } = params;
+        const { session_id, betas, workspace_id } = params;
         return this._client.post(path2`/v1/sessions/${session_id}/threads/${threadID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12192,10 +12404,10 @@ var init_threads = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs
 var Sessions;
 var init_sessions = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/sessions/sessions.mjs"() {
     init_resource();
     init_events();
     init_events();
@@ -12226,12 +12438,15 @@ var init_sessions = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/sessions?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12248,11 +12463,14 @@ var init_sessions = __esm({
        * ```
        */
       retrieve(sessionID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/sessions/${sessionID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12269,12 +12487,15 @@ var init_sessions = __esm({
        * ```
        */
       update(sessionID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/sessions/${sessionID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12291,12 +12512,15 @@ var init_sessions = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/sessions?beta=true", BidirectionalPageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12313,11 +12537,14 @@ var init_sessions = __esm({
        * ```
        */
       delete(sessionID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/sessions/${sessionID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12334,11 +12561,14 @@ var init_sessions = __esm({
        * ```
        */
       archive(sessionID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/sessions/${sessionID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12350,10 +12580,10 @@ var init_sessions = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs
 var Versions2;
 var init_versions2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/versions.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -12372,12 +12602,15 @@ var init_versions2 = __esm({
        * ```
        */
       create(skillID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/skills/${skillID}/versions?beta=true`, multipartFormRequestOptions({
           body,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         }, this._client, false));
@@ -12394,11 +12627,14 @@ var init_versions2 = __esm({
        * ```
        */
       retrieve(version, params, options) {
-        const { skill_id, betas } = params;
+        const { skill_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/skills/${skill_id}/versions/${version}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12417,12 +12653,15 @@ var init_versions2 = __esm({
        * ```
        */
       list(skillID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/skills/${skillID}/versions?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12439,11 +12678,14 @@ var init_versions2 = __esm({
        * ```
        */
       delete(version, params, options) {
-        const { skill_id, betas } = params;
+        const { skill_id, betas, workspace_id } = params;
         return this._client.delete(path2`/v1/skills/${skill_id}/versions/${version}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12463,13 +12705,14 @@ var init_versions2 = __esm({
        * ```
        */
       download(version, params, options) {
-        const { skill_id, betas } = params;
+        const { skill_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/skills/${skill_id}/versions/${version}/content?beta=true`, {
           ...options,
           headers: buildHeaders([
             {
               Accept: "application/binary",
-              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
             },
             options?.headers
           ]),
@@ -12480,10 +12723,10 @@ var init_versions2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs
 var Skills;
 var init_skills2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/skills/skills.mjs"() {
     init_resource();
     init_versions2();
     init_versions2();
@@ -12507,12 +12750,15 @@ var init_skills2 = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/skills?beta=true", multipartFormRequestOptions({
           body,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         }, this._client, false));
@@ -12528,11 +12774,14 @@ var init_skills2 = __esm({
        * ```
        */
       retrieve(skillID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/skills/${skillID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12549,12 +12798,15 @@ var init_skills2 = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/skills?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12570,11 +12822,14 @@ var init_skills2 = __esm({
        * ```
        */
       delete(skillID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/skills/${skillID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12584,10 +12839,10 @@ var init_skills2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/certificates.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/certificates.mjs
 var Certificates;
 var init_certificates = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/certificates.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/certificates.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -12613,12 +12868,15 @@ var init_certificates = __esm({
        * ```
        */
       create(tunnelID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/tunnels/${tunnelID}/certificates?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12641,11 +12899,14 @@ var init_certificates = __esm({
        * ```
        */
       retrieve(certificateID, params, options) {
-        const { tunnel_id, betas } = params;
+        const { tunnel_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/tunnels/${tunnel_id}/certificates/${certificateID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12670,12 +12931,15 @@ var init_certificates = __esm({
        * ```
        */
       list(tunnelID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/tunnels/${tunnelID}/certificates?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12701,11 +12965,14 @@ var init_certificates = __esm({
        * ```
        */
       archive(certificateID, params, options) {
-        const { tunnel_id, betas } = params;
+        const { tunnel_id, betas, workspace_id } = params;
         return this._client.post(path2`/v1/tunnels/${tunnel_id}/certificates/${certificateID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12714,10 +12981,10 @@ var init_certificates = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/tunnels.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/tunnels.mjs
 var Tunnels;
 var init_tunnels = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/tunnels.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/tunnels/tunnels.mjs"() {
     init_resource();
     init_certificates();
     init_certificates();
@@ -12745,12 +13012,15 @@ var init_tunnels = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/tunnels?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12771,11 +13041,14 @@ var init_tunnels = __esm({
        * ```
        */
       retrieve(tunnelID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/tunnels/${tunnelID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12798,12 +13071,15 @@ var init_tunnels = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/tunnels?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12827,11 +13103,14 @@ var init_tunnels = __esm({
        * ```
        */
       archive(tunnelID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/tunnels/${tunnelID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12854,11 +13133,14 @@ var init_tunnels = __esm({
        * ```
        */
       revealToken(tunnelID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/tunnels/${tunnelID}/reveal_token?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12880,12 +13162,15 @@ var init_tunnels = __esm({
        * ```
        */
       rotateToken(tunnelID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/tunnels/${tunnelID}/rotate_token?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "mcp-tunnels-2026-06-22"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12895,10 +13180,10 @@ var init_tunnels = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs
 var Credentials;
 var init_credentials2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/credentials.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -12924,12 +13209,15 @@ var init_credentials2 = __esm({
        * ```
        */
       create(vaultID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/vaults/${vaultID}/credentials?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12947,11 +13235,14 @@ var init_credentials2 = __esm({
        * ```
        */
       retrieve(credentialID, params, options) {
-        const { vault_id, betas } = params;
+        const { vault_id, betas, workspace_id } = params;
         return this._client.get(path2`/v1/vaults/${vault_id}/credentials/${credentialID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12969,12 +13260,15 @@ var init_credentials2 = __esm({
        * ```
        */
       update(credentialID, params, options) {
-        const { vault_id, betas, ...body } = params;
+        const { vault_id, betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/vaults/${vault_id}/credentials/${credentialID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -12993,12 +13287,15 @@ var init_credentials2 = __esm({
        * ```
        */
       list(vaultID, params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/vaults/${vaultID}/credentials?beta=true`, PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13016,11 +13313,14 @@ var init_credentials2 = __esm({
        * ```
        */
       delete(credentialID, params, options) {
-        const { vault_id, betas } = params;
+        const { vault_id, betas, workspace_id } = params;
         return this._client.delete(path2`/v1/vaults/${vault_id}/credentials/${credentialID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13038,11 +13338,14 @@ var init_credentials2 = __esm({
        * ```
        */
       archive(credentialID, params, options) {
-        const { vault_id, betas } = params;
+        const { vault_id, betas, workspace_id } = params;
         return this._client.post(path2`/v1/vaults/${vault_id}/credentials/${credentialID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13060,11 +13363,14 @@ var init_credentials2 = __esm({
        * ```
        */
       mcpOAuthValidate(credentialID, params, options) {
-        const { vault_id, betas } = params;
+        const { vault_id, betas, workspace_id } = params;
         return this._client.post(path2`/v1/vaults/${vault_id}/credentials/${credentialID}/mcp_oauth_validate?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13073,10 +13379,10 @@ var init_credentials2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs
 var Vaults;
 var init_vaults = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/vaults/vaults.mjs"() {
     init_resource();
     init_credentials2();
     init_credentials2();
@@ -13100,12 +13406,15 @@ var init_vaults = __esm({
        * ```
        */
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/vaults?beta=true", {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13122,11 +13431,14 @@ var init_vaults = __esm({
        * ```
        */
       retrieve(vaultID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/vaults/${vaultID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13143,12 +13455,15 @@ var init_vaults = __esm({
        * ```
        */
       update(vaultID, params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post(path2`/v1/vaults/${vaultID}?beta=true`, {
           body,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13165,12 +13480,15 @@ var init_vaults = __esm({
        * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/vaults?beta=true", PageCursor, {
           query,
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13187,11 +13505,14 @@ var init_vaults = __esm({
        * ```
        */
       delete(vaultID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.delete(path2`/v1/vaults/${vaultID}?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13208,11 +13529,14 @@ var init_vaults = __esm({
        * ```
        */
       archive(vaultID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.post(path2`/v1/vaults/${vaultID}/archive?beta=true`, {
           ...options,
           headers: buildHeaders([
-            { "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString() },
+            {
+              "anthropic-beta": [...betas ?? [], "managed-agents-2026-04-01"].toString(),
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -13222,10 +13546,10 @@ var init_vaults = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs
 var Beta;
 var init_beta = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/beta/beta.mjs"() {
     init_resource();
     init_deployment_runs();
     init_deployment_runs();
@@ -13299,21 +13623,24 @@ var init_beta = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs
 var Completions;
 var init_completions = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/completions.mjs"() {
     init_resource();
     init_headers();
     Completions = class extends APIResource {
       create(params, options) {
-        const { betas, ...body } = params;
+        const { betas, workspace_id, ...body } = params;
         return this._client.post("/v1/complete", {
           body,
           timeout: this._client._options.timeout ?? 6e5,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ]),
           stream: params.stream ?? false
@@ -13323,10 +13650,10 @@ var init_completions = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/files.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/files.mjs
 var Files2;
 var init_files2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/files.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/files.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -13336,47 +13663,116 @@ var init_files2 = __esm({
     Files2 = class extends APIResource {
       /**
        * List Files
+       *
+       * @example
+       * ```ts
+       * // Automatically fetches more pages as needed.
+       * for await (const fileMetadata of client.files.list()) {
+       *   // ...
+       * }
+       * ```
        */
-      list(query = {}, options) {
-        return this._client.getAPIList("/v1/files", PageCursor, { query, ...options });
+      list(params = {}, options) {
+        const { workspace_id, ...query } = params ?? {};
+        return this._client.getAPIList("/v1/files", PageCursor, {
+          query,
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Delete File
+       *
+       * @example
+       * ```ts
+       * const deletedFile = await client.files.delete('file_id');
+       * ```
        */
-      delete(fileID, options) {
-        return this._client.delete(path2`/v1/files/${fileID}`, options);
+      delete(fileID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.delete(path2`/v1/files/${fileID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Download File
+       *
+       * @example
+       * ```ts
+       * const response = await client.files.download('file_id');
+       *
+       * const content = await response.blob();
+       * console.log(content);
+       * ```
        */
-      download(fileID, options) {
+      download(fileID, params = {}, options) {
+        const { workspace_id } = params ?? {};
         return this._client.get(path2`/v1/files/${fileID}/content`, {
           ...options,
-          headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+          headers: buildHeaders([
+            {
+              Accept: "application/binary",
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
+            options?.headers
+          ]),
           __binaryResponse: true
         });
       }
       /**
        * Get File Metadata
+       *
+       * @example
+       * ```ts
+       * const fileMetadata = await client.files.retrieveMetadata(
+       *   'file_id',
+       * );
+       * ```
        */
-      retrieveMetadata(fileID, options) {
-        return this._client.get(path2`/v1/files/${fileID}`, options);
+      retrieveMetadata(fileID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.get(path2`/v1/files/${fileID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Upload File
+       *
+       * @example
+       * ```ts
+       * const fileMetadata = await client.files.upload({
+       *   file: fs.createReadStream('path/to/file'),
+       * });
+       * ```
        */
-      upload(body, options) {
+      upload(params, options) {
+        const { workspace_id, ...body } = params;
         return this._client.post("/v1/files", multipartFormRequestOptions({
           body,
           ...options,
-          headers: buildHeaders([stainlessHelperHeaderFromFile(body.file), options?.headers])
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            stainlessHelperHeaderFromFile(body.file),
+            options?.headers
+          ])
         }, this._client));
       }
     };
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs
 function getOutputFormat2(params) {
   return params?.output_config?.format;
 }
@@ -13437,18 +13833,18 @@ function parseOutputFormat(params, content) {
   }
 }
 var init_parser2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/parser.mjs"() {
     init_error();
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs
 function tracksToolInput2(content) {
   return content.type === "tool_use" || content.type === "server_tool_use";
 }
 var _MessageStream_instances, _MessageStream_currentMessageSnapshot, _MessageStream_params, _MessageStream_connectedPromise, _MessageStream_resolveConnectedPromise, _MessageStream_rejectConnectedPromise, _MessageStream_endPromise, _MessageStream_resolveEndPromise, _MessageStream_rejectEndPromise, _MessageStream_listeners, _MessageStream_ended, _MessageStream_errored, _MessageStream_aborted, _MessageStream_catchingPromiseCreated, _MessageStream_response, _MessageStream_request_id, _MessageStream_workspace_id, _MessageStream_logger, _MessageStream_getFinalMessage, _MessageStream_getFinalText, _MessageStream_handleError, _MessageStream_beginRequest, _MessageStream_addStreamEvent, _MessageStream_endRequest, _MessageStream_accumulateMessage, MessageStream;
 var init_MessageStream = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/MessageStream.mjs"() {
     init_tslib();
     init_stainless_helper_header();
     init_errors();
@@ -14031,10 +14427,10 @@ var init_MessageStream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs
 var Batches2;
 var init_batches2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/batches.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -14071,12 +14467,15 @@ var init_batches2 = __esm({
        * ```
        */
       create(params, options) {
-        const { user_profile_id, ...body } = params;
+        const { user_profile_id, workspace_id, ...body } = params;
         return this._client.post("/v1/messages/batches", {
           body,
           ...options,
           headers: buildHeaders([
-            { ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0 },
+            {
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -14096,8 +14495,15 @@ var init_batches2 = __esm({
        * );
        * ```
        */
-      retrieve(messageBatchID, options) {
-        return this._client.get(path2`/v1/messages/batches/${messageBatchID}`, options);
+      retrieve(messageBatchID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.get(path2`/v1/messages/batches/${messageBatchID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * List all Message Batches within a Workspace. Most recently created batches are
@@ -14114,8 +14520,16 @@ var init_batches2 = __esm({
        * }
        * ```
        */
-      list(query = {}, options) {
-        return this._client.getAPIList("/v1/messages/batches", Page, { query, ...options });
+      list(params = {}, options) {
+        const { workspace_id, ...query } = params ?? {};
+        return this._client.getAPIList("/v1/messages/batches", Page, {
+          query,
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Delete a Message Batch.
@@ -14132,8 +14546,15 @@ var init_batches2 = __esm({
        *   await client.messages.batches.delete('message_batch_id');
        * ```
        */
-      delete(messageBatchID, options) {
-        return this._client.delete(path2`/v1/messages/batches/${messageBatchID}`, options);
+      delete(messageBatchID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.delete(path2`/v1/messages/batches/${messageBatchID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Batches may be canceled any time before processing ends. Once cancellation is
@@ -14156,8 +14577,15 @@ var init_batches2 = __esm({
        * );
        * ```
        */
-      cancel(messageBatchID, options) {
-        return this._client.post(path2`/v1/messages/batches/${messageBatchID}/cancel`, options);
+      cancel(messageBatchID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.post(path2`/v1/messages/batches/${messageBatchID}/cancel`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Streams the results of a Message Batch as a `.jsonl` file.
@@ -14175,14 +14603,21 @@ var init_batches2 = __esm({
        *   await client.messages.batches.results('message_batch_id');
        * ```
        */
-      async results(messageBatchID, options) {
-        const batch = await this.retrieve(messageBatchID);
+      async results(messageBatchID, params = {}, options) {
+        const batch = await this.retrieve(messageBatchID, params, options);
         if (!batch.results_url) {
           throw new AnthropicError(`No batch \`results_url\`; Has it finished processing? ${batch.processing_status} - ${batch.id}`);
         }
+        const { workspace_id } = params ?? {};
         return this._client.get(batch.results_url, {
           ...options,
-          headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+          headers: buildHeaders([
+            {
+              Accept: "application/binary",
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
+            options?.headers
+          ]),
           stream: true,
           __binaryResponse: true
         })._thenUnwrap((_, props) => JSONLDecoder.fromResponse(props.response, props.controller));
@@ -14191,10 +14626,10 @@ var init_batches2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs
 var Messages2, DEPRECATED_MODELS2, MODELS_TO_WARN_WITH_THINKING_ENABLED2;
 var init_messages2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/messages/messages.mjs"() {
     init_resource();
     init_headers();
     init_stainless_helper_header();
@@ -14209,7 +14644,7 @@ var init_messages2 = __esm({
         this.batches = new Batches2(this._client);
       }
       create(params, options) {
-        const { user_profile_id, ...body } = params;
+        const { user_profile_id, workspace_id, ...body } = params;
         if (body.model in DEPRECATED_MODELS2) {
           console.warn(`The model '${body.model}' is deprecated and will reach end-of-life on ${DEPRECATED_MODELS2[body.model]}
 Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resources/model-deprecations for more information.`);
@@ -14228,7 +14663,10 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
           timeout: timeout ?? 6e5,
           ...options,
           headers: buildHeaders([
-            { ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0 },
+            {
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             helperHeader2,
             options?.headers
           ]),
@@ -14299,12 +14737,15 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
        * ```
        */
       countTokens(params, options) {
-        const { user_profile_id, ...body } = params;
+        const { user_profile_id, workspace_id, ...body } = params;
         return this._client.post("/v1/messages/count_tokens", {
           body,
           ...options,
           headers: buildHeaders([
-            { ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0 },
+            {
+              ...user_profile_id != null ? { "anthropic-user-profile-id": user_profile_id } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -14316,10 +14757,10 @@ Please migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resour
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs
 var Models2;
 var init_models2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/models.mjs"() {
     init_resource();
     init_pagination();
     init_headers();
@@ -14330,13 +14771,21 @@ var init_models2 = __esm({
        *
        * The Models API response can be used to determine information about a specific
        * model or resolve a model alias to a model ID.
+       *
+       * @example
+       * ```ts
+       * const modelInfo = await client.models.retrieve('model_id');
+       * ```
        */
       retrieve(modelID, params = {}, options) {
-        const { betas } = params ?? {};
+        const { betas, workspace_id } = params ?? {};
         return this._client.get(path2`/v1/models/${modelID}`, {
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -14346,14 +14795,25 @@ var init_models2 = __esm({
        *
        * The Models API response can be used to determine which models are available for
        * use in the API. More recently released models are listed first.
+       *
+       * @example
+       * ```ts
+       * // Automatically fetches more pages as needed.
+       * for await (const modelInfo of client.models.list()) {
+       *   // ...
+       * }
+       * ```
        */
       list(params = {}, options) {
-        const { betas, ...query } = params ?? {};
+        const { betas, workspace_id, ...query } = params ?? {};
         return this._client.getAPIList("/v1/models", Page, {
           query,
           ...options,
           headers: buildHeaders([
-            { ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0 },
+            {
+              ...betas?.toString() != null ? { "anthropic-beta": betas?.toString() } : void 0,
+              ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0
+            },
             options?.headers
           ])
         });
@@ -14362,56 +14822,117 @@ var init_models2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/versions.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/versions.mjs
 var Versions3;
 var init_versions3 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/versions.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/versions.mjs"() {
     init_resource();
     init_pagination();
+    init_headers();
     init_uploads();
     init_path();
     Versions3 = class extends APIResource {
       /**
        * Create Skill Version
+       *
+       * @example
+       * ```ts
+       * const skillVersion = await client.skills.versions.create(
+       *   'skill_id',
+       *   { files: [fs.createReadStream('path/to/file')] },
+       * );
+       * ```
        */
-      create(skillID, body, options) {
-        return this._client.post(path2`/v1/skills/${skillID}/versions`, multipartFormRequestOptions({ body, ...options }, this._client, false));
+      create(skillID, params, options) {
+        const { workspace_id, ...body } = params;
+        return this._client.post(path2`/v1/skills/${skillID}/versions`, multipartFormRequestOptions({
+          body,
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        }, this._client, false));
       }
       /**
        * Get Skill Version
+       *
+       * @example
+       * ```ts
+       * const skillVersion = await client.skills.versions.retrieve(
+       *   'version',
+       *   { skill_id: 'skill_id' },
+       * );
+       * ```
        */
       retrieve(version, params, options) {
-        const { skill_id } = params;
-        return this._client.get(path2`/v1/skills/${skill_id}/versions/${version}`, options);
+        const { skill_id, workspace_id } = params;
+        return this._client.get(path2`/v1/skills/${skill_id}/versions/${version}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * List Skill Versions
+       *
+       * @example
+       * ```ts
+       * // Automatically fetches more pages as needed.
+       * for await (const skillVersion of client.skills.versions.list(
+       *   'skill_id',
+       * )) {
+       *   // ...
+       * }
+       * ```
        */
-      list(skillID, query = {}, options) {
+      list(skillID, params = {}, options) {
+        const { workspace_id, ...query } = params ?? {};
         return this._client.getAPIList(path2`/v1/skills/${skillID}/versions`, PageCursor, {
           query,
-          ...options
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
         });
       }
       /**
        * Delete Skill Version
+       *
+       * @example
+       * ```ts
+       * const deletedSkillVersion =
+       *   await client.skills.versions.delete('version', {
+       *     skill_id: 'skill_id',
+       *   });
+       * ```
        */
       delete(version, params, options) {
-        const { skill_id } = params;
-        return this._client.delete(path2`/v1/skills/${skill_id}/versions/${version}`, options);
+        const { skill_id, workspace_id } = params;
+        return this._client.delete(path2`/v1/skills/${skill_id}/versions/${version}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
     };
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/skills.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/skills.mjs
 var Skills2;
 var init_skills3 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/skills.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/skills/skills.mjs"() {
     init_resource();
     init_versions3();
     init_versions3();
     init_pagination();
+    init_headers();
     init_uploads();
     init_path();
     Skills2 = class extends APIResource {
@@ -14421,36 +14942,91 @@ var init_skills3 = __esm({
       }
       /**
        * Create Skill
+       *
+       * @example
+       * ```ts
+       * const skill = await client.skills.create({
+       *   files: [fs.createReadStream('path/to/file')],
+       * });
+       * ```
        */
-      create(body, options) {
-        return this._client.post("/v1/skills", multipartFormRequestOptions({ body, ...options }, this._client, false));
+      create(params, options) {
+        const { workspace_id, ...body } = params;
+        return this._client.post("/v1/skills", multipartFormRequestOptions({
+          body,
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        }, this._client, false));
       }
       /**
        * Get Skill
+       *
+       * @example
+       * ```ts
+       * const skill = await client.skills.retrieve('skill_id');
+       * ```
        */
-      retrieve(skillID, options) {
-        return this._client.get(path2`/v1/skills/${skillID}`, options);
+      retrieve(skillID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.get(path2`/v1/skills/${skillID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * List Skills
+       *
+       * @example
+       * ```ts
+       * // Automatically fetches more pages as needed.
+       * for await (const skill of client.skills.list()) {
+       *   // ...
+       * }
+       * ```
        */
-      list(query = {}, options) {
-        return this._client.getAPIList("/v1/skills", PageCursor, { query, ...options });
+      list(params = {}, options) {
+        const { workspace_id, ...query } = params ?? {};
+        return this._client.getAPIList("/v1/skills", PageCursor, {
+          query,
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
       /**
        * Delete Skill
+       *
+       * @example
+       * ```ts
+       * const deletedSkill = await client.skills.delete('skill_id');
+       * ```
        */
-      delete(skillID, options) {
-        return this._client.delete(path2`/v1/skills/${skillID}`, options);
+      delete(skillID, params = {}, options) {
+        const { workspace_id } = params ?? {};
+        return this._client.delete(path2`/v1/skills/${skillID}`, {
+          ...options,
+          headers: buildHeaders([
+            { ...workspace_id != null ? { "anthropic-workspace-id": workspace_id } : void 0 },
+            options?.headers
+          ])
+        });
       }
     };
     Skills2.Versions = Versions3;
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/index.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/index.mjs
 var init_resources2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/index.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/resources/index.mjs"() {
     init_shared();
     init_beta();
     init_completions();
@@ -14461,10 +15037,10 @@ var init_resources2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs
 var _BaseAnthropic_instances, _a, _BaseAnthropic_encoder, _BaseAnthropic_baseURLOverridden, HUMAN_PROMPT, AI_PROMPT, BaseAnthropic, Anthropic;
 var init_client = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/client.mjs"() {
     init_tslib();
     init_uuid();
     init_values();
@@ -14669,7 +15245,8 @@ var init_client = __esm({
         });
       }
       /**
-       * Create a new client instance re-using the same options given to the current client with optional overriding.
+       * Create a new client instance re-using the same options given to the
+       * current client with optional overriding.
        */
       withOptions(options) {
         const overridesStructuredAuth = "credentials" in options || "config" in options || "profile" in options;
@@ -15259,7 +15836,7 @@ var init_client = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/middleware.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/middleware.mjs
 function stripFallbackBlocks(body) {
   const messages = body.messages.flatMap((message) => {
     if (!Array.isArray(message.content))
@@ -15741,7 +16318,7 @@ function makeAbort(controller, signal) {
 }
 var encoder, DEFAULT_BETAS, BlockTracker;
 var init_middleware2 = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/middleware.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/lib/middleware.mjs"() {
     init_error();
     init_streaming();
     init_errors();
@@ -15796,9 +16373,9 @@ var init_middleware2 = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/index.mjs
+// .harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/index.mjs
 var init_index = __esm({
-  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.123.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/index.mjs"() {
+  ".harness/node_modules/.pnpm/@anthropic-ai+sdk@0.124.0_zod@4.4.3/node_modules/@anthropic-ai/sdk/index.mjs"() {
     init_client();
     init_uploads2();
     init_api_promise();

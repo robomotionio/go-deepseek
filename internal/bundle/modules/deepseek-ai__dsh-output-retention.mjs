@@ -194,9 +194,15 @@ function describeOmitted(omitted, unit) {
 function formatRetentionNotice(notice, recovery) {
   return [describeOmitted(notice.omitted, notice.unit), recovery(notice)].filter((part) => part.length > 0).join(" ");
 }
+function truncateWithoutSplittingSurrogatePair(text, maxChars) {
+  if (text.length <= maxChars) return text;
+  const capped = text.slice(0, maxChars);
+  return /[\uD800-\uDBFF]$/.test(capped) ? capped.slice(0, -1) : capped;
+}
 export {
   ItemRetainer,
   TextRetainer,
   describeOmitted,
-  formatRetentionNotice
+  formatRetentionNotice,
+  truncateWithoutSplittingSurrogatePair
 };

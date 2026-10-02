@@ -4,8 +4,8 @@ import { randomUUID } from "node:crypto";
 import z from "@deepseek-ai/schemastery";
 import { z as z$1 } from "zod";
 import { brandString } from "@deepseek-ai/dsh-brand";
-import { AssistantStreamAccumulator, BlockAssembler, LlmAttemptId, LlmError, createAssistantMessage, createSystemMessage, createToolResultMessage, createUserMessage, errorChain, markAgentLoopRequest } from "@deepseek-ai/dsh-llm";
-import { SessionLogOffset, SessionPreparation, SessionSeq, canonicalHeader, headerEquals, interruptedTurnClosers, isReplacementSurfaceEvent } from "@deepseek-ai/dsh-session";
+import { AssistantStreamAccumulator, BlockAssembler, LlmAttemptId, LlmError, createAssistantMessage, createDeveloperMessage, createSystemMessage, createToolResultMessage, createUserMessage, errorChain, markAgentLoopRequest } from "@deepseek-ai/dsh-llm";
+import { SessionLogOffset, SessionPreparation, SessionSeq, ToolCallRecovery, canonicalHeader, headerEquals, interruptedTurnClosers, isReplacementSurfaceEvent } from "@deepseek-ai/dsh-session";
 import { SessionPersistenceNotFoundError } from "@deepseek-ai/dsh-session-persistence";
 import { agentEvents, assembleContextFor } from "@deepseek-ai/dsh-agent";
 import { assertNever, deepFreeze } from "@deepseek-ai/dsh-util-values";
@@ -193,10 +193,10 @@ var ReactLoopInbox = class {
     return removed;
   }
 };
-var SOURCE = "@deepseek-ai/dsh-system-prompt";
+var SOURCE = "runtime-context";
 var CLEARED = "Current runtime context: none. Earlier runtime-context snapshots no longer apply.";
 function isOwned(message) {
-  return message.source.kind === "plugin" && message.source.plugin === SOURCE;
+  return message.source.kind === SOURCE;
 }
 function textOf(message) {
   const [block] = message.content;
@@ -234,7 +234,7 @@ var SystemPromptProjection = class {
     const nodes = this.systemNodes();
     const head = nodes[0];
     if (head === void 0) return [{
-      message: createSystemMessage(rendered, SOURCE),
+      message: createSystemMessage(rendered),
       intent: { surfaceOp: "append" }
     }];
     const latest = nodes.findLast((node) => node.text !== "") ?? head;
@@ -245,13 +245,13 @@ var SystemPromptProjection = class {
     }
     if (latest.text === rendered) return [];
     return [{
-      message: createSystemMessage(rendered, SOURCE),
+      message: createSystemMessage(rendered),
       intent: { surfaceOp: "append" }
     }];
   }
   replace(seq, text) {
     return {
-      message: createSystemMessage(text, SOURCE),
+      message: createSystemMessage(text),
       intent: {
         surfaceOp: {
           op: "replace",
@@ -308,12 +308,8 @@ var RuntimeContextProjection = class {
         type: "text",
         text: snapshot
       }],
-      source: sections.length === 0 ? {
-        kind: "plugin",
-        plugin: SOURCE
-      } : {
-        kind: "plugin",
-        plugin: SOURCE,
+      source: sections.length === 0 ? { kind: SOURCE } : {
+        kind: SOURCE,
         form: "snapshot",
         sections
       }
@@ -475,7 +471,7 @@ function parseArguments(raw) {
 }
 async function runGroup(ctx, turn, step, group, mode, signal, acceptContext) {
   const { session } = ctx.agents.requireInitiator();
-  const { maxParallelToolCalls } = ctx.agentLoop.config;
+  const maxParallelToolCalls = ctx.agentLoop.config.maxParallelToolCalls.get();
   const slots = group.map(() => void 0);
   const callSeqs = group.map(() => void 0);
   let nextToStart = 0;
@@ -634,6 +630,24 @@ function requestProposal(header) {
   if (header.adapterDefaults.maxTokens === true) delete proposal.maxTokens;
   return proposal;
 }
+function abortedCancelCause(signal) {
+  if (!signal.aborted) return void 0;
+  const cause = signal.reason;
+  switch (cause.kind) {
+    case "user":
+    case "parent":
+    case "disposed":
+      return { kind: cause.kind };
+    case "hook":
+      return {
+        kind: "hook",
+        reason: cause.reason
+      };
+    /* v8 ignore next -- cancel accepts the closed AgentCancelCause union */
+    default:
+      return assertNever(cause);
+  }
+}
 var ReactLoopAgent = class {
   loopCtx;
   id;
@@ -727,7 +741,7 @@ var ReactLoopAgent = class {
           kind: "idle",
           lastTurn: maintenance.lastTurn
         });
-        if (maintenance.abort.signal.reason?.kind !== "disposed" && maintenance.wakeRequested && this.inbox.hasPending) this.wakeDriver();
+        if (abortedCancelCause(maintenance.abort.signal)?.kind !== "disposed" && maintenance.wakeRequested && this.inbox.hasPending) this.wakeDriver();
         done.resolve();
       }
     })();
@@ -742,7 +756,7 @@ var ReactLoopAgent = class {
   */
   wakeDriver(wakeAfterAbort = false) {
     if (this.phase.kind !== "idle") {
-      if (this.phase.abort.signal.reason?.kind !== "disposed" && (this.phase.kind === "maintenance" || wakeAfterAbort)) this.phase.wakeRequested = true;
+      if (abortedCancelCause(this.phase.abort.signal)?.kind !== "disposed" && (this.phase.kind === "maintenance" || wakeAfterAbort)) this.phase.wakeRequested = true;
       return;
     }
     const driver = Promise.withResolvers();
@@ -858,10 +872,25 @@ var ReactLoopAgent = class {
           step
         });
         phase.step = step;
+        const toolRecovery = new ToolCallRecovery();
+        const stopRecovery = this.ctx.on("session/event", (session, event) => {
+          if (session === this.session) toolRecovery.observe(event);
+        });
         try {
           const stepEnd = await this.step(decision);
           if (turnEnds === null || turnEnds.kind !== "max-tokens") turnEnds = stepEnd;
+        } catch (error) {
+          try {
+            for (const event of toolRecovery.results()) this.session.append("tool/result", event.data, {
+              surfaceOp: "append",
+              ...event.sourceEventSeqs === void 0 ? {} : { sourceEventSeqs: event.sourceEventSeqs }
+            });
+          } catch (recoveryError) {
+            throw new AggregateError([error, recoveryError], "Step failed and its pending tool results could not be recorded", { cause: error });
+          }
+          throw error;
         } finally {
+          stopRecovery();
           this.session.append("step/end", {
             turn,
             step
@@ -879,10 +908,11 @@ var ReactLoopAgent = class {
         target = "next-step";
       }
     } catch (error) {
-      if (signal.aborted) {
+      const cause = abortedCancelCause(signal);
+      if (cause !== void 0) {
         turnEnds = {
           kind: "aborted",
-          reason: signal.reason
+          reason: cause
         };
         throw error;
       }
@@ -922,7 +952,7 @@ var ReactLoopAgent = class {
       const startsRequestSeries = firstAttempt && decision.startsRequestSeries === true;
       const commits = this.systemPrompt.project(renderedPrompt, {
         inHistory: preparedCall?.systemPromptUpdate === "in-history",
-        startsSeries: startsRequestSeries || this.requestSurfaceGeneration !== this.session.surface.contentGeneration || this.toolsChanged(assembly.tools)
+        startsSeries: startsRequestSeries || this.requestSurfaceGeneration !== this.session.surface.contentGeneration || preparedCall?.toolUpdate === void 0 && this.toolsChanged(assembly.tools)
       });
       for (const { message, intent } of commits) this.session.append("system/message", {
         turn,
@@ -931,7 +961,10 @@ var ReactLoopAgent = class {
       }, intent);
       if (firstAttempt) for (const message of decision.messages) this.session.append("user/message", message, { surfaceOp: "append" });
       firstAttempt = false;
-      const request = this.buildRequest(config, preparedCall, assembly.tools, startsRequestSeries, signal);
+      const request = this.buildRequest(config, preparedCall, assembly.tools, {
+        turn,
+        step
+      }, startsRequestSeries, signal);
       const live = new AssistantStreamAttempt(this.session.id, ++this.assistantAttemptCounter, () => ++this.assistantStreamRevision, turn, step, (frame) => {
         this.dispatch.emit("agent/assistant-stream", { frame });
       });
@@ -1067,7 +1100,7 @@ var ReactLoopAgent = class {
     };
   }
   /** Log the resolved envelope and derive a frozen request from the admitted surface. */
-  buildRequest(config, preparedCall, tools, startsRequestSeries, signal) {
+  buildRequest(config, preparedCall, tools, position, startsRequestSeries, signal) {
     const { session } = this;
     const surfaceGeneration = session.surface.contentGeneration;
     const header = canonicalHeader({
@@ -1077,21 +1110,43 @@ var ReactLoopAgent = class {
     });
     const baseline = this.session.requestHeader();
     const startsSeries = startsRequestSeries || this.requestSurfaceGeneration !== surfaceGeneration;
+    let headerSeq;
     if (!this.requestHeaderLogged) {
-      this.session.append("request/header", {
+      headerSeq = this.session.append("request/header", {
         header,
-        reason: baseline === void 0 ? "initial" : "resume"
-      });
+        reason: baseline === void 0 ? "initial" : "resume",
+        ...startsSeries ? { startsSeries: true } : {}
+      }).seq;
       this.requestHeaderLogged = true;
-    } else if (baseline === void 0 || !headerEquals(baseline, header)) this.session.append("request/header", {
+    } else if (baseline === void 0 || !headerEquals(baseline, header)) headerSeq = this.session.append("request/header", {
       header,
       reason: "change",
       ...startsSeries ? { startsSeries: true } : {}
-    });
+    }).seq;
     else if (startsSeries) this.session.append("request/header", {
       header,
       reason: "series"
     });
+    if (baseline !== void 0 && headerSeq !== void 0) {
+      const previousNames = new Set(baseline.tools?.map((tool) => tool.name));
+      const currentNames = new Set(tools.map((tool) => tool.name));
+      const additions = tools.filter((tool) => !previousNames.has(tool.name)).map((tool) => ({
+        type: "tool-addition",
+        toolName: tool.name
+      }));
+      const removals = (baseline.tools ?? []).filter((tool) => !currentNames.has(tool.name)).map((tool) => ({
+        type: "tool-removal",
+        toolName: tool.name
+      }));
+      if (additions.length > 0 || removals.length > 0) session.append("developer/message", {
+        ...position,
+        message: createDeveloperMessage({
+          source: { kind: "tool-registry" },
+          content: [...additions, ...removals]
+        }),
+        ...additions.length > 0 ? { headerSeq } : {}
+      }, { surfaceOp: "append" });
+    }
     this.requestSurfaceGeneration = surfaceGeneration;
     const contextWindow = preparedCall?.context?.contextWindow;
     const systemPromptUpdate = preparedCall?.systemPromptUpdate;
@@ -1115,6 +1170,7 @@ var ReactLoopAgent = class {
     return markAgentLoopRequest(Object.freeze({
       ...header.config,
       messages: boundaryMessages,
+      toolHistory: session.toolHistory(),
       ...header.tools !== void 0 ? { tools: header.tools } : {},
       sessionId: this.session.id,
       signal
@@ -1309,11 +1365,6 @@ async function raceAbortCall(operation, signal, id, releaseAbandoned) {
     throw error;
   }
 }
-function resolveMaxParallelToolCalls(value) {
-  const maxParallelToolCalls = value ?? 10;
-  if (!Number.isInteger(maxParallelToolCalls) || maxParallelToolCalls < 1) throw new Error("maxParallelToolCalls must be a positive integer");
-  return maxParallelToolCalls;
-}
 function assertAgentOptions(options) {
   if (options.maxTokens !== void 0 && (!Number.isSafeInteger(options.maxTokens) || options.maxTokens <= 0)) throw new TypeError("agent maxTokens must be a positive safe integer");
 }
@@ -1333,8 +1384,6 @@ function applyLauncherIdentities(agents, identities) {
     };
   });
 }
-var AGENT_LOOP_SETTINGS_NAMESPACE = "agent-loop";
-var AGENT_LOOP_SETTINGS_SCHEMA = z.object({ maxParallelToolCalls: z.number().step(1).min(1).default(10) });
 function validateConfiguredAgents(agents) {
   const exactIdentities = /* @__PURE__ */ new Map();
   for (const { id, sessionId, resumeSessionId } of agents) {
@@ -1358,7 +1407,7 @@ var AgentLoop = class extends Service {
   ];
   /** Runtime schema for declarative agents. */
   static Config = z.object({
-    maxParallelToolCalls: z.number().step(1).min(1).default(10),
+    maxParallelToolCalls: z.number().step(1).min(1).default(10).volatile(),
     agents: z.array(z.object({
       id: z.string().required(),
       sessionId: z.string().min(1),
@@ -1377,25 +1426,10 @@ var AgentLoop = class extends Service {
   runtime;
   constructor(ctx, config) {
     super(ctx, "agentLoop");
-    const entry = { maxParallelToolCalls: resolveMaxParallelToolCalls(config.maxParallelToolCalls) };
-    let source = () => entry;
     this.config = {
-      ...config,
       agents: applyLauncherIdentities(config.agents, ctx.get(CONFIGURED_AGENT_IDENTITIES_KEY)),
-      get maxParallelToolCalls() {
-        return source().maxParallelToolCalls;
-      }
+      maxParallelToolCalls: config.maxParallelToolCalls
     };
-    ctx.inject(["settings"], (settingsCtx) => {
-      settingsCtx.settings.installSection(ctx, AGENT_LOOP_SETTINGS_NAMESPACE, AGENT_LOOP_SETTINGS_SCHEMA, entry, {
-        validate: (value) => void resolveMaxParallelToolCalls(value.maxParallelToolCalls),
-        setSource: (current) => {
-          source = current;
-        },
-        onChange: () => {
-        }
-      });
-    });
     validateConfiguredAgents(this.config.agents);
     ctx.sessionProjections.register(turnBoundaryProjectionDefinition);
     ctx.sessionProjections.register(inboxProjectionDefinition);
@@ -1820,8 +1854,6 @@ var AgentLoop = class extends Service {
   }
 };
 export {
-  AGENT_LOOP_SETTINGS_NAMESPACE,
-  AGENT_LOOP_SETTINGS_SCHEMA,
   AgentLoop,
   CONFIGURED_AGENT_IDENTITIES_KEY,
   DEFAULT_MAX_PARALLEL_TOOL_CALLS,

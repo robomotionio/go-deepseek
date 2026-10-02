@@ -95,9 +95,16 @@ const ENTRIES = [
   '@deepseek-ai/dsh-tool-jobs',
   '@deepseek-ai/dsh-agent-instructions',
   '@deepseek-ai/dsh-shell-env',
-  // models
+  // models. Since 0.1.7 dsh-llm-deepseek is a library — the Messages transport
+  // with no credential selection and no `apply` — and the row a composition
+  // mounts is the api-key provider built on it. The library would land in the
+  // bundle anyway, as that provider's import; it stays listed because this
+  // list is also what `make upstream-check` watches, and the transport and
+  // its auth headers are the path most worth hearing about. Chat completions,
+  // which the adapter no longer speaks, is llm-pi-ai's.
   '@deepseek-ai/dsh-llm',
   '@deepseek-ai/dsh-llm-deepseek',
+  '@deepseek-ai/dsh-llm-deepseek-api-key',
   '@deepseek-ai/dsh-llm-pi-ai',
   '@deepseek-ai/dsh-llm-retry',
   // durability

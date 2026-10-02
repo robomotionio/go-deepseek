@@ -596,8 +596,9 @@ function agentInstructionsMessage(text) {
       text
     }],
     source: {
-      kind: "plugin",
-      plugin: name
+      kind: name,
+      form: "instructions",
+      changes: []
     }
   });
 }

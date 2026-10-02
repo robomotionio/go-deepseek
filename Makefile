@@ -17,14 +17,14 @@
 #   make bundle HARNESS_DIR=../deepseek-harness
 #
 # Move to a different upstream revision:
-#   make update HARNESS_REF=dsh-v0.1.6-alpha.3
+#   make update HARNESS_REF=dsh-v0.2.0-rc.3
 
 HARNESS_REPO ?= https://github.com/deepseek-ai/deepseek-harness.git
 # The revision to build. Pinned by default, because dsh is a developer preview
 # that says breaking changes will happen — its session format went from 0 to 3
 # between two of our pins — and "latest" is a decision to take deliberately, not
 # one to inherit from whenever the last build happened to run.
-HARNESS_REF  ?= dsh-v0.1.6-alpha.2
+HARNESS_REF  ?= dsh-v0.2.0-rc.2
 HARNESS_DIR  ?= .harness
 # Where the generated bundle lands. This must stay pointed at the directory
 # that bundle.go actually embeds. It read `bundle` until 0.3.0, which is where

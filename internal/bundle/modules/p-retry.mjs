@@ -92,7 +92,4 @@ var require_index = __commonJS({
     module.exports.AbortError = AbortError;
   }
 });
-const __cjs = require_index();
-export default __cjs;
-export const AbortError = __cjs?.AbortError;
-
+export default require_index();

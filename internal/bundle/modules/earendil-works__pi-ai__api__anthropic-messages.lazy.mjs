@@ -20,13 +20,31 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
-var EventStream, AssistantMessageEventStream;
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
+var FifoQueue, EventStream, AssistantMessageEventStream;
 var init_event_stream = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+    FifoQueue = class {
+      incoming = [];
+      outgoing = [];
+      get length() {
+        return this.incoming.length + this.outgoing.length;
+      }
+      enqueue(value) {
+        this.incoming.push(value);
+      }
+      dequeue() {
+        if (this.outgoing.length === 0) {
+          while (this.incoming.length > 0) {
+            this.outgoing.push(this.incoming.pop());
+          }
+        }
+        return this.outgoing.pop();
+      }
+    };
     EventStream = class {
-      queue = [];
-      waiting = [];
+      queue = new FifoQueue();
+      waiting = new FifoQueue();
       done = false;
       finalResultPromise;
       resolveFinalResult;
@@ -46,11 +64,11 @@ var init_event_stream = __esm({
           this.done = true;
           this.resolveFinalResult(this.extractResult(event));
         }
-        const waiter = this.waiting.shift();
+        const waiter = this.waiting.dequeue();
         if (waiter) {
           waiter({ value: event, done: false });
         } else {
-          this.queue.push(event);
+          this.queue.enqueue(event);
         }
       }
       end(result) {
@@ -59,18 +77,18 @@ var init_event_stream = __esm({
           this.resolveFinalResult(result);
         }
         while (this.waiting.length > 0) {
-          const waiter = this.waiting.shift();
+          const waiter = this.waiting.dequeue();
           waiter({ value: void 0, done: true });
         }
       }
       async *[Symbol.asyncIterator]() {
         while (true) {
           if (this.queue.length > 0) {
-            yield this.queue.shift();
+            yield this.queue.dequeue();
           } else if (this.done) {
             return;
           } else {
-            const result = await new Promise((resolve) => this.waiting.push(resolve));
+            const result = await new Promise((resolve) => this.waiting.enqueue(resolve));
             if (result.done)
               return;
             yield result.value;
@@ -96,7 +114,7 @@ var init_event_stream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
 function createSetupErrorMessage(model, error) {
   return {
     role: "assistant",
@@ -159,21 +177,150 @@ function lazyApi(load, capabilities) {
   return api;
 }
 var init_lazy = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
     init_event_stream();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js
 function appendAssistantMessageDiagnostic(message, diagnostic) {
   message.diagnostics = [...message.diagnostics ?? [], diagnostic];
 }
 var init_diagnostics = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/diagnostics.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/text.js
+function contentText(content, separator = "\n") {
+  if (typeof content === "string")
+    return content;
+  return content.filter((block) => block.type === "text").map((block) => block.text).join(separator);
+}
+function getSystemMessageText(message) {
+  const parts = [contentText(message.content)];
+  for (const text of Object.values(message.sections ?? {})) {
+    if (text !== null)
+      parts.push(text);
+  }
+  return parts.filter((part) => part.length > 0).join("\n\n");
+}
+function renderSystemMessageUpdate(message) {
+  const parts = [];
+  const text = contentText(message.content);
+  if (text.length > 0)
+    parts.push(text);
+  for (const [name, value] of Object.entries(message.sections ?? {})) {
+    parts.push(value === null ? `Removed system prompt section "${name}".` : `Updated system prompt section "${name}":
+
+${value}`);
+  }
+  return parts.join("\n\n");
+}
+var init_text = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/text.js"() {
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/transcript.js
+function isSystemMessage(message) {
+  return message.role === "system";
+}
+function getInitialSystemMessage(messages) {
+  const first = messages[0];
+  return first && isSystemMessage(first) ? first : void 0;
+}
+function getCurrentTools(messages) {
+  const tools = /* @__PURE__ */ new Map();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    for (const tool of message.toolsRemoved ?? [])
+      tools.delete(tool.name);
+    for (const tool of message.toolsAdded ?? [])
+      tools.set(tool.name, tool);
+  }
+  return [...tools.values()];
+}
+function getCurrentSystemMessage(messages) {
+  const content = [];
+  const sections = /* @__PURE__ */ new Map();
+  let timestamp;
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    timestamp ??= message.timestamp;
+    const text = contentText(message.content);
+    if (text.length > 0)
+      content.push(text);
+    for (const [name, value] of Object.entries(message.sections ?? {})) {
+      if (value === null)
+        sections.delete(name);
+      else
+        sections.set(name, value);
+    }
+  }
+  const tools = getCurrentTools(messages);
+  if (timestamp === void 0 && tools.length === 0)
+    return void 0;
+  return {
+    role: "system",
+    content: content.join("\n\n"),
+    ...sections.size > 0 ? { sections: Object.fromEntries(sections) } : {},
+    ...tools.length > 0 ? { toolsAdded: tools } : {},
+    timestamp: timestamp ?? 0
+  };
+}
+function collapseSystemMessages(context) {
+  const head = getCurrentSystemMessage(context.messages);
+  const messages = context.messages.filter((message) => message.role !== "system");
+  return { messages: head ? [head, ...messages] : messages };
+}
+function resolveTranscript(context, supportsMidConvoSystemMessages) {
+  return supportsMidConvoSystemMessages ? context : collapseSystemMessages(context);
+}
+function toToolDeclaration(tool) {
+  return {
+    name: tool.name,
+    description: tool.description,
+    parameters: JSON.parse(JSON.stringify(tool.parameters)),
+    ...tool.constrainedSampling === void 0 ? {} : { constrainedSampling: tool.constrainedSampling }
+  };
+}
+function declarationsEqual(left, right) {
+  return JSON.stringify(toToolDeclaration(left)) === JSON.stringify(toToolDeclaration(right));
+}
+function getDeclaredTools(messages) {
+  const definitions = /* @__PURE__ */ new Map();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    for (const tool of message.toolsAdded ?? [])
+      definitions.set(tool.name, tool);
+  }
+  return [...definitions.values()];
+}
+function hasToolRedefinitions(messages) {
+  const declared = /* @__PURE__ */ new Map();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    for (const tool of message.toolsAdded ?? []) {
+      const previous = declared.get(tool.name);
+      if (previous !== void 0 && !declarationsEqual(previous, tool))
+        return true;
+      declared.set(tool.name, tool);
+    }
+  }
+  return false;
+}
+var init_transcript = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/transcript.js"() {
+    init_text();
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/models.js
 function calculateCost(model, usage) {
   const inputTokens = usage.input + usage.cacheRead + usage.cacheWrite;
   let rates = model.cost;
@@ -194,51 +341,11 @@ function calculateCost(model, usage) {
   return usage.cost;
 }
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/models.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js
-function splitDeferredTools(context, enabled, normalizeName = identityToolName) {
-  const uniqueTools = /* @__PURE__ */ new Map();
-  for (const tool of context.tools ?? [])
-    uniqueTools.set(normalizeName(tool.name), tool);
-  if (!enabled)
-    return { immediate: [...uniqueTools.values()], deferred: /* @__PURE__ */ new Map() };
-  const deferredNames = /* @__PURE__ */ new Set();
-  const usedNames = /* @__PURE__ */ new Set();
-  for (const message of context.messages) {
-    if (message.role === "assistant") {
-      for (const block of message.content) {
-        if (block.type === "toolCall")
-          usedNames.add(normalizeName(block.name));
-      }
-    } else if (message.role === "toolResult") {
-      for (const name of message.addedToolNames ?? []) {
-        const normalizedName = normalizeName(name);
-        if (!usedNames.has(normalizedName))
-          deferredNames.add(normalizedName);
-      }
-    }
-  }
-  const immediate = [];
-  const deferred = /* @__PURE__ */ new Map();
-  for (const [name, tool] of uniqueTools) {
-    if (deferredNames.has(name))
-      deferred.set(name, tool);
-    else
-      immediate.push(tool);
-  }
-  return { immediate, deferred };
-}
-var identityToolName;
-var init_deferred_tools = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/deferred-tools.js"() {
-    identityToolName = (name) => name;
-  }
-});
-
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
 function headersToRecord(headers) {
   const result = {};
   for (const [key, value] of headers.entries()) {
@@ -247,11 +354,11 @@ function headersToRecord(headers) {
   return result;
 }
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
 import { parse as partialParse } from "partial-json";
 function isControlCharacter(char) {
   const codePoint = char.codePointAt(0);
@@ -349,12 +456,12 @@ function parseStreamingJson(partialJson) {
 }
 var VALID_JSON_ESCAPES;
 var init_json_parse = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
     VALID_JSON_ESCAPES = /* @__PURE__ */ new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
 function loadNodeOs() {
   if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
     return null;
@@ -366,12 +473,12 @@ function getPiUserAgent() {
 }
 var nodeOs;
 var init_pi_user_agent = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
     nodeOs = loadNodeOs();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
 function getBunSandboxEnvValue(name) {
   if (typeof process === "undefined" || !process.versions?.bun || Object.keys(process.env).length > 0) {
     return void 0;
@@ -397,12 +504,12 @@ function getProviderEnvValue(name, env) {
 }
 var procEnvCache;
 var init_provider_env = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
     procEnvCache = null;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
 function isProviderError(error) {
   if (!(error instanceof Error) || !("status" in error) || !("headers" in error))
     return false;
@@ -482,21 +589,21 @@ async function retryProviderRequest(request, options = {}) {
 }
 var DEFAULT_MAX_RETRY_DELAY_MS;
 var init_provider_retry = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
     DEFAULT_MAX_RETRY_DELAY_MS = 6e4;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
 function sanitizeSurrogates(text) {
   return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 var init_sanitize_unicode = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
 function isJsonSchemaObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -608,7 +715,7 @@ function resolveJsonSchemaStrictSampling(tool, supportsStrictMode) {
 }
 var UnsupportedStrictJsonSchemaError, UNSUPPORTED_STRICT_SCHEMA_KEYS;
 var init_constrained_sampling = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
     UnsupportedStrictJsonSchemaError = class extends Error {
     };
     UNSUPPORTED_STRICT_SCHEMA_KEYS = [
@@ -632,7 +739,7 @@ var init_constrained_sampling = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
 function inferCopilotInitiator(messages) {
   const last = messages[messages.length - 1];
   return last && last.role !== "user" ? "agent" : "user";
@@ -659,11 +766,11 @@ function buildCopilotDynamicHeaders(params) {
   return headers;
 }
 var init_github_copilot_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
 function calculateContextTokens(usage) {
   return usage.totalTokens || usage.input + usage.output + usage.cacheRead + usage.cacheWrite;
 }
@@ -690,6 +797,9 @@ function estimateTextAndImageContentTokens(content) {
 }
 function estimateMessageTokens(message) {
   let chars = 0;
+  if (message.role === "system") {
+    return estimateTextTokens(getSystemMessageText(message)) + estimateToolsTokens(message.toolsAdded) + estimateToolsTokens(message.toolsRemoved);
+  }
   if (message.role === "user")
     return estimateTextAndImageContentTokens(message.content);
   if (message.role === "toolResult")
@@ -721,7 +831,8 @@ function getLastAssistantUsageInfo(messages) {
   }
   return usageInfo;
 }
-function estimateMessages(messages) {
+function estimateContextTokens(context) {
+  const messages = "messages" in context ? context.messages : context;
   const usageInfo = getLastAssistantUsageInfo(messages);
   if (usageInfo) {
     const usageTokens = calculateContextTokens(usageInfo.usage);
@@ -741,40 +852,16 @@ function estimateToolsTokens(tools) {
     return 0;
   return estimateTextTokens(safeJsonStringify(tools));
 }
-function isMessageArray(value) {
-  return Array.isArray(value);
-}
-function estimateContextTokens(context) {
-  if (isMessageArray(context))
-    return estimateMessages(context);
-  const estimate = estimateMessages(context.messages);
-  if (estimate.lastUsageIndex !== null) {
-    const addedNames = new Set(context.messages.slice(estimate.lastUsageIndex + 1).filter((message) => message.role === "toolResult").flatMap((message) => message.addedToolNames ?? []));
-    const addedToolTokens = estimateToolsTokens(context.tools?.filter((tool) => addedNames.has(tool.name)));
-    return {
-      tokens: estimate.tokens + addedToolTokens,
-      usageTokens: estimate.usageTokens,
-      trailingTokens: estimate.trailingTokens + addedToolTokens,
-      lastUsageIndex: estimate.lastUsageIndex
-    };
-  }
-  const prefixTokens = (context.systemPrompt ? estimateTextTokens(context.systemPrompt) : 0) + estimateToolsTokens(context.tools);
-  return {
-    tokens: estimate.tokens + prefixTokens,
-    usageTokens: estimate.usageTokens,
-    trailingTokens: estimate.trailingTokens + prefixTokens,
-    lastUsageIndex: estimate.lastUsageIndex
-  };
-}
 var CHARS_PER_TOKEN, ESTIMATED_IMAGE_CHARS;
 var init_estimate = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+    init_text();
     CHARS_PER_TOKEN = 4;
     ESTIMATED_IMAGE_CHARS = 4800;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
 function clampMaxTokensToContext(model, context, maxTokens) {
   if (model.contextWindow <= 0)
     return Math.max(MIN_MAX_TOKENS, maxTokens);
@@ -826,7 +913,7 @@ function adjustMaxTokensForThinking(baseMaxTokens, modelMaxTokens, reasoningLeve
 }
 var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS, MIN_ANSWER_TOKENS, DEFAULT_THINKING_BUDGETS;
 var init_simple_options = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
     init_estimate();
     CONTEXT_SAFETY_TOKENS = 4096;
     MIN_MAX_TOKENS = 1;
@@ -840,7 +927,7 @@ var init_simple_options = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
 function replaceImagesWithPlaceholder(content, placeholder) {
   const result = [];
   let previousWasPlaceholder = false;
@@ -882,7 +969,7 @@ function transformMessages(messages, model, normalizeToolCallId2) {
   const normalizedMessages = messages.map((msg) => msg.content == null ? { ...msg, content: [] } : msg);
   const imageAwareMessages = downgradeUnsupportedImages(normalizedMessages, model);
   const transformed = imageAwareMessages.map((msg) => {
-    if (msg.role === "user") {
+    if (msg.role === "system" || msg.role === "user") {
       return msg;
     }
     if (msg.role === "toolResult") {
@@ -947,7 +1034,8 @@ function transformMessages(messages, model, normalizeToolCallId2) {
   const result = [];
   let pendingToolCalls = [];
   let existingToolResultIds = /* @__PURE__ */ new Set();
-  const insertSyntheticToolResults = () => {
+  const heldSystemMessages = [];
+  const closePendingToolCalls = () => {
     if (pendingToolCalls.length > 0) {
       for (const tc of pendingToolCalls) {
         if (!existingToolResultIds.has(tc.id)) {
@@ -964,11 +1052,13 @@ function transformMessages(messages, model, normalizeToolCallId2) {
       pendingToolCalls = [];
       existingToolResultIds = /* @__PURE__ */ new Set();
     }
+    result.push(...heldSystemMessages);
+    heldSystemMessages.length = 0;
   };
   for (let i = 0; i < transformed.length; i++) {
     const msg = transformed[i];
     if (msg.role === "assistant") {
-      insertSyntheticToolResults();
+      closePendingToolCalls();
       const assistantMsg = msg;
       if (assistantMsg.stopReason === "error" || assistantMsg.stopReason === "aborted") {
         continue;
@@ -982,25 +1072,31 @@ function transformMessages(messages, model, normalizeToolCallId2) {
     } else if (msg.role === "toolResult") {
       existingToolResultIds.add(msg.toolCallId);
       result.push(msg);
+    } else if (msg.role === "system") {
+      if (pendingToolCalls.length > 0) {
+        heldSystemMessages.push(msg);
+      } else {
+        result.push(msg);
+      }
     } else if (msg.role === "user") {
-      insertSyntheticToolResults();
+      closePendingToolCalls();
       result.push(msg);
     } else {
       result.push(msg);
     }
   }
-  insertSyntheticToolResults();
+  closePendingToolCalls();
   return result;
 }
 var NON_VISION_USER_IMAGE_PLACEHOLDER, NON_VISION_TOOL_IMAGE_PLACEHOLDER;
 var init_transform_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
     NON_VISION_USER_IMAGE_PLACEHOLDER = "(image omitted: model does not support images)";
     NON_VISION_TOOL_IMAGE_PLACEHOLDER = "(tool image omitted: model does not support images)";
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js
 var anthropic_messages_exports = {};
 __export(anthropic_messages_exports, {
   stream: () => stream,
@@ -1061,26 +1157,19 @@ function shouldUseServerSideFallbackBeta(model) {
   return (model.compat?.allowedFallbackModels?.length ?? 0) > 0;
 }
 function getAnthropicCompat(model) {
+  const isOpenRouter = model.provider === "openrouter" || model.baseUrl.includes("openrouter.ai");
   return {
     supportsEagerToolInputStreaming: model.compat?.supportsEagerToolInputStreaming ?? true,
     supportsLongCacheRetention: model.compat?.supportsLongCacheRetention ?? true,
-    sendSessionAffinityHeaders: model.compat?.sendSessionAffinityHeaders ?? false,
+    sendSessionAffinityHeaders: model.compat?.sendSessionAffinityHeaders ?? isOpenRouter,
+    sessionAffinityFormat: model.compat?.sessionAffinityFormat ?? (isOpenRouter ? "openrouter" : void 0),
     supportsCacheControlOnTools: model.compat?.supportsCacheControlOnTools ?? true,
     supportsTemperature: model.compat?.supportsTemperature ?? true,
     allowEmptySignature: model.compat?.allowEmptySignature ?? false,
     supportsStrictTools: model.compat?.supportsStrictTools ?? false,
-    supportsToolReferences: model.compat?.supportsToolReferences ?? defaultSupportsToolReferences(model)
+    supportsMidConvoSystemMessages: model.compat?.supportsMidConvoSystemMessages ?? false,
+    supportsMidConvoToolChanges: model.compat?.supportsMidConvoToolChanges ?? false
   };
-}
-function defaultSupportsToolReferences(model) {
-  if (model.provider !== "anthropic" || model.id.includes("haiku"))
-    return false;
-  const version = model.id.match(/^claude-(?:opus|sonnet|fable)-(\d+)(?:-(\d+))?(?:-|$)/);
-  if (!version)
-    return false;
-  const major = Number(version[1]);
-  const minor = version[2] && version[2].length < 8 ? Number(version[2]) : 0;
-  return major > 4 || major === 4 && minor >= 5;
 }
 function mergeHeaders(...headerSources) {
   const merged = {};
@@ -1301,7 +1390,12 @@ function createClient(model, apiKey, optionsHeaders, fetch, dynamicHeaders, sess
     });
     return { client: client2, isOAuthToken: true };
   }
-  const sessionAffinityHeaders = sessionId && getAnthropicCompat(model).sendSessionAffinityHeaders ? { "x-session-affinity": sessionId } : {};
+  const compat = getAnthropicCompat(model);
+  const sessionAffinityHeaders = {};
+  if (sessionId && compat.sendSessionAffinityHeaders) {
+    const header = compat.sessionAffinityFormat === "openrouter" ? "x-session-id" : "x-session-affinity";
+    sessionAffinityHeaders[header] = sessionId;
+  }
   const defaultHeaders = mergeClientHeaders({
     accept: "application/json",
     "anthropic-dangerous-direct-browser-access": "true"
@@ -1316,7 +1410,7 @@ function createClient(model, apiKey, optionsHeaders, fetch, dynamicHeaders, sess
   });
   return { client, isOAuthToken: false };
 }
-function getBetaFeatures(model, context, isOAuthToken2, options) {
+function getBetaFeatures(model, context, isOAuthToken2, nativeToolChanges, options) {
   let configuredFeatures;
   for (const headers of [model.headers, options?.headers]) {
     for (const [name, value] of Object.entries(headers ?? {})) {
@@ -1344,24 +1438,22 @@ function getBetaFeatures(model, context, isOAuthToken2, options) {
   if (model.compat?.supportsMidConvoEffort === true) {
     features.push(MID_CONVERSATION_OUTPUT_CONFIG_BETA, THINKING_BINDING_CONTROLS_BETA);
   }
+  if (nativeToolChanges)
+    features.push(MID_CONVERSATION_TOOL_CHANGES_BETA);
   return [...new Set(features)];
 }
 function buildParams(model, context, isOAuthToken2, options) {
   const { cacheControl } = getCacheControl(model, options?.cacheRetention, options?.env);
   const compat = getAnthropicCompat(model);
+  const initialSystemMessage = getInitialSystemMessage(context.messages);
+  const initialSystemText = initialSystemMessage ? getSystemMessageText(initialSystemMessage) : "";
   const transformedMessages = transformMessages(context.messages, model, normalizeToolCallId);
-  const normalizeToolName = isOAuthToken2 ? toClaudeCodeName : (name) => name;
-  const toolPlacement = splitDeferredTools({ ...context, messages: transformedMessages }, compat.supportsToolReferences, normalizeToolName);
-  let immediateTools = toolPlacement.immediate;
-  let deferredTools = [...toolPlacement.deferred.values()];
-  if (immediateTools.length === 0 && deferredTools.length > 0) {
-    immediateTools = deferredTools;
-    deferredTools = [];
-  }
-  const deferredToolNames = new Set(deferredTools.map((tool) => normalizeToolName(tool.name)));
-  const converted = convertMessages(transformedMessages, isOAuthToken2, cacheControl, compat.allowEmptySignature, deferredToolNames, normalizeToolName, model.compat?.supportsMidConvoEffort === true ? model.provider : void 0);
+  const conversationMessages = initialSystemMessage ? transformedMessages.slice(1) : transformedMessages;
+  const initialTools = initialSystemMessage?.toolsAdded ?? [];
+  const nativeToolChanges = compat.supportsMidConvoSystemMessages && compat.supportsMidConvoToolChanges && initialTools.length > 0 && !hasToolRedefinitions(context.messages);
+  const converted = convertMessages(conversationMessages, isOAuthToken2, cacheControl, compat.allowEmptySignature, model.compat?.supportsMidConvoEffort === true ? model.provider : void 0, nativeToolChanges);
   const activeEffort = options?.effort ?? "high";
-  const betaFeatures = getBetaFeatures(model, context, isOAuthToken2, options);
+  const betaFeatures = getBetaFeatures(model, context, isOAuthToken2, nativeToolChanges, options);
   const params = {
     model: model.id,
     messages: model.compat?.supportsMidConvoEffort === true ? insertThinkingLevelMessages(converted, activeEffort) : converted.messages,
@@ -1377,18 +1469,18 @@ function buildParams(model, context, isOAuthToken2, options) {
         ...cacheControl ? { cache_control: cacheControl } : {}
       }
     ];
-    if (context.systemPrompt) {
+    if (initialSystemText) {
       params.system.push({
         type: "text",
-        text: sanitizeSurrogates(context.systemPrompt),
+        text: sanitizeSurrogates(initialSystemText),
         ...cacheControl ? { cache_control: cacheControl } : {}
       });
     }
-  } else if (context.systemPrompt) {
+  } else if (initialSystemText) {
     params.system = [
       {
         type: "text",
-        text: sanitizeSurrogates(context.systemPrompt),
+        text: sanitizeSurrogates(initialSystemText),
         ...cacheControl ? { cache_control: cacheControl } : {}
       }
     ];
@@ -1396,11 +1488,20 @@ function buildParams(model, context, isOAuthToken2, options) {
   if (options?.temperature !== void 0 && !options?.thinkingEnabled && model.compat?.supportsMidConvoEffort !== true && compat.supportsTemperature) {
     params.temperature = options.temperature;
   }
-  if (immediateTools.length > 0 || deferredTools.length > 0) {
+  const toolCacheControl = compat.supportsCacheControlOnTools ? cacheControl : void 0;
+  if (nativeToolChanges) {
+    const initialNames = new Set(initialTools.map((tool) => tool.name));
+    const laterTools = getDeclaredTools(context.messages).filter((tool) => !initialNames.has(tool.name));
     params.tools = [
-      ...convertTools(immediateTools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools, compat.supportsCacheControlOnTools ? cacheControl : void 0),
-      ...convertTools(deferredTools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools, void 0, true)
+      ...convertTools(initialTools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools, toolCacheControl),
+      DEFERRED_TOOL_PLACEHOLDER,
+      ...convertTools(laterTools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools).map((tool) => ({ ...tool, defer_loading: true }))
     ];
+  } else {
+    const tools = getCurrentTools(context.messages);
+    if (tools.length > 0) {
+      params.tools = convertTools(tools, isOAuthToken2, compat.supportsEagerToolInputStreaming, compat.supportsStrictTools, toolCacheControl);
+    }
   }
   if (model.compat?.supportsMidConvoEffort === true) {
     params.thinking = {
@@ -1450,36 +1551,46 @@ function buildParams(model, context, isOAuthToken2, options) {
 function normalizeToolCallId(id) {
   return id.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 64);
 }
-function convertToolResult(msg, isOAuthToken2, deferredToolNames, loadedToolNames, normalizeToolName) {
-  const references = [];
-  for (const name of msg.addedToolNames ?? []) {
-    const normalizedName = normalizeToolName(name);
-    if (!deferredToolNames.has(normalizedName) || loadedToolNames.has(normalizedName))
-      continue;
-    loadedToolNames.add(normalizedName);
-    references.push({
-      type: "tool_reference",
-      tool_name: isOAuthToken2 ? toClaudeCodeName(name) : name
-    });
-  }
-  const convertedContent = convertContentBlocks(msg.content);
+function convertToolResult(msg) {
   return {
-    toolResult: {
-      type: "tool_result",
-      tool_use_id: msg.toolCallId,
-      content: references.length > 0 ? references : convertedContent,
-      is_error: msg.isError
-    },
-    siblingContent: references.length === 0 ? [] : typeof convertedContent === "string" ? [{ type: "text", text: convertedContent }] : convertedContent
+    type: "tool_result",
+    tool_use_id: msg.toolCallId,
+    content: convertContentBlocks(msg.content),
+    is_error: msg.isError
   };
 }
-function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allowEmptySignature = false, deferredToolNames = /* @__PURE__ */ new Set(), normalizeToolName = (name) => name, managedProvider) {
+function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allowEmptySignature = false, managedProvider, nativeToolChanges = false) {
   const params = [];
   const assistantLevels = /* @__PURE__ */ new Map();
-  const loadedToolNames = /* @__PURE__ */ new Set();
+  const pendingSystemMessages = [];
+  const flushPendingSystemMessages = () => {
+    params.push(...pendingSystemMessages);
+    pendingSystemMessages.length = 0;
+  };
   for (let i = 0; i < transformedMessages.length; i++) {
     const msg = transformedMessages[i];
-    if (msg.role === "user") {
+    if (msg.role === "system") {
+      const text = renderSystemMessageUpdate(msg);
+      const blocks = [];
+      if (text.length > 0)
+        blocks.push({ type: "text", text: sanitizeSurrogates(text) });
+      if (nativeToolChanges) {
+        for (const tool of msg.toolsRemoved ?? []) {
+          blocks.push({
+            type: "tool_removal",
+            tool: { type: "tool_reference", name: isOAuthToken2 ? toClaudeCodeName(tool.name) : tool.name }
+          });
+        }
+        for (const tool of msg.toolsAdded ?? []) {
+          blocks.push({
+            type: "tool_addition",
+            tool: { type: "tool_reference", name: isOAuthToken2 ? toClaudeCodeName(tool.name) : tool.name }
+          });
+        }
+      }
+      if (blocks.length > 0)
+        pendingSystemMessages.push({ role: "system", content: blocks });
+    } else if (msg.role === "user") {
       if (typeof msg.content === "string") {
         if (msg.content.trim().length > 0) {
           params.push({
@@ -1519,6 +1630,7 @@ function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allow
         });
       }
     } else if (msg.role === "assistant") {
+      flushPendingSystemMessages();
       const blocks = [];
       for (const block of msg.content) {
         if (block.type === "text") {
@@ -1577,27 +1689,25 @@ function convertMessages(transformedMessages, isOAuthToken2, cacheControl, allow
       }
     } else if (msg.role === "toolResult") {
       const toolResults = [];
-      const siblingContent = [];
       let j = i;
       while (j < transformedMessages.length && transformedMessages[j].role === "toolResult") {
-        const converted = convertToolResult(transformedMessages[j], isOAuthToken2, deferredToolNames, loadedToolNames, normalizeToolName);
-        toolResults.push(converted.toolResult);
-        siblingContent.push(...converted.siblingContent);
+        toolResults.push(convertToolResult(transformedMessages[j]));
         j++;
       }
       i = j - 1;
       params.push({
         role: "user",
-        content: [...toolResults, ...siblingContent]
+        content: toolResults
       });
     }
   }
+  flushPendingSystemMessages();
   if (cacheControl && params.length > 0) {
     const lastMessage = params[params.length - 1];
-    if (lastMessage.role === "user") {
+    if (lastMessage.role === "user" || lastMessage.role === "system") {
       if (Array.isArray(lastMessage.content)) {
         const lastBlock = lastMessage.content[lastMessage.content.length - 1];
-        if (lastBlock && (lastBlock.type === "text" || lastBlock.type === "image" || lastBlock.type === "tool_result")) {
+        if (lastBlock && (lastBlock.type === "text" || lastBlock.type === "image" || lastBlock.type === "tool_result" || lastBlock.type === "tool_addition" || lastBlock.type === "tool_removal")) {
           lastBlock.cache_control = cacheControl;
         }
       } else if (typeof lastMessage.content === "string") {
@@ -1629,9 +1739,9 @@ function insertThinkingLevelMessages(converted, activeEffort) {
   return messages;
 }
 function shouldUseFineGrainedToolStreamingBeta(model, context) {
-  return !!context.tools?.length && !getAnthropicCompat(model).supportsEagerToolInputStreaming;
+  return getCurrentTools(context.messages).length > 0 && !getAnthropicCompat(model).supportsEagerToolInputStreaming;
 }
-function convertTools(tools, isOAuthToken2, supportsEagerToolInputStreaming, supportsStrictTools, cacheControl, deferLoading = false) {
+function convertTools(tools, isOAuthToken2, supportsEagerToolInputStreaming, supportsStrictTools, cacheControl) {
   if (!tools)
     return [];
   return tools.map((tool, index) => {
@@ -1653,7 +1763,6 @@ function convertTools(tools, isOAuthToken2, supportsEagerToolInputStreaming, sup
       ...supportsEagerToolInputStreaming ? { eager_input_streaming: true } : {},
       ...strict === true ? { strict: true } : {},
       input_schema: inputSchema,
-      ...deferLoading ? { defer_loading: true } : {},
       ...cacheControl && index === tools.length - 1 ? { cache_control: cacheControl } : {}
     };
   });
@@ -1682,11 +1791,10 @@ function mapStopReason(reason, stopDetails) {
       throw new Error(`Unhandled stop reason: ${reason}`);
   }
 }
-var claudeCodeVersion, claudeCodeTools, ccToolLookup, toClaudeCodeName, fromClaudeCodeName, FINE_GRAINED_TOOL_STREAMING_BETA, INTERLEAVED_THINKING_BETA, SERVER_SIDE_FALLBACK_BETA, MID_CONVERSATION_OUTPUT_CONFIG_BETA, THINKING_BINDING_CONTROLS_BETA, ANTHROPIC_MESSAGE_EVENTS, stream, streamSimple;
+var claudeCodeVersion, claudeCodeTools, ccToolLookup, toClaudeCodeName, fromClaudeCodeName, FINE_GRAINED_TOOL_STREAMING_BETA, INTERLEAVED_THINKING_BETA, SERVER_SIDE_FALLBACK_BETA, MID_CONVERSATION_OUTPUT_CONFIG_BETA, THINKING_BINDING_CONTROLS_BETA, MID_CONVERSATION_TOOL_CHANGES_BETA, DEFERRED_TOOL_PLACEHOLDER, ANTHROPIC_MESSAGE_EVENTS, stream, streamSimple;
 var init_anthropic_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js"() {
     init_models();
-    init_deferred_tools();
     init_diagnostics();
     init_event_stream();
     init_headers();
@@ -1695,11 +1803,13 @@ var init_anthropic_messages = __esm({
     init_provider_env();
     init_provider_retry();
     init_sanitize_unicode();
+    init_text();
+    init_transcript();
     init_constrained_sampling();
     init_github_copilot_headers();
     init_simple_options();
     init_transform_messages();
-    claudeCodeVersion = "2.1.251";
+    claudeCodeVersion = "2.1.280";
     claudeCodeTools = [
       "Read",
       "Write",
@@ -1735,6 +1845,13 @@ var init_anthropic_messages = __esm({
     SERVER_SIDE_FALLBACK_BETA = "server-side-fallback-2026-07-01";
     MID_CONVERSATION_OUTPUT_CONFIG_BETA = "mid-conversation-output-config-2026-07-01";
     THINKING_BINDING_CONTROLS_BETA = "thinking-binding-controls-2026-08-01";
+    MID_CONVERSATION_TOOL_CHANGES_BETA = "mid-conversation-tool-changes-2026-07-01";
+    DEFERRED_TOOL_PLACEHOLDER = {
+      name: "__pi_deferred_placeholder__",
+      description: "Reserved placeholder. Never available. Never call this.",
+      input_schema: { type: "object", properties: {}, required: [] },
+      defer_loading: true
+    };
     ANTHROPIC_MESSAGE_EVENTS = /* @__PURE__ */ new Set([
       "message_start",
       "message_delta",
@@ -1745,6 +1862,8 @@ var init_anthropic_messages = __esm({
     ]);
     stream = (model, context, options) => {
       const stream2 = new AssistantMessageEventStream();
+      const normalizedContext = resolveTranscript(context, getAnthropicCompat(model).supportsMidConvoSystemMessages);
+      const currentTools = getCurrentTools(normalizedContext.messages);
       (async () => {
         const providerThinkingLevel = model.compat?.supportsMidConvoEffort ? options?.effort ?? "high" : void 0;
         const output = {
@@ -1778,9 +1897,9 @@ var init_anthropic_messages = __esm({
             assertRequestAuth(model.provider, apiKey, options?.headers);
             let copilotDynamicHeaders;
             if (model.provider === "github-copilot") {
-              const hasImages = hasCopilotVisionInput(context.messages);
+              const hasImages = hasCopilotVisionInput(normalizedContext.messages);
               copilotDynamicHeaders = buildCopilotDynamicHeaders({
-                messages: context.messages,
+                messages: normalizedContext.messages,
                 hasImages
               });
             }
@@ -1790,7 +1909,7 @@ var init_anthropic_messages = __esm({
             client = created.client;
             isOAuth = created.isOAuthToken;
           }
-          let params = buildParams(model, context, isOAuth, options);
+          let params = buildParams(model, normalizedContext, isOAuth, options);
           const nextParams = await options?.onPayload?.(params, model);
           if (nextParams !== void 0) {
             params = { ...nextParams, stream: true };
@@ -1814,9 +1933,11 @@ var init_anthropic_messages = __esm({
               const transformations = event.message.input_transformations;
               if (Array.isArray(transformations))
                 inputTransformations = transformations;
-              output.model = event.message.model;
-              const fallbackCost = output.model === model.id ? void 0 : model.compat?.allowedFallbackModels?.find((fallback) => fallback.provider === model.provider && fallback.model === output.model)?.cost;
-              usageModel = fallbackCost ? { ...model, id: output.model, cost: fallbackCost } : model;
+              const responseModel = event.message.model;
+              if (responseModel !== model.id)
+                output.responseModel = responseModel;
+              const fallbackCost = responseModel === model.id ? void 0 : model.compat?.allowedFallbackModels?.find((fallback) => fallback.provider === model.provider && fallback.model === responseModel)?.cost;
+              usageModel = fallbackCost ? { ...model, id: responseModel, cost: fallbackCost } : model;
               output.usage.input = event.message.usage.input_tokens || 0;
               output.usage.output = event.message.usage.output_tokens || 0;
               output.usage.cacheRead = event.message.usage.cache_read_input_tokens || 0;
@@ -1862,7 +1983,7 @@ var init_anthropic_messages = __esm({
                 const block = {
                   type: "toolCall",
                   id: event.content_block.id,
-                  name: isOAuth ? fromClaudeCodeName(event.content_block.name, context.tools) : event.content_block.name,
+                  name: isOAuth ? fromClaudeCodeName(event.content_block.name, currentTools) : event.content_block.name,
                   arguments: event.content_block.input ?? {},
                   partialJson: "",
                   index: event.index
@@ -1900,7 +2021,6 @@ var init_anthropic_messages = __esm({
                 const block = blocks[index];
                 if (block && block.type === "toolCall") {
                   block.partialJson += event.delta.partial_json;
-                  block.arguments = parseStreamingJson(block.partialJson);
                   stream2.push({
                     type: "toolcall_delta",
                     contentIndex: index,
@@ -2049,7 +2169,7 @@ var init_anthropic_messages = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.lazy.js
 init_lazy();
 var anthropicMessagesApi = () => lazyApi(() => Promise.resolve().then(() => (init_anthropic_messages(), anthropic_messages_exports)));
 export {

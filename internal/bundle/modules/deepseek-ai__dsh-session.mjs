@@ -16,7 +16,7 @@ function SessionLogOffset(value) {
   if (!Number.isSafeInteger(value) || value < 0 || Object.is(value, -0)) throw new TypeError(`SessionLogOffset must be a non-negative safe integer, got ${String(value)}`);
   return brandNumber(value);
 }
-var SESSION_FORMAT_VERSION = 3;
+var SESSION_FORMAT_VERSION = 4;
 var KNOWN_SESSION_EVENT_TYPES = /* @__PURE__ */ new Set([
   "agent-preset/selected",
   "agent/inbox/spliced",
@@ -32,6 +32,7 @@ var KNOWN_SESSION_EVENT_TYPES = /* @__PURE__ */ new Set([
   "compaction/start",
   "compaction/summary",
   "deliverables/presented",
+  "developer/message",
   "feedback/message-delete",
   "feedback/message-put",
   "feedback/record",
@@ -80,6 +81,7 @@ var KNOWN_SESSION_EVENT_TYPES = /* @__PURE__ */ new Set([
 var MESSAGE_PROJECTION_EVENT_TYPES = /* @__PURE__ */ new Set(["image/offload"]);
 var SURFACE_EVENT_TYPES = /* @__PURE__ */ new Set([
   "system/message",
+  "developer/message",
   "user/message",
   "assistant/message",
   "tool/result"
@@ -104,6 +106,7 @@ function deriveEventMessage(event, projectedMessages) {
     case "user/message":
       return event.data;
     case "system/message":
+    case "developer/message":
     case "assistant/message":
       if (event.data.message.content.length === 0) return null;
       return event.data.message;
@@ -118,6 +121,25 @@ function isRecord(value) {
 }
 function validateSessionEventData(event, subject) {
   const data = event.data;
+  if (SURFACE_EVENT_TYPES.has(event.type) && isRecord(data)) {
+    const message = event.type === "user/message" ? data : data["message"];
+    if (isRecord(message)) {
+      if (event.type === "developer/message" !== (message["role"] === "developer")) throw new Error(`${subject} developer/message and developer role must occur together`);
+      if (message["role"] !== "developer" && Array.isArray(message["content"]) && message["content"].some((block) => isRecord(block) && (block["type"] === "tool-addition" || block["type"] === "tool-removal"))) throw new Error(`${subject} tool-change blocks require developer role`);
+      if (event.type === "developer/message" && Array.isArray(message["content"])) {
+        let hasAdditions = false;
+        for (const block of message["content"]) {
+          if (!isRecord(block) || block["type"] !== "tool-addition" && block["type"] !== "tool-removal") continue;
+          if (typeof block["toolName"] !== "string" || block["toolName"].length === 0) throw new Error(`${subject} ${block["type"]} requires a nonempty toolName`);
+          if (block["type"] === "tool-addition") {
+            hasAdditions = true;
+            if (Object.hasOwn(block, "tool")) throw new Error(`${subject} tool-addition must omit inline tool definitions`);
+          }
+        }
+        if (hasAdditions ? !isEventSeq(data["headerSeq"]) : Object.hasOwn(data, "headerSeq")) throw new Error(`${subject} requires headerSeq exactly when tool additions are present`);
+      }
+    }
+  }
   if (event.type === "request/header") {
     if (!isRecord(data)) throw new Error(`${subject} data must be an object`);
     const header = data["header"];
@@ -130,9 +152,7 @@ function validateSessionEventData(event, subject) {
     if (!isRecord(data)) throw new Error(`${subject} data must be an object`);
     if (data["error"] === void 0) return;
     const message = data["message"];
-    const content = isRecord(message) ? message["content"] : void 0;
-    const block = Array.isArray(content) ? content[0] : void 0;
-    if (!isRecord(block) || block["isError"] !== true) throw new Error(`${subject} error requires message content[0].isError === true`);
+    if (!isRecord(message) || message["isError"] !== true) throw new Error(`${subject} error requires message.isError === true`);
   }
 }
 function createFoldState() {
@@ -185,6 +205,22 @@ function assertSourceEventReferences(event, shadowedSeqs) {
   const missing = shadowedSeqs.filter((seq) => !sources.has(seq));
   if (missing.length > 0) throw new Error(`surface replace: sourceEventSeqs must include every shadowed surface node; missing ${missing.join(", ")}`);
 }
+function assertDeveloperHeader(event, events, baseSeq) {
+  if (event.type !== "developer/message") return;
+  validateSessionEventData(event, `developer/message at seq ${event.seq}`);
+  if (event.data.headerSeq === void 0) return;
+  const headerSeq = event.data.headerSeq;
+  const headerEvent = events[headerSeq - baseSeq];
+  if (headerSeq >= event.seq || headerEvent?.type !== "request/header") throw new Error("developer/message headerSeq must reference an earlier request/header");
+  for (const block of event.data.message.content) {
+    if (block.type !== "tool-addition") continue;
+    const definitions = headerEvent.data.header.tools?.filter((tool) => tool.name === block.toolName) ?? [];
+    if (definitions.length !== 1) throw new Error(`developer/message tool-addition "${block.toolName}" must name exactly one tool in headerSeq ${headerSeq}`);
+    const definition = definitions[0];
+    if (typeof definition.description !== "string" || !isRecord(definition.parameters)) throw new Error(`developer/message tool-addition "${block.toolName}" requires a complete tool definition in headerSeq ${headerSeq}`);
+    if (Object.hasOwn(definition, "deferLoading") && definition.deferLoading !== true) throw new Error("developer/message referenced tool deferLoading must be true when present");
+  }
+}
 function validateSurfaceMetadata(event) {
   const op = surfaceOpOf(event);
   if (op !== void 0 && op !== "append" && (op.startSeq >= event.seq || op.endSeq >= event.seq)) throw new Error(`surface replace at seq ${event.seq}: startSeq and endSeq must reference earlier events`);
@@ -223,21 +259,13 @@ function assertToolResultRewrite(event, shadowedSeqs, events, baseSeq) {
     if (original?.type !== "tool/result") throw new Error("tool/result surface replacement must target a current tool/result");
     const originalRest = { ...original.data };
     const replacementRest = { ...event.data };
-    const originalResult = original.data.message.content[0];
-    const replacementResult = event.data.message.content[0];
     originalRest["message"] = {
       ...original.data.message,
-      content: [{
-        ...originalResult,
-        content: null
-      }]
+      content: null
     };
     replacementRest["message"] = {
       ...event.data.message,
-      content: [{
-        ...replacementResult,
-        content: null
-      }]
+      content: null
     };
     if (!isDeepEqualJson(originalRest, replacementRest)) throw new Error("tool/result surface replacement may change only content");
   }
@@ -250,6 +278,7 @@ function assertSystemHeadRewrite(event, state, startIdx, shadowedSeqs, events, b
 function planSurfaceEvent(state, event, expectedSeq, events, baseSeq, projections) {
   if (event.seq !== expectedSeq) throw new Error(`session event seq ${event.seq} is not contiguous; expected ${expectedSeq}`);
   const surfaceOp = validateSurfaceMetadata(event);
+  assertDeveloperHeader(event, events, baseSeq);
   const projection = projections.find((item) => item.type === event.type);
   if (projection !== void 0) return {
     kind: "project",
@@ -420,6 +449,247 @@ function foldRequestHeader(events, from) {
   for (const event of events) if (event.type === "request/header") state = canonicalHeader(event.data.header);
   return state;
 }
+var ToolHistoryProjection = class {
+  /** Historical declarations indexed by the header sequence referenced by additions. */
+  headers = /* @__PURE__ */ new Map();
+  /** Definitions retained in the current declaration series, including removed tools. */
+  declared = /* @__PURE__ */ new Map();
+  /** Active definitions from the latest request header. */
+  active = [];
+  /** Active names reconstructed from the baseline and recorded updates. */
+  available = /* @__PURE__ */ new Set();
+  /** Header that starts the current declaration series; absent before the first header. */
+  baselineSeq;
+  /** Immutable request snapshot of the current baseline and resolved updates. */
+  history = deepFreeze({
+    tools: [],
+    updates: []
+  });
+  /**
+  * Consume the next committed event in log order.
+  * @param event - a session event, including inherited events during restoration.
+  */
+  apply(event) {
+    if (event.type === "request/header") {
+      const tools = event.data.header.tools ?? [];
+      this.headers.set(event.seq, tools);
+      const redeclared = tools.some((tool) => {
+        const before = this.declared.get(tool.name);
+        return before !== void 0 && JSON.stringify(before) !== JSON.stringify(tool);
+      });
+      if (this.baselineSeq === void 0 || event.data.reason === "series" || event.data.startsSeries || redeclared) {
+        this.baselineSeq = event.seq;
+        this.declared = new Map(tools.map((tool) => [tool.name, tool]));
+        this.history = deepFreeze({
+          tools,
+          updates: []
+        });
+        this.available = new Set(tools.map((tool) => tool.name));
+      }
+      this.active = tools;
+    } else if (event.type === "developer/message") {
+      const { message, headerSeq } = event.data;
+      const definitions = headerSeq === void 0 ? [] : this.headers.get(headerSeq);
+      const additions = message.content.flatMap((block) => {
+        if (block.type !== "tool-addition") return [];
+        const tool = definitions?.find((tool2) => tool2.name === block.toolName);
+        if (tool === void 0) throw new Error(`tool history: missing definition for ${block.toolName}`);
+        return [tool];
+      });
+      for (const tool of additions) this.declared.set(tool.name, tool);
+      for (const block of message.content) if (block.type === "tool-addition") this.available.add(block.toolName);
+      else if (block.type === "tool-removal") this.available.delete(block.toolName);
+      this.history = deepFreeze({
+        tools: this.history.tools,
+        updates: [...this.history.updates, {
+          messageId: message.id,
+          additions
+        }]
+      });
+    }
+  }
+  /**
+  * Read an immutable snapshot; subsequent events do not mutate it.
+  * @returns initial declarations and historically resolved additions for the current series.
+  */
+  snapshot() {
+    if (this.active.length !== this.available.size || this.active.some((tool) => !this.available.has(tool.name))) return deepFreeze({
+      tools: this.active,
+      updates: []
+    });
+    return this.history;
+  }
+};
+var TOOL_NOT_STARTED = "TOOL_NOT_STARTED";
+var TOOL_OUTCOME_UNKNOWN = "TOOL_OUTCOME_UNKNOWN";
+var CLOSER_TEXT = {
+  interrupted: {
+    started: "The tool call was interrupted after it was recorded, but no result was durably recorded. Its outcome is unknown. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly.",
+    notStarted: "The tool call was interrupted before the Harness recorded it as started. Retry it if it is still needed."
+  },
+  forked: {
+    started: "The history inherited by this branch records this tool call starting but does not include its result. The parent session may have completed it after the fork point. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly.",
+    notStarted: "The history inherited by this branch has no record of this tool call starting. The parent session may have executed it after the fork point. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly."
+  }
+};
+function openTurnClosers(events, cause) {
+  let openTurn = null;
+  let openStep = null;
+  const recovery = new ToolCallRecovery(cause);
+  for (const event of events) {
+    recovery.observe(event);
+    switch (event.type) {
+      case "turn/start":
+        openTurn = event.data.turn;
+        openStep = null;
+        break;
+      case "turn/end":
+        openTurn = null;
+        openStep = null;
+        break;
+      case "step/start":
+        openStep = event.data.step;
+        break;
+      case "step/end":
+        openStep = null;
+        break;
+      default:
+        break;
+    }
+  }
+  const last = events.at(-1);
+  if (openTurn === null || last === void 0) return [];
+  const closers = recovery.results();
+  let seq = last.seq + closers.length + 1;
+  const time = last.time;
+  if (openStep !== null) closers.push({
+    type: "step/end",
+    seq: SessionSeq(seq++),
+    time,
+    data: {
+      turn: openTurn,
+      step: openStep
+    }
+  });
+  closers.push({
+    type: "turn/end",
+    seq: SessionSeq(seq++),
+    time,
+    data: {
+      turn: openTurn,
+      reason: { kind: cause.kind }
+    }
+  });
+  return closers;
+}
+var ToolCallRecovery = class {
+  cause;
+  pendingCalls = /* @__PURE__ */ new Map();
+  last;
+  /** @param cause - defaults to interrupted live/crash recovery; fork-seed construction supplies its own cause. */
+  constructor(cause = { kind: "interrupted" }) {
+    this.cause = cause;
+  }
+  /**
+  * Consume the next committed event; closed steps and turn boundaries discard pending requests.
+  * @param event - the next event from the same Session, in sequence order.
+  */
+  observe(event) {
+    this.last = {
+      seq: event.seq,
+      time: event.time
+    };
+    switch (event.type) {
+      case "turn/start":
+      case "turn/end":
+      case "step/end":
+        this.pendingCalls.clear();
+        break;
+      case "assistant/message":
+        for (const block of event.data.message.content) if (block.type === "tool-call") this.pendingCalls.set(block.id, {
+          turn: event.data.turn,
+          step: event.data.step
+        });
+        break;
+      case "tool/call": {
+        const entry = this.pendingCalls.get(event.data.callId);
+        if (entry) entry.callSeq = event.seq;
+        break;
+      }
+      case "tool/result": {
+        const callId = event.data.message.source.callId;
+        const entry = this.pendingCalls.get(callId);
+        if (event.surfaceOp === "append" && entry !== void 0 && entry.turn === event.data.turn && entry.step === event.data.step) this.pendingCalls.delete(callId);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  /**
+  * Build conservative error results in assistant order without changing tracked state.
+  * Sequences follow the latest observed event and timestamps reuse its time.
+  * Callers commit the results and observe those commits before recovering again.
+  * @returns pending tool-result events, empty when no request remains unanswered.
+  */
+  results() {
+    if (this.last === void 0) return [];
+    let seq = this.last.seq + 1;
+    const time = this.last.time;
+    const results = [];
+    const text = CLOSER_TEXT[this.cause.kind];
+    for (const [callId, { turn, step, callSeq }] of this.pendingCalls) {
+      const started = callSeq !== void 0;
+      const message = deepFreeze({
+        id: brandString(`${this.cause.kind}-tool-result-${callId}-${seq}`),
+        role: "tool",
+        toolCallId: callId,
+        isError: true,
+        source: {
+          kind: "tool",
+          callId
+        },
+        content: [{
+          type: "text",
+          text: started ? text.started : text.notStarted
+        }]
+      });
+      results.push({
+        type: "tool/result",
+        seq: SessionSeq(seq++),
+        time,
+        data: {
+          turn,
+          step,
+          message,
+          error: started ? {
+            name: "ToolOutcomeUnknownError",
+            code: TOOL_OUTCOME_UNKNOWN
+          } : {
+            name: "ToolNotStartedError",
+            code: TOOL_NOT_STARTED
+          }
+        },
+        surfaceOp: "append",
+        ...started ? { sourceEventSeqs: [callSeq] } : {}
+      });
+    }
+    return results;
+  }
+};
+function interruptedTurnClosers(events) {
+  return openTurnClosers(events, { kind: "interrupted" });
+}
+function buildForkSeed(events, boundary) {
+  const prefix = events.slice(0, boundary + 1);
+  prefix.push({
+    type: "session/end-seed",
+    seq: SessionSeq(boundary + 1),
+    time: events[boundary].time,
+    data: { inherited: true }
+  });
+  return prefix.concat(openTurnClosers(prefix, { kind: "forked" }));
+}
 var SessionPreparation = class SessionPreparation2 {
   options;
   released = false;
@@ -445,109 +715,6 @@ var SessionPreparation = class SessionPreparation2 {
     this.options.release?.();
   }
 };
-var TOOL_NOT_STARTED = "TOOL_NOT_STARTED";
-var TOOL_OUTCOME_UNKNOWN = "TOOL_OUTCOME_UNKNOWN";
-function interruptedTurnClosers(events) {
-  let openTurn = null;
-  let openStep = null;
-  const pendingCalls = /* @__PURE__ */ new Map();
-  for (const event of events) switch (event.type) {
-    case "turn/start":
-      openTurn = event.data.turn;
-      openStep = null;
-      pendingCalls.clear();
-      break;
-    case "turn/end":
-      openTurn = null;
-      openStep = null;
-      pendingCalls.clear();
-      break;
-    case "step/start":
-      openStep = event.data.step;
-      break;
-    case "step/end":
-      pendingCalls.clear();
-      openStep = null;
-      break;
-    case "assistant/message":
-      for (const block of event.data.message.content) if (block.type === "tool-call") pendingCalls.set(block.id, { step: event.data.step });
-      break;
-    case "tool/call":
-      {
-        const entry = pendingCalls.get(event.data.callId);
-        if (entry) entry.callSeq = event.seq;
-      }
-      break;
-    case "tool/result":
-      pendingCalls.delete(event.data.message.source.callId);
-      break;
-    default:
-      break;
-  }
-  const last = events.at(-1);
-  if (openTurn === null || last === void 0) return [];
-  let seq = last.seq + 1;
-  const time = last.time;
-  const closers = [];
-  for (const [callId, { step, callSeq }] of pendingCalls) {
-    const started = callSeq !== void 0;
-    const message = deepFreeze({
-      id: brandString(`interrupted-tool-result-${callId}-${seq}`),
-      role: "user",
-      source: {
-        kind: "tool",
-        callId
-      },
-      content: [{
-        type: "tool-result",
-        toolCallId: callId,
-        isError: true,
-        content: [{
-          type: "text",
-          text: started ? "The tool call was interrupted after it was recorded, but no result was durably recorded. Its outcome is unknown. Decide whether to retry from the tool semantics: retry only if the operation is read-only or idempotent; if it may have side effects, first verify external state or ask the user. Do not retry blindly." : "The tool call was interrupted before the Harness recorded it as started. Retry it if it is still needed."
-        }]
-      }]
-    });
-    closers.push({
-      type: "tool/result",
-      seq: SessionSeq(seq++),
-      time,
-      data: {
-        turn: openTurn,
-        step,
-        message,
-        error: started ? {
-          name: "ToolOutcomeUnknownError",
-          code: TOOL_OUTCOME_UNKNOWN
-        } : {
-          name: "ToolNotStartedError",
-          code: TOOL_NOT_STARTED
-        }
-      },
-      surfaceOp: "append",
-      ...started ? { sourceEventSeqs: [callSeq] } : {}
-    });
-  }
-  if (openStep !== null) closers.push({
-    type: "step/end",
-    seq: SessionSeq(seq++),
-    time,
-    data: {
-      turn: openTurn,
-      step: openStep
-    }
-  });
-  closers.push({
-    type: "turn/end",
-    seq: SessionSeq(seq++),
-    time,
-    data: {
-      turn: openTurn,
-      reason: { kind: "interrupted" }
-    }
-  });
-  return closers;
-}
 function isStrictlyIncreasing(values) {
   return values.every((value, index) => index === 0 || value > values[index - 1]);
 }
@@ -594,7 +761,7 @@ function validateSessionHeader(id, input) {
   if (input === null || typeof input !== "object" || Array.isArray(input)) throw new Error("session header is not a plain JSON record");
   const record = input;
   if (Object.hasOwn(record, "seedLength")) throw new Error('session header has invalid field "seedLength"');
-  if (record.version !== 3) throw new Error(`session header version must be 3, got ${String(record.version)}`);
+  if (record.version !== 4) throw new Error(`session header version must be 4, got ${String(record.version)}`);
   if (record.id !== id) throw new Error(`session header id "${String(record.id)}" does not match session id "${id}"`);
   if (typeof record.createdAt !== "number" || !Number.isSafeInteger(record.createdAt) || record.createdAt < 0) throw new Error("session header createdAt must be a non-negative safe integer");
   if (record.cwd !== void 0) {
@@ -617,7 +784,7 @@ function validateRestoredSessionHeader(id, input) {
 }
 function snapshotSessionHeader(id, source) {
   const snapshot = snapshotJsonValue(source === void 0 ? {
-    version: 3,
+    version: 4,
     id,
     createdAt: Date.now(),
     isSeeded: false
@@ -633,6 +800,7 @@ function adoptSessionEvent(event) {
     case "user/message":
       deepFreeze(event.data);
       break;
+    case "developer/message":
     case "system/message":
     case "assistant/message":
     case "tool/result":
@@ -668,6 +836,7 @@ function assertSessionEventEnvelope(value, index) {
   validateSessionEventData(event, `seed ${type} at index ${index}`);
   switch (type) {
     case "request/header":
+    case "developer/message":
     case "system/message":
     case "user/message":
     case "assistant/attempt":
@@ -714,13 +883,14 @@ function assertAdapterDefaults(value, config, index) {
   if (Object.keys(defaults).some((key) => !allowedAdapterKeys.has(key)) || Object.values(defaults).some((marker) => marker !== true) || defaults["reasoningEffort"] === true && config["reasoningEffort"] === void 0 || defaults["maxTokens"] === true && config["maxTokens"] === void 0) throw new Error(`seed request/header at index ${index} has invalid adapterDefaults`);
 }
 function isMessageEventType(type) {
-  return type === "system/message" || type === "user/message" || type === "assistant/message" || type === "tool/result";
+  return type === "developer/message" || type === "system/message" || type === "user/message" || type === "assistant/message" || type === "tool/result";
 }
 var MESSAGE_ROLE_BY_TYPE = {
   "system/message": "system",
+  "developer/message": "developer",
   "user/message": "user",
   "assistant/message": "assistant",
-  "tool/result": "user"
+  "tool/result": "tool"
 };
 function assertMessageEventShape(event, subject) {
   const type = event["type"];
@@ -737,7 +907,7 @@ function assertMessageEventShape(event, subject) {
   if (!Array.isArray(messageRecord["content"])) throw new Error(`${subject} message has invalid content`);
   const sourceRecord = source;
   if (type === "system/message") {
-    if (sourceRecord["kind"] !== "plugin" || typeof sourceRecord["plugin"] !== "string" || sourceRecord["plugin"] === "") throw new Error(`${subject} message must have plugin source`);
+    if (sourceRecord["kind"] !== "system-prompt") throw new Error(`${subject} message must have system-prompt source`);
     return;
   }
   if (type === "assistant/message") {
@@ -746,10 +916,7 @@ function assertMessageEventShape(event, subject) {
   }
   if (type !== "tool/result") return;
   if (sourceRecord["kind"] !== "tool" || typeof sourceRecord["callId"] !== "string" || sourceRecord["callId"] === "") throw new Error(`${subject} message must have tool source`);
-  const content = messageRecord["content"];
-  const block = content[0];
-  if (content.length !== 1 || typeof block !== "object" || block === null || block["type"] !== "tool-result" || !Array.isArray(block["content"])) throw new Error(`${subject} message must contain one tool-result block`);
-  if (block["toolCallId"] !== sourceRecord["callId"]) throw new Error(`${subject} message has mismatched tool call ids`);
+  if (messageRecord["toolCallId"] !== sourceRecord["callId"]) throw new Error(`${subject} message has mismatched tool call ids`);
 }
 function hasProviderModel(value) {
   if (typeof value !== "object" || value === null) return false;
@@ -794,29 +961,25 @@ var Session = class Session2 {
     return this.header.id;
   }
   /**
-  * The first seq appended IN THIS PROCESS: the length of the constructor
-  * seed (0 without one). Events with smaller seq values entered through
-  * construction — replay, fork, or resume — and were never published on the
-  * `session/event` firehose (constructor seeds do not emit). This offset marks
-  * the constructor-input boundary for lifecycle ownership and persistence
-  * adoption; consumers that need complete canonical history still start at
-  * seq 0. Distinct from {@link inheritedEventCount}, the DURABLE
-  * fork-lineage cut: a resumed session's constructor seed is its full stored
-  * log, while the inherited count keeps the original fork value — this field is the
-  * in-process construction fact.
+  * The constructor seed length (0 without one), before any marker appended
+  * during construction. Seed events never publish on `session/event`. A
+  * marker appended before the store attaches occupies this seq without
+  * publishing either; otherwise this seq is available for the next append.
   *
-  * Not persisted itself: a seeded session projects it into the log as the
-  * `session/end-seed` event, which is what a consumer reading STORED history
-  * reads. Locate the LAST such event, not necessarily one at this seq — a
-  * seed already ending in one is not re-marked, so reopening an untouched
-  * session leaves that event at a smaller seq than `firstLiveSeq`. Prefer
-  * this field in-process: it is exact before the marker reaches storage.
-  *
-  * When this lifecycle appends the marker, it occupies this seq before the
-  * store attaches and therefore does not publish either. Otherwise this seq
-  * holds an ordinary published write.
+  * This in-process offset is not persisted. A fork seed can already contain
+  * the child's inherited marker and synthetic closers, so its child-owned
+  * history starts at {@link inheritedEventCount}, before this offset. A
+  * resumed Session's seed contains its full stored log, while its inherited
+  * count keeps the durable fork cut. Consumers needing complete canonical
+  * history start at seq 0.
   */
   firstLiveSeq;
+  /**
+  * First event produced for this object lifecycle. A new fork includes its
+  * child-owned seed marker and closers; a restored Session starts after its
+  * complete stored prefix. This in-process capture offset is not persisted.
+  */
+  firstLifecycleSeq;
   /**
   * Create a detached session by validating and snapshotting borrowed seed
   * events and storage metadata.
@@ -871,10 +1034,14 @@ var Session = class Session2 {
     const inheritedEventCount = SessionLogOffset(suppliedInheritedEventCount ?? 0);
     if (!this.header.isSeeded && inheritedEventCount !== 0) throw new Error("unseeded session inherited event count must be 0");
     if (inheritedEventCount > this.log.length) throw new Error("session inherited event count exceeds its event log");
-    if (mode === "snapshot" && this.header.isSeeded && inheritedEventCount !== this.log.length) throw new Error("seeded session constructor seed must equal its inherited prefix");
+    const seedMarker = this.log[inheritedEventCount];
+    const markedSeed = seedMarker?.type === "session/end-seed" && seedMarker.data.inherited === true;
+    if (mode === "snapshot" && this.header.isSeeded && inheritedEventCount !== this.log.length && !markedSeed) throw new Error("seeded session constructor seed must equal its inherited prefix or mark its inherited cut");
+    if (markedSeed && this.log.slice(inheritedEventCount + 1).some((event) => event.type === "session/end-seed" && event.data.inherited === true)) throw new Error("session inherited event count must identify the final inherited marker");
     this.inheritedEventCount = inheritedEventCount;
-    if (seed !== void 0 && mode === "snapshot" && this.header.isSeeded) this.append("session/end-seed", { inherited: true });
-    else if (seed !== void 0 && this.log.at(-1)?.type !== "session/end-seed") this.append("session/end-seed", {});
+    this.firstLifecycleSeq = mode === "snapshot" && this.header.isSeeded ? inheritedEventCount : this.firstLiveSeq;
+    if (seed !== void 0 && mode === "snapshot" && this.header.isSeeded && !markedSeed) this.append("session/end-seed", { inherited: true });
+    else if (seed !== void 0 && !(mode === "snapshot" && this.header.isSeeded) && this.log.at(-1)?.type !== "session/end-seed") this.append("session/end-seed", {});
   }
   /** Cached immutable full snapshot of the private append-only log. */
   eventsSnapshot;
@@ -1037,6 +1204,20 @@ var Session = class Session2 {
       this.contextFoldSeq = this.log.length;
     }
     return this.contextFold;
+  }
+  /** Cached historical tool definitions and updates for request projection. */
+  toolHistoryProjection = new ToolHistoryProjection();
+  /** Index of the next committed event not yet consumed by the tool-history fold. */
+  toolHistorySeq = 0;
+  /**
+  * Fold unseen committed events into capability-independent tool history.
+  * Initial access reconstructs inherited history; later reads consume only new events.
+  * @returns an immutable snapshot for LLM request projection, including historical addition definitions.
+  */
+  toolHistory() {
+    for (const event of this.log.slice(this.toolHistorySeq)) this.toolHistoryProjection.apply(event);
+    this.toolHistorySeq = this.log.length;
+    return this.toolHistoryProjection.snapshot();
   }
   /** The derived-message cache: frozen projections, extended per unseen node. */
   derived = [];
@@ -1203,7 +1384,7 @@ var SessionStore = class extends Service {
     const seed = options?.seed;
     const meta = options?.meta;
     const header = {
-      version: 3,
+      version: 4,
       id: sessionId,
       createdAt: meta?.createdAt ?? Date.now(),
       ...meta?.cwd === void 0 ? {} : { cwd: meta.cwd },
@@ -1374,10 +1555,12 @@ var SessionStore = class extends Service {
     return [...this.store.values()].map((entry) => entry.session);
   }
   /**
-  * Create a live child session from a stable prefix of a live source.
+  * Create a live child session from an exact prefix of a live source.
   * `boundary` is an inclusive source event seq; omitted means the source's
-  * current last event. The selected slice may end with a between-turn event
-  * but must not end inside an open turn.
+  * current last event. An open tail receives synthetic tool results and
+  * step/turn closers with the forked cause. Closed steps and turns remain
+  * unchanged, including any failed tool calls already missing results.
+  * `inheritedEventCount` counts only copied source events, excluding these closers.
   *
   * @param source - Live source session object or id.
   * @param boundary - Inclusive source event seq to fork through; omitted means
@@ -1390,10 +1573,12 @@ var SessionStore = class extends Service {
   fork(source, boundary, childSessionId) {
     if (childSessionId !== void 0 && this.get(childSessionId) !== void 0) throw new SessionForkError(`session "${childSessionId}" already exists`, "SESSION_ALREADY_EXISTS");
     const liveSource = this._resolveForkSource(source);
-    const seed = this._forkSeed(liveSource, boundary);
+    const events = liveSource.snapshotEvents();
+    const resolved = this._forkBoundary(liveSource.id, events, boundary);
+    const seed = resolved === void 0 ? [] : buildForkSeed(events, resolved);
     return this.create(childSessionId, {
       seed,
-      inheritedEventCount: SessionLogOffset(seed.length),
+      inheritedEventCount: SessionLogOffset(resolved === void 0 ? 0 : resolved + 1),
       meta: {
         ...liveSource.header.cwd !== void 0 ? { cwd: liveSource.header.cwd } : {},
         parentSession: liveSource.id,
@@ -1401,25 +1586,22 @@ var SessionStore = class extends Service {
       }
     });
   }
-  _forkSeed(session, requestedBoundary) {
-    const lastEvent = session.snapshotEvents().at(-1);
+  _forkBoundary(sessionId, events, requestedBoundary) {
+    const lastEvent = events.at(-1);
     let boundary;
     if (requestedBoundary !== void 0) boundary = requestedBoundary;
     else {
-      if (lastEvent === void 0) return [];
+      if (lastEvent === void 0) return void 0;
       boundary = lastEvent.seq;
     }
-    if (!Number.isSafeInteger(boundary) || boundary < 0) throw new SessionForkError(`fork boundary for session "${session.id}" must be a non-negative safe integer, got ${String(boundary)}`, "INVALID_BOUNDARY");
-    if (boundary >= session.seq) {
+    if (!Number.isSafeInteger(boundary) || boundary < 0) throw new SessionForkError(`fork boundary for session "${sessionId}" must be a non-negative safe integer, got ${String(boundary)}`, "INVALID_BOUNDARY");
+    if (boundary >= events.length) {
       const lastSeq = lastEvent?.seq;
-      throw new SessionForkError(`fork boundary ${boundary} does not exist in session "${session.id}" (last seq: ${lastSeq ?? "none"})`, "INVALID_BOUNDARY");
+      throw new SessionForkError(`fork boundary ${boundary} does not exist in session "${sessionId}" (last seq: ${lastSeq ?? "none"})`, "INVALID_BOUNDARY");
     }
-    const boundaryEvent = session.eventAt(boundary);
-    if (boundaryEvent === void 0 || boundaryEvent.seq !== boundary) throw new SessionForkError(`fork boundary ${boundary} does not match a contiguous event seq in session "${session.id}"`, "INVALID_BOUNDARY");
-    const events = session.snapshotEvents(SessionLogOffset(0), SessionLogOffset(boundary + 1));
-    const lastTurnBoundary = events.findLast((event) => event.type === "turn/start" || event.type === "turn/end");
-    if (lastTurnBoundary?.type === "turn/start") throw new SessionForkError(`fork boundary ${boundary} in session "${session.id}" ends inside open turn ${lastTurnBoundary.data.turn}`, "OPEN_TURN");
-    return events;
+    const boundaryEvent = events[boundary];
+    if (boundaryEvent === void 0 || boundaryEvent.seq !== boundary) throw new SessionForkError(`fork boundary ${boundary} does not match a contiguous event seq in session "${sessionId}"`, "INVALID_BOUNDARY");
+    return boundary;
   }
   _resolveForkSource(source) {
     if (typeof source === "string") {
@@ -1445,7 +1627,9 @@ export {
   SessionStore,
   TOOL_NOT_STARTED,
   TOOL_OUTCOME_UNKNOWN,
+  ToolCallRecovery,
   adoptSessionEvent,
+  buildForkSeed,
   canonicalHeader,
   decodeSeqRanges,
   SessionStore as default,
