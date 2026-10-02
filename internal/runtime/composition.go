@@ -47,43 +47,6 @@ func Compose(cfg Config) []Entry {
 	if provider == "" {
 		provider = "deepseek-official"
 	}
-	protocol := cfg.Protocol
-	if protocol == "" {
-		protocol = "chat-completions"
-	}
-
-	llmConfig := map[string]any{
-		// Pinned, because upstream moved its default to "messages" in 0.1.5 —
-		// the Anthropic-shaped wire, which appends /v1/messages to whatever
-		// base URL it is given. BaseURL has always meant an OpenAI-compatible
-		// endpoint here: every gateway, proxy and local server a caller has
-		// pointed this at speaks chat completions, and inheriting the new
-		// default would move all of them to a path most do not serve, with a
-		// 404 as the only explanation — or, from OpenRouter, which does serve
-		// /v1/messages, a 400 for the request the adapter sends there.
-		// Messages is one field away for a caller who wants it; it is what
-		// DeepSeek's own endpoint is tuned for.
-		"protocol": protocol,
-		// The catalog the adapter advertises. A model the agent asks for that is
-		// not listed here is not resolvable, so the configured one is always in
-		// it.
-		"models": []map[string]any{{"id": model, "contextWindow": 128000}},
-		// Pinned, because upstream moved its default from 2 to 5 in 0.1.1-rc.2
-		// and a default is the wrong place for that decision to be made for us.
-		// Retries are latency an operator cannot see: a provider that is down
-		// answers on the fifth attempt after five backoffs rather than on the
-		// second, and what surfaces meanwhile is a node that appears to hang.
-		// A robot runs on a schedule, so failing sooner and reporting honestly
-		// beats waiting longer and occasionally succeeding. Two is what every
-		// flow built against v0.2.0 was tuned on; raising it is a decision to
-		// take deliberately, per deployment, not one to inherit from an
-		// upstream bump.
-		"retryPolicy": map[string]any{"mode": "normal", "maxRetries": 2},
-	}
-	if cfg.BaseURL != "" {
-		llmConfig["baseURL"] = cfg.BaseURL
-	}
-
 	agent := map[string]any{
 		"id":       "main",
 		"provider": provider,
@@ -93,13 +56,7 @@ func Compose(cfg Config) []Entry {
 		"cwd": cfg.CWD,
 	}
 
-	entries := []Entry{
-		{
-			ID:     "llm-deepseek",
-			Name:   "@deepseek-ai/dsh-llm-deepseek",
-			Config: llmConfig,
-		},
-	}
+	entries := []Entry{modelRow(cfg, provider, model)}
 	entries = append(entries, coreRows(agent)...)
 	return append(entries, []Entry{
 		{
@@ -137,6 +94,249 @@ func Compose(cfg Config) []Entry {
 			},
 		},
 	}...)
+}
+
+// ModelRowID is the id of the row that serves the model, whichever plugin that
+// is. It predates the day the protocol started choosing the plugin, and saved
+// compositions address the model's settings by it.
+const ModelRowID = "llm-deepseek"
+
+const (
+	// ProtocolChatCompletions is the OpenAI-compatible wire, and the default.
+	ProtocolChatCompletions = "chat-completions"
+	// ProtocolMessages is DeepSeek's Anthropic-compatible wire.
+	ProtocolMessages = "messages"
+
+	messagesPlugin        = "@deepseek-ai/dsh-llm-deepseek-api-key"
+	chatCompletionsPlugin = "@deepseek-ai/dsh-llm-pi-ai"
+
+	// Where chat completions goes when no BaseURL says otherwise: the endpoint
+	// upstream's adapter defaulted to while it still spoke this wire.
+	chatCompletionsBaseURL = "https://api.deepseek.com"
+	// The output cap that adapter sent when nobody chose one. DeepSeek's own
+	// default is far smaller, so leaving the field off would truncate answers
+	// that used to arrive whole.
+	defaultMaxTokens = 256000
+)
+
+// modelRow is the row that serves the model, and the protocol decides which
+// plugin it is.
+//
+// Until harness 0.1.7 one plugin, dsh-llm-deepseek, spoke both wires behind a
+// `protocol` key, and Compose pinned that key to chat completions because
+// BaseURL has always meant an OpenAI-compatible endpoint here: every gateway,
+// proxy and local server a caller has pointed this at speaks it. Upstream then
+// made its adapter Messages-only — a config that still says `protocol` is
+// refused at boot — and left chat completions to llm-pi-ai. So the default
+// stays what it was and is now served by pi-ai, while Messages is the api-key
+// provider upstream's own profiles mount. The row keeps one id either way.
+//
+// Two values are pinned on both, for the reasons they always were:
+//
+//   - The catalog. A model the agent asks for that the route does not list is
+//     not resolvable, so the configured one is always in it.
+//   - The retry budget. Upstream moved its default from 2 to 5 in 0.1.1-rc.2,
+//     and retries are latency an operator cannot see: a provider that is down
+//     answers on the fifth attempt after five backoffs, and what surfaces
+//     meanwhile is a node that appears to hang. A robot runs on a schedule, so
+//     failing sooner and reporting honestly beats waiting longer. Two is what
+//     every flow built against v0.2.0 was tuned on.
+func modelRow(cfg Config, provider, model string) Entry {
+	retry := map[string]any{"mode": "normal", "maxRetries": 2}
+
+	if cfg.Protocol == ProtocolMessages {
+		config := map[string]any{
+			"models":      []map[string]any{{"id": model, "contextWindow": 128000}},
+			"retryPolicy": retry,
+		}
+		if cfg.BaseURL != "" {
+			config["baseURL"] = cfg.BaseURL
+		}
+		return Entry{ID: ModelRowID, Name: messagesPlugin, Config: config}
+	}
+
+	baseURL := cfg.BaseURL
+	if baseURL == "" {
+		baseURL = chatCompletionsBaseURL
+	}
+	return Entry{
+		ID:   ModelRowID,
+		Name: chatCompletionsPlugin,
+		Config: map[string]any{
+			"providers": map[string]any{
+				provider: map[string]any{
+					"api":       "openai-completions",
+					"baseURL":   baseURL,
+					"apiKeyEnv": "DEEPSEEK_API_KEY",
+					"models": []map[string]any{{
+						"id":            model,
+						"contextWindow": 128000,
+						"maxTokens":     defaultMaxTokens,
+						// The levels the old adapter offered, under the spellings
+						// it sent. `off` carries no value: not thinking is the
+						// parameter's absence, not a word.
+						"reasoningEfforts": map[string]any{
+							"off": nil, "low": "low", "high": "high", "max": "max",
+						},
+					}},
+					"reasoning":   "high",
+					"retryPolicy": retry,
+					// The dialect, stated rather than detected. pi-ai guesses one
+					// from the endpoint's host: deepseek.com gets this one,
+					// openrouter.ai a nested `reasoning` object, and a host it
+					// does not recognise the OpenAI one — a `developer` role,
+					// `store`, `max_completion_tokens`. The adapter this replaces
+					// sent DeepSeek's dialect to every endpoint, so that is what
+					// each gateway behind a BaseURL has been answering; letting
+					// the host decide would change the request for all of them at
+					// once, on an upgrade nobody asked to change it.
+					"compat": map[string]any{
+						"thinkingFormat":                              "deepseek",
+						"maxTokensField":                              "max_tokens",
+						"supportsReasoningEffort":                     true,
+						"supportsDeveloperRole":                       false,
+						"supportsStore":                               false,
+						"supportsUsageInStreaming":                    true,
+						"requiresReasoningContentOnAssistantMessages": true,
+					},
+				},
+			},
+		},
+	}
+}
+
+// WithModelSettings applies model settings to the model row, in the terms the
+// plugin serving it reads.
+//
+// The settings are spelled the way the DeepSeek adapter spelled them —
+// `reasoningEffort`, `thinking`, `maxTokens`, `defaultContextWindow`,
+// `streamIdleTimeoutMs`, `retryPolicy`, `baseURL` — because that is what a
+// composition saved against any earlier bundle holds for this row. On the
+// Messages row they are that plugin's own keys and are merged as written. On
+// the chat-completions row they are pi-ai's by other names and in other
+// places: the effort is the route's `reasoning`, the output cap belongs to the
+// model's catalog entry, and `thinking: disabled` is the level `off`. Merging
+// them as written there would not fail — the loader accepts an unknown key —
+// it would configure nothing, silently.
+//
+// `protocol` is skipped: it chose the row before this ran. A nil value is
+// skipped too, which is how an editor writes "no override here". Anything else
+// the chat-completions row has no place for is an error naming the key, rather
+// than a setting somebody made and nothing honoured.
+//
+// An object is MERGED onto the one Compose put there, key by key, rather than
+// replacing it: a saved `retryPolicy: {maxRetries: 4}` means that one number,
+// and replacing the object would quietly drop the `mode` pinned beside it.
+func WithModelSettings(entries []Entry, settings map[string]any) ([]Entry, error) {
+	at := -1
+	for i := range entries {
+		if entries[i].ID == ModelRowID {
+			at = i
+		}
+	}
+	if at < 0 {
+		return nil, fmt.Errorf("deepseek: the composition has no %q row to apply model settings to", ModelRowID)
+	}
+	keys := make([]string, 0, len(settings))
+	for key, value := range settings {
+		if key != "protocol" && value != nil {
+			keys = append(keys, key)
+		}
+	}
+	sort.Strings(keys)
+
+	config := cloneConfig(entries[at].Config)
+	if entries[at].Name != chatCompletionsPlugin {
+		for _, key := range keys {
+			config[key] = mergeSetting(config[key], settings[key])
+		}
+		return With(entries, ModelRowID, config), nil
+	}
+
+	providers, _ := config["providers"].(map[string]any)
+	if len(providers) != 1 {
+		return nil, fmt.Errorf("deepseek: the model row serves %d routes; model settings apply to exactly one", len(providers))
+	}
+	var route map[string]any
+	for _, value := range providers {
+		route, _ = value.(map[string]any)
+	}
+	models, _ := route["models"].([]map[string]any)
+	if route == nil || len(models) != 1 {
+		return nil, fmt.Errorf("deepseek: the model row is not the one Compose built; model settings cannot be placed on it")
+	}
+
+	for _, key := range keys {
+		value := settings[key]
+		switch key {
+		case "reasoningEffort":
+			level, _ := value.(string)
+			if _, offered := models[0]["reasoningEfforts"].(map[string]any)[level]; !offered {
+				return nil, fmt.Errorf("deepseek: reasoningEffort %v is not one of off, low, high or max", value)
+			}
+			route["reasoning"] = level
+		case "thinking":
+			if value != "enabled" && value != "disabled" {
+				return nil, fmt.Errorf("deepseek: thinking %v is neither enabled nor disabled", value)
+			}
+		case "maxTokens":
+			models[0]["maxTokens"] = value
+		case "defaultContextWindow", "streamIdleTimeoutMs", "retryPolicy", "baseURL":
+			route[key] = mergeSetting(route[key], value)
+		default:
+			return nil, fmt.Errorf("deepseek: model setting %q is read by the Messages protocol only; chat completions has no such setting", key)
+		}
+	}
+	// After the loop, so it wins whichever order the keys came in: upstream's
+	// rule was that a deployment with thinking disabled runs every request
+	// with it off, whatever effort was also named.
+	if settings["thinking"] == "disabled" {
+		route["reasoning"] = "off"
+	}
+	return With(entries, ModelRowID, config), nil
+}
+
+// mergeSetting lays one setting over what is already there. Two objects merge
+// key by key, recursively, and a nil inside the incoming one removes its key —
+// the same "no override here" a nil means at the top. Anything else replaces.
+func mergeSetting(existing, incoming any) any {
+	over, ok := incoming.(map[string]any)
+	if !ok {
+		return incoming
+	}
+	base, _ := existing.(map[string]any)
+	out := cloneConfig(base)
+	for key, value := range over {
+		if value == nil {
+			delete(out, key)
+			continue
+		}
+		out[key] = mergeSetting(out[key], value)
+	}
+	return out
+}
+
+// cloneConfig copies a row config deeply enough to edit: maps, and the model
+// catalog's list of maps. Compose returns fresh values on every call, but an
+// entry list is passed around and adjusted by value, and writing through a
+// shared map would edit the caller's copy behind its back.
+func cloneConfig(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in))
+	for key, value := range in {
+		switch v := value.(type) {
+		case map[string]any:
+			out[key] = cloneConfig(v)
+		case []map[string]any:
+			list := make([]map[string]any, len(v))
+			for i, item := range v {
+				list[i] = cloneConfig(item)
+			}
+			out[key] = list
+		default:
+			out[key] = value
+		}
+	}
+	return out
 }
 
 // coreRows is the agent core the spine used to mount, one row per plugin.
@@ -191,7 +391,17 @@ func coreRows(agent map[string]any) []Entry {
 		{ID: "scope-invariant", Name: "@deepseek-ai/dsh-scope/invariant"},
 		{ID: "agent-loop-invariant", Name: "@deepseek-ai/dsh-agent-loop/invariant"},
 		{ID: "shell-env", Name: "@deepseek-ai/dsh-shell-env"},
-		{ID: "tool-bash", Name: "@deepseek-ai/dsh-tool-bash"},
+		{
+			ID:   "tool-bash",
+			Name: "@deepseek-ai/dsh-tool-bash",
+			// New in 0.1.7, and on by default upstream: a foreground command
+			// that reaches its timeout is kept running as a background job
+			// instead of being killed. Until then the timeout was a deadline —
+			// the command stopped — and that is what every flow that set one
+			// was promised. A process that outlives the limit put on it is a
+			// decision to take per deployment, not one to arrive with a bundle.
+			Config: map[string]any{"promoteOnTimeout": false},
+		},
 		{
 			ID:   "agent-instructions",
 			Name: "@deepseek-ai/dsh-agent-instructions",
@@ -208,7 +418,17 @@ func coreRows(agent map[string]any) []Entry {
 			},
 		},
 		{ID: "tool-skill", Name: "@deepseek-ai/dsh-tool-skill"},
-		{ID: "tool-jobs", Name: "@deepseek-ai/dsh-tool-jobs"},
+		{
+			ID:   "tool-jobs",
+			Name: "@deepseek-ai/dsh-tool-jobs",
+			// Pinned, because upstream removed its default of 3 in 0.1.7: with
+			// none, every background completion opens a turn on an idle agent,
+			// without limit. That is the self-exciting chain the cap existed
+			// for — a woken turn starts the job whose completion wakes it
+			// again — and on a robot nobody is watching, each link is a model
+			// call nobody asked for.
+			Config: map[string]any{"maxConsecutiveWakes": 3},
+		},
 		{
 			ID:     "agent-loop",
 			Name:   "@deepseek-ai/dsh-agent-loop",

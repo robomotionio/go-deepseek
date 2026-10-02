@@ -1,5 +1,7 @@
 // .harness/packages/fs/fs-local/lib/index.js
 import { constants } from "node:buffer";
+import { once } from "node:events";
+import { watch } from "chokidar";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep, toNamespacedPath } from "node:path";
 import { pathToFileURL } from "node:url";
 import z from "@deepseek-ai/schemastery";
@@ -511,6 +513,31 @@ function applyLiteralEdit(content, oldString, newString, replaceAll, displayPath
 var DEFAULT_DIFF_BASIS_MAX_BYTES = 10 * 1024 * 1024;
 var MAX_DIFF_BASIS_BYTES = Math.min(constants.MAX_LENGTH, constants.MAX_STRING_LENGTH);
 var LocalFileSystem = class extends FileSystem {
+  async watch(target, changed, signal) {
+    signal.throwIfAborted();
+    const path = resolve(this.processPath(target));
+    const directory = (await this.stat(target, signal))?.type === "directory";
+    signal.throwIfAborted();
+    const root = directory ? path : dirname(path);
+    const watcher = watch(root, {
+      ignoreInitial: true,
+      depth: 0,
+      ignored: (entry) => !directory && resolve(entry) !== root && resolve(entry) !== path
+    });
+    watcher.on("all", (_event, entry) => {
+      if (directory || resolve(entry) === path) changed();
+    });
+    watcher.on("error", (error) => {
+      changed(error instanceof Error ? error : new Error(String(error)));
+    });
+    try {
+      await once(watcher, "ready", { signal });
+      return () => watcher.close();
+    } catch (error) {
+      await watcher.close();
+      throw error;
+    }
+  }
   static Config = z.object({
     cwd: z.string().default(process.cwd()),
     diffBasisMaxBytes: z.number().default(DEFAULT_DIFF_BASIS_MAX_BYTES)

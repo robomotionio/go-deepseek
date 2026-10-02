@@ -171,6 +171,37 @@ The endpoint is also read from the environment when the fields are empty:
 `DEEPSEEK_BASE_URL` and `DEEPSEEK_API_KEY`, the same variables the harness and
 the Python SDK use.
 
+`Protocol: "messages"` switches to DeepSeek's Anthropic-compatible API instead:
+`<BaseURL>/v1/messages`, or `https://api.deepseek.com/anthropic` with no
+`BaseURL`. The two wires are different plugins since harness 0.1.7 — upstream's
+DeepSeek adapter speaks Messages only, and chat completions is served by
+`llm-pi-ai` — and `Compose` mounts the right one under the same row id,
+`sdk.ModelRowID`. Two things follow from that:
+
+- **The chat-completions dialect is pinned.** Left alone, pi-ai picks one from
+  the endpoint's host: `deepseek.com` gets DeepSeek's, `openrouter.ai` a nested
+  `reasoning` object, and a host it does not recognise OpenAI's — a `developer`
+  role, `store`, `max_completion_tokens`. The adapter it replaced sent DeepSeek's
+  to everything, so that is what `Compose` states: `max_tokens`, `thinking`,
+  `reasoning_effort`, a `system` role. A gateway that wants another dialect gets
+  its own `llm-pi-ai` row.
+- **Model settings go through `sdk.WithModelSettings`,** not `sdk.With`. The
+  settings the adapter took (`reasoningEffort`, `thinking`, `maxTokens`,
+  `defaultContextWindow`, `streamIdleTimeoutMs`) live in other places under
+  other names on the pi-ai row, and a key a plugin does not read is accepted
+  and ignored rather than refused.
+
+```go
+entries, err := sdk.WithModelSettings(sdk.Compose(cfg), map[string]any{
+    "reasoningEffort": "low",
+    "maxTokens":       8192,
+})
+```
+
+The output cap sent on chat completions is the configured one (256000 unless
+set) bounded by the room the context window has left, so it shrinks as a
+conversation grows rather than asking for more than the model can hold.
+
 ### Streaming
 
 `OnEvent` sees each of the session's own events as the harness records it, which
@@ -766,7 +797,7 @@ needs node, pnpm and git; using it needs none of them.
 
 ```bash
 make update                                   # fetch upstream, build, regenerate, test
-make update HARNESS_REF=dsh-v0.1.6-alpha.3    # move to another revision
+make update HARNESS_REF=dsh-v0.2.0-rc.3       # move to another revision
 make bundle HARNESS_DIR=../deepseek-harness   # use a checkout you already have
 make show                                     # what the committed bundle was built from
 make upstream-check                           # how far upstream has moved since the pin
@@ -780,7 +811,7 @@ during a plugin mount.
 ### The pin
 
 `UPSTREAM.lock.json` records which upstream revision this repository ships, the
-44 bundled entries at their versions, and what is deliberately refused. The
+45 bundled entries at their versions, and what is deliberately refused. The
 generated manifest records the same revision, but it is generated: it changes
 whenever the bundler runs and proves only that it ran. The lockfile is written
 by hand, so a diff in it is somebody deciding to move the pin, with the reason
@@ -796,11 +827,19 @@ and a gate you cannot satisfy is a gate people learn to skip.
 
 ## Status
 
-The harness is a developer preview at `0.1.6-alpha.2`, and upstream says
-breaking changes will happen. Its session format is version 3; a log written
-by an older release (format 0, before go-deepseek 0.4.0) is migrated the first
-time it is resumed, and the original is left beside it. The bundle is pinned by
-tag, and `sdk.HarnessVersion()` reports which one you have.
+The harness is a release candidate at `0.2.0-rc.2`, and upstream says breaking
+changes will happen. Its session format is version 4; a log written by an
+older release (format 3 from go-deepseek 0.4.x, format 0 from before it) is
+migrated the first time it is resumed, and the original is left beside it. The
+bundle is pinned by tag, and `sdk.HarnessVersion()` reports which one you have.
+
+One thing about a migrated session is worth knowing. Reasoning recorded before
+the upgrade was written by the DeepSeek adapter; on chat completions it is
+replayed by pi-ai, which treats history without its own replay metadata as
+another provider's and keeps the reasoning as text in the assistant message
+rather than as `reasoning_content`. Nothing is lost and nothing fails, but those
+earlier turns cost their reasoning in context. Turns written after the upgrade
+replay natively.
 
 Not everything upstream ships is bundled. Excluded, with the reason recorded in
 the manifest: anything needing `node:sqlite`, native image processing,

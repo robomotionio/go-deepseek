@@ -1,7 +1,7 @@
-// .harness/node_modules/.pnpm/readdirp@5.0.0/node_modules/readdirp/index.js
-import { lstat, readdir, realpath, stat } from "node:fs/promises";
-import { join as pjoin, relative as prelative, resolve as presolve, sep as psep } from "node:path";
+// .harness/node_modules/.pnpm/readdirp@4.1.2/node_modules/readdirp/esm/index.js
+import { stat, lstat, readdir, realpath } from "node:fs/promises";
 import { Readable } from "node:stream";
+import { resolve as presolve, relative as prelative, join as pjoin, sep as psep } from "node:path";
 var EntryTypes = {
   FILE_TYPE: "files",
   DIR_TYPE: "directories",
@@ -56,20 +56,6 @@ var normalizeFilter = (filter) => {
   return emptyFn;
 };
 var ReaddirpStream = class extends Readable {
-  parents;
-  reading;
-  parent;
-  _stat;
-  _maxDepth;
-  _wantsDir;
-  _wantsFile;
-  _wantsEverything;
-  _root;
-  _isDirent;
-  _statsProp;
-  _rdOptions;
-  _fileFilter;
-  _directoryFilter;
   constructor(options = {}) {
     super({
       objectMode: true,
@@ -86,7 +72,7 @@ var ReaddirpStream = class extends Readable {
     } else {
       this._stat = statMethod;
     }
-    this._maxDepth = opts.depth != null && Number.isSafeInteger(opts.depth) ? opts.depth : defaultOptions.depth;
+    this._maxDepth = opts.depth ?? defaultOptions.depth;
     this._wantsDir = type ? DIR_TYPES.has(type) : false;
     this._wantsFile = type ? FILE_TYPES.has(type) : false;
     this._wantsEverything = type === EntryTypes.EVERYTHING_TYPE;

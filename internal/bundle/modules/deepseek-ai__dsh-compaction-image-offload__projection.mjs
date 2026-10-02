@@ -15,10 +15,6 @@ function offloadMessageImages(message, indexes) {
           selected += 1;
         }
         imageIndex += 1;
-      } else if (block.type === "tool-result") {
-        const content2 = visit(block.content);
-        if (content2 !== block.content)
-          projected = { ...block, content: content2 };
       }
       if (projected !== block)
         next ??= blocks.slice(0, index);

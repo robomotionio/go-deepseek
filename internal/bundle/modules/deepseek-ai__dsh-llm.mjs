@@ -14,9 +14,15 @@ function freezeMessage(message) {
   return deepFreeze(structuredClone(message));
 }
 function createMessage(input) {
-  return freezeMessage({
+  return deepFreeze(structuredClone({
     ...input,
     id: brandString(randomUUID())
+  }));
+}
+function createDeveloperMessage(input) {
+  return createMessage({
+    ...input,
+    role: "developer"
   });
 }
 function createUserMessage(input) {
@@ -35,31 +41,26 @@ function createAssistantMessage(input) {
     }
   });
 }
-function createSystemMessage(text, plugin) {
+function createSystemMessage(text) {
   return createMessage({
     role: "system",
     content: text.length === 0 ? [] : [{
       type: "text",
       text
     }],
-    source: {
-      kind: "plugin",
-      plugin
-    }
+    source: { kind: "system-prompt" }
   });
 }
 function createToolResultMessage(input) {
-  return createUserMessage({
+  return createMessage({
+    role: "tool",
     source: {
       kind: "tool",
       callId: input.callId
     },
-    content: [{
-      type: "tool-result",
-      toolCallId: input.callId,
-      content: input.content,
-      isError: input.isError
-    }]
+    toolCallId: input.callId,
+    content: input.content,
+    isError: input.isError
   });
 }
 var HarnessError = class extends Error {
@@ -73,6 +74,7 @@ var HarnessError = class extends Error {
 };
 var CONTEXT_WINDOW_EXCEEDED_CODE = "CONTEXT_WINDOW_EXCEEDED";
 var QUOTA_EXCEEDED_CODE = "QUOTA";
+var ACCOUNT_QUOTA_EXCEEDED_CODE = "ACCOUNT_QUOTA";
 var EMPTY_RESPONSE_CODE = "EMPTY_RESPONSE";
 var INVALID_CREDENTIAL_CODE = "INVALID_CREDENTIAL";
 var STRUCTURED_CONTEXT_OVERFLOW = new RegExp(String.raw`(?:^|[^a-z0-9])context[\s_-](?:length|window)[\s_-]` + String.raw`(?:exceed(?:ed|s)?|overflow(?:ed)?|limit[\s_-]exceeded)(?:$|[^a-z0-9])`, "i");
@@ -346,10 +348,10 @@ function offloadedImageText(ref, access) {
   return `[${identity}${normalizedAccessText(ref, access)}]`;
 }
 function contentHasImage(content) {
-  return content.some((block) => block.type === "image" || block.type === "tool-result" && contentHasImage(block.content));
+  return content.some((block) => block.type === "image");
 }
 function contentHasFile(content) {
-  for (const block of content) if (block.type === "file" || block.type === "tool-result" && contentHasFile(block.content)) return true;
+  for (const block of content) if (block.type === "file") return true;
   return false;
 }
 function fileHandleText(ref, readonlyPath) {
@@ -368,17 +370,6 @@ function replaceFilesWithHandles(blocks, resolvePath) {
         text: fileHandleText(block.attachment, resolvePath(block.attachment))
       });
       continue;
-    }
-    if (block.type === "tool-result") {
-      const content = replaceFilesWithHandles(block.content, resolvePath);
-      if (content !== block.content) {
-        next ??= blocks.slice(0, index);
-        next.push({
-          ...block,
-          content
-        });
-        continue;
-      }
     }
     next?.push(block);
   }
@@ -399,7 +390,6 @@ function base64Length(bytes) {
 }
 function visitImageBlocks(content, visit) {
   for (const block of content) if (block.type === "image") visit(block);
-  else if (block.type === "tool-result") visitImageBlocks(block.content, visit);
 }
 function replaceOffloadedImages(blocks, placeholder) {
   let next;
@@ -411,17 +401,6 @@ function replaceOffloadedImages(blocks, placeholder) {
         text: placeholder(block.attachment)
       });
       continue;
-    }
-    if (block.type === "tool-result") {
-      const content = replaceOffloadedImages(block.content, placeholder);
-      if (content !== block.content) {
-        next ??= blocks.slice(0, index);
-        next.push({
-          ...block,
-          content
-        });
-        continue;
-      }
     }
     next?.push(block);
   }
@@ -474,17 +453,6 @@ function replaceImagesForTextModel(blocks) {
       });
       continue;
     }
-    if (block.type === "tool-result") {
-      const content = replaceImagesForTextModel(block.content);
-      if (content !== block.content) {
-        next ??= blocks.slice(0, index);
-        next.push({
-          ...block,
-          content
-        });
-        continue;
-      }
-    }
     next?.push(block);
   }
   return next ?? blocks;
@@ -498,6 +466,82 @@ function projectImagesForTextModel(messages) {
       content
     };
   });
+}
+function withoutDeveloperMessages(messages) {
+  const retained = messages.filter((message) => message.role !== "developer");
+  return retained.length === messages.length ? messages : retained;
+}
+function toolDeclarations(tools, mode, history) {
+  const declarations = new Map(history.tools.map((tool) => [tool.name, tool]));
+  for (const update of history.updates) for (const tool of update.additions) if (!declarations.has(tool.name)) declarations.set(tool.name, {
+    ...tool,
+    deferLoading: true
+  });
+  switch (mode) {
+    case "in-history":
+      return declarations;
+    case "addition-only": {
+      const activeNames = new Set(tools?.map((tool) => tool.name));
+      for (const name of declarations.keys()) if (!activeNames.has(name)) declarations.delete(name);
+      return declarations;
+    }
+    /* v8 ignore next 2 -- closed-union exhaustiveness guard */
+    default:
+      return assertNever(mode);
+  }
+}
+function projectToolUpdates(messages, tools, toolUpdate, history) {
+  if (toolUpdate === void 0) {
+    let immediateTools = tools;
+    if (tools?.some((tool) => tool.deferLoading === true)) immediateTools = tools.map(({ deferLoading: _loading, ...tool }) => tool);
+    return {
+      messages: withoutDeveloperMessages(messages),
+      tools: immediateTools
+    };
+  }
+  if (history === void 0) return {
+    messages: withoutDeveloperMessages(messages),
+    tools
+  };
+  const messageIds = new Set(messages.flatMap((message) => message.role === "developer" ? [message.id] : []));
+  if (history.updates.some((update) => !messageIds.has(update.messageId))) return {
+    messages: withoutDeveloperMessages(messages),
+    tools
+  };
+  const declarations = toolDeclarations(tools, toolUpdate, history);
+  const updateIds = new Set(history.updates.map((update) => update.messageId));
+  const offered = new Set(history.tools.filter((tool) => !tool.deferLoading).map((tool) => tool.name));
+  const projectedMessages = [];
+  for (const message of messages) {
+    if (message.role !== "developer") {
+      projectedMessages.push(message);
+      continue;
+    }
+    if (!updateIds.has(message.id)) continue;
+    const content = message.content.filter((block) => {
+      switch (block.type) {
+        case "tool-addition":
+          if (!declarations.has(block.toolName) || offered.has(block.toolName)) return false;
+          offered.add(block.toolName);
+          return true;
+        case "tool-removal":
+          if (toolUpdate !== "in-history") return false;
+          return offered.delete(block.toolName);
+        default:
+          return true;
+      }
+    });
+    if (content.length === 0) continue;
+    if (content.length === message.content.length) projectedMessages.push(message);
+    else projectedMessages.push({
+      ...message,
+      content
+    });
+  }
+  return {
+    messages: projectedMessages.length === messages.length && projectedMessages.every((message, index) => message === messages[index]) ? messages : projectedMessages,
+    tools: [...declarations.values()]
+  };
 }
 var { version } = createRequire(import.meta.url)("../package.json");
 var APP_IDENTITY = {
@@ -691,15 +735,11 @@ var BlockAssembler = class {
   }
   /**
   * The assembled assistant message.
-  * @param source - producer attribution for the assembled message.
+  * @param source - provider/model attribution (without the `kind` tag) for the assembled message.
   * @returns a frozen assistant-role message over `blocks()` (same open-block assembly rules).
   */
-  message(source = {
-    kind: "plugin",
-    plugin: "dsh-llm/assembler"
-  }) {
-    return createMessage({
-      role: "assistant",
+  message(source) {
+    return createAssistantMessage({
       content: this.blocks(),
       source
     });
@@ -1163,8 +1203,9 @@ var LlmAdapter = class {
   }
   /**
   * List models this adapter can currently advertise for one owned provider.
-  * The result is advisory: an adapter may accept unlisted model ids, and
-  * consumers must not turn absence into request rejection.
+  * Core routing accepts unlisted model ids; catalog-driven entry points such
+  * as the GUI may require membership. Adapters used there must advertise
+  * their available models; the base empty catalog offers no GUI selection.
   * @param _provider - one provider route owned by this adapter.
   * @returns discoverable models in adapter-preferred order.
   */
@@ -1519,7 +1560,8 @@ var LlmRuntime = (() => {
     }
     /**
     * Discover models advertised by one registered provider. Catalog membership
-    * is advisory and never changes routing or request validation.
+    * does not constrain core routing. Catalog-driven entry points may restrict
+    * selection and submission to the advertised models.
     * @param provider - registered provider route to inspect.
     * @returns detached model metadata in adapter-preferred order.
     */
@@ -1564,6 +1606,8 @@ var LlmRuntime = (() => {
       const inputModalities = this.detachedModalities(resolved.inputModalities);
       const systemPromptUpdate = resolved.systemPromptUpdate;
       if (systemPromptUpdate !== void 0 && systemPromptUpdate !== "in-history") throw new LlmError(`adapter returned invalid system prompt update mode for provider "${provider}" model "${model}"`, "INVALID_MODEL_INFO");
+      const toolUpdate = resolved.toolUpdate;
+      if (toolUpdate !== void 0 && toolUpdate !== "in-history" && toolUpdate !== "addition-only") throw new LlmError(`adapter returned invalid tool update mode for provider "${provider}" model "${model}"`, "INVALID_MODEL_INFO");
       const defaultMaxTokens = resolved.defaultMaxTokens;
       if (defaultMaxTokens !== void 0 && (!Number.isSafeInteger(defaultMaxTokens) || defaultMaxTokens <= 0)) throw new LlmError(`adapter returned invalid default maxTokens for provider "${provider}" model "${model}"`, "INVALID_MODEL_MAX_TOKENS");
       const info = {
@@ -1574,7 +1618,8 @@ var LlmRuntime = (() => {
         ...inputModalities === void 0 ? {} : { inputModalities },
         ...context === void 0 ? {} : { context: { contextWindow: context.contextWindow } },
         ...defaultMaxTokens === void 0 ? {} : { defaultMaxTokens },
-        ...resolved.systemPromptUpdate === void 0 ? {} : { systemPromptUpdate: resolved.systemPromptUpdate }
+        ...resolved.systemPromptUpdate === void 0 ? {} : { systemPromptUpdate: resolved.systemPromptUpdate },
+        ...resolved.toolUpdate === void 0 ? {} : { toolUpdate: resolved.toolUpdate }
       };
       const reasoning = resolved.reasoning;
       if (reasoning === void 0) return info;
@@ -1669,6 +1714,7 @@ var LlmRuntime = (() => {
         ...context === void 0 ? {} : { context },
         ...modelInfo.inputModalities === void 0 ? {} : { inputModalities: Object.freeze([...modelInfo.inputModalities]) },
         ...modelInfo.systemPromptUpdate === void 0 ? {} : { systemPromptUpdate: modelInfo.systemPromptUpdate },
+        ...modelInfo.toolUpdate === void 0 ? {} : { toolUpdate: modelInfo.toolUpdate },
         stream: (options) => {
           if (dispatched) throw new LlmError("a prepared LLM call can only be dispatched once", "INVALID_PREPARED_CALL");
           if (!callConfigEquals(options, resolvedConfig)) throw new LlmError("prepared LLM call config changed before adapter dispatch", "INVALID_PREPARED_CALL");
@@ -1690,8 +1736,9 @@ var LlmRuntime = (() => {
     /** Remove replay state whose historical route is owned by another adapter. */
     forAdapter(options, adapter) {
       const messages = options.messages.map((message) => {
+        if (message.role !== "assistant") return message;
         const source = message.source;
-        if (message.role !== "assistant" || source.kind !== "model" || source.replayState === void 0) return message;
+        if (source.replayState === void 0) return message;
         if (this.adapters.get(source.provider)?.adapter === adapter) return message;
         return freezeMessage({
           ...message,
@@ -1757,13 +1804,17 @@ var LlmRuntime = (() => {
         let projectedMessages = resolvedOptions.messages;
         if (projectedMessages.some((message) => contentHasFile(message.content))) projectedMessages = projectFilesToText(projectedMessages, (ref) => this.fileReadPath(ref));
         if (modelInfo.inputModalities !== void 0 && !modelInfo.inputModalities.includes("image") && projectedMessages.some((message) => contentHasImage(message.content))) projectedMessages = projectImagesForTextModel(projectedMessages);
-        const projectedOptions = projectedMessages === resolvedOptions.messages ? resolvedOptions : Object.isFrozen(resolvedOptions) ? deepFreeze({
-          ...resolvedOptions,
-          messages: projectedMessages
-        }) : {
-          ...resolvedOptions,
-          messages: projectedMessages
-        };
+        const projectedTools = projectToolUpdates(projectedMessages, resolvedOptions.tools, modelInfo.toolUpdate, resolvedOptions.toolHistory);
+        projectedMessages = projectedTools.messages;
+        let projectedOptions = resolvedOptions;
+        if (projectedMessages !== resolvedOptions.messages || projectedTools.tools !== resolvedOptions.tools) {
+          projectedOptions = {
+            ...resolvedOptions,
+            messages: projectedMessages,
+            ...projectedTools.tools === void 0 ? {} : { tools: projectedTools.tools }
+          };
+          if (Object.isFrozen(resolvedOptions)) deepFreeze(projectedOptions);
+        }
         iterator = dispatch(this.forAdapter(projectedOptions, adapter))[Symbol.asyncIterator]();
       } catch (error) {
         yield adapterFailureChunk(error, options.signal);
@@ -1830,6 +1881,7 @@ function adapterFailureChunk(error, signal) {
   };
 }
 export {
+  ACCOUNT_QUOTA_EXCEEDED_CODE,
   APP_IDENTITY,
   AssistantStreamAccumulator,
   BlockAssembler,
@@ -1862,6 +1914,7 @@ export {
   contentHasFile,
   contentHasImage,
   createAssistantMessage,
+  createDeveloperMessage,
   createMessage,
   createSystemMessage,
   createToolResultMessage,
@@ -1885,6 +1938,7 @@ export {
   projectFilesToText,
   projectImagesForTextModel,
   projectOffloadedImages,
+  projectToolUpdates,
   requestImageHandleText,
   requiredImageOffload,
   resolveImageAttachmentAccess,

@@ -1,7 +1,7 @@
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/overflow.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/overflow.js
 var OVERFLOW_PATTERNS = [
-  /prompt is too long/i,
-  // Anthropic token overflow
+  /prompt (?:is )?too long/i,
+  // Anthropic and z.ai token overflow
   /request_too_large/i,
   // Anthropic request byte-size overflow (HTTP 413)
   /input is too long for requested model/i,
@@ -46,11 +46,10 @@ var OVERFLOW_PATTERNS = [
   // Generic fallback
   /too many tokens/i,
   // Generic fallback
-  /token limit exceeded/i,
+  /token limit exceeded/i
   // Generic fallback
-  /^4(?:00|13)\s*(?:status code)?\s*\(no body\)/i
-  // Cerebras: 400/413 with no body
 ];
+var CEREBRAS_BODYLESS_OVERFLOW_PATTERN = /^4(?:00|13)\s*(?:status code)?\s*\(no body\)/i;
 var NON_OVERFLOW_PATTERNS = [
   /^(Throttling error|Service unavailable):/i,
   // AWS Bedrock non-overflow errors (human-readable prefixes from formatBedrockError)
@@ -62,8 +61,13 @@ var NON_OVERFLOW_PATTERNS = [
 function isContextOverflow(message, contextWindow) {
   if (message.stopReason === "error" && message.errorMessage) {
     const isNonOverflow = NON_OVERFLOW_PATTERNS.some((p) => p.test(message.errorMessage));
-    if (!isNonOverflow && OVERFLOW_PATTERNS.some((p) => p.test(message.errorMessage))) {
-      return true;
+    if (!isNonOverflow) {
+      if (OVERFLOW_PATTERNS.some((p) => p.test(message.errorMessage))) {
+        return true;
+      }
+      if (message.provider === "cerebras" && CEREBRAS_BODYLESS_OVERFLOW_PATTERN.test(message.errorMessage)) {
+        return true;
+      }
     }
   }
   if (contextWindow && message.stopReason === "stop") {

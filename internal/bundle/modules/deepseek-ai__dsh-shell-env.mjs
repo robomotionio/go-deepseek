@@ -8,10 +8,14 @@ var inject = [];
 var Config = z.object({ dshHome: z.string() });
 var DSH_SHELL_KEY = `${DSH_ENV_PREFIX}SHELL`;
 var DSH_SESSION_ID_KEY = `${DSH_ENV_PREFIX}SESSION_ID`;
+var DSH_PROFILE_KEY = `${DSH_ENV_PREFIX}PROFILE`;
+var DSH_PROFILE_DIR_KEY = `${DSH_ENV_PREFIX}PROFILE_DIR`;
 var RESERVED_BASH_ENV_KEYS = /* @__PURE__ */ new Set([
   DSH_HOME_ENV,
   DSH_SHELL_KEY,
-  DSH_SESSION_ID_KEY
+  DSH_SESSION_ID_KEY,
+  DSH_PROFILE_KEY,
+  DSH_PROFILE_DIR_KEY
 ]);
 var BASH_ENV_KEY_SUFFIX = /^[A-Z][A-Z0-9_]*$/;
 var ShellEnvRegistry = class extends Service {
@@ -65,6 +69,11 @@ var ShellEnvRegistry = class extends Service {
       [DSH_SHELL_KEY]: "1"
     };
     if (execution.agent !== void 0) values[DSH_SESSION_ID_KEY] = execution.agent.session.header.id;
+    const profile = this.ctx.get("profileContext");
+    if (profile !== void 0) {
+      values[DSH_PROFILE_KEY] = profile.name;
+      values[DSH_PROFILE_DIR_KEY] = profile.dir;
+    }
     for (const contributor of [...this.contributors.values()].sort((left, right) => left.name.localeCompare(right.name))) {
       const resolved = contributor.resolve(execution);
       for (const [rawKey, value] of Object.entries(resolved)) {

@@ -20,6 +20,9 @@ function sandboxDenialMarker(mode) {
 function escalationHintMarker(subject) {
   return `[sandbox: escalation available \u2014 retry this exact ${subject} once with sandbox_permissions (the narrowest wider mode that suffices) + justification; the approval prompt asks the user]`;
 }
+function sandboxPermissionsDescription(subject) {
+  return `The narrowest wider sandbox mode for a one-shot retry of the exact ${subject} the sandbox just denied; the retry asks the user for approval.`;
+}
 async function approveEscalation(request, approval) {
   const { requestedMode: mode, effectiveMode, justification, subject } = request;
   if (mode === effectiveMode) return effectiveMode;
@@ -31,13 +34,17 @@ async function approveEscalation(request, approval) {
     toolName: approval.toolName,
     callId: approval.callId,
     reason: `escalate sandbox to ${mode}: ${justification}`,
+    displayReason: {
+      en: `Allow this operation with ${mode} permissions: ${justification}`,
+      zh: `\u5141\u8BB8\u672C\u6B21\u64CD\u4F5C\u4F7F\u7528 ${mode} \u6743\u9650\uFF1A${justification}`
+    },
     ...approval.signal ? { signal: approval.signal } : {}
   });
   switch (outcome) {
     case "allowed-once":
       return mode;
     case "rejected":
-      throw new Error(`the user rejected escalating this ${subject} to "${mode}"`);
+      throw new Error(`the user rejected escalating this ${subject} to "${mode}"; it stays denied, so stop and explain instead of working around it`);
     case "cancelled":
       throw new Error(`approval for escalating to "${mode}" was cancelled`);
     case "unavailable":
@@ -128,6 +135,7 @@ export {
   isRunnerSpawnFailure,
   matchesSignature,
   sandboxDenialMarker,
+  sandboxPermissionsDescription,
   validateEscalationArgs,
   writableRoots
 };

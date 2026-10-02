@@ -60,6 +60,53 @@ function remove(list, item) {
 function makeArray(source) {
   return Array.isArray(source) ? source : isNullable(source) ? [] : [source];
 }
+var write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+function snapshot(value, ancestors = /* @__PURE__ */ new Set()) {
+  if (typeof value === "function") throw new TypeError("volatile config cannot contain functions");
+  if (value === null || typeof value !== "object") return value;
+  if (ancestors.has(value)) throw new TypeError("volatile config cannot contain cycles");
+  ancestors.add(value);
+  try {
+    if (Array.isArray(value)) return Object.freeze(value.map((item) => snapshot(item, ancestors)));
+    if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) throw new TypeError("volatile config objects must be plain objects or arrays");
+    return Object.freeze(Object.fromEntries(Object.entries(value).map(([key, item]) => [key, snapshot(item, ancestors)])));
+  } finally {
+    ancestors.delete(value);
+  }
+}
+function createVolatile(value) {
+  let current = snapshot(value);
+  return Object.freeze({
+    get: () => current,
+    [write]: (value2) => {
+      current = value2;
+    }
+  });
+}
+function isVolatile(value) {
+  return typeof value === "object" && value !== null && write in value;
+}
+function volatileEntries(value) {
+  const ancestors = /* @__PURE__ */ new Set();
+  function visit(value2, path) {
+    if (isVolatile(value2)) return [{
+      path,
+      ref: value2
+    }];
+    if (!value2 || typeof value2 !== "object" || ancestors.has(value2)) return [];
+    if (!Array.isArray(value2) && Object.getPrototypeOf(value2) !== Object.prototype && Object.getPrototypeOf(value2) !== null) return [];
+    ancestors.add(value2);
+    try {
+      return Object.entries(value2).flatMap(([key, child]) => visit(child, [...path, key]));
+    } finally {
+      ancestors.delete(value2);
+    }
+  }
+  return visit(value, []);
+}
+function updateVolatile(target, source) {
+  target[write](source.get());
+}
 function is(type, value) {
   if (arguments.length === 1) return (value2) => is(type, value2);
   return type in globalThis && value instanceof globalThis[type] || Object.prototype.toString.call(value).slice(8, -1) === type;
@@ -138,24 +185,37 @@ function clone(source, refs = /* @__PURE__ */ new Map()) {
   return result;
 }
 function deepEqual(a, b, strict) {
-  if (a === b) return true;
-  if (!strict && isNullable(a) && isNullable(b)) return true;
-  if (typeof a !== typeof b) return false;
-  if (typeof a !== "object") return false;
-  if (!a || !b) return false;
-  function check(test, then) {
-    return test(a) ? test(b) ? then(a, b) : false : test(b) ? false : void 0;
+  const ancestors = /* @__PURE__ */ new Set();
+  function compare(a2, b2) {
+    if (a2 === b2) return true;
+    if (isVolatile(a2) || isVolatile(b2)) return isVolatile(a2) && isVolatile(b2);
+    if (!strict && isNullable(a2) && isNullable(b2)) return true;
+    if (typeof a2 !== typeof b2 || typeof a2 !== "object" || !a2 || !b2) return false;
+    if (ancestors.has(a2)) return false;
+    function check(test, then) {
+      return test(a2) ? test(b2) ? then(a2, b2) : false : test(b2) ? false : void 0;
+    }
+    ancestors.add(a2);
+    try {
+      return check(Array.isArray, (a3, b3) => {
+        if (a3.length !== b3.length) return false;
+        for (let index = 0; index < a3.length; index++) if (!compare(a3[index], b3[index])) return false;
+        return true;
+      }) ?? check(is("Date"), (a3, b3) => a3.valueOf() === b3.valueOf()) ?? check(is("URL"), (a3, b3) => a3.href === b3.href) ?? check(is("RegExp"), (a3, b3) => a3.source === b3.source && a3.flags === b3.flags) ?? check(isArrayBufferLike, (a3, b3) => {
+        if (a3.byteLength !== b3.byteLength) return false;
+        const viewA = new Uint8Array(a3);
+        const viewB = new Uint8Array(b3);
+        for (let i = 0; i < viewA.length; i++) if (viewA[i] !== viewB[i]) return false;
+        return true;
+      }) ?? ((!strict || [a2, b2].every((value) => Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) && Object.keys({
+        ...a2,
+        ...b2
+      }).every((key) => compare(a2[key], b2[key])));
+    } finally {
+      ancestors.delete(a2);
+    }
   }
-  return check(Array.isArray, (a2, b2) => a2.length === b2.length && a2.every((item, index) => deepEqual(item, b2[index]))) ?? check(is("Date"), (a2, b2) => a2.valueOf() === b2.valueOf()) ?? check(is("RegExp"), (a2, b2) => a2.source === b2.source && a2.flags === b2.flags) ?? check(isArrayBufferLike, (a2, b2) => {
-    if (a2.byteLength !== b2.byteLength) return false;
-    const viewA = new Uint8Array(a2);
-    const viewB = new Uint8Array(b2);
-    for (let i = 0; i < viewA.length; i++) if (viewA[i] !== viewB[i]) return false;
-    return true;
-  }) ?? Object.keys({
-    ...a,
-    ...b
-  }).every((key) => deepEqual(a[key], b[key], strict));
+  return compare(a, b);
 }
 function capitalize(source) {
   return source.charAt(0).toUpperCase() + source.slice(1);
@@ -290,6 +350,7 @@ export {
   capitalize,
   clone,
   contain,
+  createVolatile,
   deduplicate,
   deepEqual,
   defineProperty,
@@ -303,6 +364,7 @@ export {
   isNonNullable,
   isNullable,
   isPlainObject,
+  isVolatile,
   makeArray,
   mapValues,
   noop,
@@ -315,5 +377,7 @@ export {
   trimSlash,
   uncapitalize,
   union,
-  mapValues as valueMap
+  updateVolatile,
+  mapValues as valueMap,
+  volatileEntries
 };

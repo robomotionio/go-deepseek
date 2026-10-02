@@ -38,9 +38,9 @@ type Config struct {
 	BaseURL string
 	APIKey  string
 
-	// Protocol is the wire the DeepSeek adapter speaks: "chat-completions"
-	// (the default here) or "messages". See Compose for why the default is
-	// pinned rather than inherited.
+	// Protocol is the wire the model is reached over: "chat-completions" (the
+	// default here) or "messages". It decides which plugin serves the model
+	// row; see modelRow for why the default is pinned rather than inherited.
 	Protocol string
 
 	// MaxTokens bounds a single response. Zero leaves it to the model.

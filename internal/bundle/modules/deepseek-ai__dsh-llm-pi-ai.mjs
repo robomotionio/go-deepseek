@@ -40,7 +40,6 @@ function emptyPiUsage() {
   };
 }
 function toPiReplayState(message, requestedModel = message.model) {
-  const responseModel = message.api === "anthropic-messages" && message.model !== requestedModel ? message.model : message.responseModel;
   return {
     response: {
       kind: "pi-ai",
@@ -48,7 +47,7 @@ function toPiReplayState(message, requestedModel = message.model) {
       api: message.api,
       provider: message.provider,
       model: requestedModel,
-      ...responseModel === void 0 ? {} : { responseModel },
+      ...message.responseModel === void 0 ? {} : { responseModel: message.responseModel },
       ...message.responseId === void 0 ? {} : { responseId: message.responseId },
       ...message.providerThinkingLevel === void 0 ? {} : { providerThinkingLevel: message.providerThinkingLevel },
       stopReason: message.stopReason
@@ -124,7 +123,7 @@ function readReplayState(value) {
   };
 }
 function foreignAssistant(message) {
-  const source = message.source.kind === "model" ? message.source : void 0;
+  const source = message.source;
   const content = [];
   for (const block of message.content) switch (block.type) {
     case "text":
@@ -156,8 +155,8 @@ function foreignAssistant(message) {
     role: "assistant",
     content,
     api: "dsh-foreign",
-    provider: source?.provider ?? "dsh-foreign",
-    model: source?.model ?? "dsh-foreign",
+    provider: source.provider,
+    model: source.model,
     usage: emptyPiUsage(),
     stopReason: content.some((piece) => piece.type === "toolCall") ? "toolUse" : "stop",
     timestamp: 0
@@ -202,7 +201,7 @@ function replayedAssistant(message, source, rawState) {
     }),
     api: state.response.api,
     provider: state.response.provider,
-    model: state.response.api === "anthropic-messages" ? state.response.responseModel ?? state.response.model : state.response.model,
+    model: state.response.model,
     ...state.response.responseModel === void 0 ? {} : { responseModel: state.response.responseModel },
     ...state.response.responseId === void 0 ? {} : { responseId: state.response.responseId },
     ...state.response.providerThinkingLevel === void 0 ? {} : { providerThinkingLevel: state.response.providerThinkingLevel },
@@ -213,7 +212,7 @@ function replayedAssistant(message, source, rawState) {
 }
 function toPiAssistant(message, onDegrade) {
   const source = message.source;
-  if (source.kind !== "model" || source.replayState === void 0) return foreignAssistant(message);
+  if (source.replayState === void 0) return foreignAssistant(message);
   try {
     return replayedAssistant(message, source, source.replayState);
   } catch (error) {
@@ -313,7 +312,8 @@ var COMPLETIONS_COMPAT_GATE = {
   zaiToolStream: "withhold",
   supportsOpenAIGrammarTools: "withhold",
   sendSessionAffinityHeaders: "withhold",
-  deferredToolsMode: "withhold",
+  supportsMidConvoSystemMessages: "withhold",
+  supportsMidConvoToolAdditions: "withhold",
   sessionAffinityFormat: "withhold"
 };
 var RESPONSES_COMPAT_GATE = {
@@ -325,9 +325,11 @@ var RESPONSES_COMPAT_GATE = {
   supportsOpenAIGrammarTools: "withhold",
   supportsAdditionalTools: "withhold",
   supportsToolSearch: "withhold",
-  supportsExplicitPromptCacheMode: "withhold"
+  supportsExplicitPromptCacheMode: "withhold",
+  supportsMidConvoSystemMessages: "withhold"
 };
 var COMPAT_GATES = {
+  "mistral-conversations": { supportsMidConvoSystemMessages: "withhold" },
   "openai-completions": COMPLETIONS_COMPAT_GATE,
   "openai-responses": RESPONSES_COMPAT_GATE,
   "azure-openai-responses": RESPONSES_COMPAT_GATE,
@@ -341,7 +343,9 @@ var COMPAT_GATES = {
     allowEmptySignature: "offer",
     supportsStrictTools: "offer",
     sendSessionAffinityHeaders: "withhold",
-    supportsToolReferences: "withhold",
+    sessionAffinityFormat: "withhold",
+    supportsMidConvoSystemMessages: "withhold",
+    supportsMidConvoToolChanges: "withhold",
     supportsMidConvoEffort: "withhold",
     allowedFallbackModels: "withhold"
   },
@@ -684,7 +688,7 @@ var profile = z.object({
   requestImageMaxBytes: z.number().step(1).min(1).default(DEFAULT_REQUEST_IMAGE_MAX_BYTES),
   retryPolicy: RetryPolicySchema
 });
-var Config = z.object({ providers: z.dict(profile).default({}) });
+var Config = z.object({ providers: z.dict(profile).default({}).volatile() });
 function assertServiceable(config, previous) {
   resolveProfiles(Object.fromEntries(Object.entries(config.providers ?? {}).filter(([provider, profile2]) => !deepEqualJson(profile2, previous?.providers?.[provider]))));
 }
@@ -773,13 +777,27 @@ function resolveProfiles(providers, validation = "strict") {
 function flattenText(message) {
   return message.content.filter((block) => block.type === "text").map((block) => block.text).join("");
 }
-function toolResultText(blocks) {
-  return blocks.map((block) => block.type === "text" ? block.text : block.type === "tool-result" ? toolResultText(block.content) : "").join("");
+function toolResultOf(message, toolNames, content) {
+  return {
+    role: "toolResult",
+    toolCallId: message.toolCallId,
+    toolName: toolNames.get(message.toolCallId) ?? "unknown",
+    content: typeof content === "string" ? [{
+      type: "text",
+      text: content || "(no output)"
+    }] : content,
+    isError: message.isError ?? false,
+    timestamp: 0
+  };
 }
-function assertSupportedImageRoles(messages) {
-  for (const message of messages) if (message.role !== "user" && contentHasImage(message.content)) throw new LlmError(`pi-ai cannot represent an image in an in-history ${message.role} message`, "UNSUPPORTED_CONTENT");
+function assertSupportedHistory(messages) {
+  for (const message of messages) {
+    if (message.role === "developer") throw new LlmError("Developer messages are not supported yet", "UNSUPPORTED_CONTENT");
+    if (message.content.some((block) => block.type === "tool-addition" || block.type === "tool-removal")) throw new LlmError("Tool-change blocks require developer role", "UNSUPPORTED_CONTENT");
+    if (message.role !== "user" && message.role !== "tool" && contentHasImage(message.content)) throw new LlmError(`pi-ai cannot represent an image in an in-history ${message.role} message`, "UNSUPPORTED_CONTENT");
+  }
 }
-async function userContent(blocks, requestImages, resolveImageAccess) {
+function userContent(blocks, requestImages, resolveImageAccess) {
   const content = [];
   for (const block of blocks) switch (block.type) {
     case "text":
@@ -801,17 +819,6 @@ async function userContent(blocks, requestImages, resolveImageAccess) {
       });
       break;
     }
-    case "tool-result":
-      {
-        const nested = await userContent(block.content, requestImages, resolveImageAccess);
-        if (typeof nested === "string") {
-          if (nested.length > 0) content.push({
-            type: "text",
-            text: nested
-          });
-        } else content.push(...nested);
-      }
-      break;
     default:
       break;
   }
@@ -821,7 +828,7 @@ async function userContent(blocks, requestImages, resolveImageAccess) {
 function collectImageRefs(blocks, refs) {
   for (const block of blocks) if (block.type === "image") {
     if (block.offloaded !== true) refs.set(block.attachment.attachmentId, block.attachment);
-  } else if (block.type === "tool-result") collectImageRefs(block.content, refs);
+  }
 }
 async function prepareRequestImages(messages, attachments, budget, signal) {
   const refs = /* @__PURE__ */ new Map();
@@ -833,6 +840,7 @@ async function prepareRequestImages(messages, attachments, budget, signal) {
   return versions;
 }
 function toolsOf(options) {
+  if (options.tools?.some((tool) => tool.deferLoading === true)) throw new LlmError("Deferred tool loading is not supported yet", "UNSUPPORTED_CONTENT");
   return options.tools?.map((tool) => ({
     name: tool.name,
     description: tool.description,
@@ -868,41 +876,36 @@ function appendAssistant(message, messages, toolNames, onReplayDegrade) {
   for (const block of assistant.content) if (block.type === "toolCall") toolNames.set(brandString(block.id), block.name);
   messages.push(assistant);
 }
+function appendSystemOrAssistant(message, messages, toolNames, onReplayDegrade) {
+  if (message.role === "system") {
+    messages.push({
+      role: "user",
+      content: flattenText(message),
+      timestamp: 0
+    });
+    return true;
+  }
+  if (message.role === "assistant") {
+    appendAssistant(message, messages, toolNames, onReplayDegrade);
+    return true;
+  }
+  return false;
+}
 function textOnlyContext(options, onReplayDegrade) {
-  assertSupportedImageRoles(options.messages);
+  assertSupportedHistory(options.messages);
   const split = splitSystemPrompt(options);
   const toolNames = /* @__PURE__ */ new Map();
   const messages = [];
   for (const message of split.messages) {
     if (contentHasImage(message.content)) throw new LlmError("pi-ai image conversion requires the durable attachment service", "UNSUPPORTED_CONTENT");
-    if (message.role === "system") {
-      messages.push({
-        role: "user",
-        content: flattenText(message),
-        timestamp: 0
-      });
+    if (appendSystemOrAssistant(message, messages, toolNames, onReplayDegrade)) continue;
+    if (message.role === "tool") {
+      messages.push(toolResultOf(message, toolNames, flattenText(message)));
       continue;
     }
-    if (message.role === "assistant") {
-      appendAssistant(message, messages, toolNames, onReplayDegrade);
-      continue;
-    }
-    const text = flattenText(message);
-    const results = message.content.filter((block) => block.type === "tool-result");
-    if (text.length > 0 || results.length === 0) messages.push({
+    messages.push({
       role: "user",
-      content: text,
-      timestamp: 0
-    });
-    for (const result of results) messages.push({
-      role: "toolResult",
-      toolCallId: result.toolCallId,
-      toolName: toolNames.get(result.toolCallId) ?? "unknown",
-      content: [{
-        type: "text",
-        text: toolResultText(result.content) || "(no output)"
-      }],
-      isError: result.isError ?? false,
+      content: flattenText(message),
       timestamp: 0
     });
   }
@@ -923,7 +926,7 @@ async function toPiContextWithImages(options, images, onReplayDegrade) {
     maxPixels: 4194304,
     maxBytes: 1048576
   };
-  assertSupportedImageRoles(options.messages);
+  assertSupportedHistory(options.messages);
   const split = splitSystemPrompt(options);
   const requestImages = await prepareRequestImages(split.messages, attachments, requestImagePolicy, options.signal);
   if (maxRequestImageBytes !== void 0) {
@@ -937,39 +940,17 @@ async function toPiContextWithImages(options, images, onReplayDegrade) {
   const toolNames = /* @__PURE__ */ new Map();
   const messages = [];
   for (const message of exactMessages) {
-    if (message.role === "system") {
-      messages.push({
-        role: "user",
-        content: flattenText(message),
-        timestamp: 0
-      });
+    if (appendSystemOrAssistant(message, messages, toolNames, onReplayDegrade)) continue;
+    if (message.role === "tool") {
+      messages.push(toolResultOf(message, toolNames, userContent(message.content, requestImages, resolveImageAccess)));
       continue;
     }
-    if (message.role === "assistant") {
-      appendAssistant(message, messages, toolNames, onReplayDegrade);
-      continue;
-    }
-    const content = await userContent(message.content.filter((block) => block.type !== "tool-result"), requestImages, resolveImageAccess);
-    const results = message.content.filter((block) => block.type === "tool-result");
-    if (content.length > 0 || results.length === 0) messages.push({
+    const content = userContent(message.content, requestImages, resolveImageAccess);
+    messages.push({
       role: "user",
       content,
       timestamp: 0
     });
-    for (const result of results) {
-      const resultContent = await userContent(result.content, requestImages, resolveImageAccess);
-      messages.push({
-        role: "toolResult",
-        toolCallId: result.toolCallId,
-        toolName: toolNames.get(result.toolCallId) ?? "unknown",
-        content: typeof resultContent === "string" ? [{
-          type: "text",
-          text: resultContent || "(no output)"
-        }] : resultContent,
-        isError: result.isError ?? false,
-        timestamp: 0
-      });
-    }
   }
   return piContext(split.systemPrompt, options, messages);
 }
@@ -1781,14 +1762,14 @@ function registrationFacts(profiles) {
     retryPolicy: profile2.retryPolicy
   })).sort((left, right) => left.provider.localeCompare(right.provider));
 }
-function directoryEntries(profiles) {
+function directoryEntries(profiles, settingsNs) {
   const catalog = new Set(catalogProviderIds());
   const entries = /* @__PURE__ */ new Map();
   const declare = (provider, displayName, error) => {
     entries.set(provider, {
       provider,
       displayName,
-      settingsNs: NS,
+      settingsNs,
       settingsPath: ["providers", provider],
       declared: !catalog.has(provider),
       ...error === void 0 ? {} : { error }
@@ -1799,18 +1780,28 @@ function directoryEntries(profiles) {
   return [...entries.values()];
 }
 function apply(ctx, config) {
-  let current = () => config;
+  ctx.inject(["settings"], (child) => {
+    child.effect(() => child.settings.configure({ auto: false }, ctx.fiber));
+  });
+  const settingsNs = ctx.fiber.entry?.options.id ?? NS;
   let lastRaw;
   let memoized;
   const profiles = () => {
-    const raw = current();
+    const raw = config.providers.get();
     if (raw === lastRaw && memoized !== void 0) return memoized;
-    const next = resolveProfiles(raw.providers, "deferred");
+    const next = resolveProfiles(structuredClone(raw), "deferred");
     lastRaw = raw;
     memoized = next;
     return next;
   };
   profiles();
+  ctx.on("internal/config", function(_raw, next) {
+    const raw = next();
+    if (this !== ctx.fiber) return raw;
+    const candidate = Config(raw);
+    assertServiceable({ providers: structuredClone(candidate.providers.get()) }, { providers: structuredClone(config.providers.get()) });
+    return raw;
+  });
   const resolveApiKey = async (provider, profile2) => {
     const ref = profile2.apiKeyEnv;
     if (ref === void 0) return void 0;
@@ -1839,7 +1830,7 @@ function apply(ctx, config) {
   let directory;
   let directoryFacts;
   const ensureDirectory = () => {
-    const entries = directoryEntries(profiles());
+    const entries = directoryEntries(profiles(), settingsNs);
     if (deepEqualJson(entries, directoryFacts)) return;
     if (directory === void 0) directory = ctx.llm.registerConfigurableProviders(entries);
     else directory.replace(entries);
@@ -1855,7 +1846,7 @@ function apply(ctx, config) {
       resolveApiKey: () => resolveApiKey(provider, profile2)
     };
   };
-  ctx.llm.registerModelDiscovery(NS, (request, signal) => discoverModels({
+  ctx.llm.registerModelDiscovery(settingsNs, (request, signal) => discoverModels({
     ...request,
     ...signal === void 0 ? {} : { signal }
   }, () => storedDiscoveryProfile(request.provider)));
@@ -1875,32 +1866,14 @@ function apply(ctx, config) {
     registeredFacts = facts;
   };
   ensureRegistrationFacts();
-  ctx.inject(["settings"], (settingsCtx) => {
-    let registering = true;
-    settingsCtx.settings.installSection(ctx, NS, Config, config, {
-      validate: (value) => {
-        if (registering) resolveProfiles(value.providers, "deferred");
-        else assertServiceable(value, current());
-      },
-      setSource: (source) => {
-        current = source;
-      },
-      onChange: () => {
-        try {
-          ensureRegistrationFacts();
-        } catch (error) {
-          ctx.logger.error("llm-pi-ai: keeping the previously registered routes after a refused update");
-          ctx.logger.error(error);
-        }
-        try {
-          ensureDirectory();
-        } catch (error) {
-          ctx.logger.error("llm-pi-ai: keeping the previous configurable-provider directory after a refused update");
-          ctx.logger.error(error);
-        }
-      }
-    });
-    registering = false;
+  ctx.on("loader/volatile-update", () => {
+    try {
+      ensureRegistrationFacts();
+      ensureDirectory();
+    } catch (error) {
+      ctx.logger.error("llm-pi-ai: configuration conflicts with an existing provider route");
+      ctx.logger.error(error);
+    }
   });
 }
 export {

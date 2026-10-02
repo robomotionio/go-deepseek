@@ -131,6 +131,8 @@ function assertContiguous(id, events, cursor) {
   for (const [index, event] of events.entries()) if (event.seq !== cursor + index) throw new Error(`append seq mismatch for "${id}": expected ${cursor + index} at index ${index}, got ${event.seq}`);
 }
 var SessionPersistence = class extends Service {
+  /** Process-local instance identity, stable through Context proxies and distinct after service replacement. */
+  identity = /* @__PURE__ */ Symbol("sessionPersistence");
   constructor(ctx) {
     super(ctx, "sessionPersistence");
   }

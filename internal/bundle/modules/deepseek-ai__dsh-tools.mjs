@@ -734,6 +734,7 @@ function validateArgs(spec, args) {
 function defineTool(options) {
   const userExecute = options.execute;
   const userFinalizeContent = options.finalizeContent;
+  const userProjectContent = options.projectContent;
   const userRender = options.output.render;
   const userPresentationMeta = options.output.presentationMeta;
   const userPresentCall = options.presentCall;
@@ -756,6 +757,7 @@ function defineTool(options) {
         return userPresentationMeta(args, value);
       } } : {}
     },
+    ...options.deferLoading === true ? { deferLoading: options.deferLoading } : {},
     ...options.timeoutMs !== void 0 ? { timeoutMs: options.timeoutMs } : {},
     async execute(args, exec) {
       const violations = validate(args);
@@ -763,6 +765,7 @@ function defineTool(options) {
       return userExecute(args, exec);
     }
   };
+  if (userProjectContent) tool.projectContent = (exec, result) => userProjectContent(exec, result);
   if (userFinalizeContent) tool.finalizeContent = (exec, result) => userFinalizeContent(exec, result);
   if (userPresentCall) tool.presentCall = (args) => {
     if (validate(args).length > 0) return void 0;
@@ -803,7 +806,7 @@ var RUN_CODE_CONTROLS = {
   },
   justification: {
     type: "string",
-    description: "Reason this complete program needs wider access, shown to the user for approval."
+    description: "Reason this complete program needs wider access, shown to the user for approval. Use the language of the user\u2019s current request."
   }
 };
 function controlParameters(runtime) {
@@ -1196,10 +1199,7 @@ function createRunCodeTool(registry, options) {
               const result = parked.kind === "post-result" ? await scheduler.finalize(parked.exec, parked.result) : scheduler.finish(parked.exec, parked.result);
               if (!result.isError && result.content.some((block) => block.type === "image")) exec.deferContext(createUserMessage({
                 content: result.content,
-                source: {
-                  kind: "plugin",
-                  plugin: "tools-ptc"
-                }
+                source: { kind: "ptc-mode" }
               }));
               for (const context of result.additionalContexts ?? []) exec.deferContext(context);
               if (result.concludesTurn) exec.concludeTurn();
@@ -2017,6 +2017,8 @@ var ToolRuntime = class extends Service {
   cancellationStates = /* @__PURE__ */ new WeakMap();
   /** Definition-owned final content transform snapshotted before policy begins. */
   contentFinalizers = /* @__PURE__ */ new WeakMap();
+  /** Execution-prepared content installed before post-execute policy. */
+  contentProjectors = /* @__PURE__ */ new WeakMap();
   layers = new ScopedLayers((scope) => new ToolLayer(scope), () => {
     this.ctx.emit("tools/change");
   });
@@ -2365,13 +2367,14 @@ var ToolRuntime = class extends Service {
   }
   /** Project one definition onto the model-facing schema fields. */
   schemaOf(definition, detachParameters) {
-    const { name, description, parameters } = definition;
+    const { name, description, parameters, deferLoading } = definition;
     const detached = detachParameters ? snapshotJsonValue(parameters) : parameters;
     if (detached === void 0) throw new Error(`tool "${name}" parameters must be lossless JSON before schema projection`);
     return {
       name,
       description,
-      parameters: detached
+      parameters: detached,
+      ...deferLoading === true ? { deferLoading } : {}
     };
   }
   /**
@@ -2487,6 +2490,7 @@ var ToolRuntime = class extends Service {
       }
     };
     const capturedFinalizer = visible?.finalizeContent?.bind(visible);
+    const capturedProjector = visible?.projectContent?.bind(visible);
     const finalizerFor = () => collapsed && !signal.aborted ? void 0 : capturedFinalizer;
     try {
       const detached = snapshotJsonValue(exec.arguments);
@@ -2497,6 +2501,7 @@ var ToolRuntime = class extends Service {
       };
       this.deferredContexts.set(execution, deferredContexts);
       this.contentFinalizers.set(execution, finalizerFor());
+      if (!collapsed) this.contentProjectors.set(execution, capturedProjector);
       this.cancellationStates.set(execution, {
         callerSignal: signal,
         bodyInvoked: false
@@ -2682,7 +2687,14 @@ var ToolRuntime = class extends Service {
   */
   async finalizeScheduledExecution(exec, result) {
     try {
-      const postResult = await this.postExecute(exec, result);
+      const project = this.contentProjectors.get(exec);
+      this.contentProjectors.delete(exec);
+      const content = project?.(exec, result);
+      const projected = content === void 0 ? result : this.markCanonical(exec, this.materializeFinalResult({
+        ...result,
+        content
+      }));
+      const postResult = await this.postExecute(exec, projected);
       return this.finishScheduledExecution(exec, this.callerCancelled(exec) && !postResult.isError ? this.cancellationResult(exec, postResult) : postResult);
     } catch (error) {
       return this.finishScheduledExecution(exec, toolErrorResult(error));
@@ -2774,6 +2786,7 @@ var ToolRuntime = class extends Service {
       toolName: exec.name,
       callId: exec.callId,
       ...ask.reason !== void 0 ? { reason: ask.reason } : {},
+      ...ask.displayReason !== void 0 ? { displayReason: ask.displayReason } : {},
       signal: exec.signal
     });
     switch (outcome) {

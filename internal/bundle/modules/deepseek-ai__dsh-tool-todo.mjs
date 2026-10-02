@@ -10,10 +10,10 @@ var STATUSES = [
   "completed"
 ];
 var Config = z.object({ allowParallelInProgress: z.boolean().required() });
-var DESCRIPTION_HEAD = "Record and update a structured task list for the current work. Send the ENTIRE list every call \u2014 it REPLACES the previous list (there are no partial updates, no per-item edits). Use it to plan multi-step work and show progress: add one todo per concrete step before you start. ";
-var DESCRIPTION_PARALLEL = "Mark every todo being actively worked on `in_progress` \u2014 several at once when work genuinely runs in parallel (e.g. concurrent subagents or background commands), one for sequential work; while work remains, at least one task should be `in_progress`. ";
-var DESCRIPTION_SINGLE = "Keep AT MOST ONE todo `in_progress` at a time; while work remains, exactly one active task should be `in_progress`. ";
-var DESCRIPTION_TAIL = "Mark a todo `completed` the moment it is done (do not batch completions), and allow no `in_progress` item only once all work is complete. Skip the list for trivial single-step tasks. Statuses: `pending` (not started), `in_progress` (being worked on now), `completed` (finished).";
+var DESCRIPTION_HEAD = "Record and update a task list to plan multi-step work and show progress; skip it for trivial single-step tasks. Add one todo per concrete step before you start. ";
+var DESCRIPTION_PARALLEL = "While work remains, keep the todos being worked on `in_progress`, several only when work runs in parallel. ";
+var DESCRIPTION_SINGLE = "While work remains, keep exactly one todo `in_progress`. ";
+var DESCRIPTION_TAIL = "Mark each todo `completed` as soon as it is done.";
 function describe(allowParallel) {
   return DESCRIPTION_HEAD + (allowParallel ? DESCRIPTION_PARALLEL : DESCRIPTION_SINGLE) + DESCRIPTION_TAIL;
 }

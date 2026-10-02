@@ -20,13 +20,31 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
-var EventStream, AssistantMessageEventStream;
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js
+var FifoQueue, EventStream, AssistantMessageEventStream;
 var init_event_stream = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/event-stream.js"() {
+    FifoQueue = class {
+      incoming = [];
+      outgoing = [];
+      get length() {
+        return this.incoming.length + this.outgoing.length;
+      }
+      enqueue(value) {
+        this.incoming.push(value);
+      }
+      dequeue() {
+        if (this.outgoing.length === 0) {
+          while (this.incoming.length > 0) {
+            this.outgoing.push(this.incoming.pop());
+          }
+        }
+        return this.outgoing.pop();
+      }
+    };
     EventStream = class {
-      queue = [];
-      waiting = [];
+      queue = new FifoQueue();
+      waiting = new FifoQueue();
       done = false;
       finalResultPromise;
       resolveFinalResult;
@@ -46,11 +64,11 @@ var init_event_stream = __esm({
           this.done = true;
           this.resolveFinalResult(this.extractResult(event));
         }
-        const waiter = this.waiting.shift();
+        const waiter = this.waiting.dequeue();
         if (waiter) {
           waiter({ value: event, done: false });
         } else {
-          this.queue.push(event);
+          this.queue.enqueue(event);
         }
       }
       end(result) {
@@ -59,18 +77,18 @@ var init_event_stream = __esm({
           this.resolveFinalResult(result);
         }
         while (this.waiting.length > 0) {
-          const waiter = this.waiting.shift();
+          const waiter = this.waiting.dequeue();
           waiter({ value: void 0, done: true });
         }
       }
       async *[Symbol.asyncIterator]() {
         while (true) {
           if (this.queue.length > 0) {
-            yield this.queue.shift();
+            yield this.queue.dequeue();
           } else if (this.done) {
             return;
           } else {
-            const result = await new Promise((resolve) => this.waiting.push(resolve));
+            const result = await new Promise((resolve) => this.waiting.enqueue(resolve));
             if (result.done)
               return;
             yield result.value;
@@ -96,7 +114,7 @@ var init_event_stream = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/lazy.js
 function createSetupErrorMessage(model, error) {
   return {
     role: "assistant",
@@ -159,12 +177,138 @@ function lazyApi(load, capabilities) {
   return api;
 }
 var init_lazy = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/lazy.js"() {
     init_event_stream();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/text.js
+function contentText(content, separator = "\n") {
+  if (typeof content === "string")
+    return content;
+  return content.filter((block) => block.type === "text").map((block) => block.text).join(separator);
+}
+function getSystemMessageText(message) {
+  const parts = [contentText(message.content)];
+  for (const text of Object.values(message.sections ?? {})) {
+    if (text !== null)
+      parts.push(text);
+  }
+  return parts.filter((part) => part.length > 0).join("\n\n");
+}
+function renderSystemMessageUpdate(message) {
+  const parts = [];
+  const text = contentText(message.content);
+  if (text.length > 0)
+    parts.push(text);
+  for (const [name, value] of Object.entries(message.sections ?? {})) {
+    parts.push(value === null ? `Removed system prompt section "${name}".` : `Updated system prompt section "${name}":
+
+${value}`);
+  }
+  return parts.join("\n\n");
+}
+var init_text = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/text.js"() {
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/transcript.js
+function isSystemMessage(message) {
+  return message.role === "system";
+}
+function getInitialSystemMessage(messages) {
+  const first = messages[0];
+  return first && isSystemMessage(first) ? first : void 0;
+}
+function getCurrentTools(messages) {
+  const tools = /* @__PURE__ */ new Map();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    for (const tool of message.toolsRemoved ?? [])
+      tools.delete(tool.name);
+    for (const tool of message.toolsAdded ?? [])
+      tools.set(tool.name, tool);
+  }
+  return [...tools.values()];
+}
+function getCurrentSystemMessage(messages) {
+  const content = [];
+  const sections = /* @__PURE__ */ new Map();
+  let timestamp;
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    timestamp ??= message.timestamp;
+    const text = contentText(message.content);
+    if (text.length > 0)
+      content.push(text);
+    for (const [name, value] of Object.entries(message.sections ?? {})) {
+      if (value === null)
+        sections.delete(name);
+      else
+        sections.set(name, value);
+    }
+  }
+  const tools = getCurrentTools(messages);
+  if (timestamp === void 0 && tools.length === 0)
+    return void 0;
+  return {
+    role: "system",
+    content: content.join("\n\n"),
+    ...sections.size > 0 ? { sections: Object.fromEntries(sections) } : {},
+    ...tools.length > 0 ? { toolsAdded: tools } : {},
+    timestamp: timestamp ?? 0
+  };
+}
+function collapseSystemMessages(context) {
+  const head = getCurrentSystemMessage(context.messages);
+  const messages = context.messages.filter((message) => message.role !== "system");
+  return { messages: head ? [head, ...messages] : messages };
+}
+function resolveTranscript(context, supportsMidConvoSystemMessages) {
+  return supportsMidConvoSystemMessages ? context : collapseSystemMessages(context);
+}
+function getDeclaredTools(messages) {
+  const definitions = /* @__PURE__ */ new Map();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    for (const tool of message.toolsAdded ?? [])
+      definitions.set(tool.name, tool);
+  }
+  return [...definitions.values()];
+}
+function hasNonAdditiveToolChanges(messages) {
+  const declared = /* @__PURE__ */ new Set();
+  for (const message of messages) {
+    if (!isSystemMessage(message))
+      continue;
+    if ((message.toolsRemoved?.length ?? 0) > 0)
+      return true;
+    for (const tool of message.toolsAdded ?? []) {
+      if (declared.has(tool.name))
+        return true;
+      declared.add(tool.name);
+    }
+  }
+  return false;
+}
+function resolveTranscriptTools(messages, supportsToolAdditions) {
+  const anchorsAdditions = supportsToolAdditions && !hasNonAdditiveToolChanges(messages);
+  return {
+    requestTools: anchorsAdditions ? getInitialSystemMessage(messages)?.toolsAdded ?? [] : getCurrentTools(messages),
+    anchorsAdditions
+  };
+}
+var init_transcript = __esm({
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/transcript.js"() {
+    init_text();
+  }
+});
+
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/models.js
 function calculateCost(model, usage) {
   const inputTokens = usage.input + usage.cacheRead + usage.cacheWrite;
   let rates = model.cost;
@@ -217,12 +361,12 @@ function clampThinkingLevel(model, level) {
 }
 var EXTENDED_THINKING_LEVELS;
 var init_models = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/models.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/models.js"() {
     EXTENDED_THINKING_LEVELS = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js
 function normalizeProviderError(error) {
   if (!(error instanceof Error)) {
     return { message: safeJsonStringify(error), messageCarriesBody: false };
@@ -304,12 +448,12 @@ function safeJsonStringify(value) {
 }
 var MAX_PROVIDER_ERROR_BODY_CHARS;
 var init_error_body = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/error-body.js"() {
     MAX_PROVIDER_ERROR_BODY_CHARS = 4e3;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/hash.js
 function shortHash(str) {
   let h1 = 3735928559;
   let h2 = 1103547991;
@@ -323,11 +467,11 @@ function shortHash(str) {
   return (h2 >>> 0).toString(36) + (h1 >>> 0).toString(36);
 }
 var init_hash = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/hash.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/headers.js
 function headersToRecord(headers) {
   const result = {};
   for (const [key, value] of headers.entries()) {
@@ -336,11 +480,11 @@ function headersToRecord(headers) {
   return result;
 }
 var init_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js
 import { parse as partialParse } from "partial-json";
 function isControlCharacter(char) {
   const codePoint = char.codePointAt(0);
@@ -438,12 +582,12 @@ function parseStreamingJson(partialJson) {
 }
 var VALID_JSON_ESCAPES;
 var init_json_parse = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/json-parse.js"() {
     VALID_JSON_ESCAPES = /* @__PURE__ */ new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js
 function loadNodeOs() {
   if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
     return null;
@@ -455,12 +599,12 @@ function getPiUserAgent() {
 }
 var nodeOs;
 var init_pi_user_agent = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/pi-user-agent.js"() {
     nodeOs = loadNodeOs();
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js
 function getBunSandboxEnvValue(name) {
   if (typeof process === "undefined" || !process.versions?.bun || Object.keys(process.env).length > 0) {
     return void 0;
@@ -486,12 +630,12 @@ function getProviderEnvValue(name, env) {
 }
 var procEnvCache;
 var init_provider_env = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-env.js"() {
     procEnvCache = null;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js
 function isProviderError(error) {
   if (!(error instanceof Error) || !("status" in error) || !("headers" in error))
     return false;
@@ -571,21 +715,21 @@ async function retryProviderRequest(request, options = {}) {
 }
 var DEFAULT_MAX_RETRY_DELAY_MS;
 var init_provider_retry = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/provider-retry.js"() {
     DEFAULT_MAX_RETRY_DELAY_MS = 6e4;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js
 function sanitizeSurrogates(text) {
   return text.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
 }
 var init_sanitize_unicode = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/sanitize-unicode.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js
 function isJsonSchemaObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -782,7 +926,7 @@ function createGrammarToolInputProperties(tools, supportsOpenAIGrammarTools) {
 }
 var UnsupportedStrictJsonSchemaError, UNSUPPORTED_STRICT_SCHEMA_KEYS;
 var init_constrained_sampling = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/constrained-sampling.js"() {
     UnsupportedStrictJsonSchemaError = class extends Error {
     };
     UNSUPPORTED_STRICT_SCHEMA_KEYS = [
@@ -806,7 +950,7 @@ var init_constrained_sampling = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js
 function inferCopilotInitiator(messages) {
   const last = messages[messages.length - 1];
   return last && last.role !== "user" ? "agent" : "user";
@@ -833,11 +977,11 @@ function buildCopilotDynamicHeaders(params) {
   return headers;
 }
 var init_github_copilot_headers = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/github-copilot-headers.js"() {
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js
 function clampOpenAIPromptCacheKey(key) {
   if (key === void 0)
     return void 0;
@@ -848,12 +992,12 @@ function clampOpenAIPromptCacheKey(key) {
 }
 var OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH;
 var init_openai_prompt_cache = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/openai-prompt-cache.js"() {
     OPENAI_PROMPT_CACHE_KEY_MAX_LENGTH = 64;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js
 function calculateContextTokens(usage) {
   return usage.totalTokens || usage.input + usage.output + usage.cacheRead + usage.cacheWrite;
 }
@@ -880,6 +1024,9 @@ function estimateTextAndImageContentTokens(content) {
 }
 function estimateMessageTokens(message) {
   let chars = 0;
+  if (message.role === "system") {
+    return estimateTextTokens(getSystemMessageText(message)) + estimateToolsTokens(message.toolsAdded) + estimateToolsTokens(message.toolsRemoved);
+  }
   if (message.role === "user")
     return estimateTextAndImageContentTokens(message.content);
   if (message.role === "toolResult")
@@ -911,7 +1058,8 @@ function getLastAssistantUsageInfo(messages) {
   }
   return usageInfo;
 }
-function estimateMessages(messages) {
+function estimateContextTokens(context) {
+  const messages = "messages" in context ? context.messages : context;
   const usageInfo = getLastAssistantUsageInfo(messages);
   if (usageInfo) {
     const usageTokens = calculateContextTokens(usageInfo.usage);
@@ -931,40 +1079,16 @@ function estimateToolsTokens(tools) {
     return 0;
   return estimateTextTokens(safeJsonStringify2(tools));
 }
-function isMessageArray(value) {
-  return Array.isArray(value);
-}
-function estimateContextTokens(context) {
-  if (isMessageArray(context))
-    return estimateMessages(context);
-  const estimate = estimateMessages(context.messages);
-  if (estimate.lastUsageIndex !== null) {
-    const addedNames = new Set(context.messages.slice(estimate.lastUsageIndex + 1).filter((message) => message.role === "toolResult").flatMap((message) => message.addedToolNames ?? []));
-    const addedToolTokens = estimateToolsTokens(context.tools?.filter((tool) => addedNames.has(tool.name)));
-    return {
-      tokens: estimate.tokens + addedToolTokens,
-      usageTokens: estimate.usageTokens,
-      trailingTokens: estimate.trailingTokens + addedToolTokens,
-      lastUsageIndex: estimate.lastUsageIndex
-    };
-  }
-  const prefixTokens = (context.systemPrompt ? estimateTextTokens(context.systemPrompt) : 0) + estimateToolsTokens(context.tools);
-  return {
-    tokens: estimate.tokens + prefixTokens,
-    usageTokens: estimate.usageTokens,
-    trailingTokens: estimate.trailingTokens + prefixTokens,
-    lastUsageIndex: estimate.lastUsageIndex
-  };
-}
 var CHARS_PER_TOKEN, ESTIMATED_IMAGE_CHARS;
 var init_estimate = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/utils/estimate.js"() {
+    init_text();
     CHARS_PER_TOKEN = 4;
     ESTIMATED_IMAGE_CHARS = 4800;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js
 function clampMaxTokensToContext(model, context, maxTokens) {
   if (model.contextWindow <= 0)
     return Math.max(MIN_MAX_TOKENS, maxTokens);
@@ -1008,7 +1132,7 @@ function clampThinkingBudgetToAnswerRoom(thinkingBudget, ceiling) {
 }
 var CONTEXT_SAFETY_TOKENS, MIN_MAX_TOKENS, MIN_ANSWER_TOKENS, DEFAULT_THINKING_BUDGETS;
 var init_simple_options = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/simple-options.js"() {
     init_estimate();
     CONTEXT_SAFETY_TOKENS = 4096;
     MIN_MAX_TOKENS = 1;
@@ -1022,7 +1146,7 @@ var init_simple_options = __esm({
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js
 function replaceImagesWithPlaceholder(content, placeholder) {
   const result = [];
   let previousWasPlaceholder = false;
@@ -1064,7 +1188,7 @@ function transformMessages(messages, model, normalizeToolCallId) {
   const normalizedMessages = messages.map((msg) => msg.content == null ? { ...msg, content: [] } : msg);
   const imageAwareMessages = downgradeUnsupportedImages(normalizedMessages, model);
   const transformed = imageAwareMessages.map((msg) => {
-    if (msg.role === "user") {
+    if (msg.role === "system" || msg.role === "user") {
       return msg;
     }
     if (msg.role === "toolResult") {
@@ -1129,7 +1253,8 @@ function transformMessages(messages, model, normalizeToolCallId) {
   const result = [];
   let pendingToolCalls = [];
   let existingToolResultIds = /* @__PURE__ */ new Set();
-  const insertSyntheticToolResults = () => {
+  const heldSystemMessages = [];
+  const closePendingToolCalls = () => {
     if (pendingToolCalls.length > 0) {
       for (const tc of pendingToolCalls) {
         if (!existingToolResultIds.has(tc.id)) {
@@ -1146,11 +1271,13 @@ function transformMessages(messages, model, normalizeToolCallId) {
       pendingToolCalls = [];
       existingToolResultIds = /* @__PURE__ */ new Set();
     }
+    result.push(...heldSystemMessages);
+    heldSystemMessages.length = 0;
   };
   for (let i = 0; i < transformed.length; i++) {
     const msg = transformed[i];
     if (msg.role === "assistant") {
-      insertSyntheticToolResults();
+      closePendingToolCalls();
       const assistantMsg = msg;
       if (assistantMsg.stopReason === "error" || assistantMsg.stopReason === "aborted") {
         continue;
@@ -1164,25 +1291,31 @@ function transformMessages(messages, model, normalizeToolCallId) {
     } else if (msg.role === "toolResult") {
       existingToolResultIds.add(msg.toolCallId);
       result.push(msg);
+    } else if (msg.role === "system") {
+      if (pendingToolCalls.length > 0) {
+        heldSystemMessages.push(msg);
+      } else {
+        result.push(msg);
+      }
     } else if (msg.role === "user") {
-      insertSyntheticToolResults();
+      closePendingToolCalls();
       result.push(msg);
     } else {
       result.push(msg);
     }
   }
-  insertSyntheticToolResults();
+  closePendingToolCalls();
   return result;
 }
 var NON_VISION_USER_IMAGE_PLACEHOLDER, NON_VISION_TOOL_IMAGE_PLACEHOLDER;
 var init_transform_messages = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/transform-messages.js"() {
     NON_VISION_USER_IMAGE_PLACEHOLDER = "(image omitted: model does not support images)";
     NON_VISION_TOOL_IMAGE_PLACEHOLDER = "(tool image omitted: model does not support images)";
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js
 var openai_completions_exports = {};
 __export(openai_completions_exports, {
   convertMessages: () => convertMessages,
@@ -1219,23 +1352,6 @@ function hasToolHistory(messages) {
     }
   }
   return false;
-}
-function getDeferredToolNames(messages) {
-  const names = /* @__PURE__ */ new Set();
-  for (const message of messages) {
-    if (message.role === "toolResult") {
-      for (const name of message.addedToolNames ?? []) {
-        names.add(name);
-      }
-    }
-  }
-  return names;
-}
-function getToolsByName(tools, names) {
-  if (!tools)
-    return [];
-  const toolsByName = new Map(tools.map((tool) => [tool.name, tool]));
-  return Array.from(names).map((name) => toolsByName.get(name)).filter((tool) => tool !== void 0);
 }
 function isTextContentBlock(block) {
   return block.type === "text";
@@ -1354,8 +1470,11 @@ function createClient(model, context, apiKey, optionsHeaders, fetch, sessionId, 
     defaultHeaders: headers
   });
 }
-function buildParams(model, context, options, compat = getCompat(model), cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env), grammarToolInputProperties = createGrammarToolInputProperties(context.tools, compat.supportsOpenAIGrammarTools)) {
-  const messages = convertMessages(model, context, compat, { grammarToolInputProperties });
+function buildParams(model, context, options, compat = getCompat(model), cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env), grammarToolInputProperties = createGrammarToolInputProperties(getDeclaredTools(context.messages), compat.supportsOpenAIGrammarTools)) {
+  const transcriptTools = resolveTranscriptTools(context.messages, compat.supportsMidConvoSystemMessages === true && compat.supportsMidConvoToolAdditions === true);
+  const messages = convertMessages(model, context, compat, {
+    grammarToolInputProperties
+  });
   const cacheControl = getCompatCacheControl(compat, cacheRetention);
   const params = {
     model: model.id,
@@ -1380,10 +1499,8 @@ function buildParams(model, context, options, compat = getCompat(model), cacheRe
   if (options?.temperature !== void 0) {
     params.temperature = options.temperature;
   }
-  const deferredToolNames = compat.deferredToolsMode === "kimi" ? getDeferredToolNames(context.messages) : /* @__PURE__ */ new Set();
-  const activeTools = context.tools?.filter((tool) => !deferredToolNames.has(tool.name));
-  if (activeTools && activeTools.length > 0) {
-    params.tools = convertTools(activeTools, compat);
+  if (transcriptTools.requestTools.length > 0) {
+    params.tools = convertTools(transcriptTools.requestTools, compat);
     if (compat.zaiToolStream) {
       params.tool_stream = true;
     }
@@ -1625,6 +1742,7 @@ function addCacheControlToTextContent(message, cacheControl) {
   return false;
 }
 function convertMessages(model, context, compat, options) {
+  const normalizedContext = resolveTranscript(context, compat.supportsMidConvoSystemMessages);
   const params = [];
   const normalizeToolCallId = (id) => {
     if (id.includes("|")) {
@@ -1643,12 +1761,9 @@ function convertMessages(model, context, compat, options) {
       return id.length > 40 ? id.slice(0, 40) : id;
     return id;
   };
-  const transformedMessages = transformMessages(context.messages, model, (id) => normalizeToolCallId(id));
-  if (context.systemPrompt) {
-    const useDeveloperRole = model.reasoning && compat.supportsDeveloperRole;
-    const role = useDeveloperRole ? "developer" : "system";
-    params.push({ role, content: sanitizeSurrogates(context.systemPrompt) });
-  }
+  const transformedMessages = transformMessages(normalizedContext.messages, model, (id) => normalizeToolCallId(id));
+  const transcriptTools = resolveTranscriptTools(normalizedContext.messages, compat.supportsMidConvoSystemMessages === true && compat.supportsMidConvoToolAdditions === true);
+  const instructionRole = model.reasoning && compat.supportsDeveloperRole ? "developer" : "system";
   let lastRole = null;
   for (let i = 0; i < transformedMessages.length; i++) {
     const msg = transformedMessages[i];
@@ -1658,14 +1773,27 @@ function convertMessages(model, context, compat, options) {
         content: "I have processed the tool results."
       });
     }
-    if (msg.role === "user") {
+    if (msg.role === "system") {
+      const addedTools = i > 0 && transcriptTools.anchorsAdditions ? msg.toolsAdded ?? [] : [];
+      if (addedTools.length > 0) {
+        const kimiToolMessage = {
+          role: "system",
+          tools: convertTools(addedTools, compat)
+        };
+        params.push(kimiToolMessage);
+      }
+      const text = i === 0 ? getSystemMessageText(msg) : renderSystemMessageUpdate(msg);
+      if (text.length > 0) {
+        params.push({ role: instructionRole, content: sanitizeSurrogates(text) });
+      }
+    } else if (msg.role === "user") {
       if (typeof msg.content === "string") {
         params.push({
           role: "user",
           content: sanitizeSurrogates(msg.content)
         });
       } else {
-        const content = msg.content.map((item) => {
+        const content = msg.content.filter((item) => item.type !== "text" || item.text.length > 0).map((item) => {
           if (item.type === "text") {
             return {
               type: "text",
@@ -1761,7 +1889,6 @@ function convertMessages(model, context, compat, options) {
       params.push(assistantMsg);
     } else if (msg.role === "toolResult") {
       const imageBlocks = [];
-      const deferredToolNames = /* @__PURE__ */ new Set();
       let j = i;
       for (; j < transformedMessages.length && transformedMessages[j].role === "toolResult"; j++) {
         const toolMsg = transformedMessages[j];
@@ -1778,11 +1905,6 @@ function convertMessages(model, context, compat, options) {
           toolResultMsg.name = toolMsg.toolName;
         }
         params.push(toolResultMsg);
-        if (compat.deferredToolsMode === "kimi") {
-          for (const name of toolMsg.addedToolNames ?? []) {
-            deferredToolNames.add(name);
-          }
-        }
         if (hasImages && model.input.includes("image")) {
           for (const block of toolMsg.content) {
             if (isImageContentBlock(block)) {
@@ -1817,16 +1939,6 @@ function convertMessages(model, context, compat, options) {
         lastRole = "user";
       } else {
         lastRole = "toolResult";
-      }
-      if (deferredToolNames.size > 0) {
-        const deferredTools = getToolsByName(context.tools, deferredToolNames);
-        if (deferredTools.length > 0) {
-          const kimiToolMessage = {
-            role: "system",
-            tools: convertTools(deferredTools, compat)
-          };
-          params.push(kimiToolMessage);
-        }
       }
       continue;
     }
@@ -1918,8 +2030,9 @@ function detectCompat(model) {
   const isCloudflareAiGateway = provider === "cloudflare-ai-gateway" || baseUrl.includes("gateway.ai.cloudflare.com");
   const isNvidia = provider === "nvidia" || baseUrl.includes("integrate.api.nvidia.com");
   const isAntLing = provider === "ant-ling" || baseUrl.includes("api.ant-ling.com");
+  const isCerebras = provider === "cerebras" || baseUrl.includes("cerebras.ai");
   const isDeepSeek = provider === "deepseek" || baseUrl.toLowerCase().includes("deepseek.com");
-  const isNonStandard = isNvidia || provider === "cerebras" || baseUrl.includes("cerebras.ai") || provider === "xai" || baseUrl.includes("api.x.ai") || isTogether || baseUrl.includes("chutes.ai") || isDeepSeek || isZai || isMoonshot || provider === "opencode" || baseUrl.includes("opencode.ai") || isCloudflareWorkersAI || isCloudflareAiGateway || isAntLing;
+  const isNonStandard = isNvidia || isCerebras || provider === "xai" || baseUrl.includes("api.x.ai") || isTogether || baseUrl.includes("chutes.ai") || isDeepSeek || isZai || isMoonshot || provider === "opencode" || baseUrl.includes("opencode.ai") || isCloudflareWorkersAI || isCloudflareAiGateway || isAntLing;
   const useMaxTokens = baseUrl.includes("chutes.ai") || isDeepSeek || isMoonshot || isCloudflareAiGateway || isTogether || isNvidia || isAntLing || isZai;
   const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
   const isOpenRouterDeveloperRoleModel = isOpenRouter && (model.id.startsWith("anthropic/") || model.id.startsWith("openai/"));
@@ -1943,11 +2056,13 @@ function detectCompat(model) {
     zaiToolStream: false,
     supportsThinkingTokenBudget: false,
     thinkingTokenBudgetField: void 0,
-    supportsStrictMode: !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia,
+    // OpenAI compatibility alone does not imply strict JSON-schema tool support.
+    supportsStrictMode: false,
     supportsOpenAIGrammarTools: false,
+    supportsMidConvoSystemMessages: false,
+    supportsMidConvoToolAdditions: false,
     cacheControlFormat,
-    sendSessionAffinityHeaders: false,
-    deferredToolsMode: void 0,
+    sendSessionAffinityHeaders: isOpenRouter,
     sessionAffinityFormat: isOpenRouter ? "openrouter" : "openai",
     supportsLongCacheRetention: !(isTogether || isCloudflareWorkersAI || isCloudflareAiGateway || isNvidia || isAntLing)
   };
@@ -1977,9 +2092,10 @@ function getCompat(model) {
     thinkingTokenBudgetField: model.compat.thinkingTokenBudgetField ?? detected.thinkingTokenBudgetField,
     supportsStrictMode: model.compat.supportsStrictMode ?? detected.supportsStrictMode,
     supportsOpenAIGrammarTools: model.compat.supportsOpenAIGrammarTools ?? detected.supportsOpenAIGrammarTools,
+    supportsMidConvoSystemMessages: model.compat.supportsMidConvoSystemMessages ?? detected.supportsMidConvoSystemMessages,
+    supportsMidConvoToolAdditions: model.compat.supportsMidConvoToolAdditions ?? detected.supportsMidConvoToolAdditions,
     cacheControlFormat: model.compat.cacheControlFormat ?? detected.cacheControlFormat,
     sendSessionAffinityHeaders: model.compat.sendSessionAffinityHeaders ?? detected.sendSessionAffinityHeaders,
-    deferredToolsMode: model.compat.deferredToolsMode ?? detected.deferredToolsMode,
     sessionAffinityFormat: model.compat.sessionAffinityFormat ?? detected.sessionAffinityFormat,
     supportsLongCacheRetention: model.compat.supportsLongCacheRetention ?? detected.supportsLongCacheRetention,
     vllmPriority: model.compat.vllmPriority
@@ -1987,7 +2103,7 @@ function getCompat(model) {
 }
 var OPENAI_COMPLETIONS_REASONING_FIELDS, stream, streamSimple;
 var init_openai_completions = __esm({
-  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js"() {
+  ".harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.js"() {
     init_models();
     init_error_body();
     init_event_stream();
@@ -1998,6 +2114,8 @@ var init_openai_completions = __esm({
     init_provider_env();
     init_provider_retry();
     init_sanitize_unicode();
+    init_text();
+    init_transcript();
     init_constrained_sampling();
     init_github_copilot_headers();
     init_openai_prompt_cache();
@@ -2006,6 +2124,7 @@ var init_openai_completions = __esm({
     OPENAI_COMPLETIONS_REASONING_FIELDS = ["reasoning", "reasoning_content", "reasoning_text"];
     stream = (model, context, options) => {
       const stream2 = new AssistantMessageEventStream();
+      const normalizedContext = resolveTranscript(context, getCompat(model).supportsMidConvoSystemMessages);
       (async () => {
         const output = {
           role: "assistant",
@@ -2033,11 +2152,11 @@ var init_openai_completions = __esm({
         try {
           const apiKey = getClientApiKey(model.provider, options?.apiKey, options?.headers);
           const compat = getCompat(model);
-          const grammarToolInputProperties = createGrammarToolInputProperties(context.tools, compat.supportsOpenAIGrammarTools);
+          const grammarToolInputProperties = createGrammarToolInputProperties(getDeclaredTools(normalizedContext.messages), compat.supportsOpenAIGrammarTools);
           const cacheRetention = resolveCacheRetention(options?.cacheRetention, options?.env);
           const cacheSessionId = cacheRetention === "none" ? void 0 : options?.sessionId;
-          const client = createClient(model, context, apiKey, options?.headers, options?.fetch, cacheSessionId, compat);
-          let params = buildParams(model, context, options, compat, cacheRetention, grammarToolInputProperties);
+          const client = createClient(model, normalizedContext, apiKey, options?.headers, options?.fetch, cacheSessionId, compat);
+          let params = buildParams(model, normalizedContext, options, compat, cacheRetention, grammarToolInputProperties);
           const nextParams = await options?.onPayload?.(params, model);
           if (nextParams !== void 0) {
             params = nextParams;
@@ -2269,7 +2388,6 @@ var init_openai_completions = __esm({
                   if (toolCall.function?.arguments) {
                     delta = toolCall.function.arguments;
                     block.partialArgs = (block.partialArgs ?? "") + toolCall.function.arguments;
-                    block.arguments = parseStreamingJson(block.partialArgs);
                   } else if (toolCall.custom?.input) {
                     const nextInput = getCustomToolCallInput(block) + toolCall.custom.input;
                     delta = appendCustomToolCallInput(block, nextInput, false) ?? "";
@@ -2354,7 +2472,7 @@ ${rawMetadata}`;
   }
 });
 
-// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.85.1_@modelcontextprotocol+sdk@1.29.0_zod@4.4.3__ws@8.21.0_zod@4.4.3/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.lazy.js
+// .harness/node_modules/.pnpm/@earendil-works+pi-ai@0.87.1_patch_hash=b9bcce474fb2ac44633dff0fa722816a5bff5451b4575d5_ecef9fb4cf2934d432845a5253d64a9c/node_modules/@earendil-works/pi-ai/dist/api/openai-completions.lazy.js
 init_lazy();
 var openAICompletionsApi = () => lazyApi(() => Promise.resolve().then(() => (init_openai_completions(), openai_completions_exports)));
 export {

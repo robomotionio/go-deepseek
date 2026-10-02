@@ -2,10 +2,11 @@
 import z from "@deepseek-ai/schemastery";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { FsError } from "@deepseek-ai/dsh-fs";
+import { readLangHintForPath as langFromPath } from "@deepseek-ai/dsh-util-code-language";
 import { structuredPatch } from "diff";
 import { basename, extname } from "node:path";
 import { AttachmentError, AttachmentId } from "@deepseek-ai/dsh-attachment";
-import { ESCALATION_TARGETS, approveEscalation, escalationHintMarker, sandboxDenialMarker, validateEscalationArgs } from "@deepseek-ai/dsh-sandbox";
+import { ESCALATION_TARGETS, approveEscalation, escalationHintMarker, sandboxDenialMarker, sandboxPermissionsDescription, validateEscalationArgs } from "@deepseek-ai/dsh-sandbox";
 var READ_MAX_LINE_LENGTH = 2e3;
 var READ_MAX_BYTES = 50 * 1024;
 function newAccumulator() {
@@ -88,58 +89,6 @@ ${outcome.lines.length > 0 ? `${outcome.lines.map((line) => `${line.number}: ${l
 ${footer}` : footer}
 </content>`;
 }
-var LANG_BY_EXTENSION = {
-  ts: "ts",
-  tsx: "tsx",
-  mts: "ts",
-  cts: "ts",
-  js: "js",
-  jsx: "jsx",
-  mjs: "js",
-  cjs: "js",
-  json: "json",
-  jsonc: "json",
-  py: "py",
-  rb: "rb",
-  go: "go",
-  rs: "rs",
-  java: "java",
-  c: "c",
-  h: "c",
-  cc: "cpp",
-  cpp: "cpp",
-  hpp: "cpp",
-  cxx: "cpp",
-  cs: "cs",
-  kt: "kotlin",
-  swift: "swift",
-  php: "php",
-  sh: "sh",
-  bash: "sh",
-  zsh: "sh",
-  yaml: "yaml",
-  yml: "yaml",
-  toml: "toml",
-  ini: "ini",
-  md: "md",
-  markdown: "md",
-  mdx: "mdx",
-  html: "html",
-  htm: "html",
-  css: "css",
-  scss: "scss",
-  less: "less",
-  sql: "sql",
-  xml: "xml",
-  lua: "lua"
-};
-function langFromPath(path) {
-  const base = path.slice(Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\")) + 1);
-  const dot = base.lastIndexOf(".");
-  if (dot <= 0) return void 0;
-  const ext = base.slice(dot + 1).toLowerCase();
-  return Object.hasOwn(LANG_BY_EXTENSION, ext) ? LANG_BY_EXTENSION[ext] : void 0;
-}
 function isFileTextLine(value) {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
   const { number, text } = value;
@@ -210,7 +159,7 @@ function applyReadTool(ctx, caps) {
   ctx.systemPrompt.section({
     name: "tool:read",
     order: ctx.systemPrompt.getSectionOrder("TOOL_READ"),
-    text: ({ scope }) => ctx.tools.get("read", scope) === void 0 ? "" : "Use the read tool \u2014 not shell commands like cat \u2014 to inspect text files. Results include line numbers. Use offset and limit to continue reading large files."
+    text: ({ scope }) => ctx.tools.get("read", scope) === void 0 ? "" : "Use the read tool \u2014 not shell commands like cat \u2014 to inspect text files. Use offset and limit to continue reading large files."
   });
   ctx.tools.register(defineTool({
     name: "read",
@@ -413,7 +362,7 @@ function applyWriteTool(ctx, sandbox) {
   ctx.systemPrompt.section({
     name: "tool:write",
     order: ctx.systemPrompt.getSectionOrder("TOOL_WRITE"),
-    text: ({ scope }) => ctx.tools.get("write", scope) === void 0 ? "" : "Use the write tool to create files or completely replace file contents. Existing files are overwritten, so read an existing file first (the default fs-observation-policy requires it)" + (ctx.tools.get("edit", scope) === void 0 ? "" : " and prefer edit for targeted changes") + "."
+    text: ({ scope }) => ctx.tools.get("write", scope) === void 0 ? "" : "Read an existing file before overwriting it with write (the default fs-observation-policy requires it)" + (ctx.tools.get("edit", scope) === void 0 ? "" : " and prefer edit for targeted changes") + "."
   });
   ctx.tools.register(defineTool({
     name: "write",
@@ -535,7 +484,7 @@ function applyEditTool(ctx, sandbox) {
   ctx.systemPrompt.section({
     name: "tool:edit",
     order: ctx.systemPrompt.getSectionOrder("TOOL_EDIT"),
-    text: ({ scope }) => ctx.tools.get("edit", scope) === void 0 ? "" : "Use the edit tool for targeted changes to existing UTF-8 text files. It replaces literal old_string with new_string; by default old_string must appear exactly once. If old_string appears multiple times, provide a more specific old_string or set replace_all to true. Read the file first (the default fs-observation-policy requires it), unless you just created or edited it in this session."
+    text: ({ scope }) => ctx.tools.get("edit", scope) === void 0 ? "" : "Read a file before editing it (the default fs-observation-policy requires it), unless you just created or edited it in this session."
   });
   ctx.tools.register(defineTool({
     name: "edit",
@@ -549,7 +498,7 @@ function applyEditTool(ctx, sandbox) {
       old_string: {
         type: "string",
         required: true,
-        description: "Literal text to replace. Must match exactly."
+        description: "Literal text to replace."
       },
       new_string: {
         type: "string",
@@ -777,7 +726,7 @@ function imageReadContent(value) {
 function applyReadImageTool(ctx) {
   ctx.tools.register(defineTool({
     name: "read_image",
-    description: "Read a PNG/JPEG/WebP/GIF file and return the image itself. A path without a file extension is accepted; the format is detected from the file content, so normalized attachment paths can be passed directly without copying or renaming. Harness validates and downscales large supported images before the next model request, so use this tool directly instead of installing image libraries or creating thumbnails merely to inspect an image. Independent files may be read concurrently in small batches. Requires the current model to accept image input.",
+    description: "Read a PNG/JPEG/WebP/GIF file and return the image itself. Large images are downscaled automatically; do not install image libraries or create thumbnails to inspect an image.",
     parameters: { file_path: {
       type: "string",
       required: true,
@@ -884,11 +833,11 @@ var FsSandboxController = class {
       sandbox_permissions: {
         type: "string",
         enum: [...this.escalationModes],
-        description: "The wider sandbox mode this file operation needs. Only valid as a one-shot retry of an operation the sandbox just denied; requires justification and user approval."
+        description: sandboxPermissionsDescription("operation")
       },
       justification: {
         type: "string",
-        description: "Required with sandbox_permissions: one sentence for the user explaining why this exact file operation needs the wider access."
+        description: "Required with sandbox_permissions: one sentence for the user explaining why this exact file operation needs the wider access. Use the language of the user\u2019s current request."
       }
     };
   }

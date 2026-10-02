@@ -1,6 +1,12 @@
 // .harness/packages/settings/settings/lib/index.js
-import { Service } from "@deepseek-ai/cordis";
-import { deepEqualJson, deepFreeze } from "@deepseek-ai/dsh-util-values";
+import { existsSync } from "node:fs";
+import { readFile, rename } from "node:fs/promises";
+import { join } from "node:path";
+import { parse } from "yaml";
+import { Service, resolveConfig } from "@deepseek-ai/cordis";
+import { interpolate } from "@deepseek-ai/cordis-plugin-loader";
+import z from "@deepseek-ai/schemastery";
+import { isVolatile } from "@deepseek-ai/cosmokit";
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -40,21 +46,78 @@ function walk(node, value, path, secrets) {
     case "array":
       if (!Array.isArray(value)) return value;
       return value.map((entry, index) => walk(node.inner, entry, [...path, String(index)], secrets));
+    case "union":
+    case "intersect":
+      return (node.list ?? []).reduce((current, child) => walk(child, current, path, secrets), value);
+    case "transform":
+      return walk(node.inner, value, path, secrets);
     default:
       return value;
   }
 }
 function redactSecrets(schema, value) {
   const secrets = [];
+  const stripped = walk(schema, value, [], secrets);
+  const positions = /* @__PURE__ */ new Map();
+  for (const secret of secrets) {
+    const key = JSON.stringify(secret.path);
+    const previous = positions.get(key);
+    positions.set(key, {
+      ...secret,
+      set: secret.set || previous?.set === true
+    });
+  }
   return {
-    value: walk(schema, value, [], secrets),
-    secrets
+    value: stripped,
+    secrets: [...positions.values()]
   };
 }
-var NAMESPACE_PATTERN = /^[a-z][a-z0-9-]*$/;
-function parseSettingsNamespace(value) {
-  if (!NAMESPACE_PATTERN.test(value)) throw new TypeError(`settings namespace "${value}" must match ${String(NAMESPACE_PATTERN)}`);
+function plainConfig(value) {
+  if (isVolatile(value)) return plainConfig(value.get());
+  if (Array.isArray(value)) return value.map(plainConfig);
+  if (value !== null && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, plainConfig(child)]));
   return value;
+}
+function plainSchema(schema) {
+  const result = new z(schema.toJSON());
+  const walk2 = (node) => {
+    delete node.meta.volatile;
+    if (node.meta.role === "secret") {
+      delete node.meta.default;
+      delete node.meta.required;
+    } else if (node.meta.default !== void 0) node.meta.default = redactSecrets(node, node.meta.default).value;
+    for (const child of Object.values(node.dict ?? {})) walk2(child);
+    if (node.inner) walk2(node.inner);
+    for (const child of node.list ?? []) walk2(child);
+  };
+  walk2(result);
+  return result;
+}
+function volatileForm(schema) {
+  if (schema.meta.volatile) return plainSchema(schema);
+  if (schema.type === "object") {
+    const dict = Object.fromEntries(Object.entries(schema.dict ?? {}).flatMap(([key, child]) => {
+      const field = volatileForm(child);
+      return field === void 0 ? [] : [[key, field]];
+    }));
+    return Object.keys(dict).length === 0 ? void 0 : z.object(dict);
+  }
+}
+function isExpression(value) {
+  return Object.keys(value).length === 1 && typeof Reflect.get(value, "__jsExpr") === "string";
+}
+function projectForm(schema, value) {
+  if (schema.type === "object" && value !== null && typeof value === "object" && !isExpression(value)) return Object.fromEntries(Object.entries(schema.dict ?? {}).flatMap(([key, child]) => {
+    const field = Reflect.get(value, key);
+    return field === void 0 ? [] : [[key, projectForm(child, field)]];
+  }));
+  return value;
+}
+function isVolatilePath(schema, path) {
+  if (schema.meta.volatile) return true;
+  const [key, ...rest] = path;
+  const child = key === void 0 ? void 0 : schema.dict?.[key];
+  return child !== void 0 && isVolatilePath(child, rest);
 }
 var SettingsConflictError = class extends Error {
   /** Stable machine code for wire layers mapping this to their own taxonomy. */
@@ -80,39 +143,33 @@ function isPlainObject(value) {
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
 }
-function applyPathOp(section, op) {
-  const [head, ...rest] = op.path;
-  if (head === void 0) {
-    if (op.op === "unset") return {};
-    if (!isPlainObject(op.value)) throw new TypeError("settings mutate: setting the section root requires a plain object");
-    return { ...op.value };
-  }
-  if (rest.length === 0) {
-    if (op.op === "set") return {
-      ...section,
-      [head]: op.value
-    };
-    const { [head]: _removed, ...kept } = section;
-    return kept;
-  }
-  const child = section[head];
-  if (!isPlainObject(child)) {
-    if (op.op === "unset") return section;
-    return {
-      ...section,
-      [head]: applyPathOp({}, {
-        ...op,
-        path: rest
-      })
-    };
-  }
-  return {
-    ...section,
-    [head]: applyPathOp(child, {
-      ...op,
-      path: rest
-    })
+function applyPathOp(section, op, schema) {
+  const edit = (input, path, node) => {
+    const [head, ...rest] = path;
+    if (head === void 0) return op.op === "set" ? op.value : void 0;
+    const value = input === void 0 ? node?.meta.default : input;
+    if (Array.isArray(value)) {
+      if (!/^(0|[1-9][0-9]*)$/.test(head) || Number(head) > value.length || Number(head) === value.length && (rest.length > 0 || op.op === "unset")) throw new TypeError(`Config array index "${head}" is out of range`);
+      const result3 = [...value];
+      const index = Number(head);
+      if (rest.length === 0 && op.op === "unset") result3.splice(index, 1);
+      else result3[index] = edit(value[index], rest, node?.inner);
+      return result3;
+    }
+    const result2 = isPlainObject(value) ? { ...value } : {};
+    const child = edit(Object.hasOwn(result2, head) ? result2[head] : void 0, rest, node?.dict?.[head] ?? node?.inner);
+    if (child === void 0) Reflect.deleteProperty(result2, head);
+    else Object.defineProperty(result2, head, {
+      value: child,
+      enumerable: true,
+      writable: true,
+      configurable: true
+    });
+    return result2;
   };
+  const result = edit(section, op.path, schema);
+  if (!isPlainObject(result)) throw new TypeError("Config root must be a plain object");
+  return result;
 }
 function describeRejected(value) {
   if (value === void 0) return "undefined";
@@ -122,7 +179,9 @@ function describeRejected(value) {
   }
   return `a ${typeof value}`;
 }
-function cloneJsonShaped(root, reject) {
+function cloneJsonShaped(root) {
+  const reject = (label, path) => /* @__PURE__ */ new TypeError(`Config ${path} contains ${label}`);
+  if (!isPlainObject(root)) throw reject("a non-plain root", "$");
   const visiting = /* @__PURE__ */ new WeakSet();
   const clone = (value, path) => {
     if (value === null || typeof value === "string" || typeof value === "boolean") return value;
@@ -143,7 +202,12 @@ function cloneJsonShaped(root, reject) {
       const out = {};
       for (const [key, entry] of Object.entries(value)) {
         if (entry === void 0) continue;
-        out[key] = clone(entry, `${path}.${key}`);
+        Object.defineProperty(out, key, {
+          value: clone(entry, `${path}.${key}`),
+          enumerable: true,
+          configurable: true,
+          writable: true
+        });
       }
       visiting.delete(value);
       return out;
@@ -153,396 +217,257 @@ function cloneJsonShaped(root, reject) {
   return clone(root, "$");
 }
 function mergeLayers(under, over) {
-  if (over === void 0) return under;
   if (!isPlainObject(under) || !isPlainObject(over)) return over;
   const merged = { ...under };
-  for (const [key, value] of Object.entries(over)) merged[key] = key in merged ? mergeLayers(merged[key], value) : value;
+  for (const [key, value] of Object.entries(over)) Object.defineProperty(merged, key, {
+    value: Object.hasOwn(merged, key) ? mergeLayers(merged[key], value) : value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
   return merged;
 }
-var SettingsProvider = class extends Service {
-  registrations = /* @__PURE__ */ new Map();
-  /** Latest published raw document; empty until the provider's first publish. */
-  document = {};
-  /** Per-namespace write chains; settled tails, so a failure never poisons the queue. */
-  writeQueues = /* @__PURE__ */ new Map();
-  /** In-flight watcher invocation segments, drained by the dispose teardown. */
-  pendingTails = /* @__PURE__ */ new Set();
-  /** Set at service dispose: refuse new writes while queued ones drain. */
-  stopped = false;
-  /** Opaque read of {@link stopped}: control flow cannot narrow it across awaits. */
-  isStopped() {
-    return this.stopped;
+function member(node, key, own = false) {
+  if (!(isPlainObject(node) || Array.isArray(node)) || own && !Object.hasOwn(node, key)) return void 0;
+  return Reflect.get(node, key);
+}
+var LEGACY_SECTION_ENTRIES = {
+  "ui-developer-tools": "ui-settings",
+  "ui-onboarding": "ui-settings-general",
+  /* v8 ignore next -- the base bundle composes one shell executor per platform */
+  shell: process.platform === "win32" ? "pwsh-sandbox" : "bash-sandbox"
+};
+function inheritedConfig(runtime, inherited) {
+  try {
+    return resolveConfig(runtime, inherited);
+  } catch (_error) {
+    return inherited;
   }
-  constructor(ctx) {
-    super(ctx, "settings");
+}
+var SettingsForms = class extends Service {
+  ownerContext;
+  static inject = ["configEditor", "profileContext"];
+  revisions = /* @__PURE__ */ new Map();
+  closed = false;
+  scheduled = false;
+  presentations = /* @__PURE__ */ new Map();
+  constructor(ownerContext) {
+    super(ownerContext, "settings");
+    this.ownerContext = ownerContext;
+    const ctx = ownerContext;
+    ctx.effect(() => () => {
+      this.closed = true;
+    });
+    ctx.on("app-boot/config-reload", () => {
+      this.invalidate();
+    });
+    ctx.root.loader.await().then(() => this.importLegacyDocument()).catch((error) => {
+      ctx.logger.error(error);
+    });
   }
-  /**
-  * Load the provider's document once and publish it before the service
-  * becomes injectable, and register the write-drain teardown. Providers with
-  * their own init (watchers, connections) delegate here first via
-  * `yield* super[Service.init]()`; their disposers then run before the drain.
+  /** Move the sections of the removed `settings.yaml` into the active profile once the Loader has settled every entry.
+  * The document is renamed before the first write, so a partial import never repeats; a section the running
+  * composition rejects is logged and remains only in the renamed file. */
+  async importLegacyDocument() {
+    const profile = this.ownerContext.profileContext;
+    const path = join(profile.home, "settings.yaml");
+    if (!existsSync(path)) return;
+    const imported = `${path}.imported`;
+    await rename(path, imported);
+    const sections = parse(await readFile(imported, "utf8"));
+    for (const [section, values] of Object.entries(sections ?? {})) {
+      const ns = LEGACY_SECTION_ENTRIES[section] ?? section;
+      try {
+        await this.update(ns, values);
+      } catch (error) {
+        this.ownerContext.logger.warn("settings: section %s of %s was not imported into entry %s", section, imported, ns);
+        this.ownerContext.logger.warn(error);
+      }
+    }
+    this.ownerContext.logger.info("settings: imported %s into profile %s", imported, profile.name);
+  }
+  /** Register the calling plugin instance's page policy without changing its Config.
+  * @param presentation Automatic-page policy for this instance; `auto` defaults to true.
+  * @param owner Plugin instance the policy belongs to; defaults to the calling fiber.
+  * @returns Disposer; register it with the calling plugin's effects.
+  * @throws If this instance already has a registered policy.
   */
-  async *[Service.init]() {
-    yield async () => {
-      this.stopped = true;
-      await Promise.allSettled([...this.writeQueues.values(), ...this.pendingTails]);
+  configure(presentation, owner = this.ctx.fiber) {
+    const fiber = owner;
+    if (this.presentations.has(fiber)) throw new Error("Settings presentation is already configured for this plugin instance");
+    const policy = { ...presentation };
+    this.presentations.set(fiber, policy);
+    this.invalidate();
+    return () => {
+      if (this.presentations.get(fiber) !== policy) return;
+      this.presentations.delete(fiber);
+      this.invalidate();
     };
-    this.publish(await this.load());
   }
-  /**
-  * Absolute path of the provider's user-editable document, when its storage
-  * is one local file. Configuration surfaces use this only as availability
-  * metadata; the guarded open operation resolves the path again Host-side.
-  * Non-file providers leave it undefined and expose no open-document affordance.
-  * @returns the absolute local document path, or undefined for non-file storage.
-  */
+  invalidate() {
+    if (this.scheduled || this.closed) return;
+    this.scheduled = true;
+    queueMicrotask(() => {
+      this.scheduled = false;
+      if (this.closed || this.ownerContext.fiber.state !== 2) return;
+      try {
+        this.describe();
+      } catch (error) {
+        this.ownerContext.logger.error(error);
+      }
+    });
+  }
+  /** Whether the active profile accepts form edits. */
+  get writable() {
+    return true;
+  }
+  /** Current profile patch shown by the native configuration editor. */
   get documentPath() {
+    return this.ownerContext.configEditor.documentPath;
   }
-  /**
-  * Prepare the provider's user-editable document for a native editor. File
-  * providers may materialize an absent document before returning its path;
-  * non-file providers return undefined.
-  * @returns the absolute local document path, or undefined for non-file storage.
+  /** Locate the profile patch for native editing.
+  * @returns The existing profile patch path.
   */
   prepareDocument() {
     return Promise.resolve(this.documentPath);
   }
-  /**
-  * Register a namespace schema and receive its owner scope. The registration
-  * is an effect on the calling plugin's fiber: disposing that fiber removes
-  * the namespace and its observers. An invalid stored section fails the
-  * registration itself — the earliest point where the schema can judge it.
-  * @param ns - unique namespace; duplicate registration fails loud.
-  * @param schema - schemastery schema resolving this namespace's value.
-  * @param options - composition `base` layer and effect timing.
-  * @returns the owner scope for reads, observation, and updates.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
-  */
-  register(ns, schema, options) {
-    const parsedNs = parseSettingsNamespace(ns);
-    if (this.registrations.has(parsedNs)) throw new Error(`settings namespace "${parsedNs}" is already registered`);
-    const registration = {
-      ns: parsedNs,
-      schema,
-      base: options?.base,
-      applies: options?.applies ?? "live",
-      ...options?.validate === void 0 ? {} : { validate: options.validate },
-      resolved: deepFreeze(this.resolve(schema, options?.base, this.section(parsedNs), options?.validate)),
-      revision: 0,
-      watchers: /* @__PURE__ */ new Set()
-    };
-    this.ctx.effect(() => {
-      this.registrations.set(parsedNs, registration);
-      return () => this.registrations.delete(parsedNs);
-    }, `settings.register(${JSON.stringify(String(parsedNs))})`);
-    return {
-      get: () => registration.resolved,
-      watch: (callback) => {
-        const watcher = {
-          callback,
-          tail: Promise.resolve(),
-          active: true
-        };
-        registration.watchers.add(watcher);
-        return () => {
-          watcher.active = false;
-          registration.watchers.delete(watcher);
-        };
-      },
-      update: (patch) => this.update(parsedNs, patch),
-      replace: (section) => this.replace(parsedNs, section)
-    };
-  }
-  /**
-  * Attach one optional-settings consumer to this provider. The consumer
-  * registers its composition entry as the base layer while this provider is
-  * present, then falls back to that entry if the provider detaches.
-  * @param owner - consumer context whose unload suppresses fallback work.
-  * @param ns - consumer-owned settings namespace.
-  * @param schema - schema resolving the namespace.
-  * @param entry - composition entry used as the base and fallback value.
-  * @param hooks - source sink, change notification, and optional validation.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
-  */
-  installSection(owner, ns, schema, entry, hooks) {
-    const scope = this.register(ns, schema, {
-      base: entry,
-      ...hooks.validate === void 0 ? {} : { validate: hooks.validate }
-    });
-    hooks.setSource(() => scope.get());
-    this.ctx.effect(() => () => {
-      if (isUnloading(owner)) return;
-      hooks.setSource(() => entry);
-      hooks.onChange();
-    });
-    hooks.onChange();
-    scope.watch(() => {
-      if (isUnloading(owner)) return;
-      hooks.onChange();
-    });
-  }
-  /**
-  * Describe every registered namespace for configuration surfaces, including
-  * the composition `base` and raw user layers so a form can mark which fields
-  * the user overrode (presence in `user`) and what a reset returns to.
-  * @param options - redaction switch; wire surfaces must redact.
-  * @returns one descriptor per registered namespace, in registration order.
+  /** Read active plugin schemas and their live values.
+  * @param options Redaction required for remote callers.
+  * @returns Forms keyed by unique profile entry ids.
   */
   describe(options) {
-    return [...this.registrations.values()].map((registration) => {
-      let user;
-      try {
-        user = this.section(registration.ns);
-      } catch {
-        user = void 0;
-      }
-      const base = registration.base === void 0 ? void 0 : structuredClone(registration.base);
-      const detachedUser = user === void 0 ? void 0 : structuredClone(user);
-      const descriptor = {
-        ns: registration.ns,
-        schema: registration.schema.toJSON(),
-        value: registration.resolved,
-        revision: registration.revision,
-        ...base === void 0 ? {} : { base },
-        ...detachedUser === void 0 ? {} : { user: detachedUser },
-        applies: registration.applies
-      };
-      if (options?.redactSecrets !== true) return descriptor;
-      const schema = registration.schema;
-      const redacted = redactSecrets(schema, registration.resolved);
-      return {
-        ...descriptor,
-        value: redacted.value,
-        ...base === void 0 ? {} : { base: redactSecrets(schema, base).value },
-        ...detachedUser === void 0 ? {} : { user: redactSecrets(schema, detachedUser).value },
-        secrets: redacted.secrets
-      };
+    const active = /* @__PURE__ */ new Set();
+    const descriptors = this.ownerContext.configEditor.configuration().flatMap(({ entry, inherited, override }) => {
+      const schema = this.schema(entry);
+      if (schema === void 0 || entry.fiber === void 0 || entry.fiber.runtime === null || entry.fiber.state !== 2) return [];
+      const form = volatileForm(schema);
+      if (form === void 0) return [];
+      active.add(entry.id);
+      const raw = JSON.stringify([
+        entry.fiber.uid,
+        schema.toJSON(),
+        entry.options.config ?? {}
+      ]);
+      const autoGenerate = this.presentations.get(entry.fiber)?.auto ?? true;
+      const previous = this.revisions.get(entry.id);
+      const revision = previous === void 0 ? 0 : previous.revision + Number(previous.raw !== raw);
+      this.revisions.set(entry.id, {
+        raw,
+        revision,
+        ns: entry.options.id,
+        autoGenerate
+      });
+      if (previous?.raw !== raw || previous.autoGenerate !== autoGenerate) this.ownerContext.emit("settings/document-updated", entry.options.id, revision);
+      const value = projectForm(form, plainConfig(entry.fiber.config));
+      const resolved = interpolate(entry.fiber.ctx, inherited);
+      const base = projectForm(form, plainConfig(inheritedConfig(entry.fiber.runtime, resolved)));
+      const user = projectForm(form, override);
+      const redacted = redactSecrets(form, value);
+      return [{
+        autoGenerate,
+        ns: entry.options.id,
+        schema: form.toJSON(),
+        revision,
+        applies: "live",
+        value: options?.redactSecrets ? redacted.value : value,
+        base: options?.redactSecrets ? redactSecrets(form, base).value : base,
+        user: options?.redactSecrets ? redactSecrets(form, user).value : user,
+        ...options?.redactSecrets ? { secrets: redacted.secrets } : {}
+      }];
     });
+    for (const [id, previous] of this.revisions) {
+      if (active.has(id) || previous.raw === void 0) continue;
+      const revision = previous.revision + 1;
+      this.revisions.set(id, {
+        ...previous,
+        raw: void 0,
+        revision
+      });
+      this.ownerContext.emit("settings/document-updated", previous.ns, revision);
+    }
+    return descriptors;
   }
-  /**
-  * Read one registered namespace's resolved value.
-  * @param ns - the namespace to read.
-  * @returns the resolved value, or `undefined` while unregistered.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
-  */
-  get(ns) {
-    return this.registrations.get(parseSettingsNamespace(ns))?.resolved;
-  }
-  /**
-  * Merge a patch into one registered namespace's user layer, validate the
-  * resolved candidate, persist through the provider, then commit and emit.
-  * A validation failure rejects before anything is persisted. Writes to one
-  * namespace are serialized: concurrent updates apply in call order, each
-  * merging over the previous write's committed section.
-  * @param ns - the registered namespace to update.
-  * @param patch - plain-object patch over the user section.
-  * @param expectedRevision - the descriptor `revision` the caller read; a
-  *   namespace that moved past it rejects with {@link SettingsConflictError}.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
+  /** Merge editable fields into an entry's config.
+  * @param ns Profile entry id.
+  * @param patch Fields to merge.
+  * @param expectedRevision Revision returned by describe.
   */
   async update(ns, patch, expectedRevision) {
-    return this.write(parseSettingsNamespace(ns), patch, "merge", expectedRevision);
+    const input = cloneJsonShaped(patch);
+    await this.write(ns, (current) => mergeLayers(current, input), expectedRevision);
   }
-  /**
-  * Replace one registered namespace's user section wholesale, validate,
-  * persist, then commit and emit. Keys absent from `section` fall back to the
-  * composition `base` and schema defaults — this is the removal/reset path a
-  * merge-only patch cannot express (`replace({})` re-inherits everything).
-  * @param ns - the registered namespace to replace.
-  * @param section - the complete next user section.
-  * @param expectedRevision - the descriptor `revision` the caller read; a
-  *   namespace that moved past it rejects with {@link SettingsConflictError}.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
+  /** Reset all live fields, then set the supplied fields; ordinary config is preserved.
+  * @param ns Profile entry id.
+  * @param section Complete form values.
+  * @param expectedRevision Revision returned by describe.
   */
   async replace(ns, section, expectedRevision) {
-    return this.write(parseSettingsNamespace(ns), section, "replace", expectedRevision);
+    const input = cloneJsonShaped(section);
+    await this.write(ns, (_current, base) => mergeLayers(base, input), expectedRevision);
   }
-  /**
-  * Apply path-addressed edits to one registered namespace's user section,
-  * validate, persist, then commit and emit. The ops are applied to the
-  * section as it stands when the write reaches the front of the queue, so a
-  * caller never has to restate fields it did not touch — and, crucially,
-  * cannot delete fields it never saw. This is the write path for any caller
-  * holding a redacted view; `replace` remains the wholesale reset.
-  * @param ns - the registered namespace to edit.
-  * @param ops - ordered path edits; later ops observe earlier ones.
-  * @param expectedRevision - the descriptor `revision` the caller read; a
-  *   namespace that moved past it rejects with {@link SettingsConflictError}.
-  * @throws {TypeError} when `ns` is not a lowercase hyphenated identifier.
+  /** Apply field edits without restating redacted secrets; unsetting an array index removes its element.
+  * @param ns Profile entry id.
+  * @param ops Ordered form edits.
+  * @param expectedRevision Revision returned by describe.
   */
   async mutate(ns, ops, expectedRevision) {
-    const parsedNs = parseSettingsNamespace(ns);
-    if (!Array.isArray(ops)) throw new TypeError(`settings mutate for "${parsedNs}" must be an array of path ops`);
-    for (const op of ops) {
-      if (!isPlainObject(op) || op["op"] !== "set" && op["op"] !== "unset") throw new TypeError(`settings mutate for "${parsedNs}" ops must be {op:'set'|'unset', path}`);
-      if (!Array.isArray(op["path"]) || op["path"].some((part) => typeof part !== "string")) throw new TypeError(`settings mutate for "${parsedNs}" op paths must be arrays of strings`);
-    }
-    return this.write(parsedNs, ops, "mutate", expectedRevision);
+    await this.write(ns, (current, base, schema) => ops.reduce((value, op) => {
+      if (op.op === "set") return applyPathOp(value, op, schema);
+      const parent = op.path.slice(0, -1).reduce((node, key) => member(node, key), value);
+      if (Array.isArray(parent)) return applyPathOp(value, op, schema);
+      const inherited = op.path.reduce((node, key) => member(node, key, true), base);
+      return applyPathOp(value, inherited === void 0 ? op : {
+        op: "set",
+        path: op.path,
+        value: inherited
+      }, schema);
+    }, current), expectedRevision, ops.map((op) => op.path));
   }
-  /** Validate a write, then queue it on the namespace's serialized write chain. */
-  write(ns, input, mode, expectedRevision) {
-    const verb = mode === "merge" ? "update" : mode === "replace" ? "replace" : "mutate";
-    const registration = this.registrations.get(ns);
-    if (registration === void 0) throw new Error(`settings namespace "${ns}" is not registered`);
-    if (this.isStopped()) throw new Error(`settings service is disposed: "${ns}" cannot be written`);
-    if (!this.writable) throw new Error(`settings provider is read-only: "${ns}" cannot be updated in-process`);
-    let payload;
-    if (mode === "mutate") payload = { ops: input };
-    else {
-      if (!isPlainObject(input)) throw new TypeError(`settings ${verb} for "${ns}" must be a plain object`);
-      payload = input;
-    }
-    const snapshot = cloneJsonShaped(payload, (label, path) => /* @__PURE__ */ new TypeError(`settings ${verb} for "${ns}" must contain only JSON-compatible data (found ${label} at ${path})`));
-    const run = (this.writeQueues.get(ns) ?? Promise.resolve()).catch(() => void 0).then(async () => {
-      if (this.isStopped()) throw new Error(`settings service was disposed before the queued "${ns}" ${verb} ran`);
-      if (this.registrations.get(ns) !== registration) throw new Error(`settings namespace "${ns}" registration was disposed before the queued ${verb} ran`);
-      const current = this.section(ns) ?? {};
-      if (expectedRevision !== void 0 && expectedRevision !== registration.revision) throw new SettingsConflictError(ns, expectedRevision, registration.revision);
-      const section = mode === "merge" ? mergeLayers(current, snapshot) : mode === "replace" ? snapshot : snapshot["ops"].reduce(applyPathOp, current);
-      const next = deepFreeze(this.resolve(registration.schema, registration.base, section, registration.validate));
-      await this.persist(ns, section);
-      this.document[ns] = section;
-      if (this.registrations.get(ns) === registration && !this.isStopped()) {
-        this.bumpRevision(registration, current, section);
-        this.commit(registration, next, "update");
-      }
+  async write(ns, change, expected, paths = []) {
+    const entry = this.ownerContext.configEditor.entries().find((row) => row.options.id === ns);
+    const schema = entry === void 0 ? void 0 : this.schema(entry);
+    if (entry === void 0 || schema === void 0) throw new Error(`No configurable plugin entry "${ns}"`);
+    const form = volatileForm(schema);
+    if (form === void 0) throw new Error(`Plugin entry "${ns}" has no volatile fields`);
+    for (const path of paths) if (path.length && !isVolatilePath(schema, path)) throw new Error(`Config field "${path.join(".")}" is not volatile`);
+    await this.ownerContext.configEditor.edit(entry, (raw, inherited) => {
+      const descriptor = this.describe().find((row) => row.ns === ns);
+      if (descriptor === void 0) throw new Error(`Plugin entry "${ns}" is no longer configurable`);
+      if (expected !== void 0 && descriptor.revision !== expected) throw new SettingsConflictError(ns, expected, descriptor.revision);
+      const next = cloneJsonShaped(change(projectForm(form, raw), projectForm(form, inherited), schema));
+      const validatePaths = (value, node, path = []) => {
+        for (const [key, child] of Object.entries(value)) {
+          const target = [...path, key];
+          if (isVolatilePath(schema, target)) continue;
+          const fields = node.dict;
+          const field = Object.hasOwn(fields, key) ? fields[key] : void 0;
+          if (isPlainObject(child) && field !== void 0) validatePaths(child, field, target);
+          else throw new Error(`Config field "${target.join(".")}" is not volatile`);
+        }
+      };
+      validatePaths(next, form);
+      const strip = (value, node, path = []) => {
+        if (isVolatilePath(schema, path)) return {};
+        const result = { ...value };
+        for (const [key, field] of Object.entries(node.dict)) {
+          const target = [...path, key];
+          if (isVolatilePath(schema, target)) Reflect.deleteProperty(result, key);
+          else if (isPlainObject(result[key])) result[key] = strip(result[key], field, target);
+        }
+        return result;
+      };
+      return mergeLayers(strip(raw, form), next);
     });
-    this.writeQueues.set(ns, run);
-    return run;
+    this.describe();
   }
-  /**
-  * Provider hook: commit a complete raw document observed in storage. Each
-  * registered namespace re-resolves; an invalid section keeps that
-  * namespace's last good value and warns, other namespaces still commit.
-  * @param doc - the detached raw document (unregistered sections preserved).
-  * @param source - change origin; defaults to `provider`.
-  */
-  publish(doc, source = "provider") {
-    const before = /* @__PURE__ */ new Map();
-    for (const registration of this.registrations.values()) try {
-      before.set(registration.ns, this.section(registration.ns));
-    } catch {
-      before.set(registration.ns, void 0);
-    }
-    this.document = doc;
-    for (const registration of this.registrations.values()) {
-      let next;
-      try {
-        next = deepFreeze(this.resolve(registration.schema, registration.base, this.section(registration.ns), registration.validate));
-      } catch (error) {
-        this.ctx.logger.warn('settings: keeping last good "%s" after invalid stored section', registration.ns);
-        this.ctx.logger.warn(error);
-        continue;
-      }
-      this.bumpRevision(registration, before.get(registration.ns), this.section(registration.ns));
-      this.commit(registration, next, source);
-    }
-  }
-  /** Read one namespace's raw user section, rejecting non-object sections. */
-  section(ns) {
-    const section = this.document[ns];
-    if (section === void 0) return void 0;
-    if (!isPlainObject(section)) throw new TypeError(`settings section "${ns}" must be an object of keys`);
-    return section;
-  }
-  /** Resolve one namespace value: schema defaults, then `base`, then the user layer. */
-  resolve(schema, base, section, validate) {
-    const value = schema(mergeLayers(base, section));
-    validate?.(value);
-    return value;
-  }
-  /**
-  * Advance a namespace's revision when its RAW section changed, and announce
-  * it. Deliberately independent of {@link commit}'s resolved-value equality:
-  * storing an override equal to the composition base leaves the resolved
-  * value alone but changes what the document says, which is exactly what a
-  * configuration surface must re-read.
-  */
-  bumpRevision(registration, before, after) {
-    if (deepEqualJson(before, after)) return;
-    registration.revision += 1;
-    this.emitDocumentUpdated(registration.ns, registration.revision);
-  }
-  /** Contained fan-out of `settings/document-updated`, mirroring {@link commit}'s. */
-  emitDocumentUpdated(ns, revision) {
-    let invariantFailure;
-    const args = [
-      "settings/document-updated",
-      ns,
-      revision
-    ];
-    for (const listener of this.ctx.events.dispatch("emit", args)) try {
-      const returned = listener(ns, revision);
-      if (returned != null && typeof returned.then === "function") Promise.resolve(returned).then(void 0, (error) => {
-        this.warnListenerFailure(ns, error);
-      });
-    } catch (error) {
-      if (error?.code === "INVARIANT") {
-        invariantFailure ??= error;
-        continue;
-      }
-      this.warnListenerFailure(ns, error);
-    }
-    if (invariantFailure !== void 0) throw invariantFailure;
-  }
-  /** Commit a resolved value when changed: swap, notify watchers, emit the event. */
-  commit(registration, next, source) {
-    const prev = registration.resolved;
-    if (deepEqualJson(next, prev)) return;
-    registration.resolved = next;
-    for (const watcher of [...registration.watchers]) {
-      const segment = watcher.tail.then(() => {
-        if (!watcher.active || this.isStopped()) return;
-        return watcher.callback(next, prev);
-      }).then(() => void 0, (error) => {
-        this.warnWatcherFailure(registration.ns, error);
-      });
-      watcher.tail = segment;
-      this.pendingTails.add(segment);
-      segment.then(() => this.pendingTails.delete(segment));
-    }
-    let invariantFailure;
-    const args = [
-      "settings/updated",
-      registration.ns,
-      next,
-      prev,
-      source
-    ];
-    for (const listener of this.ctx.events.dispatch("emit", args)) try {
-      const returned = listener(registration.ns, next, prev, source);
-      if (returned != null && typeof returned.then === "function") Promise.resolve(returned).then(void 0, (error) => {
-        this.warnListenerFailure(registration.ns, error);
-      });
-    } catch (error) {
-      if (error?.code === "INVARIANT") {
-        invariantFailure ??= error;
-        continue;
-      }
-      this.warnListenerFailure(registration.ns, error);
-    }
-    if (invariantFailure !== void 0) throw invariantFailure;
-  }
-  /** Contained-watcher diagnostic shared by the sync and async failure paths. */
-  warnWatcherFailure(ns, error) {
-    this.ctx.logger.warn('settings: watcher for "%s" failed', ns);
-    this.ctx.logger.warn(error);
-  }
-  /** Contained-listener diagnostic shared by the sync and async failure paths. */
-  warnListenerFailure(ns, error) {
-    this.ctx.logger.warn('settings: a settings/updated listener for "%s" failed', ns);
-    this.ctx.logger.warn(error);
+  schema(entry) {
+    const schema = entry.fiber?.runtime?.Config;
+    return schema !== void 0 && "toJSON" in schema ? schema : void 0;
   }
 };
-var FIBER_DISPOSED = 4;
-var FIBER_UNLOADING = 5;
-function isUnloading(ctx) {
-  const state = ctx.fiber.state;
-  return state === FIBER_UNLOADING || state === FIBER_DISPOSED;
-}
 export {
   SettingsConflictError,
-  SettingsProvider,
-  SettingsProvider as default,
+  SettingsForms,
+  SettingsForms as default,
   redactSecrets
 };

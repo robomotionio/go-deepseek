@@ -17,7 +17,6 @@ function parseExitStatus(text) {
     exitCode: 0
   };
 }
-var SHELL_SETTINGS_NAMESPACE = "shell";
 var ShellExecutor = class extends Service {
   constructor(ctx) {
     super(ctx, "shell");
@@ -32,7 +31,6 @@ var ShellExecutor = class extends Service {
 };
 export {
   DSH_ENV_PREFIX,
-  SHELL_SETTINGS_NAMESPACE,
   ShellExecutor,
   ShellExecutor as default,
   parseExitStatus

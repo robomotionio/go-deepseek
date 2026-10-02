@@ -3,6 +3,200 @@ import z from "@deepseek-ai/schemastery";
 import { AnonymousEntries, ScopedLayers, scopeOf } from "@deepseek-ai/dsh-scope";
 import { deadline, timeoutOf } from "@deepseek-ai/dsh-timeout";
 import { JobId, JobRegistry } from "@deepseek-ai/dsh-jobs";
+var JobLayer = class {
+  /** Tokens of the job controllers attached from this scope. */
+  controllers = new AnonymousEntries();
+  /** The `{ owners: 'scope' }` subscriptions registered from this scope. */
+  scoped = new AnonymousEntries();
+  isEmpty() {
+    return this.controllers.isEmpty() && this.scoped.isEmpty();
+  }
+};
+var JobEventHub = class {
+  layers;
+  warn;
+  unscoped = /* @__PURE__ */ new Set();
+  /**
+  * @param layers - the scope-layer table shared with the controller handshake.
+  * @param warn - sink for a listener's contained failure.
+  */
+  constructor(layers, warn) {
+    this.layers = layers;
+    this.warn = warn;
+  }
+  /**
+  * Register one listener as an effect of `ctx`.
+  * @param ctx - the subscribing context; owns the effect and, for `'scope'`, names the scope.
+  * @param filter - which owners' events to deliver.
+  * @param listener - receives each matching event.
+  * @returns disposer that unregisters the listener.
+  */
+  subscribe(ctx, filter, listener) {
+    const subscription = {
+      filter,
+      listener
+    };
+    if ("owners" in filter && filter.owners === "scope") return this.layers.effect(ctx, (layer) => layer.scoped.append(subscription), { label: "jobs.events.subscribe()" });
+    return ctx.effect(() => {
+      this.unscoped.add(subscription);
+      return () => {
+        this.unscoped.delete(subscription);
+      };
+    }, "jobs.events.subscribe()");
+  }
+  /**
+  * Deliver one event to every matching subscription, containing each
+  * listener so an observer cannot break the commit already made.
+  * @param event - the event to deliver.
+  * @param owner - the job's exact owner, or undefined for unowned work.
+  */
+  emit(event, owner) {
+    const ownerId = owner?.id;
+    for (const subscription of this.unscoped) {
+      const { filter } = subscription;
+      if ("owner" in filter && ownerId !== void 0 && ownerId !== filter.owner) continue;
+      this.deliver(subscription, event);
+    }
+    for (const subscription of this.layers.global.scoped.values()) this.deliver(subscription, event);
+    const scope = owner === void 0 ? void 0 : scopeOf(owner.ctx);
+    for (const layer of this.layers.chainLayers(scope)) for (const subscription of layer.scoped.values()) this.deliver(subscription, event);
+  }
+  deliver(subscription, event) {
+    try {
+      subscription.listener(event);
+    } catch (error) {
+      this.warn(`jobs: event listener threw on ${event.type}: ${String(error)}`);
+    }
+  }
+};
+function startPump(sources, sink, pollMs, until) {
+  if (!Number.isFinite(pollMs) || pollMs <= 0) throw new Error(`invalid pump pollMs: expected a positive finite number of milliseconds, got ${JSON.stringify(pollMs)}`);
+  const states = sources.map((source) => ({
+    source,
+    cursor: 0
+  }));
+  const drain = () => {
+    for (const [index, state] of states.entries()) {
+      const { source } = state;
+      const read = source.read(state.cursor);
+      state.cursor = read.nextOffset;
+      sink.spill(index, read.spillPath);
+      if (read.text.length === 0) continue;
+      if (source.channel === void 0 && !read.lossy) sink.append(read.text);
+      else sink.append(read.text, {
+        ...source.channel !== void 0 ? { channel: source.channel } : {},
+        ...read.lossy ? { gapBefore: true } : {}
+      });
+    }
+  };
+  return { done: (async () => {
+    let settled = false;
+    let timer;
+    let wake;
+    const finish = () => {
+      settled = true;
+      clearTimeout(timer);
+      wake?.();
+    };
+    until.then(finish, finish);
+    while (!settled) {
+      drain();
+      await new Promise((resolve) => {
+        wake = resolve;
+        timer = setTimeout(resolve, pollMs);
+      });
+      wake = void 0;
+      timer = void 0;
+    }
+    drain();
+  })() };
+}
+function utf8Tail(text, maxBytes) {
+  const raw = Buffer.from(text, "utf8");
+  let start = raw.length - maxBytes;
+  while (start < raw.length && (raw[start] & 192) === 128) start += 1;
+  const tail = raw.subarray(start);
+  return {
+    text: tail.toString("utf8"),
+    bytes: tail.length
+  };
+}
+var OutputRing = class {
+  /** Retained chunks in offset order. */
+  chunks = [];
+  /** Sum of the retained chunks' byte lengths. */
+  retainedBytes = 0;
+  /** Total UTF-8 bytes ever appended — the offset the next chunk starts at. */
+  total = 0;
+  /** Offset of the oldest retained byte (equals {@link total} when nothing is retained). */
+  earliest = 0;
+  /**
+  * Append one chunk and trim the head to `cap`.
+  * @param text - the chunk text, exactly as produced.
+  * @param options - stream label and gap marker.
+  * @param cap - retention cap in UTF-8 bytes after this append.
+  * @returns false when the chunk was empty and nothing changed.
+  */
+  append(text, options, cap) {
+    if (text.length === 0) return false;
+    const bytes = Buffer.byteLength(text, "utf8");
+    this.chunks.push({
+      at: this.total,
+      text,
+      bytes,
+      ...options?.channel !== void 0 ? { channel: options.channel } : {},
+      ...options?.gapBefore !== void 0 ? { gapBefore: options.gapBefore } : {}
+    });
+    this.total += bytes;
+    this.retainedBytes += bytes;
+    this.trim(cap);
+    return true;
+  }
+  /**
+  * Drop retained head chunks until the ring fits `cap`; a single oversized
+  * chunk keeps only its UTF-8-safe tail with a `gapBefore` marker.
+  * @param cap - retention cap in UTF-8 bytes.
+  */
+  trim(cap) {
+    while (this.retainedBytes > cap && this.chunks.length > 1) {
+      const dropped = this.chunks.shift();
+      if (dropped === void 0) break;
+      this.retainedBytes -= dropped.bytes;
+    }
+    const single = this.chunks.length === 1 ? this.chunks[0] : void 0;
+    if (single !== void 0 && single.bytes > cap) {
+      const tail = utf8Tail(single.text, cap);
+      single.at += single.bytes - tail.bytes;
+      single.text = tail.text;
+      single.bytes = tail.bytes;
+      single.gapBefore = true;
+      this.retainedBytes = tail.bytes;
+    }
+    this.earliest = this.chunks[0]?.at ?? this.total;
+  }
+  /**
+  * Retained chunks overlapping `[from, total)` as fresh wire chunks.
+  * @param from - absolute byte offset to read from.
+  * @returns the chunks, the resume offset, and whether bytes before them were evicted.
+  */
+  readFrom(from) {
+    const chunks = [];
+    for (const chunk of this.chunks) {
+      if (chunk.at + chunk.bytes <= from) continue;
+      chunks.push({
+        at: chunk.at,
+        text: chunk.text,
+        ...chunk.channel !== void 0 ? { channel: chunk.channel } : {},
+        ...chunk.gapBefore !== void 0 ? { gapBefore: chunk.gapBefore } : {}
+      });
+    }
+    return {
+      chunks,
+      next: this.total,
+      lossy: from < this.earliest
+    };
+  }
+};
 var __addDisposableResource = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -63,27 +257,34 @@ var __disposeResources = /* @__PURE__ */ (function(SuppressedError2) {
 });
 var TASK_WAIT_TIMEOUT = "TASK_WAIT_TIMEOUT";
 var DEFAULT_MAX_CONCURRENT_JOBS_PER_OWNER = 10;
+var DEFAULT_RETAIN_BYTES = 256 * 1024;
+var DEFAULT_SETTLED_RETAIN_BYTES = 16 * 1024;
+var DEFAULT_PUMP_POLL_MS = 150;
 function isTerminal(status) {
   return status === "completed" || status === "killed" || status === "failed";
 }
-var JobLayer = class {
-  controllers = new AnonymousEntries();
-  listeners = new AnonymousEntries();
-  changed = new AnonymousEntries();
-  isEmpty() {
-    return this.controllers.isEmpty() && this.listeners.isEmpty() && this.changed.isEmpty();
-  }
-};
 var LocalJobRegistry = class extends JobRegistry {
-  static Config = z.object({ maxConcurrentJobsPerOwner: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_MAX_CONCURRENT_JOBS_PER_OWNER) });
+  static Config = z.object({
+    maxConcurrentJobsPerOwner: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_MAX_CONCURRENT_JOBS_PER_OWNER),
+    retainBytes: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_RETAIN_BYTES),
+    settledRetainBytes: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_SETTLED_RETAIN_BYTES),
+    pumpPollMs: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER).default(DEFAULT_PUMP_POLL_MS)
+  });
   /** Schemastery-defaulted active-job limit. */
   maxConcurrentJobsPerOwner;
+  /** Schemastery-defaulted live ring retention cap. */
+  retainBytes;
+  /** Schemastery-defaulted settled ring retention cap. */
+  settledRetainBytes;
+  /** Schemastery-defaulted pull-source poll interval. */
+  pumpPollMs;
   store = /* @__PURE__ */ new Map();
   counters = /* @__PURE__ */ new Map();
   /**
-  * Surfaces and listeners layered by the scope that registered them, in the
-  * tools-registry shape: a contribution files into its registering context's
-  * scope, and a read unions the global layer with the reader's scope chain.
+  * Controllers and scoped subscriptions layered by the scope that registered
+  * them, in the tools-registry shape: a contribution files into its
+  * registering context's scope, and a read unions the global layer with the
+  * owner's scope chain.
   *
   * The registry is one process-wide instance serving every composition, so a
   * flat table would answer a per-owner question process-wide: one preset's
@@ -94,28 +295,58 @@ var LocalJobRegistry = class extends JobRegistry {
   */
   layers = new ScopedLayers(() => new JobLayer(), () => {
   });
-  listenersClosed = false;
+  hub;
   /** Owner agents with attached scope cleanup, mapped to the exact disposer. */
   ownerCleanups = /* @__PURE__ */ new Map();
   /** Service context used by detached settlement continuations and teardown. */
   selfCtx;
   constructor(ctx, config) {
     super(ctx);
-    this.maxConcurrentJobsPerOwner = config.maxConcurrentJobsPerOwner;
+    const resolved = config;
+    this.maxConcurrentJobsPerOwner = resolved.maxConcurrentJobsPerOwner;
+    this.retainBytes = resolved.retainBytes;
+    this.settledRetainBytes = resolved.settledRetainBytes;
+    this.pumpPollMs = resolved.pumpPollMs;
     this.selfCtx = ctx;
+    this.hub = new JobEventHub(this.layers, (message) => {
+      ctx.logger.warn(message);
+    });
     ctx.effect(() => () => this.disposeAll(), "jobs teardown");
   }
+  /**
+  * The event stream bound to the accessing context: a subscription is an
+  * effect of that context, and `{ owners: 'scope' }` names its scope.
+  */
+  get events() {
+    const registrar = this.ctx;
+    return { subscribe: (filter, listener) => this.hub.subscribe(registrar, filter, listener) };
+  }
   start(spec) {
-    if (!this.servesOwner(spec.owner)) throw new Error("background jobs unavailable: no job controller serves this agent (load @deepseek-ai/dsh-tool-jobs in its composition)");
+    const owner = this.resolveOwner(spec.owner);
+    if (!this.servesOwner(owner)) throw new Error("background jobs unavailable: no job controller serves this agent (load @deepseek-ai/dsh-tool-jobs in its composition)");
     if (spec.kind.length === 0) throw new Error("invalid job kind: expected a non-empty string");
     if (spec.label.length === 0) throw new Error("invalid job label: expected a non-empty string");
     if (spec.outputLimitBytes !== void 0 && (!Number.isSafeInteger(spec.outputLimitBytes) || spec.outputLimitBytes <= 0)) throw new Error(`invalid outputLimitBytes: expected a positive safe integer, got ${JSON.stringify(spec.outputLimitBytes)}`);
-    if (spec.owner !== void 0) this.ensureOwnerCleanup(spec.owner);
-    if (this.activeJobCount(spec.owner) >= this.maxConcurrentJobsPerOwner) throw new Error(`background job limit reached for this owner (limit: ${this.maxConcurrentJobsPerOwner}); use job_kill to stop an unneeded job, wait for it to finish, then retry`);
-    const hooks = spec.run();
+    if (owner !== void 0) this.ensureOwnerCleanup(owner);
+    if (this.activeJobCount(owner) >= this.maxConcurrentJobsPerOwner) throw new Error(`background job limit reached for this owner (limit: ${this.maxConcurrentJobsPerOwner}); use job_kill to stop an unneeded job, wait for it to finish, then retry`);
     const count = (this.counters.get(spec.kind) ?? 0) + 1;
     this.counters.set(spec.kind, count);
     const id = JobId(`${spec.kind}-${count}`);
+    const ring = new OutputRing();
+    const state = {
+      progress: void 0,
+      job: void 0
+    };
+    const handle = {
+      id,
+      append: (text, options) => {
+        this.appendRing(state, ring, text, options, "producer");
+      },
+      updateProgress: (line) => {
+        this.updateProgress(state, line);
+      }
+    };
+    const hooks = spec.run(handle);
     let markSettled;
     const settled = new Promise((resolve) => {
       markSettled = resolve;
@@ -125,125 +356,93 @@ var LocalJobRegistry = class extends JobRegistry {
       kind: spec.kind,
       label: spec.label,
       outputLimitBytes: spec.outputLimitBytes,
-      owner: spec.owner,
+      owner,
       cancel: hooks.cancel.bind(hooks),
-      readOutput: hooks.readOutput?.bind(hooks),
       status: "running",
+      ring,
+      modelCursor: 0,
+      resultDelivered: false,
+      state,
       detail: void 0,
-      output: void 0,
+      result: void 0,
       startedAt: Date.now(),
       finishedAt: void 0,
-      reported: false,
+      killReason: void 0,
+      settleCause: void 0,
       settled,
       markSettled,
-      waiters: 0,
-      waitResolvers: /* @__PURE__ */ new Set()
+      waitResolvers: /* @__PURE__ */ new Set(),
+      pump: void 0,
+      spillPaths: []
     };
+    state.job = job;
     this.store.set(id, job);
-    hooks.done.then((outcome) => {
-      this.settle(job, outcome);
-    }, (error) => {
+    this.emit({
+      type: "registered",
+      job: this.view(job)
+    }, owner);
+    const producerDone = hooks.done.then((outcome) => outcome, (error) => {
       this.selfCtx.logger.warn(`jobs: job ${job.id} producer done promise rejected (producer contract violation): ${String(error)}`);
-      this.settle(job, {
+      return {
         status: "failed",
         detail: String(error)
-      });
+      };
     });
-    this.notifyChanged(job.owner);
+    if (spec.output !== void 0 && spec.output.length > 0) job.pump = startPump(spec.output.map((source) => this.guardSource(job, source)), {
+      append: (text, options) => {
+        this.appendRing(state, ring, text, options, "pump");
+      },
+      spill: (index, path) => {
+        job.spillPaths[index] = path;
+      }
+    }, this.pumpPollMs, Promise.race([producerDone, settled]));
+    producerDone.then(async (outcome) => {
+      if (job.pump !== void 0) await job.pump.done;
+      this.settle(job, outcome, job.settleCause ?? "producer");
+    });
     return id;
   }
   list(caller) {
-    const session = caller?.id;
-    return [...this.store.values()].filter((job) => job.owner === void 0 || job.owner.id === session).map((job) => this.snapshot(job));
+    return [...this.store.values()].filter((job) => job.owner === void 0 || job.owner.id === caller).map((job) => this.view(job));
   }
   get(id, caller) {
-    const job = this.expect(id);
-    this.assertAccess(job, caller);
-    return this.snapshot(job);
+    return this.view(this.expect(id, caller));
   }
   read(id, caller) {
-    const job = this.expect(id);
-    this.assertAccess(job, caller);
-    const text = job.readOutput !== void 0 ? job.readOutput() : isTerminal(job.status) ? job.output ?? "" : "";
-    if (isTerminal(job.status)) job.reported = true;
-    return {
-      text,
-      snapshot: this.snapshot(job)
-    };
+    return this.readJob(this.expect(id, caller));
+  }
+  readAt(id, from, caller) {
+    const job = this.expect(id, caller);
+    if (!Number.isSafeInteger(from) || from < 0) throw new Error(`invalid output read offset: expected a non-negative safe integer, got ${JSON.stringify(from)}`);
+    return job.ring.readFrom(from);
   }
   kill(id, caller, reason) {
-    const job = this.expect(id);
-    this.assertAccess(job, caller);
-    if (isTerminal(job.status)) {
-      job.reported = true;
-      return "already-finished";
-    }
-    job.cancel(reason);
-    job.status = "stopping";
-    job.reported = true;
-    this.notifyChanged(job.owner);
-    return "requested";
+    return this.killJob(this.expect(id, caller), reason);
   }
   async wait(id, timeoutMs, caller, signal) {
-    const job = this.expect(id);
-    this.assertAccess(job, caller);
-    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) throw new Error(`invalid wait timeout: expected a positive number of milliseconds, got ${JSON.stringify(timeoutMs)}`);
-    if (!isTerminal(job.status)) {
-      if (signal?.aborted) throw new Error("wait aborted");
-      job.waiters += 1;
-      let counted = true;
-      const uncount = () => {
-        if (!counted) return;
-        counted = false;
-        job.waiters -= 1;
-      };
-      try {
-        const env_1 = {
-          stack: [],
-          error: void 0,
-          hasError: false
-        };
-        try {
-          const d = __addDisposableResource(env_1, deadline(signal, timeoutMs, TASK_WAIT_TIMEOUT), false);
-          await new Promise((resolve, reject) => {
-            const onSettled = () => {
-              job.waitResolvers.delete(onSettled);
-              d.signal.removeEventListener("abort", onAbort);
-              resolve();
-            };
-            const onAbort = () => {
-              job.waitResolvers.delete(onSettled);
-              if (timeoutOf(d.signal, "TASK_WAIT_TIMEOUT") !== void 0) resolve();
-              else {
-                uncount();
-                reject(/* @__PURE__ */ new Error("wait aborted"));
-              }
-            };
-            job.waitResolvers.add(onSettled);
-            d.signal.addEventListener("abort", onAbort, { once: true });
-          });
-        } catch (e_1) {
-          env_1.error = e_1;
-          env_1.hasError = true;
-        } finally {
-          __disposeResources(env_1);
-        }
-      } finally {
-        uncount();
-      }
-    }
-    if (isTerminal(job.status)) job.reported = true;
-    return this.snapshot(job);
+    return this.waitJob(this.expect(id, caller), timeoutMs, signal);
   }
-  onJobDone(listener) {
-    return this.layers.effect(this.ctx, (layer) => layer.listeners.append(listener), { label: "jobs.onJobDone()" });
-  }
-  onJobsChanged(listener) {
-    return this.layers.effect(this.ctx, (layer) => layer.changed.append(listener), { label: "jobs.onJobsChanged()" });
+  remove(id, caller) {
+    const job = this.expect(id, caller);
+    if (!isTerminal(job.status)) throw new Error(`job ${id} is still ${job.status}; kill it and wait for settlement before removing it`);
+    this.drop([job]);
   }
   attachController(name) {
     const token = Symbol(name);
     return this.layers.effect(this.ctx, (layer) => layer.controllers.append(token), { label: "jobs.attachController()" });
+  }
+  /**
+  * Resolve a spec's owner session to its live Agent. An owned registration
+  * needs the agent registry, and the session must currently have a live
+  * instance: that instance's disposal is what cancels and drops the job.
+  */
+  resolveOwner(session) {
+    if (session === void 0) return void 0;
+    const agents = this.selfCtx.get("agents");
+    if (agents === void 0) throw new Error("background job ownership requires the agent registry (load @deepseek-ai/dsh-agent)");
+    const owner = agents.get(session);
+    if (owner === void 0) throw new Error(`session "${session}" has no live agent (background job owner must be live)`);
+    return owner;
   }
   /**
   * Whether an attached job controller can collect and stop work owned by
@@ -263,116 +462,216 @@ var LocalJobRegistry = class extends JobRegistry {
     for (const job of this.store.values()) if (job.owner === owner && (job.status === "running" || job.status === "stopping")) count += 1;
     return count;
   }
-  /**
-  * The completion listeners that own `owner`'s notices: the global layer's
-  * first, then each scoped layer along the owner's chain. A listener outside
-  * that chain belongs to another composition and must not deliver, or the
-  * owner reads one notice per mounted preset.
-  * @param owner - the settled job's owner, or undefined for unowned work.
-  * @returns the listeners to notify, in registration order per layer.
-  */
-  *listenersFor(owner) {
-    yield* this.layers.global.listeners.values();
-    const scope = owner === void 0 ? void 0 : scopeOf(owner.ctx);
-    for (const layer of this.layers.chainLayers(scope)) yield* layer.listeners.values();
-  }
-  /** Look up a job or fail loud. */
-  expect(id) {
+  /** Look up a job and enforce caller access. */
+  expect(id, caller) {
     const job = this.store.get(id);
     if (job === void 0) throw new Error(`unknown job ${id}`);
+    this.assertAccess(job, caller);
     return job;
   }
   /**
   * The isolation fence: a job with an owner is reachable only by callers
   * whose session id matches (`!== undefined` semantics — an unowned job is
-  * open, and a no-agent caller can never match an owned one).
+  * open, and a caller-less view can never match an owned one).
   */
   assertAccess(job, caller) {
-    if (job.owner !== void 0 && job.owner.id !== caller?.id) throw new Error(`job ${job.id} belongs to another session`);
+    if (job.owner !== void 0 && job.owner.id !== caller) throw new Error(`job ${job.id} belongs to another session`);
   }
-  /** Project a fresh read-only snapshot from the mutable record. */
-  snapshot(job) {
-    const ownerSession = job.owner?.id;
+  /** Project a fresh read-only view from the mutable record. */
+  view(job) {
+    const owner = job.owner?.id;
+    const spillPaths = [...new Set(job.spillPaths.filter((path) => path !== void 0))];
     return {
       id: job.id,
       kind: job.kind,
       label: job.label,
+      ...owner !== void 0 ? { owner } : {},
       ...job.outputLimitBytes !== void 0 ? { outputLimitBytes: job.outputLimitBytes } : {},
-      ...ownerSession !== void 0 ? { ownerSession } : {},
       status: job.status,
+      ...job.state.progress !== void 0 ? { progress: job.state.progress } : {},
       ...job.detail !== void 0 ? { detail: job.detail } : {},
       startedAt: job.startedAt,
       ...job.finishedAt !== void 0 ? { finishedAt: job.finishedAt } : {},
-      reported: job.reported
+      output: {
+        total: job.ring.total,
+        earliest: job.ring.earliest,
+        ...spillPaths.length > 0 ? { spillPaths } : {}
+      }
     };
   }
-  /**
-  * The change observers that own `owner`'s updates, resolved exactly like
-  * {@link listenersFor}: the global layer — a host composition's own carrier,
-  * which serves every owner — then each scoped layer along the owner's chain.
-  * An observer outside that chain belongs to another composition and would
-  * otherwise be told about agents it does not compose.
-  * @param owner - the owner whose visible set moved, or undefined for unowned work.
-  * @returns the observers to notify, in registration order per layer.
-  */
-  *changedFor(owner) {
-    yield* this.layers.global.changed.values();
-    const scope = owner === void 0 ? void 0 : scopeOf(owner.ctx);
-    for (const layer of this.layers.chainLayers(scope)) yield* layer.changed.values();
+  emit(event, owner) {
+    this.hub.emit(event, owner);
   }
   /**
-  * Announce that one owner's visible set changed. Each listener is contained
-  * so an observer cannot break a lifecycle commit that already happened.
+  * Consume the ring from the model cursor; the result rides the first read
+  * after settlement. A terminal read is the point the settled stream drops
+  * to the settled cap: settlement kept every unconsumed byte for it.
   */
-  notifyChanged(owner) {
-    for (const listener of this.changedFor(owner)) try {
-      listener(owner);
-    } catch (error) {
-      this.selfCtx.logger.warn(`jobs: onJobsChanged listener threw: ${String(error)}`);
+  readJob(job) {
+    const read = job.ring.readFrom(job.modelCursor);
+    job.modelCursor = job.ring.total;
+    const result = isTerminal(job.status) && !job.resultDelivered ? job.result : void 0;
+    if (result !== void 0) job.resultDelivered = true;
+    if (isTerminal(job.status)) job.ring.trim(this.settledRetainBytes);
+    return {
+      chunks: read.chunks,
+      lossy: read.lossy,
+      ...result !== void 0 ? { result } : {},
+      job: this.view(job)
+    };
+  }
+  killJob(job, reason) {
+    if (isTerminal(job.status)) return "already-finished";
+    job.cancel(reason);
+    job.status = "stopping";
+    if (reason !== void 0) job.killReason = reason;
+    job.settleCause = "kill";
+    this.emit({
+      type: "stopping",
+      job: this.view(job)
+    }, job.owner);
+    return "requested";
+  }
+  async waitJob(job, timeoutMs, signal) {
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) throw new Error(`invalid wait timeout: expected a positive number of milliseconds, got ${JSON.stringify(timeoutMs)}`);
+    if (!isTerminal(job.status)) {
+      const env_1 = {
+        stack: [],
+        error: void 0,
+        hasError: false
+      };
+      try {
+        if (signal?.aborted) throw new Error("wait aborted");
+        const d = __addDisposableResource(env_1, deadline(signal, timeoutMs, TASK_WAIT_TIMEOUT), false);
+        await new Promise((resolve, reject) => {
+          const onSettled = () => {
+            job.waitResolvers.delete(onSettled);
+            d.signal.removeEventListener("abort", onAbort);
+            resolve();
+          };
+          const onAbort = () => {
+            job.waitResolvers.delete(onSettled);
+            if (timeoutOf(d.signal, "TASK_WAIT_TIMEOUT") !== void 0) resolve();
+            else reject(/* @__PURE__ */ new Error("wait aborted"));
+          };
+          job.waitResolvers.add(onSettled);
+          d.signal.addEventListener("abort", onAbort, { once: true });
+        });
+      } catch (e_1) {
+        env_1.error = e_1;
+        env_1.hasError = true;
+      } finally {
+        __disposeResources(env_1);
+      }
     }
+    return this.view(job);
   }
   /**
-  * Record the first terminal outcome, release waiters, then announce
-  * completion. First-wins preserves a teardown force-failure against late
-  * producer settlement. Pending waits mark the job reported before listeners
-  * run. Completion is announced last because a reporter may open a model turn
-  * synchronously: every other observer of this settlement must already have
-  * seen the committed record.
+  * Append one chunk to the ring. A producer chunk against a settled job is
+  * logged and dropped; the registry's own pump drains silently after
+  * settlement (a forced settlement may precede the producer's). A chunk
+  * staged inside the starter call is retained and signals no observer — the
+  * registration commit publishes it.
   */
-  settle(job, outcome) {
+  appendRing(state, ring, text, options, writer) {
+    const job = state.job;
+    if (job !== void 0 && isTerminal(job.status)) {
+      if (writer === "producer") this.selfCtx.logger.warn(`jobs: append to settled job ${job.id} dropped`);
+      return;
+    }
+    if (!ring.append(text, options, this.retainBytes)) return;
+    if (job !== void 0) this.emitOutput(job);
+  }
+  /**
+  * Contain a failing pull source: the first throw is logged, and the source
+  * reads as exhausted from then on, so the job runs to its own settlement
+  * with whatever the ring holds instead of freezing on a pump failure.
+  */
+  guardSource(job, source) {
+    let failed = false;
+    return {
+      ...source.channel !== void 0 ? { channel: source.channel } : {},
+      read: (fromByte) => {
+        if (failed) return {
+          text: "",
+          nextOffset: fromByte,
+          lossy: false
+        };
+        try {
+          return source.read(fromByte);
+        } catch (error) {
+          failed = true;
+          this.selfCtx.logger.warn(`jobs: output source for ${job.id} failed; its stream stops here: ${String(error)}`);
+          return {
+            text: "",
+            nextOffset: fromByte,
+            lossy: false
+          };
+        }
+      }
+    };
+  }
+  /** Announce that one job's ring advanced (append or settlement). */
+  emitOutput(job) {
+    const owner = job.owner?.id;
+    this.emit({
+      type: "output",
+      id: job.id,
+      ...owner !== void 0 ? { owner } : {},
+      total: job.ring.total
+    }, job.owner);
+  }
+  /**
+  * Replace the live progress line through a producer face; a write against a
+  * settled job is logged and dropped. A write staged inside the starter call
+  * seeds the registered projection and signals no observer.
+  */
+  updateProgress(state, line) {
+    const job = state.job;
+    if (job !== void 0 && isTerminal(job.status)) {
+      this.selfCtx.logger.warn(`jobs: progress update on settled job ${job.id} dropped`);
+      return;
+    }
+    state.progress = line;
+    if (job !== void 0) this.emit({
+      type: "progress",
+      job: this.view(job)
+    }, job.owner);
+  }
+  /**
+  * Record the first terminal outcome, release waiters, then announce the
+  * settlement. First-wins preserves a teardown force-failure against late
+  * producer settlement. The settled event follows every released waiter and
+  * reports whether it released one: a timed-out or aborted wait has already
+  * left the set, so only a wait still owed the projection counts.
+  */
+  settle(job, outcome, cause) {
     if (isTerminal(job.status)) return;
     job.status = outcome.status;
-    job.detail = outcome.detail;
-    job.output = outcome.output;
+    if (outcome.status === "killed" && job.killReason !== void 0) job.detail = outcome.detail !== void 0 ? `${outcome.detail}; ${job.killReason}` : job.killReason;
+    else if (outcome.detail !== void 0) job.detail = outcome.detail;
+    job.state.progress = void 0;
+    job.result = outcome.result;
     job.finishedAt = Date.now();
-    if (job.waiters > 0) job.reported = true;
-    const snapshot = this.snapshot(job);
+    job.ring.trim(Math.max(this.settledRetainBytes, job.ring.total - job.modelCursor));
     const waitResolvers = [...job.waitResolvers];
     job.waitResolvers.clear();
     for (const resolveWait of waitResolvers) resolveWait();
     job.markSettled();
-    this.notifyChanged(job.owner);
-    if (this.listenersClosed) return;
-    for (const listener of this.listenersFor(job.owner)) try {
-      const returned = listener(snapshot, job.owner);
-      Promise.resolve(returned).catch((error) => {
-        this.selfCtx.logger.warn(`jobs: onJobDone listener rejected for ${job.id}: ${String(error)}`);
-      });
-    } catch (error) {
-      this.selfCtx.logger.warn(`jobs: onJobDone listener threw for ${job.id}: ${String(error)}`);
-    }
+    this.emit({
+      type: "settled",
+      job: this.view(job),
+      cause,
+      awaited: waitResolvers.length > 0
+    }, job.owner);
+    this.emitOutput(job);
   }
   /**
   * Attach one awaited cleanup through the exact owner's scope. This survives
   * producer reloads and joins agent quiescence; the retained disposer lets
-  * service teardown detach the cross-fiber effect. Fails when the registry is
-  * absent or the owner is not its currently registered instance.
+  * service teardown detach the cross-fiber effect.
   */
   ensureOwnerCleanup(owner) {
-    const ownerId = owner.id;
-    const agents = this.selfCtx.get("agents");
-    if (agents === void 0) throw new Error("background job ownership requires the agent registry (load @deepseek-ai/dsh-agent)");
-    if (agents.get(ownerId) !== owner) throw new Error(`agent "${ownerId}" is not the registered agent instance (background job owner must be live)`);
     if (this.ownerCleanups.has(owner)) return;
     const detach = owner.ctx.effect(() => async () => {
       this.ownerCleanups.delete(owner);
@@ -385,21 +684,27 @@ var LocalJobRegistry = class extends JobRegistry {
     const owned = [...this.store.values()].filter((job) => job.owner === owner);
     this.cancelForTeardown(owned, "owner disposed");
     await Promise.all(owned.map((job) => job.settled));
-    for (const job of owned) this.store.delete(job.id);
-    if (owned.length > 0) this.notifyChanged(owner);
+    this.drop(owned);
+  }
+  /** Drop settled records and announce each removal, the one visible-set change no per-job record carries. */
+  drop(jobs) {
+    for (const job of jobs) {
+      this.store.delete(job.id);
+      this.emit({
+        type: "removed",
+        job: this.view(job)
+      }, job.owner);
+    }
   }
   /**
-  * Close listeners, cancel live jobs, await settlement, and detach owner
+  * Cancel live jobs, await settlement, drop every record, and detach owner
   * effects. Throwing cancels are force-failed to avoid teardown deadlock.
   */
   async disposeAll() {
-    this.listenersClosed = true;
     const all = [...this.store.values()];
     this.cancelForTeardown(all, "jobs service disposed");
     await Promise.all(all.map((job) => job.settled));
-    const emptied = new Set(all.map((job) => job.owner));
-    this.store.clear();
-    for (const owner of emptied) this.notifyChanged(owner);
+    this.drop(all);
     const ownerCleanups = [...this.ownerCleanups.values()];
     this.ownerCleanups.clear();
     await Promise.all(ownerCleanups.map((cleanup) => Promise.resolve(cleanup())));
@@ -412,18 +717,21 @@ var LocalJobRegistry = class extends JobRegistry {
   cancelForTeardown(jobs, reason) {
     for (const job of jobs) {
       if (isTerminal(job.status)) continue;
-      job.reported = true;
+      job.settleCause = "teardown";
       try {
         job.cancel(reason);
         job.status = "stopping";
-        this.notifyChanged(job.owner);
+        this.emit({
+          type: "stopping",
+          job: this.view(job)
+        }, job.owner);
       } catch (error) {
         const detail = `cancel threw during teardown; work may be orphaned: ${String(error)}`;
         this.selfCtx.logger.warn(`jobs: cancel of ${job.id} threw during teardown; job record forced failed and work may be orphaned: ${String(error)}`);
         this.settle(job, {
           status: "failed",
           detail
-        });
+        }, "teardown");
       }
     }
   }

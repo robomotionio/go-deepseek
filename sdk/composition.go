@@ -91,6 +91,30 @@ func SplitSpine(config map[string]any) (map[string]map[string]any, []string, err
 	return runtime.SplitSpine(config)
 }
 
+// ModelRowID is the id of the row that serves the model. Which plugin that is
+// depends on Config.Protocol — llm-pi-ai for chat completions, the DeepSeek
+// api-key provider for Messages — and the id is the same either way, because
+// saved compositions address the model's settings by it.
+const ModelRowID = runtime.ModelRowID
+
+// WithModelSettings applies model settings to the model row, whichever plugin
+// serves it.
+//
+// The settings are the ones the DeepSeek adapter took — reasoningEffort,
+// thinking, maxTokens, defaultContextWindow, streamIdleTimeoutMs, retryPolicy,
+// baseURL — which is what a composition saved against an earlier bundle holds
+// for this row. Do not merge them onto the row with With: since harness 0.1.7
+// the chat-completions row is a different plugin with a different config
+// shape, and a key it does not read is accepted and ignored. This places each
+// one where the mounted plugin looks for it, and returns an error for one that
+// has no place.
+//
+// A `protocol` key is skipped. It selects the row, so it has to reach Compose
+// as Config.Protocol before there is a row to configure.
+func WithModelSettings(entries []Entry, settings map[string]any) ([]Entry, error) {
+	return runtime.WithModelSettings(entries, settings)
+}
+
 // Plugins lists what the embedded bundle can mount. A composition naming
 // anything else fails when the harness starts, so this is the set to choose
 // from — and the reason to regenerate the bundle when you need more.

@@ -2,6 +2,7 @@
 import { isAbsolute } from "node:path";
 import z from "@deepseek-ai/schemastery";
 import { FsError } from "@deepseek-ai/dsh-fs";
+import { truncateWithoutSplittingSurrogatePair } from "@deepseek-ai/dsh-output-retention";
 import { sandboxDenialMarker } from "@deepseek-ai/dsh-sandbox";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 var TRUNCATED_MESSAGE = "<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with `grep -n` in order to find the line numbers of what you are looking for.</NOTE>";
@@ -19,7 +20,7 @@ Notes for using the \`str_replace\` command:
 * The \`new_str\` parameter should contain the edited lines that should replace the \`old_str\`
 `.trim();
 function maybeTruncate(content, maxOutputChars) {
-  return content.length <= maxOutputChars ? content : content.slice(0, maxOutputChars) + TRUNCATED_MESSAGE;
+  return content.length <= maxOutputChars ? content : truncateWithoutSplittingSurrogatePair(content, maxOutputChars) + TRUNCATED_MESSAGE;
 }
 function codepointCompare(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;

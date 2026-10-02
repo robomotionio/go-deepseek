@@ -1,7 +1,7 @@
 // .harness/vendor/loader/lib/index.js
 import { createRequire } from "node:module";
-import { Context, Inject, Service, composeError } from "@deepseek-ai/cordis";
-import { deepEqual, defineProperty, isNonNullable, isNullable, valueMap } from "@deepseek-ai/cosmokit";
+import { Context, Inject, Service, composeError, resolveConfig } from "@deepseek-ai/cordis";
+import { deepEqual, defineProperty, isNonNullable, isNullable, updateVolatile, valueMap, volatileEntries } from "@deepseek-ai/cosmokit";
 var ModuleLoader;
 (function(ModuleLoader2) {
   let _cachedLoader;
@@ -224,6 +224,34 @@ function interpolate(ctx, value) {
 function isJsExpr(value) {
   return value instanceof Object && "__jsExpr" in value;
 }
+function isSchemastery(schema) {
+  return schema?.["~standard"].vendor === "schemastery";
+}
+function isRecord(value) {
+  if (!value || typeof value !== "object" || isJsExpr(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+function equal(a, b, schema, ancestors) {
+  if (schema?.meta?.volatile) return true;
+  if (schema?.type !== "object" || !schema.dict || ancestors.has(schema)) return deepEqual(a, b, true);
+  const left = a ?? schema.meta?.default;
+  const right = b ?? schema.meta?.default;
+  if (!isRecord(left) || !isRecord(right)) return deepEqual(left, right, true);
+  const { dict } = schema;
+  ancestors.add(schema);
+  try {
+    return Object.keys({
+      ...left,
+      ...right
+    }).every((key) => equal(left[key], right[key], Object.hasOwn(dict, key) ? dict[key] : void 0, ancestors));
+  } finally {
+    ancestors.delete(schema);
+  }
+}
+function equalExceptVolatile(previous, next, schema) {
+  return isSchemastery(schema) ? equal(previous, next, schema, /* @__PURE__ */ new Set()) : deepEqual(previous, next, true);
+}
 function takeEntries(object, keys) {
   const result = [];
   for (const key of keys) {
@@ -309,14 +337,55 @@ var Entry = class Entry2 {
       return;
     }
     if (this.fiber?.uid) {
-      const diff = Object.keys({
+      const changes = Object.keys({
         ...this.options,
         ...legacy
-      }).filter((key) => !deepEqual(this.options[key], legacy[key]));
-      if (!diff.length && !force) return;
+      }).filter((key) => !deepEqual(this.options[key], legacy[key], key === "config"));
+      const volatileOnly = changes.length === 1 && changes[0] === "config" && this.fiber.state === 2 && Object.getPrototypeOf(this.ctx) === this.parent.ctx && equalExceptVolatile(legacy.config, this.options.config, this.fiber.runtime?.Config);
+      if (volatileOnly) this.fiber._config = this.options.config;
+      const pending = volatileOnly && this._commitVolatile() ? [] : changes;
+      if (!pending.length && !force) return;
       this.context.emit("loader/partial-dispose", this, legacy, true);
-      this._patchContext(diff);
+      this._patchContext(pending);
     } else await this.init();
+  }
+  /**
+  * Parse a volatile-only raw config change and commit its values into the running fiber's references.
+  * An invalid candidate is logged and leaves the running references unchanged; the raw config stays retained for the next activation.
+  * @returns `false` when an ordinary effective value changed, so the caller applies the ordinary update lifecycle.
+  */
+  _commitVolatile() {
+    const fiber = this.fiber;
+    const refs = volatileEntries(fiber.config);
+    if (!refs.length) return true;
+    const raw = this.options.config;
+    let candidate;
+    try {
+      candidate = resolveConfig(fiber.runtime, fiber.ctx.waterfall(fiber, "internal/config", raw, () => raw));
+    } catch (error) {
+      this.ctx.logger.warn("volatile config update failed for %C", this.options.id);
+      this.ctx.logger.warn(error);
+      return true;
+    }
+    if (!deepEqual(fiber.config, candidate, true)) {
+      this.ctx.logger.debug("ordinary config values of %C changed with its volatile values; applying the ordinary update", this.options.id);
+      return false;
+    }
+    const paths = refs.flatMap(({ path, ref }) => {
+      const source = path.reduce((value, key) => Reflect.get(value, key), candidate);
+      if (deepEqual(ref.get(), source.get(), true)) return [];
+      updateVolatile(ref, source);
+      return [path];
+    });
+    if (!paths.length) return true;
+    const self = Object.create(fiber.ctx);
+    self[Context.filter] = (owner) => owner.fiber === fiber;
+    try {
+      fiber.ctx.emit(self, "loader/volatile-update", paths);
+    } catch (error) {
+      this.ctx.logger.warn(error);
+    }
+    return true;
   }
   getOuterStack = () => {
     let entry = this;
@@ -492,7 +561,7 @@ var Loader = class extends EntryTree {
     ctx.on("internal/update", function(config2, noSave, next) {
       if (!this.entry || noSave || this.parent.fiber?.entry === this.entry) return next();
       const unparse = this.runtime?.Config?.["simplify"];
-      this.entry.options.config = unparse ? unparse(config2) : config2;
+      this.entry.options.config = unparse ? unparse.call(this.runtime.Config, config2) : config2;
       this.entry.parent.tree.write();
       return next();
     }, {
